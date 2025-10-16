@@ -1,0 +1,312 @@
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import { Mail, ArrowLeft, CheckCircle } from 'lucide-react-native';
+
+export default function ForgotPasswordScreen() {
+  const [email, setEmail] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
+  const router = useRouter();
+
+  const handleResetPassword = async () => {
+    if (!email) {
+      Alert.alert('Erro', 'Por favor, insira seu email');
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      Alert.alert('Erro', 'Por favor, insira um email válido');
+      return;
+    }
+
+    setIsLoading(true);
+
+    setTimeout(() => {
+      setIsLoading(false);
+      setEmailSent(true);
+    }, 1500);
+  };
+
+  const handleBackToLogin = () => {
+    router.push('/auth/login');
+  };
+
+  if (emailSent) {
+    return (
+      <LinearGradient
+        colors={['#0a0a0a', '#1a0a2a']}
+        style={styles.container}
+      >
+        <View style={styles.content}>
+          <View style={styles.successContainer}>
+            <View style={styles.successIcon}>
+              <CheckCircle size={64} color="#10B981" />
+            </View>
+
+            <Text style={styles.successTitle}>Email Enviado!</Text>
+            <Text style={styles.successMessage}>
+              Enviamos um link de recuperação de senha para{'\n'}
+              <Text style={styles.emailText}>{email}</Text>
+            </Text>
+
+            <Text style={styles.instructionText}>
+              Verifique sua caixa de entrada e siga as instruções para redefinir sua senha.
+            </Text>
+
+            <TouchableOpacity
+              style={styles.backButton}
+              onPress={handleBackToLogin}
+            >
+              <LinearGradient
+                colors={['#8B5CF6', '#3B82F6']}
+                style={styles.backGradient}
+              >
+                <Text style={styles.backButtonText}>Voltar ao Login</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.resendButton}
+              onPress={handleResetPassword}
+            >
+              <Text style={styles.resendText}>Reenviar email</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </LinearGradient>
+    );
+  }
+
+  return (
+    <LinearGradient
+      colors={['#0a0a0a', '#1a0a2a']}
+      style={styles.container}
+    >
+      <View style={styles.content}>
+        <TouchableOpacity
+          style={styles.backIconButton}
+          onPress={handleBackToLogin}
+        >
+          <ArrowLeft size={24} color="white" />
+        </TouchableOpacity>
+
+        <View style={styles.header}>
+          <LinearGradient
+            colors={['#8B5CF6', '#3B82F6']}
+            style={styles.logo}
+          >
+            <Text style={styles.logoText}>₿</Text>
+          </LinearGradient>
+          <Text style={styles.title}>Esqueceu a senha?</Text>
+          <Text style={styles.subtitle}>
+            Sem problemas! Digite seu email e enviaremos instruções para redefinir sua senha.
+          </Text>
+        </View>
+
+        <View style={styles.form}>
+          <View style={styles.inputContainer}>
+            <View style={styles.inputIcon}>
+              <Mail size={20} color="#9CA3AF" />
+            </View>
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              placeholderTextColor="#9CA3AF"
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
+          </View>
+
+          <TouchableOpacity
+            style={styles.resetButton}
+            onPress={handleResetPassword}
+            disabled={isLoading}
+          >
+            <LinearGradient
+              colors={['#8B5CF6', '#3B82F6']}
+              style={styles.resetGradient}
+            >
+              <Text style={styles.resetText}>
+                {isLoading ? 'Enviando...' : 'Enviar Link de Recuperação'}
+              </Text>
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>Lembrou da senha? </Text>
+          <TouchableOpacity onPress={handleBackToLogin}>
+            <Text style={styles.loginText}>Fazer login</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </LinearGradient>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  content: {
+    flex: 1,
+    padding: 20,
+    justifyContent: 'center',
+  },
+  backIconButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    top: 60,
+    left: 20,
+  },
+  header: {
+    alignItems: 'center',
+    marginBottom: 40,
+  },
+  logo: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  logoText: {
+    fontSize: 36,
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: 'white',
+    marginBottom: 8,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#9CA3AF',
+    textAlign: 'center',
+    lineHeight: 24,
+    paddingHorizontal: 20,
+  },
+  form: {
+    marginBottom: 40,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderRadius: 12,
+    marginBottom: 24,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+  },
+  inputIcon: {
+    padding: 16,
+  },
+  input: {
+    flex: 1,
+    fontSize: 16,
+    color: 'white',
+    paddingVertical: 16,
+    paddingRight: 16,
+  },
+  resetButton: {
+    borderRadius: 12,
+    overflow: 'hidden',
+  },
+  resetGradient: {
+    paddingVertical: 16,
+    alignItems: 'center',
+  },
+  resetText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  footerText: {
+    fontSize: 16,
+    color: '#9CA3AF',
+  },
+  loginText: {
+    fontSize: 16,
+    color: '#8B5CF6',
+    fontWeight: '600',
+  },
+  successContainer: {
+    alignItems: 'center',
+  },
+  successIcon: {
+    marginBottom: 24,
+  },
+  successTitle: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: 'white',
+    marginBottom: 12,
+  },
+  successMessage: {
+    fontSize: 16,
+    color: '#9CA3AF',
+    textAlign: 'center',
+    marginBottom: 16,
+    lineHeight: 24,
+  },
+  emailText: {
+    color: '#8B5CF6',
+    fontWeight: '600',
+  },
+  instructionText: {
+    fontSize: 14,
+    color: '#9CA3AF',
+    textAlign: 'center',
+    lineHeight: 22,
+    marginBottom: 32,
+    paddingHorizontal: 20,
+  },
+  backButton: {
+    borderRadius: 12,
+    overflow: 'hidden',
+    width: '100%',
+    marginBottom: 16,
+  },
+  backGradient: {
+    paddingVertical: 16,
+    alignItems: 'center',
+  },
+  backButtonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  resendButton: {
+    paddingVertical: 12,
+  },
+  resendText: {
+    fontSize: 14,
+    color: '#8B5CF6',
+    fontWeight: '600',
+  },
+});
