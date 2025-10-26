@@ -12,6 +12,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react-native';
 import { FontAwesome } from '@expo/vector-icons';
+import { useVSL } from '@/contexts/VSLContext';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -19,6 +20,7 @@ export default function LoginScreen() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { resetSessionFlag } = useVSL();
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -32,6 +34,8 @@ export default function LoginScreen() {
       setIsLoading(false);
 
       if (email === 'teste@bitforkids.com' && password === 'admin123') {
+        // Reset VSL session flag on successful login
+        resetSessionFlag();
         router.replace('/(tabs)');
       } else {
         Alert.alert('Erro', 'Email ou senha incorretos');

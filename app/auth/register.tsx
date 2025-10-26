@@ -10,8 +10,9 @@ import {
   Image,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useRouter } from 'expo-router';
-import { Mail, Lock, User, Eye, EyeOff } from 'lucide-react-native';
+import { useRouter, useLocalSearchParams } from 'expo-router';
+import { Mail, Lock, User, Eye, EyeOff, Phone } from 'lucide-react-native';
+import { useVSL } from '@/contexts/VSLContext';
 
 export default function RegisterScreen() {
   const [name, setName] = useState('');
@@ -23,6 +24,15 @@ export default function RegisterScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const router = useRouter();
+  const { source, plan } = useLocalSearchParams();
+  const { trackVSLConversion, resetSessionFlag } = useVSL();
+
+  // Track VSL conversion when user comes from VSL
+  React.useEffect(() => {
+    if (source === 'vsl') {
+      trackVSLConversion('register');
+    }
+  }, [source, trackVSLConversion]);
 
   const handleRegister = async () => {
     if (!name || !email || !password || !confirmPassword) {
@@ -52,8 +62,21 @@ export default function RegisterScreen() {
       setIsLoading(false);
       Alert.alert(
         'Sucesso!',
-        'Conta criada com sucesso. Você será redirecionado para o login.',
-        [{ text: 'OK', onPress: () => router.replace('/auth/login') }]
+        'Conta criada com sucesso! Você será redirecionado para a plataforma.',
+        [
+          {
+            text: 'Continuar',
+            onPress: () => {
+              // Track purchase conversion if coming from VSL with premium plan
+              if (source === 'vsl' && plan === 'premium') {
+                trackVSLConversion('purchase');
+              }
+              // Reset VSL session flag on successful registration
+              resetSessionFlag();
+              router.replace('/(tabs)');
+            },
+          },
+        ]
       );
     }, 1500);
   };
@@ -74,8 +97,17 @@ export default function RegisterScreen() {
             />
             <Text style={styles.title}>Criar Conta</Text>
             <Text style={styles.subtitle}>
-              Junte-se à nossa comunidade de aprendizado
+              {source === 'vsl'
+                ? 'Você está a um passo de transformar a educação financeira do seu filho!'
+                : 'Junte-se à nossa comunidade de aprendizado'}
             </Text>
+            {source === 'vsl' && plan === 'premium' && (
+              <View style={styles.vslBadge}>
+                <Text style={styles.vslBadgeText}>
+                  🎯 Você escolheu o Plano Premium - Acesso completo garantido!
+                </Text>
+              </View>
+            )}
           </View>
 
           {/* Registration Form */}
@@ -235,6 +267,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#9CA3AF',
     textAlign: 'center',
+    marginBottom: 8,
+  },
+  vslBadge: {
+    backgroundColor: 'rgba(245, 158, 11, 0.2)',
+    borderWidth: 1,
+    borderColor: '#F59E0B',
+    borderRadius: 8,
+    padding: 12,
+    marginTop: 12,
+  },
+  vslBadgeText: {
+    fontSize: 14,
+    color: '#F59E0B',
+    textAlign: 'center',
+    fontWeight: '600',
   },
   form: {
     marginBottom: 40,

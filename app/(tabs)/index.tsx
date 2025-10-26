@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -13,7 +13,9 @@ import { useRouter } from 'expo-router';
 import CashbackBanner from '@/components/CashbackBanner';
 import CrossSellCard from '@/components/CrossSellCard';
 import SubscriptionPlan from '@/components/SubscriptionPlan';
+import VSLModal from '@/components/VSLModal';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useVSL } from '@/contexts/VSLContext';
 import {
   TrendingUp,
   Award,
@@ -33,6 +35,13 @@ const { width } = Dimensions.get('window');
 export default function HomeScreen() {
   const router = useRouter();
   const { colors, theme, toggleTheme, isDark } = useTheme();
+  const {
+    shouldShowVSL,
+    showVSLModal,
+    hideVSLModal,
+    isVSLModalVisible,
+    resetSessionFlag,
+  } = useVSL();
   const [showSubscription, setShowSubscription] = useState(false);
   const [user] = useState({
     name: 'João Silva',
@@ -41,6 +50,18 @@ export default function HomeScreen() {
     coursesCompleted: 3,
     certificates: 2,
   });
+
+  // Check if VSL should be shown for remarketing
+  useEffect(() => {
+    if (shouldShowVSL) {
+      // Delay showing VSL modal to allow home screen to load first
+      const timer = setTimeout(() => {
+        showVSLModal();
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [shouldShowVSL, showVSLModal]);
 
   const featuredCourses = [
     {
@@ -165,13 +186,22 @@ export default function HomeScreen() {
     );
   };
 
+  const handleVSLCTAPress = () => {
+    hideVSLModal();
+    setShowSubscription(true);
+  };
+
   const handleLogout = () => {
     Alert.alert('Sair', 'Tem certeza que deseja sair?', [
       { text: 'Cancelar', style: 'cancel' },
       {
         text: 'Sair',
         style: 'destructive',
-        onPress: () => router.replace('/auth/login'),
+        onPress: () => {
+          // Reset VSL session flag on logout
+          resetSessionFlag();
+          router.replace('/auth/login');
+        },
       },
     ]);
   };
@@ -560,6 +590,13 @@ export default function HomeScreen() {
           </LinearGradient>
         </TouchableOpacity>
       </View>
+
+      {/* VSL Modal for Remarketing */}
+      <VSLModal
+        visible={isVSLModalVisible}
+        onClose={hideVSLModal}
+        onCTAPress={handleVSLCTAPress}
+      />
     </ScrollView>
   );
 }
