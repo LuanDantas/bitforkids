@@ -132,6 +132,8 @@ export default function ProfileScreen() {
                 router.push('/notifications');
               } else if (item.title === 'Privacidade') {
                 router.push('/privacy');
+              } else if (item.title === 'Configurações') {
+                router.push('/settings');
               }
             };
 
