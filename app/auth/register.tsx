@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Alert,
   ScrollView,
+  Image,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
@@ -45,7 +46,7 @@ export default function RegisterScreen() {
     }
 
     setIsLoading(true);
-    
+
     // Simulate registration API call
     setTimeout(() => {
       setIsLoading(false);
@@ -58,20 +59,19 @@ export default function RegisterScreen() {
   };
 
   return (
-    <LinearGradient
-      colors={['#0a0a0a', '#1a0a2a']}
-      style={styles.container}
-    >
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+    <LinearGradient colors={['#0a0a0a', '#1a0a2a']} style={styles.container}>
+      <ScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.content}>
           {/* Header */}
           <View style={styles.header}>
-            <LinearGradient
-              colors={['#8B5CF6', '#3B82F6']}
+            <Image
+              source={require('../../assets/images/logo.png')}
               style={styles.logo}
-            >
-              <Text style={styles.logoText}>₿</Text>
-            </LinearGradient>
+              resizeMode="contain"
+            />
             <Text style={styles.title}>Criar Conta</Text>
             <Text style={styles.subtitle}>
               Junte-se à nossa comunidade de aprendizado
@@ -161,13 +161,17 @@ export default function RegisterScreen() {
               style={styles.termsContainer}
               onPress={() => setAcceptedTerms(!acceptedTerms)}
             >
-              <View style={[styles.checkbox, acceptedTerms && styles.checkboxChecked]}>
+              <View
+                style={[
+                  styles.checkbox,
+                  acceptedTerms && styles.checkboxChecked,
+                ]}
+              >
                 {acceptedTerms && <Text style={styles.checkmark}>✓</Text>}
               </View>
               <Text style={styles.termsText}>
                 Aceito os{' '}
-                <Text style={styles.termsLink}>Termos e Condições</Text>
-                {' '}e a{' '}
+                <Text style={styles.termsLink}>Termos e Condições</Text> e a{' '}
                 <Text style={styles.termsLink}>Política de Privacidade</Text>
               </Text>
             </TouchableOpacity>
@@ -217,17 +221,9 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   logo: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: 150,
+    height: 150,
     marginBottom: 16,
-  },
-  logoText: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    color: 'white',
   },
   title: {
     fontSize: 28,

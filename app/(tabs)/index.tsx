@@ -49,7 +49,8 @@ export default function HomeScreen() {
       instructor: 'Prof. Maria Santos',
       rating: 4.8,
       students: 1250,
-      image: 'https://images.pexels.com/photos/6765363/pexels-photo-6765363.jpeg?auto=compress&cs=tinysrgb&w=400',
+      image:
+        'https://images.pexels.com/photos/6765363/pexels-photo-6765363.jpeg?auto=compress&cs=tinysrgb&w=400',
       price: 'R$ 149,90',
       isFree: false,
       level: 'Iniciante',
@@ -60,7 +61,8 @@ export default function HomeScreen() {
       instructor: 'Prof. Carlos Lima',
       rating: 4.9,
       students: 890,
-      image: 'https://images.pexels.com/photos/6802042/pexels-photo-6802042.jpeg?auto=compress&cs=tinysrgb&w=400',
+      image:
+        'https://images.pexels.com/photos/6802042/pexels-photo-6802042.jpeg?auto=compress&cs=tinysrgb&w=400',
       price: 'R$ 299,90',
       isFree: false,
       level: 'Avançado',
@@ -71,7 +73,8 @@ export default function HomeScreen() {
       instructor: 'Prof. João Santos',
       rating: 4.5,
       students: 3200,
-      image: 'https://images.pexels.com/photos/6765363/pexels-photo-6765363.jpeg?auto=compress&cs=tinysrgb&w=400',
+      image:
+        'https://images.pexels.com/photos/6765363/pexels-photo-6765363.jpeg?auto=compress&cs=tinysrgb&w=400',
       price: 'GRÁTIS',
       isFree: true,
       level: 'Iniciante',
@@ -133,8 +136,18 @@ export default function HomeScreen() {
   ];
 
   const stats = [
-    { icon: TrendingUp, label: 'Progresso', value: `${user.progress}%`, color: '#10B981' },
-    { icon: Award, label: 'Certificados', value: user.certificates, color: '#F59E0B' },
+    {
+      icon: TrendingUp,
+      label: 'Progresso',
+      value: `${user.progress}%`,
+      color: '#10B981',
+    },
+    {
+      icon: Award,
+      label: 'Certificados',
+      value: user.certificates,
+      color: '#F59E0B',
+    },
     { icon: Users, label: 'Comunidade', value: '12.5k', color: '#3B82F6' },
   ];
 
@@ -144,24 +157,23 @@ export default function HomeScreen() {
       'Redirecionando para o pagamento do plano anual...',
       [
         { text: 'Cancelar', style: 'cancel' },
-        { text: 'Continuar', onPress: () => console.log('Redirect to payment') }
+        {
+          text: 'Continuar',
+          onPress: () => console.log('Redirect to payment'),
+        },
       ]
     );
   };
 
   const handleLogout = () => {
-    Alert.alert(
-      'Sair',
-      'Tem certeza que deseja sair?',
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        {
-          text: 'Sair',
-          style: 'destructive',
-          onPress: () => router.replace('/auth/login')
-        }
-      ]
-    );
+    Alert.alert('Sair', 'Tem certeza que deseja sair?', [
+      { text: 'Cancelar', style: 'cancel' },
+      {
+        text: 'Sair',
+        style: 'destructive',
+        onPress: () => router.replace('/auth/login'),
+      },
+    ]);
   };
 
   const getThemeIcon = () => {
@@ -181,13 +193,18 @@ export default function HomeScreen() {
 
   if (showSubscription) {
     return (
-      <ScrollView style={[styles.container, { backgroundColor: colors.background }]} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={[styles.container, { backgroundColor: colors.background }]}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.subscriptionHeader}>
           <TouchableOpacity
             style={styles.backButton}
             onPress={() => setShowSubscription(false)}
           >
-            <Text style={[styles.backButtonText, { color: colors.primary }]}>← Voltar</Text>
+            <Text style={[styles.backButtonText, { color: colors.primary }]}>
+              ← Voltar
+            </Text>
           </TouchableOpacity>
         </View>
         <SubscriptionPlan onSubscribe={handleSubscribe} />
@@ -196,7 +213,10 @@ export default function HomeScreen() {
   }
 
   return (
-    <ScrollView style={[styles.container, { backgroundColor: colors.background }]} showsVerticalScrollIndicator={false}>
+    <ScrollView
+      style={[styles.container, { backgroundColor: colors.background }]}
+      showsVerticalScrollIndicator={false}
+    >
       {/* Header */}
       <LinearGradient
         colors={isDark ? ['#1a1a1a', '#2a1a4a'] : ['#8B5CF6', '#3B82F6']}
@@ -207,14 +227,11 @@ export default function HomeScreen() {
             <Text style={styles.welcomeText}>Olá, {user.name} 👋</Text>
             <Text style={styles.levelText}>Nível: {user.level}</Text>
           </View>
-          
-          <TouchableOpacity
-            style={styles.themeToggle}
-            onPress={toggleTheme}
-          >
+
+          <TouchableOpacity style={styles.themeToggle} onPress={toggleTheme}>
             <ThemeIcon size={24} color="white" />
           </TouchableOpacity>
-          
+
           <TouchableOpacity
             style={styles.adminButton}
             onPress={() => router.push('/(tabs)/admin')}
@@ -222,18 +239,26 @@ export default function HomeScreen() {
             <Settings size={24} color="white" />
           </TouchableOpacity>
         </View>
-        
+
         <View style={styles.progressCard}>
-          <Text style={[styles.progressTitle, { color: 'white' }]}>Seu Progresso</Text>
+          <Text style={[styles.progressTitle, { color: 'white' }]}>
+            Seu Progresso
+          </Text>
           <View style={styles.progressBar}>
-            <View style={[styles.progressFill, { width: `${user.progress}%` }]} />
+            <View
+              style={[styles.progressFill, { width: `${user.progress}%` }]}
+            />
           </View>
-          <Text style={[styles.progressText, { color: 'rgba(255, 255, 255, 0.8)' }]}>{user.progress}% concluído</Text>
+          <Text
+            style={[styles.progressText, { color: 'rgba(255, 255, 255, 0.8)' }]}
+          >
+            {user.progress}% concluído
+          </Text>
         </View>
       </LinearGradient>
 
       {/* Special Cashback Offer */}
-      <View style={styles.section}>
+      <View style={[styles.section, { paddingBottom: 5 }]}>
         <CashbackBanner
           cashbackPercentage={25}
           cashbackAmount="R$ 74,98"
@@ -242,8 +267,8 @@ export default function HomeScreen() {
       </View>
 
       {/* Premium Subscription CTA */}
-      <View style={styles.section}>
-        <TouchableOpacity 
+      <View style={[styles.section, styles.sectionNoPadding]}>
+        <TouchableOpacity
           style={styles.premiumCTA}
           onPress={() => setShowSubscription(true)}
         >
@@ -276,8 +301,12 @@ export default function HomeScreen() {
           return (
             <View key={index} style={styles.statCard}>
               <Icon size={24} color={stat.color} />
-              <Text style={[styles.statValue, { color: colors.text }]}>{stat.value}</Text>
-              <Text style={[styles.statLabel, { color: colors.textSecondary }]}>{stat.label}</Text>
+              <Text style={[styles.statValue, { color: colors.text }]}>
+                {stat.value}
+              </Text>
+              <Text style={[styles.statLabel, { color: colors.textSecondary }]}>
+                {stat.label}
+              </Text>
             </View>
           );
         })}
@@ -286,61 +315,90 @@ export default function HomeScreen() {
       {/* Featured Courses */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>Cursos em Destaque</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>
+            Cursos em Destaque
+          </Text>
           <TouchableOpacity style={styles.seeAllButton}>
-            <Text style={[styles.seeAllText, { color: colors.primary }]}>Ver todos</Text>
+            <Text style={[styles.seeAllText, { color: colors.primary }]}>
+              Ver todos
+            </Text>
             <ChevronRight size={16} color="#8B5CF6" />
           </TouchableOpacity>
         </View>
 
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {featuredCourses.map((course) => (
-            <TouchableOpacity 
-              key={course.id} 
+            <TouchableOpacity
+              key={course.id}
               style={styles.courseCard}
               onPress={() => router.push(`/course/${course.id}`)}
             >
               <View style={styles.courseImageContainer}>
                 <LinearGradient
-                  colors={['rgba(139, 92, 246, 0.8)', 'rgba(59, 130, 246, 0.8)']}
+                  colors={[
+                    'rgba(139, 92, 246, 0.8)',
+                    'rgba(59, 130, 246, 0.8)',
+                  ]}
                   style={styles.courseImageOverlay}
                 >
                   <Play size={32} color="white" />
                 </LinearGradient>
               </View>
-              
+
               <View style={styles.courseInfo}>
                 <Text style={styles.courseTitle} numberOfLines={2}>
                   {course.title}
                 </Text>
-                <Text style={[styles.instructor, { color: colors.textSecondary }]}>{course.instructor}</Text>
-                
+                <Text
+                  style={[styles.instructor, { color: colors.textSecondary }]}
+                >
+                  {course.instructor}
+                </Text>
+
                 <View style={styles.courseStats}>
                   <View style={styles.rating}>
                     <Star size={14} color="#F59E0B" fill="#F59E0B" />
-                    <Text style={[styles.ratingText, { color: colors.text }]}>{course.rating}</Text>
+                    <Text style={[styles.ratingText, { color: colors.text }]}>
+                      {course.rating}
+                    </Text>
                   </View>
-                  <Text style={[styles.students, { color: colors.textSecondary }]}>
+                  <Text
+                    style={[styles.students, { color: colors.textSecondary }]}
+                  >
                     {course.students} estudantes
                   </Text>
                 </View>
-                
+
                 <View style={styles.courseBottom}>
-                  <Text style={[styles.price, { color: colors.success }]}>{course.price}</Text>
-                  <View style={[styles.levelBadge, 
-                    course.level === 'Iniciante' ? styles.beginnerBadge : 
-                    course.level === 'Avançado' ? styles.advancedBadge : styles.intermediateBadge
-                  ]}>
-                    <Text style={[styles.levelText, 
-                      course.level === 'Iniciante' ? styles.beginnerText : 
-                      course.level === 'Avançado' ? styles.advancedText : styles.intermediateText
-                    ]}>
+                  <Text style={[styles.price, { color: colors.success }]}>
+                    {course.price}
+                  </Text>
+                  <View
+                    style={[
+                      styles.levelBadge,
+                      course.level === 'Iniciante'
+                        ? styles.beginnerBadge
+                        : course.level === 'Avançado'
+                        ? styles.advancedBadge
+                        : styles.intermediateBadge,
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.levelText,
+                        course.level === 'Iniciante'
+                          ? styles.beginnerText
+                          : course.level === 'Avançado'
+                          ? styles.advancedText
+                          : styles.intermediateText,
+                      ]}
+                    >
                       {course.level}
                     </Text>
                   </View>
                 </View>
               </View>
-              
+
               {/* Free course indicator */}
               {course.isFree && (
                 <View style={styles.freeIndicator}>
@@ -355,24 +413,28 @@ export default function HomeScreen() {
       {/* Free Courses Section */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>Cursos Gratuitos</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>
+            Cursos Gratuitos
+          </Text>
           <TouchableOpacity style={styles.seeAllButton}>
-            <Text style={[styles.seeAllText, { color: colors.primary }]}>Ver todos</Text>
+            <Text style={[styles.seeAllText, { color: colors.primary }]}>
+              Ver todos
+            </Text>
             <ChevronRight size={16} color="#8B5CF6" />
           </TouchableOpacity>
         </View>
 
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {freeCourses.map((course) => (
-            <TouchableOpacity 
-              key={course.id} 
+            <TouchableOpacity
+              key={course.id}
               style={styles.freeCourseCard}
               onPress={() => router.push(`/course/${course.id}`)}
             >
               <View style={styles.freeBadge}>
                 <Text style={styles.freeBadgeText}>GRÁTIS</Text>
               </View>
-              
+
               <View style={styles.courseImageContainer}>
                 <LinearGradient
                   colors={['rgba(16, 185, 129, 0.8)', 'rgba(5, 150, 105, 0.8)']}
@@ -381,33 +443,45 @@ export default function HomeScreen() {
                   <Play size={32} color="white" />
                 </LinearGradient>
               </View>
-              
+
               <View style={styles.courseInfo}>
                 <Text style={styles.courseTitle} numberOfLines={2}>
                   {course.title}
                 </Text>
-                <Text style={[styles.instructor, { color: colors.textSecondary }]}>{course.instructor}</Text>
-                
+                <Text
+                  style={[styles.instructor, { color: colors.textSecondary }]}
+                >
+                  {course.instructor}
+                </Text>
+
                 <View style={styles.courseStats}>
                   <View style={styles.rating}>
                     <Star size={14} color="#F59E0B" fill="#F59E0B" />
-                    <Text style={[styles.ratingText, { color: colors.text }]}>{course.rating}</Text>
+                    <Text style={[styles.ratingText, { color: colors.text }]}>
+                      {course.rating}
+                    </Text>
                   </View>
-                  <Text style={[styles.students, { color: colors.textSecondary }]}>
+                  <Text
+                    style={[styles.students, { color: colors.textSecondary }]}
+                  >
                     {course.students} estudantes
                   </Text>
                 </View>
-                
+
                 <View style={styles.courseBottom}>
-                  <Text style={[styles.freePrice, { color: colors.success }]}>{course.price}</Text>
-                  <TouchableOpacity 
+                  <Text style={[styles.freePrice, { color: colors.success }]}>
+                    {course.price}
+                  </Text>
+                  <TouchableOpacity
                     style={styles.freeAccessButton}
                     onPress={(e) => {
                       e.stopPropagation();
                       router.push(`/course/${course.id}`);
                     }}
                   >
-                    <Text style={[styles.freeAccessText, { color: 'white' }]}>Acessar</Text>
+                    <Text style={[styles.freeAccessText, { color: 'white' }]}>
+                      Acessar
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -419,9 +493,13 @@ export default function HomeScreen() {
       {/* Special Offers */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>Ofertas Especiais</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>
+            Ofertas Especiais
+          </Text>
           <TouchableOpacity style={styles.seeAllButton}>
-            <Text style={[styles.seeAllText, { color: colors.primary }]}>Ver todas</Text>
+            <Text style={[styles.seeAllText, { color: colors.primary }]}>
+              Ver todas
+            </Text>
             <ChevronRight size={16} color="#8B5CF6" />
           </TouchableOpacity>
         </View>
@@ -440,7 +518,9 @@ export default function HomeScreen() {
 
       {/* Quick Actions */}
       <View style={styles.section}>
-        <Text style={[styles.sectionTitle, { color: colors.text }]}>Ações Rápidas</Text>
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>
+          Ações Rápidas
+        </Text>
         <View style={styles.quickActions}>
           <TouchableOpacity style={styles.quickAction}>
             <LinearGradient
@@ -449,7 +529,9 @@ export default function HomeScreen() {
             >
               <Play size={24} color="white" />
             </LinearGradient>
-            <Text style={[styles.quickActionText, { color: colors.text }]}>Continuar Estudos</Text>
+            <Text style={[styles.quickActionText, { color: colors.text }]}>
+              Continuar Estudos
+            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.quickAction}>
@@ -459,17 +541,16 @@ export default function HomeScreen() {
             >
               <Award size={24} color="white" />
             </LinearGradient>
-            <Text style={[styles.quickActionText, { color: colors.text }]}>Meus Certificados</Text>
+            <Text style={[styles.quickActionText, { color: colors.text }]}>
+              Meus Certificados
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
 
       {/* Logout Button */}
       <View style={styles.section}>
-        <TouchableOpacity
-          style={styles.logoutButton}
-          onPress={handleLogout}
-        >
+        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
           <LinearGradient
             colors={['#EF4444', '#DC2626']}
             style={styles.logoutGradient}
@@ -579,6 +660,10 @@ const styles = StyleSheet.create({
   },
   section: {
     padding: 20,
+  },
+  sectionNoPadding: {
+    paddingTop: 0,
+    paddingBottom: 5,
   },
   sectionHeader: {
     flexDirection: 'row',

@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
+  Image,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
@@ -43,10 +44,7 @@ export default function ForgotPasswordScreen() {
 
   if (emailSent) {
     return (
-      <LinearGradient
-        colors={['#0a0a0a', '#1a0a2a']}
-        style={styles.container}
-      >
+      <LinearGradient colors={['#0a0a0a', '#1a0a2a']} style={styles.container}>
         <View style={styles.content}>
           <View style={styles.successContainer}>
             <View style={styles.successIcon}>
@@ -60,7 +58,8 @@ export default function ForgotPasswordScreen() {
             </Text>
 
             <Text style={styles.instructionText}>
-              Verifique sua caixa de entrada e siga as instruções para redefinir sua senha.
+              Verifique sua caixa de entrada e siga as instruções para redefinir
+              sua senha.
             </Text>
 
             <TouchableOpacity
@@ -88,10 +87,7 @@ export default function ForgotPasswordScreen() {
   }
 
   return (
-    <LinearGradient
-      colors={['#0a0a0a', '#1a0a2a']}
-      style={styles.container}
-    >
+    <LinearGradient colors={['#0a0a0a', '#1a0a2a']} style={styles.container}>
       <View style={styles.content}>
         <TouchableOpacity
           style={styles.backIconButton}
@@ -101,15 +97,15 @@ export default function ForgotPasswordScreen() {
         </TouchableOpacity>
 
         <View style={styles.header}>
-          <LinearGradient
-            colors={['#8B5CF6', '#3B82F6']}
+          <Image
+            source={require('../../assets/images/logo.png')}
             style={styles.logo}
-          >
-            <Text style={styles.logoText}>₿</Text>
-          </LinearGradient>
+            resizeMode="contain"
+          />
           <Text style={styles.title}>Esqueceu a senha?</Text>
           <Text style={styles.subtitle}>
-            Sem problemas! Digite seu email e enviaremos instruções para redefinir sua senha.
+            Sem problemas! Digite seu email e enviaremos instruções para
+            redefinir sua senha.
           </Text>
         </View>
 
@@ -181,17 +177,9 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   logo: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: 150,
+    height: 150,
     marginBottom: 16,
-  },
-  logoText: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    color: 'white',
   },
   title: {
     fontSize: 28,

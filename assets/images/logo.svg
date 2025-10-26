@@ -1,0 +1,30 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="512" height="512" fill="#000000"/>
+  
+  <!-- Outer circle -->
+  <circle cx="256" cy="256" r="200" fill="none" stroke="#ffffff" stroke-width="3"/>
+  
+  <!-- Middle dashed circles -->
+  <circle cx="256" cy="256" r="160" fill="none" stroke="#ffffff" stroke-width="2" stroke-dasharray="8,8"/>
+  <circle cx="256" cy="256" r="120" fill="none" stroke="#ffffff" stroke-width="2" stroke-dasharray="6,6"/>
+  
+  <!-- Inner solid circle -->
+  <circle cx="256" cy="256" r="80" fill="none" stroke="#ffffff" stroke-width="3"/>
+  
+  <!-- Bitcoin B symbol -->
+  <path d="M 200 180 L 200 332 L 240 332 L 240 300 L 280 300 L 280 280 L 240 280 L 240 220 L 280 220 L 280 200 L 240 200 L 240 180 Z" fill="#ffffff"/>
+  <path d="M 200 200 L 200 220 L 240 220 L 240 200 Z" fill="#000000"/>
+  <path d="M 200 280 L 200 300 L 240 300 L 240 280 Z" fill="#000000"/>
+  
+  <!-- Horizontal arrows (compass) -->
+  <path d="M 120 256 L 160 256 L 150 246 L 150 250 L 160 250 L 160 262 L 150 262 L 150 266 Z" fill="#ffffff"/>
+  <path d="M 352 256 L 312 256 L 322 246 L 322 250 L 312 250 L 312 262 L 322 262 L 322 266 Z" fill="#ffffff"/>
+  
+  <!-- Vertical arrows -->
+  <path d="M 256 120 L 256 160 L 246 150 L 250 150 L 250 160 L 262 160 L 262 150 L 266 150 Z" fill="#ffffff"/>
+  <path d="M 256 352 L 256 312 L 266 322 L 262 322 L 262 312 L 250 312 L 250 322 L 246 322 Z" fill="#ffffff"/>
+  
+  <!-- "Bit for Kids" text -->
+  <text x="256" y="100" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="24" font-weight="300">Bit for Kids</text>
+</svg>

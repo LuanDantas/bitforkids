@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
+  Image,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
@@ -43,20 +44,16 @@ export default function LoginScreen() {
   };
 
   return (
-    <LinearGradient
-      colors={['#0a0a0a', '#1a0a2a']}
-      style={styles.container}
-    >
+    <LinearGradient colors={['#0a0a0a', '#1a0a2a']} style={styles.container}>
       <View style={styles.content}>
         {/* Logo/Header */}
         <View style={styles.header}>
-          <LinearGradient
-            colors={['#8B5CF6', '#3B82F6']}
+          <Image
+            source={require('../../assets/images/logo.png')}
             style={styles.logo}
-          >
-            <Text style={styles.logoText}>₿</Text>
-          </LinearGradient>
-          <Text style={styles.title}>Bitforkids</Text>
+            resizeMode="contain"
+          />
+          <Text style={styles.title}>Seja bem vindo</Text>
           <Text style={styles.subtitle}>
             Faça login para continuar seus estudos
           </Text>
@@ -176,17 +173,9 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   logo: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: 150,
+    height: 150,
     marginBottom: 16,
-  },
-  logoText: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    color: 'white',
   },
   title: {
     fontSize: 28,
