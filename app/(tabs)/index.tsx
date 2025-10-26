@@ -586,7 +586,10 @@ export default function HomeScreen() {
           Mentoria Individual
         </Text>
 
-        <TouchableOpacity style={styles.mentorshipCard}>
+        <TouchableOpacity
+          style={styles.mentorshipCard}
+          onPress={() => router.push('/mentoria-completa')}
+        >
           <LinearGradient
             colors={['#8B5CF6', '#7C3AED']}
             style={styles.mentorshipGradient}
