@@ -100,11 +100,6 @@ export default function MentoriaCompletaScreen() {
       title: 'Suporte Contínuo',
       description: 'Acesso direto ao mentor via WhatsApp',
     },
-    {
-      icon: '🏆',
-      title: 'Certificação',
-      description: 'Certificado de conclusão para toda a família',
-    },
   ];
 
   const modules = [

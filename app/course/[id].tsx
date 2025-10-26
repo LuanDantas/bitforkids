@@ -33,7 +33,7 @@ import {
   MessageCircle,
   Send,
   UserCircle,
-  Shield
+  Shield,
 } from 'lucide-react-native';
 
 const { width } = Dimensions.get('window');
@@ -51,202 +51,458 @@ export default function CourseDetailScreen() {
       user: 'Pedro Almeida',
       date: '2024-01-18',
       question: 'Qual é a diferença entre Bitcoin e Ethereum?',
-      answer: 'Bitcoin é principalmente uma moeda digital focada em transações peer-to-peer, enquanto Ethereum é uma plataforma que permite a criação de contratos inteligentes e aplicações descentralizadas. Ambos usam blockchain, mas com propósitos diferentes.',
+      answer:
+        'Bitcoin é principalmente uma moeda digital focada em transações peer-to-peer, enquanto Ethereum é uma plataforma que permite a criação de contratos inteligentes e aplicações descentralizadas. Ambos usam blockchain, mas com propósitos diferentes.',
       answerBy: 'Prof. Maria Santos',
-      answerDate: '2024-01-18'
+      answerDate: '2024-01-18',
     },
     {
       id: 2,
       user: 'Juliana Souza',
       date: '2024-01-17',
-      question: 'É necessário comprar um Bitcoin inteiro para começar a investir?',
-      answer: 'Não! Você pode comprar frações de Bitcoin. É possível começar com valores bem pequenos, já que o Bitcoin é divisível até 8 casas decimais (a menor unidade é chamada de Satoshi).',
+      question:
+        'É necessário comprar um Bitcoin inteiro para começar a investir?',
+      answer:
+        'Não! Você pode comprar frações de Bitcoin. É possível começar com valores bem pequenos, já que o Bitcoin é divisível até 8 casas decimais (a menor unidade é chamada de Satoshi).',
       answerBy: 'Prof. Maria Santos',
-      answerDate: '2024-01-17'
+      answerDate: '2024-01-17',
     },
     {
       id: 3,
       user: 'Roberto Dias',
       date: '2024-01-16',
       question: 'Qual carteira vocês recomendam para iniciantes?',
-      answer: null
-    }
+      answer: null,
+    },
   ]);
 
   // Mock course data - in real app, this would come from API
   const course = {
     id: 1,
-    title: id === '7' || id === '8' || id === '9' ? 
-      (id === '7' ? 'Bitcoin para Iniciantes - GRÁTIS' :
-       id === '8' ? 'Carteiras Digitais - Básico GRÁTIS' :
-       'Blockchain Explicado - GRÁTIS') : 
-      'Fundamentos do Bitcoin e Blockchain',
-    description: id === '7' || id === '8' || id === '9' ? 
-      (id === '7' ? 'Curso introdutório gratuito sobre Bitcoin e criptomoedas. Aprenda os conceitos básicos sem custo algum.' :
-       id === '8' ? 'Aprenda a criar e usar carteiras digitais com segurança. Curso gratuito para iniciantes.' :
-       'Entenda como funciona a tecnologia blockchain de forma simples e gratuita.') :
-      'Um curso completo e abrangente sobre Bitcoin, tecnologia blockchain e o futuro das criptomoedas. Aprenda desde os conceitos básicos até estratégias avançadas de investimento e análise técnica.',
+    title:
+      id === '7' || id === '8' || id === '9'
+        ? id === '7'
+          ? 'Bitcoin para Iniciantes - GRÁTIS'
+          : id === '8'
+          ? 'Carteiras Digitais - Básico GRÁTIS'
+          : 'Blockchain Explicado - GRÁTIS'
+        : 'Fundamentos do Bitcoin e Blockchain',
+    description:
+      id === '7' || id === '8' || id === '9'
+        ? id === '7'
+          ? 'Curso introdutório gratuito sobre Bitcoin e criptomoedas. Aprenda os conceitos básicos sem custo algum.'
+          : id === '8'
+          ? 'Aprenda a criar e usar carteiras digitais com segurança. Curso gratuito para iniciantes.'
+          : 'Entenda como funciona a tecnologia blockchain de forma simples e gratuita.'
+        : 'Um curso completo e abrangente sobre Bitcoin, tecnologia blockchain e o futuro das criptomoedas. Aprenda desde os conceitos básicos até estratégias avançadas de investimento e análise técnica.',
     instructor: {
-      name: id === '7' ? 'Prof. João Santos' : 
-            id === '8' ? 'Prof. Ana Costa' :
-            id === '9' ? 'Prof. Roberto Lima' : 'Prof. Maria Santos',
-      bio: id === '7' ? 'Especialista em educação financeira e criptomoedas, com foco em ensino para iniciantes.' :
-           id === '8' ? 'Especialista em segurança digital e carteiras de criptomoedas.' :
-           id === '9' ? 'Desenvolvedor blockchain e educador, especialista em explicar conceitos técnicos de forma simples.' :
-           'Especialista em criptomoedas com mais de 8 anos de experiência no mercado financeiro e blockchain. Formada em Economia pela USP e certificada em Análise Técnica.',
-      avatar: id === '7' ? 'JS' : 
-              id === '8' ? 'AC' :
-              id === '9' ? 'RL' : 'MS',
+      name:
+        id === '7'
+          ? 'Prof. João Santos'
+          : id === '8'
+          ? 'Prof. Ana Costa'
+          : id === '9'
+          ? 'Prof. Roberto Lima'
+          : 'Prof. Maria Santos',
+      bio:
+        id === '7'
+          ? 'Especialista em educação financeira e criptomoedas, com foco em ensino para iniciantes.'
+          : id === '8'
+          ? 'Especialista em segurança digital e carteiras de criptomoedas.'
+          : id === '9'
+          ? 'Desenvolvedor blockchain e educador, especialista em explicar conceitos técnicos de forma simples.'
+          : 'Especialista em criptomoedas com mais de 8 anos de experiência no mercado financeiro e blockchain. Formada em Economia pela USP e certificada em Análise Técnica.',
+      avatar: id === '7' ? 'JS' : id === '8' ? 'AC' : id === '9' ? 'RL' : 'MS',
       courses: 12,
-      students: id === '7' ? 3200 : id === '8' ? 2800 : id === '9' ? 4100 : 15000,
-      rating: 4.9
+      students:
+        id === '7' ? 3200 : id === '8' ? 2800 : id === '9' ? 4100 : 15000,
+      rating: 4.9,
     },
     rating: id === '7' ? 4.5 : id === '8' ? 4.4 : id === '9' ? 4.6 : 4.8,
     reviews: id === '7' ? 156 : id === '8' ? 98 : id === '9' ? 203 : 324,
     students: id === '7' ? 3200 : id === '8' ? 2800 : id === '9' ? 4100 : 1250,
-    duration: id === '7' ? '2h 15min' : id === '8' ? '1h 45min' : id === '9' ? '3h 00min' : '4h 30min',
+    duration:
+      id === '7'
+        ? '2h 15min'
+        : id === '8'
+        ? '1h 45min'
+        : id === '9'
+        ? '3h 00min'
+        : '4h 30min',
     lessons: id === '7' ? 8 : id === '8' ? 6 : id === '9' ? 10 : 24,
-    price: (id === '7' || id === '8' || id === '9') ? 'GRÁTIS' : 'R$ 149,90',
-    originalPrice: (id === '7' || id === '8' || id === '9') ? null : 'R$ 199,90',
-    isFree: (id === '7' || id === '8' || id === '9'),
+    price: id === '7' || id === '8' || id === '9' ? 'GRÁTIS' : 'R$ 149,90',
+    originalPrice: id === '7' || id === '8' || id === '9' ? null : 'R$ 199,90',
+    isFree: id === '7' || id === '8' || id === '9',
     level: 'Iniciante',
     category: 'Blockchain',
     language: 'Português',
     lastUpdated: '2024',
-    certificate: true,
+    certificate: false,
     downloadable: true,
     hasCashback: !(id === '7' || id === '8' || id === '9'),
     cashbackPercentage: !(id === '7' || id === '8' || id === '9') ? 15 : 0,
-    cashbackAmount: !(id === '7' || id === '8' || id === '9') ? 'R$ 22,49' : null,
+    cashbackAmount: !(id === '7' || id === '8' || id === '9')
+      ? 'R$ 22,49'
+      : null,
     objectives: [
-      ...(id === '7' ? [
-        'Entender o que é Bitcoin e como funciona',
-        'Conhecer a história das criptomoedas',
-        'Aprender conceitos básicos de blockchain',
-        'Identificar vantagens e riscos do Bitcoin'
-      ] : id === '8' ? [
-        'Criar sua primeira carteira digital',
-        'Entender tipos de carteiras (hot e cold)',
-        'Aprender práticas de segurança',
-        'Fazer backup e recuperação de carteiras'
-      ] : id === '9' ? [
-        'Compreender como funciona a blockchain',
-        'Entender conceitos de descentralização',
-        'Conhecer aplicações da blockchain',
-        'Identificar diferentes tipos de blockchain'
-      ] : [
-        'Entender completamente o que é Bitcoin e como funciona',
-        'Compreender a tecnologia blockchain e suas aplicações',
-        'Aprender a comprar, armazenar e transferir Bitcoin com segurança',
-        'Dominar estratégias básicas de investimento em criptomoedas',
-        'Conhecer as principais exchanges e carteiras digitais',
-        'Entender análise técnica básica para trading'
-      ])
+      ...(id === '7'
+        ? [
+            'Entender o que é Bitcoin e como funciona',
+            'Conhecer a história das criptomoedas',
+            'Aprender conceitos básicos de blockchain',
+            'Identificar vantagens e riscos do Bitcoin',
+          ]
+        : id === '8'
+        ? [
+            'Criar sua primeira carteira digital',
+            'Entender tipos de carteiras (hot e cold)',
+            'Aprender práticas de segurança',
+            'Fazer backup e recuperação de carteiras',
+          ]
+        : id === '9'
+        ? [
+            'Compreender como funciona a blockchain',
+            'Entender conceitos de descentralização',
+            'Conhecer aplicações da blockchain',
+            'Identificar diferentes tipos de blockchain',
+          ]
+        : [
+            'Entender completamente o que é Bitcoin e como funciona',
+            'Compreender a tecnologia blockchain e suas aplicações',
+            'Aprender a comprar, armazenar e transferir Bitcoin com segurança',
+            'Dominar estratégias básicas de investimento em criptomoedas',
+            'Conhecer as principais exchanges e carteiras digitais',
+            'Entender análise técnica básica para trading',
+          ]),
     ],
     requirements: [
       'Conhecimento básico de informática',
       'Acesso à internet',
-      'Interesse em aprender sobre tecnologia financeira'
+      'Interesse em aprender sobre tecnologia financeira',
     ],
     modules: [
       {
         id: 1,
-        title: id === '7' ? 'O que é Bitcoin?' : 
-               id === '8' ? 'Introdução às Carteiras' :
-               id === '9' ? 'Fundamentos da Blockchain' : 'Introdução ao Bitcoin',
+        title:
+          id === '7'
+            ? 'O que é Bitcoin?'
+            : id === '8'
+            ? 'Introdução às Carteiras'
+            : id === '9'
+            ? 'Fundamentos da Blockchain'
+            : 'Introdução ao Bitcoin',
         lessons: id === '7' ? 3 : id === '8' ? 2 : id === '9' ? 4 : 6,
-        duration: id === '7' ? '45min' : id === '8' ? '30min' : id === '9' ? '1h 00min' : '1h 15min',
+        duration:
+          id === '7'
+            ? '45min'
+            : id === '8'
+            ? '30min'
+            : id === '9'
+            ? '1h 00min'
+            : '1h 15min',
         completed: false,
         lessons_detail: [
-          ...(id === '7' ? [
-            { id: 1, title: 'O que é Bitcoin?', type: 'video', duration: '15min', completed: false },
-            { id: 2, title: 'História das Criptomoedas', type: 'video', duration: '20min', completed: false },
-            { id: 3, title: 'Quiz Básico', type: 'quiz', duration: '10min', completed: false }
-          ] : id === '8' ? [
-            { id: 1, title: 'Tipos de Carteiras', type: 'video', duration: '15min', completed: false },
-            { id: 2, title: 'Criando sua Carteira', type: 'video', duration: '15min', completed: false }
-          ] : id === '9' ? [
-            { id: 1, title: 'O que é Blockchain?', type: 'video', duration: '20min', completed: false },
-            { id: 2, title: 'Como funciona?', type: 'video', duration: '25min', completed: false },
-            { id: 3, title: 'Aplicações práticas', type: 'video', duration: '10min', completed: false },
-            { id: 4, title: 'Quiz Final', type: 'quiz', duration: '5min', completed: false }
-          ] : [
-            { id: 1, title: 'O que é Bitcoin?', type: 'video', duration: '12min', completed: false },
-            { id: 2, title: 'História das Criptomoedas', type: 'video', duration: '15min', completed: false },
-            { id: 3, title: 'Como funciona o Bitcoin', type: 'video', duration: '18min', completed: false },
-            { id: 4, title: 'Vantagens e Desvantagens', type: 'video', duration: '10min', completed: false },
-            { id: 5, title: 'Material de Apoio', type: 'pdf', duration: '5min', completed: false },
-            { id: 6, title: 'Quiz - Módulo 1', type: 'quiz', duration: '15min', completed: false }
-          ])
-        ]
+          ...(id === '7'
+            ? [
+                {
+                  id: 1,
+                  title: 'O que é Bitcoin?',
+                  type: 'video',
+                  duration: '15min',
+                  completed: false,
+                },
+                {
+                  id: 2,
+                  title: 'História das Criptomoedas',
+                  type: 'video',
+                  duration: '20min',
+                  completed: false,
+                },
+                {
+                  id: 3,
+                  title: 'Quiz Básico',
+                  type: 'quiz',
+                  duration: '10min',
+                  completed: false,
+                },
+              ]
+            : id === '8'
+            ? [
+                {
+                  id: 1,
+                  title: 'Tipos de Carteiras',
+                  type: 'video',
+                  duration: '15min',
+                  completed: false,
+                },
+                {
+                  id: 2,
+                  title: 'Criando sua Carteira',
+                  type: 'video',
+                  duration: '15min',
+                  completed: false,
+                },
+              ]
+            : id === '9'
+            ? [
+                {
+                  id: 1,
+                  title: 'O que é Blockchain?',
+                  type: 'video',
+                  duration: '20min',
+                  completed: false,
+                },
+                {
+                  id: 2,
+                  title: 'Como funciona?',
+                  type: 'video',
+                  duration: '25min',
+                  completed: false,
+                },
+                {
+                  id: 3,
+                  title: 'Aplicações práticas',
+                  type: 'video',
+                  duration: '10min',
+                  completed: false,
+                },
+                {
+                  id: 4,
+                  title: 'Quiz Final',
+                  type: 'quiz',
+                  duration: '5min',
+                  completed: false,
+                },
+              ]
+            : [
+                {
+                  id: 1,
+                  title: 'O que é Bitcoin?',
+                  type: 'video',
+                  duration: '12min',
+                  completed: false,
+                },
+                {
+                  id: 2,
+                  title: 'História das Criptomoedas',
+                  type: 'video',
+                  duration: '15min',
+                  completed: false,
+                },
+                {
+                  id: 3,
+                  title: 'Como funciona o Bitcoin',
+                  type: 'video',
+                  duration: '18min',
+                  completed: false,
+                },
+                {
+                  id: 4,
+                  title: 'Vantagens e Desvantagens',
+                  type: 'video',
+                  duration: '10min',
+                  completed: false,
+                },
+                {
+                  id: 5,
+                  title: 'Material de Apoio',
+                  type: 'pdf',
+                  duration: '5min',
+                  completed: false,
+                },
+                {
+                  id: 6,
+                  title: 'Quiz - Módulo 1',
+                  type: 'quiz',
+                  duration: '15min',
+                  completed: false,
+                },
+              ]),
+        ],
       },
-      ...(!(id === '7' || id === '8' || id === '9') ? [{
-        id: 2,
-        title: 'Blockchain e Criptografia',
-        lessons: 8,
-        duration: '1h 45min',
-        completed: false,
-        lessons_detail: [
-          { id: 7, title: 'Fundamentos da Blockchain', type: 'video', duration: '20min', completed: false },
-          { id: 8, title: 'Criptografia e Hashing', type: 'video', duration: '15min', completed: false },
-          { id: 9, title: 'Mineração e Consenso', type: 'video', duration: '25min', completed: false },
-          { id: 10, title: 'Tipos de Blockchain', type: 'video', duration: '12min', completed: false },
-          { id: 11, title: 'Smart Contracts', type: 'video', duration: '18min', completed: false },
-          { id: 12, title: 'Casos de Uso', type: 'video', duration: '10min', completed: false },
-          { id: 13, title: 'Exercícios Práticos', type: 'pdf', duration: '10min', completed: false },
-          { id: 14, title: 'Avaliação - Módulo 2', type: 'quiz', duration: '15min', completed: false }
-        ]
-      }, {
-        id: 3,
-        title: 'Carteiras e Segurança',
-        lessons: 5,
-        duration: '1h 00min',
-        completed: false,
-        lessons_detail: [
-          { id: 15, title: 'Tipos de Carteiras', type: 'video', duration: '15min', completed: false },
-          { id: 16, title: 'Configurando sua Carteira', type: 'video', duration: '20min', completed: false },
-          { id: 17, title: 'Backup e Recuperação', type: 'video', duration: '12min', completed: false },
-          { id: 18, title: 'Boas Práticas de Segurança', type: 'video', duration: '8min', completed: false },
-          { id: 19, title: 'Teste Final - Segurança', type: 'quiz', duration: '5min', completed: false }
-        ]
-      }, {
-        id: 4,
-        title: 'Estratégias de Investimento',
-        lessons: 5,
-        duration: '30min',
-        completed: false,
-        lessons_detail: [
-          { id: 20, title: 'Análise Fundamentalista', type: 'video', duration: '8min', completed: false },
-          { id: 21, title: 'Análise Técnica Básica', type: 'video', duration: '10min', completed: false },
-          { id: 22, title: 'Gerenciamento de Risco', type: 'video', duration: '7min', completed: false },
-          { id: 23, title: 'Estratégias de Longo Prazo', type: 'video', duration: '5min', completed: false },
-          { id: 24, title: 'Avaliação Final', type: 'quiz', duration: '10min', completed: false }
-        ]
-      }] : [])
+      ...(!(id === '7' || id === '8' || id === '9')
+        ? [
+            {
+              id: 2,
+              title: 'Blockchain e Criptografia',
+              lessons: 8,
+              duration: '1h 45min',
+              completed: false,
+              lessons_detail: [
+                {
+                  id: 7,
+                  title: 'Fundamentos da Blockchain',
+                  type: 'video',
+                  duration: '20min',
+                  completed: false,
+                },
+                {
+                  id: 8,
+                  title: 'Criptografia e Hashing',
+                  type: 'video',
+                  duration: '15min',
+                  completed: false,
+                },
+                {
+                  id: 9,
+                  title: 'Mineração e Consenso',
+                  type: 'video',
+                  duration: '25min',
+                  completed: false,
+                },
+                {
+                  id: 10,
+                  title: 'Tipos de Blockchain',
+                  type: 'video',
+                  duration: '12min',
+                  completed: false,
+                },
+                {
+                  id: 11,
+                  title: 'Smart Contracts',
+                  type: 'video',
+                  duration: '18min',
+                  completed: false,
+                },
+                {
+                  id: 12,
+                  title: 'Casos de Uso',
+                  type: 'video',
+                  duration: '10min',
+                  completed: false,
+                },
+                {
+                  id: 13,
+                  title: 'Exercícios Práticos',
+                  type: 'pdf',
+                  duration: '10min',
+                  completed: false,
+                },
+                {
+                  id: 14,
+                  title: 'Avaliação - Módulo 2',
+                  type: 'quiz',
+                  duration: '15min',
+                  completed: false,
+                },
+              ],
+            },
+            {
+              id: 3,
+              title: 'Carteiras e Segurança',
+              lessons: 5,
+              duration: '1h 00min',
+              completed: false,
+              lessons_detail: [
+                {
+                  id: 15,
+                  title: 'Tipos de Carteiras',
+                  type: 'video',
+                  duration: '15min',
+                  completed: false,
+                },
+                {
+                  id: 16,
+                  title: 'Configurando sua Carteira',
+                  type: 'video',
+                  duration: '20min',
+                  completed: false,
+                },
+                {
+                  id: 17,
+                  title: 'Backup e Recuperação',
+                  type: 'video',
+                  duration: '12min',
+                  completed: false,
+                },
+                {
+                  id: 18,
+                  title: 'Boas Práticas de Segurança',
+                  type: 'video',
+                  duration: '8min',
+                  completed: false,
+                },
+                {
+                  id: 19,
+                  title: 'Teste Final - Segurança',
+                  type: 'quiz',
+                  duration: '5min',
+                  completed: false,
+                },
+              ],
+            },
+            {
+              id: 4,
+              title: 'Estratégias de Investimento',
+              lessons: 5,
+              duration: '30min',
+              completed: false,
+              lessons_detail: [
+                {
+                  id: 20,
+                  title: 'Análise Fundamentalista',
+                  type: 'video',
+                  duration: '8min',
+                  completed: false,
+                },
+                {
+                  id: 21,
+                  title: 'Análise Técnica Básica',
+                  type: 'video',
+                  duration: '10min',
+                  completed: false,
+                },
+                {
+                  id: 22,
+                  title: 'Gerenciamento de Risco',
+                  type: 'video',
+                  duration: '7min',
+                  completed: false,
+                },
+                {
+                  id: 23,
+                  title: 'Estratégias de Longo Prazo',
+                  type: 'video',
+                  duration: '5min',
+                  completed: false,
+                },
+                {
+                  id: 24,
+                  title: 'Avaliação Final',
+                  type: 'quiz',
+                  duration: '10min',
+                  completed: false,
+                },
+              ],
+            },
+          ]
+        : []),
     ],
     reviews_sample: [
       {
         id: 1,
         user: 'João Silva',
         rating: 5,
-        comment: 'Excelente curso! Muito didático e completo. Recomendo para quem está começando.',
-        date: '2024-01-15'
+        comment:
+          'Excelente curso! Muito didático e completo. Recomendo para quem está começando.',
+        date: '2024-01-15',
       },
       {
         id: 2,
         user: 'Ana Costa',
         rating: 5,
-        comment: 'A professora explica muito bem. Consegui entender conceitos que antes eram confusos.',
-        date: '2024-01-10'
+        comment:
+          'A professora explica muito bem. Consegui entender conceitos que antes eram confusos.',
+        date: '2024-01-10',
       },
       {
         id: 3,
         user: 'Carlos Lima',
         rating: 4,
         comment: 'Bom conteúdo, mas poderia ter mais exemplos práticos.',
-        date: '2024-01-08'
-      }
-    ]
+        date: '2024-01-08',
+      },
+    ],
   };
 
   // Cross-sell and Upsell courses
@@ -296,7 +552,8 @@ export default function CourseDetailScreen() {
   const bundleOffer = {
     id: 1,
     title: 'Pacote Completo Bitcoin Master',
-    description: 'Tudo que você precisa saber sobre Bitcoin, do básico ao avançado, incluindo trading e análise técnica.',
+    description:
+      'Tudo que você precisa saber sobre Bitcoin, do básico ao avançado, incluindo trading e análise técnica.',
     courses: [
       { id: 1, title: 'Fundamentos do Bitcoin', duration: '4h 30min' },
       { id: 7, title: 'Trading Profissional de Bitcoin', duration: '8h 30min' },
@@ -310,11 +567,10 @@ export default function CourseDetailScreen() {
     totalDuration: '18h 20min',
     features: [
       'Acesso vitalício a todos os cursos',
-      'Certificados para cada curso',
       'Suporte direto com instrutores',
       'Grupo VIP no Telegram',
       'Atualizações gratuitas',
-      'Garantia de 30 dias'
+      'Garantia de 30 dias',
     ],
   };
 
@@ -347,7 +603,10 @@ export default function CourseDetailScreen() {
   };
 
   const handleShare = () => {
-    Alert.alert('Compartilhar', 'Funcionalidade de compartilhamento será implementada');
+    Alert.alert(
+      'Compartilhar',
+      'Funcionalidade de compartilhamento será implementada'
+    );
   };
 
   const handleDownload = () => {
@@ -361,11 +620,14 @@ export default function CourseDetailScreen() {
         user: 'Você',
         date: new Date().toISOString().split('T')[0],
         question: newQuestion,
-        answer: null
+        answer: null,
       };
       setQuestions([newQuestionObj, ...questions]);
       setNewQuestion('');
-      Alert.alert('Sucesso!', 'Sua pergunta foi enviada. O instrutor responderá em breve.');
+      Alert.alert(
+        'Sucesso!',
+        'Sua pergunta foi enviada. O instrutor responderá em breve.'
+      );
     } else {
       Alert.alert('Atenção', 'Por favor, digite sua pergunta.');
     }
@@ -438,10 +700,11 @@ export default function CourseDetailScreen() {
             <View style={styles.section}>
               <View style={styles.contentSummary}>
                 <Text style={styles.contentSummaryText}>
-                  {course.modules.length} módulos • {course.lessons} aulas • {course.duration}
+                  {course.modules.length} módulos • {course.lessons} aulas •{' '}
+                  {course.duration}
                 </Text>
               </View>
-              
+
               {course.modules.map((module) => (
                 <View key={module.id} style={styles.moduleItem}>
                   <TouchableOpacity style={styles.moduleHeader}>
@@ -458,19 +721,26 @@ export default function CourseDetailScreen() {
                       <CheckCircle size={20} color="#10B981" />
                     )}
                   </TouchableOpacity>
-                  
+
                   {/* Lesson Details */}
                   <View style={styles.lessonsList}>
                     {module.lessons_detail.map((lesson) => {
                       const LessonIcon = getLessonIcon(lesson.type);
                       return (
-                        <TouchableOpacity key={lesson.id} style={styles.lessonItem}>
+                        <TouchableOpacity
+                          key={lesson.id}
+                          style={styles.lessonItem}
+                        >
                           <View style={styles.lessonIcon}>
                             <LessonIcon size={16} color="#9CA3AF" />
                           </View>
                           <View style={styles.lessonInfo}>
-                            <Text style={styles.lessonTitle}>{lesson.title}</Text>
-                            <Text style={styles.lessonDuration}>{lesson.duration}</Text>
+                            <Text style={styles.lessonTitle}>
+                              {lesson.title}
+                            </Text>
+                            <Text style={styles.lessonDuration}>
+                              {lesson.duration}
+                            </Text>
                           </View>
                           {lesson.completed && (
                             <CheckCircle size={16} color="#10B981" />
@@ -492,27 +762,39 @@ export default function CourseDetailScreen() {
               <View style={styles.instructorCard}>
                 <View style={styles.instructorHeader}>
                   <View style={styles.instructorAvatar}>
-                    <Text style={styles.instructorInitial}>{course.instructor.avatar}</Text>
+                    <Text style={styles.instructorInitial}>
+                      {course.instructor.avatar}
+                    </Text>
                   </View>
                   <View style={styles.instructorInfo}>
-                    <Text style={styles.instructorName}>{course.instructor.name}</Text>
+                    <Text style={styles.instructorName}>
+                      {course.instructor.name}
+                    </Text>
                     <View style={styles.instructorStats}>
                       <View style={styles.instructorStat}>
                         <Star size={14} color="#F59E0B" fill="#F59E0B" />
-                        <Text style={styles.instructorStatText}>{course.instructor.rating}</Text>
+                        <Text style={styles.instructorStatText}>
+                          {course.instructor.rating}
+                        </Text>
                       </View>
                       <View style={styles.instructorStat}>
                         <BookOpen size={14} color="#9CA3AF" />
-                        <Text style={styles.instructorStatText}>{course.instructor.courses} cursos</Text>
+                        <Text style={styles.instructorStatText}>
+                          {course.instructor.courses} cursos
+                        </Text>
                       </View>
                       <View style={styles.instructorStat}>
                         <Users size={14} color="#9CA3AF" />
-                        <Text style={styles.instructorStatText}>{course.instructor.students.toLocaleString()} alunos</Text>
+                        <Text style={styles.instructorStatText}>
+                          {course.instructor.students.toLocaleString()} alunos
+                        </Text>
                       </View>
                     </View>
                   </View>
                 </View>
-                <Text style={styles.instructorBio}>{course.instructor.bio}</Text>
+                <Text style={styles.instructorBio}>
+                  {course.instructor.bio}
+                </Text>
               </View>
             </View>
           </View>
@@ -524,26 +806,36 @@ export default function CourseDetailScreen() {
             <View style={styles.section}>
               <View style={styles.reviewsHeader}>
                 <View style={styles.reviewsRating}>
-                  <Text style={styles.reviewsRatingNumber}>{course.rating}</Text>
+                  <Text style={styles.reviewsRatingNumber}>
+                    {course.rating}
+                  </Text>
                   <View style={styles.reviewsStars}>
                     {[1, 2, 3, 4, 5].map((star) => (
                       <Star
                         key={star}
                         size={16}
                         color="#F59E0B"
-                        fill={star <= Math.floor(course.rating) ? "#F59E0B" : "transparent"}
+                        fill={
+                          star <= Math.floor(course.rating)
+                            ? '#F59E0B'
+                            : 'transparent'
+                        }
                       />
                     ))}
                   </View>
-                  <Text style={styles.reviewsCount}>({course.reviews} avaliações)</Text>
+                  <Text style={styles.reviewsCount}>
+                    ({course.reviews} avaliações)
+                  </Text>
                 </View>
               </View>
-              
+
               {course.reviews_sample.map((review) => (
                 <View key={review.id} style={styles.reviewItem}>
                   <View style={styles.reviewHeader}>
                     <View style={styles.reviewAvatar}>
-                      <Text style={styles.reviewInitial}>{review.user.charAt(0)}</Text>
+                      <Text style={styles.reviewInitial}>
+                        {review.user.charAt(0)}
+                      </Text>
                     </View>
                     <View style={styles.reviewInfo}>
                       <Text style={styles.reviewUser}>{review.user}</Text>
@@ -553,7 +845,9 @@ export default function CourseDetailScreen() {
                             key={star}
                             size={12}
                             color="#F59E0B"
-                            fill={star <= review.rating ? "#F59E0B" : "transparent"}
+                            fill={
+                              star <= review.rating ? '#F59E0B' : 'transparent'
+                            }
                           />
                         ))}
                       </View>
@@ -605,7 +899,8 @@ export default function CourseDetailScreen() {
               {/* Questions List */}
               <View style={styles.questionsContainer}>
                 <Text style={styles.questionsCount}>
-                  {questions.length} {questions.length === 1 ? 'pergunta' : 'perguntas'}
+                  {questions.length}{' '}
+                  {questions.length === 1 ? 'pergunta' : 'perguntas'}
                 </Text>
 
                 {questions.map((q) => (
@@ -628,7 +923,9 @@ export default function CourseDetailScreen() {
                         <View style={styles.answerHeader}>
                           <View style={styles.answerBadge}>
                             <Shield size={16} color="#10B981" />
-                            <Text style={styles.answerBadgeText}>Resposta do Instrutor</Text>
+                            <Text style={styles.answerBadgeText}>
+                              Resposta do Instrutor
+                            </Text>
                           </View>
                           <Text style={styles.answerDate}>{q.answerDate}</Text>
                         </View>
@@ -665,8 +962,13 @@ export default function CourseDetailScreen() {
               <View style={styles.section}>
                 <CashbackBanner
                   cashbackPercentage={course.cashbackPercentage}
-                  cashbackAmount={course.cashbackAmount}
-                  onPress={() => Alert.alert('Cashback', 'Você receberá o cashback após a compra!')}
+                  cashbackAmount={course.cashbackAmount || 'R$ 0,00'}
+                  onPress={() =>
+                    Alert.alert(
+                      'Cashback',
+                      'Você receberá o cashback após a compra!'
+                    )
+                  }
                 />
               </View>
             )}
@@ -676,14 +978,21 @@ export default function CourseDetailScreen() {
               <Text style={styles.sectionTitle}>Oferta Especial</Text>
               <BundleOffer
                 bundle={bundleOffer}
-                onPress={() => Alert.alert('Bundle', 'Redirecionando para o pacote completo...')}
+                onPress={() =>
+                  Alert.alert(
+                    'Bundle',
+                    'Redirecionando para o pacote completo...'
+                  )
+                }
               />
             </View>
 
             {/* Upsell Courses */}
             {upsellCourses.length > 0 && (
               <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Aprimore seus conhecimentos</Text>
+                <Text style={styles.sectionTitle}>
+                  Aprimore seus conhecimentos
+                </Text>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                   {upsellCourses.map((upsellCourse) => (
                     <CrossSellCard
@@ -707,7 +1016,9 @@ export default function CourseDetailScreen() {
                       key={crossSellCourse.id}
                       course={crossSellCourse}
                       type="crosssell"
-                      onPress={() => router.push(`/course/${crossSellCourse.id}`)}
+                      onPress={() =>
+                        router.push(`/course/${crossSellCourse.id}`)
+                      }
                     />
                   ))}
                 </ScrollView>
@@ -724,10 +1035,7 @@ export default function CourseDetailScreen() {
   return (
     <View style={styles.container}>
       {/* Header */}
-      <LinearGradient
-        colors={['#1a1a1a', '#2a1a4a']}
-        style={styles.header}
-      >
+      <LinearGradient colors={['#1a1a1a', '#2a1a4a']} style={styles.header}>
         <View style={styles.headerTop}>
           <TouchableOpacity
             style={styles.backButton}
@@ -735,23 +1043,24 @@ export default function CourseDetailScreen() {
           >
             <ArrowLeft size={24} color="white" />
           </TouchableOpacity>
-          
+
           <View style={styles.headerActions}>
             <TouchableOpacity
               style={styles.actionButton}
               onPress={() => setLiked(!liked)}
             >
-              <Heart size={20} color={liked ? "#EF4444" : "white"} fill={liked ? "#EF4444" : "transparent"} />
+              <Heart
+                size={20}
+                color={liked ? '#EF4444' : 'white'}
+                fill={liked ? '#EF4444' : 'transparent'}
+              />
             </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.actionButton}
-              onPress={handleShare}
-            >
+            <TouchableOpacity style={styles.actionButton} onPress={handleShare}>
               <Share size={20} color="white" />
             </TouchableOpacity>
           </View>
         </View>
-        
+
         <View style={styles.courseHeader}>
           <LinearGradient
             colors={['rgba(139, 92, 246, 0.8)', 'rgba(59, 130, 246, 0.8)']}
@@ -759,29 +1068,31 @@ export default function CourseDetailScreen() {
           >
             <Play size={40} color="white" />
           </LinearGradient>
-          
+
           <View style={styles.courseInfo}>
             <Text style={styles.courseTitle}>{course.title}</Text>
             <Text style={styles.instructor}>por {course.instructor.name}</Text>
-            
+
             <View style={styles.courseStats}>
               <View style={styles.statItem}>
                 <Star size={16} color="#F59E0B" fill="#F59E0B" />
                 <Text style={styles.statText}>{course.rating}</Text>
                 <Text style={styles.statSubtext}>({course.reviews})</Text>
               </View>
-              
+
               <View style={styles.statItem}>
                 <Users size={16} color="#9CA3AF" />
-                <Text style={styles.statText}>{course.students.toLocaleString()}</Text>
+                <Text style={styles.statText}>
+                  {course.students.toLocaleString()}
+                </Text>
               </View>
-              
+
               <View style={styles.statItem}>
                 <Clock size={16} color="#9CA3AF" />
                 <Text style={styles.statText}>{course.duration}</Text>
               </View>
             </View>
-            
+
             <View style={styles.courseBadges}>
               <View
                 style={[
@@ -798,14 +1109,7 @@ export default function CourseDetailScreen() {
                   {course.level}
                 </Text>
               </View>
-              
-              {course.certificate && (
-                <View style={styles.featureBadge}>
-                  <Award size={12} color="#F59E0B" />
-                  <Text style={styles.featureText}>Certificado</Text>
-                </View>
-              )}
-              
+
               {course.downloadable && (
                 <View style={styles.featureBadge}>
                   <Download size={12} color="#10B981" />
@@ -826,20 +1130,17 @@ export default function CourseDetailScreen() {
             { key: 'instructor', label: 'Instrutor' },
             { key: 'reviews', label: 'Avaliações' },
             { key: 'questions', label: 'Perguntas' },
-            { key: 'offers', label: 'Ofertas' }
+            { key: 'offers', label: 'Ofertas' },
           ].map((tab) => (
             <TouchableOpacity
               key={tab.key}
-              style={[
-                styles.tab,
-                selectedTab === tab.key && styles.activeTab
-              ]}
+              style={[styles.tab, selectedTab === tab.key && styles.activeTab]}
               onPress={() => setSelectedTab(tab.key)}
             >
               <Text
                 style={[
                   styles.tabText,
-                  selectedTab === tab.key && styles.activeTabText
+                  selectedTab === tab.key && styles.activeTabText,
                 ]}
               >
                 {tab.label}
@@ -867,14 +1168,19 @@ export default function CourseDetailScreen() {
             {course.isFree ? 'Acesso gratuito' : 'Acesso vitalício'}
           </Text>
         </View>
-        
+
         <TouchableOpacity
           style={[styles.enrollButton, enrolled && styles.enrolledButton]}
           onPress={handleEnroll}
         >
           <LinearGradient
-            colors={enrolled ? ['#10B981', '#059669'] : 
-                   course.isFree ? ['#10B981', '#059669'] : ['#8B5CF6', '#3B82F6']}
+            colors={
+              enrolled
+                ? ['#10B981', '#059669']
+                : course.isFree
+                ? ['#10B981', '#059669']
+                : ['#8B5CF6', '#3B82F6']
+            }
             style={styles.enrollGradient}
           >
             {enrolled ? (

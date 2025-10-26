@@ -8,7 +8,22 @@ import {
   Image,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { User, Award, BookOpen, CreditCard, Settings, Bell, Shield, LogOut, CreditCard as Edit, ChevronRight, Star, Calendar, Gift, Coins } from 'lucide-react-native';
+import {
+  User,
+  Award,
+  BookOpen,
+  CreditCard,
+  Settings,
+  Bell,
+  Shield,
+  LogOut,
+  CreditCard as Edit,
+  ChevronRight,
+  Star,
+  Calendar,
+  Gift,
+  Coins,
+} from 'lucide-react-native';
 
 export default function ProfileScreen() {
   const [user] = useState({
@@ -16,11 +31,12 @@ export default function ProfileScreen() {
     email: 'joao.silva@email.com',
     level: 'Intermediário',
     joinDate: '2023',
-    avatar: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=400',
+    avatar:
+      'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=400',
     stats: {
       coursesCompleted: 8,
       hoursStudied: 42,
-      certificates: 5,
+      certificates: 0,
       currentStreak: 7,
       totalCashback: 'R$ 127,50',
       availableCashback: 'R$ 45,20',
@@ -92,10 +108,7 @@ export default function ProfileScreen() {
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* Profile Header */}
-      <LinearGradient
-        colors={['#1a1a1a', '#2a1a4a']}
-        style={styles.header}
-      >
+      <LinearGradient colors={['#1a1a1a', '#2a1a4a']} style={styles.header}>
         <View style={styles.profileSection}>
           <View style={styles.avatarContainer}>
             <View style={styles.avatar}>
@@ -105,7 +118,7 @@ export default function ProfileScreen() {
               <Edit size={16} color="white" />
             </TouchableOpacity>
           </View>
-          
+
           <View style={styles.userInfo}>
             <Text style={styles.userName}>{user.name}</Text>
             <Text style={styles.userEmail}>{user.email}</Text>
@@ -114,7 +127,7 @@ export default function ProfileScreen() {
             </View>
           </View>
         </View>
-        
+
         <View style={styles.statsGrid}>
           <View style={styles.statItem}>
             <Text style={styles.statValue}>{user.stats.coursesCompleted}</Text>
@@ -124,10 +137,7 @@ export default function ProfileScreen() {
             <Text style={styles.statValue}>{user.stats.hoursStudied}h</Text>
             <Text style={styles.statLabel}>Estudadas</Text>
           </View>
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>{user.stats.certificates}</Text>
-            <Text style={styles.statLabel}>Certificados</Text>
-          </View>
+          <View style={styles.statItem}></View>
           <View style={styles.statItem}>
             <Text style={styles.statValue}>{user.stats.currentStreak}</Text>
             <Text style={styles.statLabel}>Dias Seguidos</Text>
@@ -149,7 +159,9 @@ export default function ProfileScreen() {
               </View>
               <Text style={styles.cashbackTitle}>Saldo Disponível</Text>
             </View>
-            <Text style={styles.cashbackAmount}>{user.stats.availableCashback}</Text>
+            <Text style={styles.cashbackAmount}>
+              {user.stats.availableCashback}
+            </Text>
             <Text style={styles.cashbackTotal}>
               Total acumulado: {user.stats.totalCashback}
             </Text>

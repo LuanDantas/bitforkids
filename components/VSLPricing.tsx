@@ -34,7 +34,6 @@ export default function VSLPricing({
     { icon: Crown, text: 'Acesso a +50 cursos completos' },
     { icon: Clock, text: 'Mais de 200 horas de conteúdo' },
     { icon: Users, text: 'Comunidade VIP exclusiva' },
-    { icon: Zap, text: 'Certificados ilimitados' },
     { icon: Gift, text: 'Cashback dobrado (10%)' },
     { icon: CheckCircle, text: 'Suporte prioritário' },
   ];
@@ -235,7 +234,6 @@ export default function VSLPricing({
               individual: '1 curso',
               premium: '50+ cursos',
             },
-            { feature: 'Certificados', individual: '1', premium: 'Ilimitados' },
             { feature: 'Comunidade VIP', individual: '❌', premium: '✅' },
             { feature: 'Suporte', individual: 'Email', premium: 'Prioritário' },
             { feature: 'Cashback', individual: '5%', premium: '10%' },

@@ -34,13 +34,6 @@ export default function VSLBenefits() {
       color: '#10B981',
     },
     {
-      icon: Award,
-      title: 'Certificados Reconhecidos',
-      description:
-        'Certificados válidos que seu filho pode usar no futuro acadêmico',
-      color: '#F59E0B',
-    },
-    {
       icon: Users,
       title: 'Comunidade Exclusiva',
       description: 'Acesso a grupo VIP com outros pais e jovens investidores',

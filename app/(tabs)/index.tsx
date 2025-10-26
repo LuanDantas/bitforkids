@@ -50,7 +50,6 @@ export default function HomeScreen() {
     level: 'Iniciante',
     progress: 65,
     coursesCompleted: 3,
-    certificates: 2,
   });
 
   // Check if VSL should be shown for remarketing
@@ -190,12 +189,6 @@ export default function HomeScreen() {
       label: 'Progresso',
       value: `${user.progress}%`,
       color: '#10B981',
-    },
-    {
-      icon: Award,
-      label: 'Certificados',
-      value: user.certificates,
-      color: '#F59E0B',
     },
     { icon: Users, label: 'Comunidade', value: '12.5k', color: '#3B82F6' },
   ];
@@ -647,18 +640,6 @@ export default function HomeScreen() {
             </LinearGradient>
             <Text style={[styles.quickActionText, { color: colors.text }]}>
               Continuar Estudos
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.quickAction}>
-            <LinearGradient
-              colors={['#10B981', '#059669']}
-              style={styles.quickActionIcon}
-            >
-              <Award size={24} color="white" />
-            </LinearGradient>
-            <Text style={[styles.quickActionText, { color: colors.text }]}>
-              Meus Certificados
             </Text>
           </TouchableOpacity>
         </View>

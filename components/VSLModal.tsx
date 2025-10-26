@@ -160,9 +160,6 @@ export default function VSLModal({
                   ✅ Comunidade VIP exclusiva
                 </Text>
                 <Text style={styles.benefitItem}>
-                  ✅ Certificados ilimitados
-                </Text>
-                <Text style={styles.benefitItem}>
                   ✅ Cashback dobrado (10%)
                 </Text>
                 <Text style={styles.benefitItem}>✅ Suporte prioritário</Text>
