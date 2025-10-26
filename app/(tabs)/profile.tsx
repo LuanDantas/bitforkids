@@ -8,6 +8,7 @@ import {
   Image,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
 import {
   User,
   CreditCard,
@@ -22,6 +23,7 @@ import {
 } from 'lucide-react-native';
 
 export default function ProfileScreen() {
+  const router = useRouter();
   const [user] = useState({
     name: 'João Silva',
     email: 'joao.silva@email.com',
@@ -123,8 +125,20 @@ export default function ProfileScreen() {
         <View style={styles.menuList}>
           {menuItems.map((item, index) => {
             const Icon = item.icon;
+            const handlePress = () => {
+              if (item.title === 'Pagamentos') {
+                router.push('/payments');
+              } else if (item.title === 'Notificações') {
+                router.push('/notifications');
+              }
+            };
+
             return (
-              <TouchableOpacity key={index} style={styles.menuItem}>
+              <TouchableOpacity
+                key={index}
+                style={styles.menuItem}
+                onPress={handlePress}
+              >
                 <View style={styles.menuItemLeft}>
                   <View
                     style={[
