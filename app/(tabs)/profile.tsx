@@ -10,8 +10,6 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import {
   User,
-  Award,
-  BookOpen,
   CreditCard,
   Settings,
   Bell,
@@ -19,8 +17,6 @@ import {
   LogOut,
   CreditCard as Edit,
   ChevronRight,
-  Star,
-  Calendar,
   Gift,
   Coins,
 } from 'lucide-react-native';
@@ -42,41 +38,6 @@ export default function ProfileScreen() {
       availableCashback: 'R$ 45,20',
     },
   });
-
-  const achievements = [
-    {
-      id: 1,
-      title: 'Primeiro Curso',
-      description: 'Completou seu primeiro curso',
-      icon: BookOpen,
-      color: '#10B981',
-      unlocked: true,
-    },
-    {
-      id: 2,
-      title: 'Estudante Dedicado',
-      description: '10 horas de estudo',
-      icon: Award,
-      color: '#F59E0B',
-      unlocked: true,
-    },
-    {
-      id: 3,
-      title: 'Especialista Bitcoin',
-      description: 'Dominou fundamentos do Bitcoin',
-      icon: Star,
-      color: '#8B5CF6',
-      unlocked: true,
-    },
-    {
-      id: 4,
-      title: 'Sequência de Ouro',
-      description: '30 dias consecutivos',
-      icon: Calendar,
-      color: '#EF4444',
-      unlocked: false,
-    },
-  ];
 
   const menuItems = [
     {
@@ -172,57 +133,6 @@ export default function ProfileScreen() {
         </View>
       </View>
 
-      {/* Achievements */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Conquistas</Text>
-        <View style={styles.achievementsGrid}>
-          {achievements.map((achievement) => {
-            const Icon = achievement.icon;
-            return (
-              <TouchableOpacity
-                key={achievement.id}
-                style={[
-                  styles.achievementCard,
-                  !achievement.unlocked && styles.achievementLocked,
-                ]}
-              >
-                <View
-                  style={[
-                    styles.achievementIcon,
-                    {
-                      backgroundColor: achievement.unlocked
-                        ? `${achievement.color}20`
-                        : '#2a2a2a',
-                    },
-                  ]}
-                >
-                  <Icon
-                    size={24}
-                    color={achievement.unlocked ? achievement.color : '#6B7280'}
-                  />
-                </View>
-                <Text
-                  style={[
-                    styles.achievementTitle,
-                    !achievement.unlocked && styles.achievementTextLocked,
-                  ]}
-                >
-                  {achievement.title}
-                </Text>
-                <Text
-                  style={[
-                    styles.achievementDescription,
-                    !achievement.unlocked && styles.achievementTextLocked,
-                  ]}
-                >
-                  {achievement.description}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-      </View>
-
       {/* Menu Items */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Configurações</Text>
@@ -262,9 +172,9 @@ export default function ProfileScreen() {
 
       {/* App Info */}
       <View style={styles.appInfo}>
-        <Text style={styles.appVersion}>CryptoLearn v1.0.0</Text>
+        <Text style={styles.appVersion}>Bit for Kids 1.0.0</Text>
         <Text style={styles.appCopyright}>
-          © 2024 CryptoLearn. Todos os direitos reservados.
+          © 2025 Bit for Kids. Todos os direitos reservados.
         </Text>
       </View>
     </ScrollView>
@@ -367,46 +277,6 @@ const styles = StyleSheet.create({
     color: 'white',
     marginBottom: 16,
   },
-  achievementsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 12,
-  },
-  achievementCard: {
-    width: '48%',
-    backgroundColor: '#1a1a1a',
-    borderRadius: 12,
-    padding: 16,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#2a2a2a',
-  },
-  achievementLocked: {
-    opacity: 0.5,
-  },
-  achievementIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  achievementTitle: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: 'white',
-    textAlign: 'center',
-    marginBottom: 4,
-  },
-  achievementDescription: {
-    fontSize: 12,
-    color: '#9CA3AF',
-    textAlign: 'center',
-  },
-  achievementTextLocked: {
-    color: '#6B7280',
-  },
   menuList: {
     gap: 4,
   },
@@ -419,6 +289,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderWidth: 1,
     borderColor: '#2a2a2a',
+    marginBottom: 5,
   },
   menuItemLeft: {
     flexDirection: 'row',
