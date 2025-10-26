@@ -31,41 +31,41 @@ export default function SubscriptionPlan({ onSubscribe }: SubscriptionPlanProps)
   const benefits = [
     {
       icon: BookOpen,
-      title: 'Acesso a +50 Cursos',
-      description: 'Biblioteca completa de cursos sobre criptomoedas',
+      title: 'Todos os Cursos Inclusos',
+      description: 'Mini Curso GPS, Autocustódia, Herança Digital, DeFi e AAVE',
     },
     {
       icon: Infinity,
-      title: 'Acesso Ilimitado',
+      title: 'Acesso por 1 Ano',
       description: 'Assista quantas vezes quiser, sem restrições',
     },
     {
       icon: Award,
-      title: 'Certificados Premium',
-      description: 'Certificados especiais para assinantes',
+      title: 'Cashback R$ 20 em Bitcoin',
+      description: 'Receba cashback em Bitcoin ao comprar o pacote',
     },
     {
       icon: Zap,
-      title: 'Conteúdo Exclusivo',
-      description: 'Cursos e materiais apenas para assinantes',
+      title: 'Suporte WhatsApp',
+      description: 'Tire dúvidas diretamente via WhatsApp',
     },
     {
       icon: Users,
-      title: 'Comunidade VIP',
-      description: 'Acesso ao grupo exclusivo de assinantes',
+      title: 'Comunidade Exclusiva',
+      description: 'Acesso ao grupo de alunos do pacote completo',
     },
     {
       icon: Gift,
-      title: 'Cashback Dobrado',
-      description: 'Ganhe 2x mais cashback em compras extras',
+      title: 'Aula Individual',
+      description: 'Opção de aula de 1h por R$ 800,00',
     },
   ];
 
   const stats = [
-    { label: 'Cursos Inclusos', value: '50+' },
-    { label: 'Horas de Conteúdo', value: '200+' },
-    { label: 'Certificados', value: 'Ilimitados' },
-    { label: 'Suporte', value: 'Prioritário' },
+    { label: 'Cursos Inclusos', value: '6' },
+    { label: 'Horas de Conteúdo', value: '50+' },
+    { label: 'Cashback Bitcoin', value: 'R$ 20' },
+    { label: 'Suporte', value: 'WhatsApp' },
   ];
 
   return (
@@ -78,21 +78,21 @@ export default function SubscriptionPlan({ onSubscribe }: SubscriptionPlanProps)
         <View style={styles.crownContainer}>
           <Crown size={32} color="white" fill="white" />
         </View>
-        <Text style={styles.planTitle}>PLANO ANUAL PREMIUM</Text>
+        <Text style={styles.planTitle}>PACOTE COMPLETO</Text>
         <Text style={styles.planSubtitle}>
-          Acesso completo à plataforma por 12 meses
+          Todos os cursos + Cashback R$ 20 em Bitcoin
         </Text>
         
         <View style={styles.priceContainer}>
           <View style={styles.priceRow}>
-            <Text style={styles.originalPrice}>De R$ 1.799,90</Text>
+            <Text style={styles.originalPrice}>De R$ 1.055,00</Text>
             <View style={styles.discountBadge}>
-              <Text style={styles.discountText}>-60%</Text>
+              <Text style={styles.discountText}>-25%</Text>
             </View>
           </View>
-          <Text style={styles.currentPrice}>R$ 699,90</Text>
+          <Text style={styles.currentPrice}>R$ 790,00</Text>
           <Text style={styles.priceSubtext}>
-            ou 12x de R$ 58,33 sem juros
+            Acesso por 1 ano + Cashback Bitcoin
           </Text>
         </View>
       </LinearGradient>
@@ -142,11 +142,11 @@ export default function SubscriptionPlan({ onSubscribe }: SubscriptionPlanProps)
           </View>
           
           {[
-            { feature: 'Cursos Básicos', free: '3', premium: '50+' },
-            { feature: 'Certificados', free: '❌', premium: '✅' },
-            { feature: 'Suporte', free: 'Email', premium: 'Prioritário' },
-            { feature: 'Comunidade VIP', free: '❌', premium: '✅' },
-            { feature: 'Cashback', free: '5%', premium: '10%' },
+            { feature: 'Mini Curso GPS', free: '❌', premium: '✅' },
+            { feature: 'Curso Autocustódia', free: '❌', premium: '✅' },
+            { feature: 'Herança Digital', free: '❌', premium: '✅' },
+            { feature: 'DeFi Ethereum', free: '❌', premium: '✅' },
+            { feature: 'Cashback Bitcoin', free: '❌', premium: 'R$ 20' },
           ].map((row, index) => (
             <View key={index} style={[styles.comparisonRow, { borderBottomColor: colors.border }]}>
               <Text style={[styles.comparisonFeature, { color: colors.text }]}>{row.feature}</Text>
@@ -212,7 +212,7 @@ export default function SubscriptionPlan({ onSubscribe }: SubscriptionPlanProps)
           style={styles.subscribeGradient}
         >
           <Crown size={20} color="white" />
-          <Text style={styles.subscribeText}>Assinar Plano Premium</Text>
+          <Text style={styles.subscribeText}>Comprar Pacote Completo</Text>
         </LinearGradient>
       </TouchableOpacity>
 

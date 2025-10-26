@@ -14,8 +14,10 @@ import CashbackBanner from '@/components/CashbackBanner';
 import CrossSellCard from '@/components/CrossSellCard';
 import SubscriptionPlan from '@/components/SubscriptionPlan';
 import VSLModal from '@/components/VSLModal';
+import BitcoinPriceWidget from '@/components/BitcoinPriceWidget';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useVSL } from '@/contexts/VSLContext';
+import { bitcoinPriceService } from '@/services/BitcoinPriceService';
 import {
   TrendingUp,
   Award,
@@ -63,42 +65,57 @@ export default function HomeScreen() {
     }
   }, [shouldShowVSL, showVSLModal]);
 
+  // Initialize Bitcoin price monitoring
+  useEffect(() => {
+    bitcoinPriceService.startPriceMonitoring();
+
+    return () => {
+      bitcoinPriceService.stopPriceMonitoring();
+    };
+  }, []);
+
   const featuredCourses = [
     {
       id: 1,
-      title: 'Fundamentos do Bitcoin',
-      instructor: 'Prof. Maria Santos',
+      title:
+        'Mini Curso GPS Bitcoin para leigos + ebook Bitcoin para iniciantes',
+      instructor: 'Dani Spitaletti',
       rating: 4.8,
       students: 1250,
       image:
         'https://images.pexels.com/photos/6765363/pexels-photo-6765363.jpeg?auto=compress&cs=tinysrgb&w=400',
-      price: 'R$ 149,90',
+      price: 'R$ 67,00',
       isFree: false,
       level: 'Iniciante',
+      description:
+        'Entenda o que só o Bitcoin pode fazer por você e conheça a rede descentralizada',
     },
     {
       id: 2,
-      title: 'Trading Avançado',
-      instructor: 'Prof. Carlos Lima',
+      title: 'Curso Autocustódia - Carteiras Hotwallet e Coldwallet',
+      instructor: 'Dani Spitaletti',
       rating: 4.9,
       students: 890,
       image:
         'https://images.pexels.com/photos/6802042/pexels-photo-6802042.jpeg?auto=compress&cs=tinysrgb&w=400',
-      price: 'R$ 299,90',
+      price: 'R$ 97,00',
       isFree: false,
-      level: 'Avançado',
+      level: 'Intermediário',
+      description:
+        'Aprenda a ser seu próprio banco com carteiras digitais seguras',
     },
     {
-      id: 7,
-      title: 'Bitcoin para Iniciantes - GRÁTIS',
-      instructor: 'Prof. João Santos',
-      rating: 4.5,
-      students: 3200,
+      id: 3,
+      title: 'Curso Herança Digital - Reserva em Bitcoin e Auto-custódia',
+      instructor: 'Dani Spitaletti',
+      rating: 4.9,
+      students: 650,
       image:
         'https://images.pexels.com/photos/6765363/pexels-photo-6765363.jpeg?auto=compress&cs=tinysrgb&w=400',
-      price: 'GRÁTIS',
-      isFree: true,
-      level: 'Iniciante',
+      price: 'R$ 397,00',
+      isFree: false,
+      level: 'Avançado',
+      description: 'Curso completo sobre reserva em Bitcoin e auto-custódia',
     },
   ];
 
@@ -106,53 +123,64 @@ export default function HomeScreen() {
   const freeCourses = [
     {
       id: 7,
-      title: 'Bitcoin para Iniciantes',
-      instructor: 'Prof. João Santos',
+      title: '🧠 Liberte sua mente do Sistema e conheça o Bitcoin',
+      instructor: 'Vinicius da Palavra de Satoshi',
       rating: 4.5,
       students: 3200,
       duration: '2h 15min',
       price: 'GRÁTIS',
       isFree: true,
       level: 'Iniciante',
-    },
-    {
-      id: 8,
-      title: 'Carteiras Digitais - Básico',
-      instructor: 'Prof. Ana Costa',
-      rating: 4.4,
-      students: 2800,
-      duration: '1h 45min',
-      price: 'GRÁTIS',
-      isFree: true,
-      level: 'Iniciante',
-    },
-    {
-      id: 9,
-      title: 'Blockchain Explicado',
-      instructor: 'Prof. Roberto Lima',
-      rating: 4.6,
-      students: 4100,
-      duration: '3h 00min',
-      price: 'GRÁTIS',
-      isFree: true,
-      level: 'Iniciante',
+      description:
+        'Aula especial com Vinicius da Palavra de Satoshi - Presente para você',
     },
   ];
 
   // Special offers and cross-sell opportunities
   const specialOffers = [
     {
-      id: 8,
-      title: 'Pacote Iniciante Completo',
-      instructor: 'Vários Instrutores',
+      id: 4,
+      title: 'Curso Finanças Descentralizadas e Rede Ethereum',
+      instructor: 'Dani Spitaletti',
       rating: 4.9,
-      students: 2500,
-      duration: '12h 30min',
-      price: 'R$ 299,90',
-      originalPrice: 'R$ 499,90',
-      discount: 40,
-      level: 'Iniciante',
+      students: 450,
+      duration: '15h 30min',
+      price: 'R$ 397,00',
+      originalPrice: 'R$ 497,00',
+      discount: 20,
+      level: 'Avançado',
+      category: 'DeFi',
+      description:
+        'Aprenda a usar USDT, pagar contas e usar cartão com criptomoedas',
+    },
+    {
+      id: 5,
+      title: 'Curso Empréstimo Descentralizado - AAVE',
+      instructor: 'Dani Spitaletti',
+      rating: 4.8,
+      students: 320,
+      duration: '8h 45min',
+      price: 'R$ 97,00',
+      originalPrice: 'R$ 147,00',
+      discount: 34,
+      level: 'Intermediário',
+      category: 'DeFi',
+      description: 'Juros de 6% ao ano na plataforma AAVE',
+    },
+    {
+      id: 6,
+      title: 'Pacote Completo - Todos os Cursos',
+      instructor: 'Dani Spitaletti',
+      rating: 4.9,
+      students: 180,
+      duration: '50h+',
+      price: 'R$ 790,00',
+      originalPrice: 'R$ 1.055,00',
+      discount: 25,
+      level: 'Todos',
       category: 'Pacote',
+      description:
+        'Acesso a todos os cursos por 1 ano + Cashback R$ 20 em Bitcoin',
     },
   ];
 
@@ -287,11 +315,16 @@ export default function HomeScreen() {
         </View>
       </LinearGradient>
 
+      {/* Bitcoin Price Widget */}
+      <View style={styles.section}>
+        <BitcoinPriceWidget onPress={() => router.push('/(tabs)/indices')} />
+      </View>
+
       {/* Special Cashback Offer */}
       <View style={[styles.section, { paddingBottom: 5 }]}>
         <CashbackBanner
-          cashbackPercentage={25}
-          cashbackAmount="R$ 74,98"
+          cashbackPercentage={20}
+          cashbackAmount="R$ 20,00"
           onPress={() => setShowSubscription(true)}
         />
       </View>
@@ -311,9 +344,10 @@ export default function HomeScreen() {
                 <Text style={styles.premiumEmoji}>👑</Text>
               </View>
               <View style={styles.premiumText}>
-                <Text style={styles.premiumTitle}>Plano Premium Anual</Text>
+                <Text style={styles.premiumTitle}>Pacote Completo</Text>
                 <Text style={styles.premiumSubtitle}>
-                  Acesso a +50 cursos por apenas R$ 699,90/ano
+                  Todos os cursos por apenas R$ 790,00 + Cashback R$ 20 em
+                  Bitcoin
                 </Text>
               </View>
               <View style={styles.premiumArrow}>
@@ -544,6 +578,55 @@ export default function HomeScreen() {
             />
           ))}
         </ScrollView>
+      </View>
+
+      {/* Mentorship Section */}
+      <View style={styles.section}>
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>
+          Mentoria Individual
+        </Text>
+
+        <TouchableOpacity style={styles.mentorshipCard}>
+          <LinearGradient
+            colors={['#8B5CF6', '#7C3AED']}
+            style={styles.mentorshipGradient}
+          >
+            <View style={styles.mentorshipHeader}>
+              <View style={styles.mentorshipIcon}>
+                <Text style={styles.mentorshipEmoji}>🎯</Text>
+              </View>
+              <View style={styles.mentorshipContent}>
+                <Text style={styles.mentorshipTitle}>Mentoria Completa</Text>
+                <Text style={styles.mentorshipSubtitle}>
+                  Acesso a todos os cursos + 3h de assessoria individual
+                </Text>
+              </View>
+            </View>
+
+            <View style={styles.mentorshipPrice}>
+              <Text style={styles.mentorshipOriginalPrice}>De R$ 1.200,00</Text>
+              <Text style={styles.mentorshipCurrentPrice}>R$ 2.997,00</Text>
+              <Text style={styles.mentorshipCashback}>
+                + Cashback R$ 100 em Bitcoin
+              </Text>
+            </View>
+
+            <View style={styles.mentorshipBenefits}>
+              <Text style={styles.mentorshipBenefit}>
+                ✓ Acesso a todos os cursos
+              </Text>
+              <Text style={styles.mentorshipBenefit}>
+                ✓ 3h de aulas individuais (2 dias)
+              </Text>
+              <Text style={styles.mentorshipBenefit}>
+                ✓ Montagem de carteira inconfiscável
+              </Text>
+              <Text style={styles.mentorshipBenefit}>
+                ✓ Suporte por 1 ano no WhatsApp
+              </Text>
+            </View>
+          </LinearGradient>
+        </TouchableOpacity>
       </View>
 
       {/* Quick Actions */}
@@ -950,5 +1033,72 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: 'white',
+  },
+  mentorshipCard: {
+    borderRadius: 16,
+    overflow: 'hidden',
+    marginTop: 8,
+  },
+  mentorshipGradient: {
+    padding: 20,
+  },
+  mentorshipHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  mentorshipIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
+  },
+  mentorshipEmoji: {
+    fontSize: 24,
+  },
+  mentorshipContent: {
+    flex: 1,
+  },
+  mentorshipTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: 'white',
+    marginBottom: 4,
+  },
+  mentorshipSubtitle: {
+    fontSize: 14,
+    color: 'rgba(255, 255, 255, 0.9)',
+  },
+  mentorshipPrice: {
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  mentorshipOriginalPrice: {
+    fontSize: 14,
+    color: 'rgba(255, 255, 255, 0.7)',
+    textDecorationLine: 'line-through',
+    marginBottom: 4,
+  },
+  mentorshipCurrentPrice: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: 'white',
+    marginBottom: 4,
+  },
+  mentorshipCashback: {
+    fontSize: 14,
+    color: '#F59E0B',
+    fontWeight: '600',
+  },
+  mentorshipBenefits: {
+    gap: 8,
+  },
+  mentorshipBenefit: {
+    fontSize: 14,
+    color: 'rgba(255, 255, 255, 0.9)',
+    fontWeight: '500',
   },
 });
