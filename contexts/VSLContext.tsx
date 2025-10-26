@@ -101,16 +101,37 @@ export function VSLProvider({ children }: VSLProviderProps) {
           VSL_CONFIG.DAYS_BETWEEN_SHOWS
         : true;
 
-      if (sessionsPassed || daysPassed) {
+      // Additional check: Don't show if closed recently (within last hour)
+      const recentlyClosed = lastViewDate
+        ? currentDate.getTime() - lastViewDate.getTime() < 60 * 60 * 1000 // 1 hour
+        : false;
+
+      if ((sessionsPassed || daysPassed) && !recentlyClosed) {
+        console.log(
+          'VSL: Showing modal - sessions passed:',
+          sessionsPassed,
+          'days passed:',
+          daysPassed,
+          'recently closed:',
+          recentlyClosed
+        );
         setShouldShowVSL(true);
         // Mark as shown this session
         await AsyncStorage.setItem(
           VSL_STORAGE_KEYS.VSL_SHOWN_THIS_SESSION,
           'true'
         );
-        // Increment session count
+        // Reset session count
         await AsyncStorage.setItem(VSL_STORAGE_KEYS.SESSION_COUNT, '0');
       } else {
+        console.log(
+          'VSL: Not showing modal - sessions passed:',
+          sessionsPassed,
+          'days passed:',
+          daysPassed,
+          'recently closed:',
+          recentlyClosed
+        );
         setShouldShowVSL(false);
         // Increment session count for next check
         await AsyncStorage.setItem(
@@ -128,8 +149,24 @@ export function VSLProvider({ children }: VSLProviderProps) {
     trackVSLConversion('view');
   };
 
-  const hideVSLModal = () => {
+  const hideVSLModal = async () => {
     setIsVSLModalVisible(false);
+    // Mark as shown this session to prevent immediate re-showing
+    try {
+      await AsyncStorage.setItem(
+        VSL_STORAGE_KEYS.VSL_SHOWN_THIS_SESSION,
+        'true'
+      );
+      // Update last view date to prevent showing again too soon
+      await AsyncStorage.setItem(
+        VSL_STORAGE_KEYS.LAST_VSL_VIEW,
+        new Date().toISOString()
+      );
+      // Reset session count to start counting again
+      await AsyncStorage.setItem(VSL_STORAGE_KEYS.SESSION_COUNT, '0');
+    } catch (error) {
+      console.error('Error updating VSL state after hide:', error);
+    }
   };
 
   const dismissVSLForDays = async (days: number = VSL_CONFIG.DISMISS_DAYS) => {
@@ -190,6 +227,10 @@ export function VSLProvider({ children }: VSLProviderProps) {
   const resetSessionFlag = async () => {
     try {
       await AsyncStorage.removeItem(VSL_STORAGE_KEYS.VSL_SHOWN_THIS_SESSION);
+      await AsyncStorage.removeItem(VSL_STORAGE_KEYS.LAST_VSL_VIEW);
+      await AsyncStorage.setItem(VSL_STORAGE_KEYS.SESSION_COUNT, '0');
+      setShouldShowVSL(false);
+      setIsVSLModalVisible(false);
     } catch (error) {
       console.error('Error resetting session flag:', error);
     }
