@@ -130,6 +130,8 @@ export default function ProfileScreen() {
                 router.push('/payments');
               } else if (item.title === 'Notificações') {
                 router.push('/notifications');
+              } else if (item.title === 'Privacidade') {
+                router.push('/privacy');
               }
             };
 
