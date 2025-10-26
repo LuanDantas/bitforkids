@@ -50,6 +50,14 @@ export default function HomeScreen() {
     level: 'Iniciante',
     progress: 65,
     coursesCompleted: 3,
+    currentCourse: {
+      id: 1,
+      title: 'Mini Curso GPS Bitcoin para leigos',
+      progress: 65,
+      lessonsCompleted: 13,
+      totalLessons: 20,
+      nextLesson: 'O que é Bitcoin?',
+    },
   });
 
   // Check if VSL should be shown for remarketing
@@ -291,21 +299,51 @@ export default function HomeScreen() {
           </TouchableOpacity>
         </View>
 
-        <View style={styles.progressCard}>
-          <Text style={[styles.progressTitle, { color: 'white' }]}>
-            Seu Progresso
-          </Text>
-          <View style={styles.progressBar}>
-            <View
-              style={[styles.progressFill, { width: `${user.progress}%` }]}
-            />
+        <TouchableOpacity
+          style={styles.progressCard}
+          onPress={() => router.push(`/course/${user.currentCourse.id}`)}
+        >
+          <View style={styles.progressHeader}>
+            <View style={styles.progressHeaderLeft}>
+              <Play size={20} color="#10B981" />
+              <Text style={[styles.progressTitle, { color: 'white' }]}>
+                Curso Atual
+              </Text>
+            </View>
+            <ChevronRight size={20} color="rgba(255, 255, 255, 0.6)" />
           </View>
+
           <Text
-            style={[styles.progressText, { color: 'rgba(255, 255, 255, 0.8)' }]}
+            style={[styles.currentCourseTitle, { color: 'white' }]}
+            numberOfLines={2}
           >
-            {user.progress}% concluído
+            {user.currentCourse.title}
           </Text>
-        </View>
+
+          <View style={styles.progressDetails}>
+            <View style={styles.lessonProgress}>
+              <Text style={styles.lessonProgressText}>
+                {user.currentCourse.lessonsCompleted}/
+                {user.currentCourse.totalLessons} aulas
+              </Text>
+            </View>
+            <View style={styles.progressBar}>
+              <View
+                style={[
+                  styles.progressFill,
+                  { width: `${user.currentCourse.progress}%` },
+                ]}
+              />
+            </View>
+          </View>
+
+          <View style={styles.nextLesson}>
+            <Text style={styles.nextLessonLabel}>Próxima:</Text>
+            <Text style={styles.nextLessonText} numberOfLines={1}>
+              {user.currentCourse.nextLesson}
+            </Text>
+          </View>
+        </TouchableOpacity>
       </LinearGradient>
 
       {/* Bitcoin Price Widget */}
@@ -721,21 +759,59 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.1)',
   },
+  progressHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  progressHeaderLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
   progressTitle: {
     fontSize: 16,
     fontWeight: '600',
+  },
+  currentCourseTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    marginBottom: 12,
+  },
+  progressDetails: {
+    marginBottom: 12,
+  },
+  lessonProgress: {
     marginBottom: 8,
+  },
+  lessonProgressText: {
+    fontSize: 12,
+    color: 'rgba(255, 255, 255, 0.7)',
   },
   progressBar: {
     height: 8,
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     borderRadius: 4,
-    marginBottom: 8,
   },
   progressFill: {
     height: '100%',
-    backgroundColor: '#8B5CF6',
+    backgroundColor: '#10B981',
     borderRadius: 4,
+  },
+  nextLesson: {
+    flexDirection: 'row',
+    gap: 6,
+  },
+  nextLessonLabel: {
+    fontSize: 12,
+    color: 'rgba(255, 255, 255, 0.6)',
+  },
+  nextLessonText: {
+    fontSize: 12,
+    color: 'rgba(255, 255, 255, 0.9)',
+    fontWeight: '500',
+    flex: 1,
   },
   progressText: {
     fontSize: 14,

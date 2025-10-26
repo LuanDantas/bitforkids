@@ -88,22 +88,6 @@ export default function ProfileScreen() {
             </View>
           </View>
         </View>
-
-        <View style={styles.statsGrid}>
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>{user.stats.coursesCompleted}</Text>
-            <Text style={styles.statLabel}>Cursos</Text>
-          </View>
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>{user.stats.hoursStudied}h</Text>
-            <Text style={styles.statLabel}>Estudadas</Text>
-          </View>
-          <View style={styles.statItem}></View>
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>{user.stats.currentStreak}</Text>
-            <Text style={styles.statLabel}>Dias Seguidos</Text>
-          </View>
-        </View>
       </LinearGradient>
 
       {/* Cashback Section */}
@@ -247,26 +231,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     color: '#8B5CF6',
-  },
-  statsGrid: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    borderRadius: 12,
-    padding: 16,
-  },
-  statItem: {
-    alignItems: 'center',
-  },
-  statValue: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: 'white',
-    marginBottom: 4,
-  },
-  statLabel: {
-    fontSize: 12,
-    color: '#9CA3AF',
   },
   section: {
     padding: 20,
