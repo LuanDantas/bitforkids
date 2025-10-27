@@ -849,13 +849,25 @@ export default function PortfolioScreen() {
 
             <View style={styles.modalButtons}>
               <TouchableOpacity
-                style={[styles.modalButton, { backgroundColor: colors.border }]}
+                style={[
+                  styles.modalButton,
+                  {
+                    backgroundColor: colors.surface || '#f3f4f6',
+                    borderWidth: 1,
+                    borderColor: colors.border,
+                  },
+                ]}
                 onPress={() => {
                   setShowWalletModal(false);
                   setNewWalletName('');
                 }}
               >
-                <Text style={[styles.modalButtonText, { color: colors.text }]}>
+                <Text
+                  style={[
+                    styles.modalButtonText,
+                    { color: colors.text || '#000000' },
+                  ]}
+                >
                   Cancelar
                 </Text>
               </TouchableOpacity>
@@ -1017,12 +1029,18 @@ export default function PortfolioScreen() {
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.modalButton, { backgroundColor: colors.border }]}
+              style={{
+                width: '100%',
+                padding: 16,
+                borderRadius: 8,
+                alignItems: 'center',
+                backgroundColor: '#8B5CF6',
+              }}
               onPress={() => {
                 setShowTransactionModal(false);
               }}
             >
-              <Text style={[styles.modalButtonText, { color: colors.text }]}>
+              <Text style={[styles.modalButtonText, { color: '#FFFFFF' }]}>
                 Cancelar
               </Text>
             </TouchableOpacity>
@@ -1223,13 +1241,25 @@ export default function PortfolioScreen() {
 
             <View style={styles.modalButtons}>
               <TouchableOpacity
-                style={[styles.modalButton, { backgroundColor: colors.border }]}
+                style={[
+                  styles.modalButton,
+                  {
+                    backgroundColor: colors.surface || '#f3f4f6',
+                    borderWidth: 1,
+                    borderColor: colors.border,
+                  },
+                ]}
                 onPress={() => {
                   setSelectedTransactionType(null);
                   setShowTransactionModal(false);
                 }}
               >
-                <Text style={[styles.modalButtonText, { color: colors.text }]}>
+                <Text
+                  style={[
+                    styles.modalButtonText,
+                    { color: colors.text || '#000000' },
+                  ]}
+                >
                   Cancelar
                 </Text>
               </TouchableOpacity>
