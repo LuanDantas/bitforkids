@@ -1,5 +1,11 @@
 import { Tabs } from 'expo-router';
-import { Chrome as Home, BookOpen, User, Newspaper, TrendingUp } from 'lucide-react-native';
+import {
+  Chrome as Home,
+  BookOpen,
+  User,
+  Newspaper,
+  TrendingUp,
+} from 'lucide-react-native';
 import { useTheme } from '@/contexts/ThemeContext';
 
 export default function TabLayout() {
@@ -23,14 +29,13 @@ export default function TabLayout() {
           fontSize: 12,
           fontWeight: '600',
         },
-      }}>
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ size, color }) => (
-            <Home size={size} color={color} />
-          ),
+          tabBarIcon: ({ size, color }) => <Home size={size} color={color} />,
         }}
       />
       <Tabs.Screen
@@ -55,15 +60,13 @@ export default function TabLayout() {
         name="profile"
         options={{
           title: 'Perfil',
-          tabBarIcon: ({ size, color }) => (
-            <User size={size} color={color} />
-          ),
+          tabBarIcon: ({ size, color }) => <User size={size} color={color} />,
         }}
       />
       <Tabs.Screen
         name="indices"
         options={{
-          title: 'Índices',
+          title: 'Portfólio',
           tabBarIcon: ({ size, color }) => (
             <TrendingUp size={size} color={color} />
           ),
