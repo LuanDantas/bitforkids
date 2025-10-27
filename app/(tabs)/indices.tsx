@@ -208,6 +208,42 @@ const EnhancedCardChart = ({
   );
 };
 
+// Helper functions for currency and date formatting
+const formatCurrency = (value: string): string => {
+  // Remove all non-numeric characters except decimal point
+  const numbers = value.replace(/[^\d.]/g, '');
+  // Split into integer and decimal parts
+  const parts = numbers.split('.');
+  // Format integer part with commas
+  const integer = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  // Return formatted currency
+  return parts.length > 1
+    ? `$${integer}.${parts[1].slice(0, 2)}`
+    : `$${integer}`;
+};
+
+const parseCurrency = (value: string): string => {
+  // Remove dollar sign, commas, and spaces
+  return value.replace(/[$,\s]/g, '');
+};
+
+const formatDateInput = (value: string): string => {
+  // Remove all non-numeric characters
+  const numbers = value.replace(/\D/g, '');
+  // Add slashes
+  if (numbers.length <= 2) return numbers;
+  if (numbers.length <= 4) return `${numbers.slice(0, 2)}/${numbers.slice(2)}`;
+  return `${numbers.slice(0, 2)}/${numbers.slice(2, 4)}/${numbers.slice(4, 8)}`;
+};
+
+const calculateQuantity = (amount: string, price: string): string => {
+  const amountNum = parseFloat(parseCurrency(amount)) || 0;
+  const priceNum = parseFloat(parseCurrency(price)) || 0;
+  if (priceNum === 0) return '0.0000';
+  const quantity = amountNum / priceNum;
+  return quantity.toFixed(4);
+};
+
 export default function PortfolioScreen() {
   const { colors, isDark } = useTheme();
   const router = useRouter();
@@ -216,6 +252,8 @@ export default function PortfolioScreen() {
   const [showWalletModal, setShowWalletModal] = useState(false);
   const [showWalletsList, setShowWalletsList] = useState(false);
   const [showTransactionModal, setShowTransactionModal] = useState(false);
+  const [showWalletPicker, setShowWalletPicker] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
   const [newWalletName, setNewWalletName] = useState('');
   const [selectedTransactionType, setSelectedTransactionType] = useState<
     'deposit' | 'withdrawal' | null
@@ -407,21 +445,19 @@ export default function PortfolioScreen() {
       return;
     }
 
-    // Calculate quantity if not provided
-    const quantity =
-      transactionForm.quantity ||
-      (
-        parseFloat(transactionForm.amount) / parseFloat(transactionForm.price)
-      ).toString();
+    // Parse currency values (remove $ and commas)
+    const priceValue = parseFloat(parseCurrency(transactionForm.price));
+    const amountValue = parseFloat(parseCurrency(transactionForm.amount));
+    const quantityValue = parseFloat(transactionForm.quantity);
 
     const newTransaction = {
       id: Date.now().toString(),
       crypto: transactionForm.crypto,
-      currentPrice: parseFloat(transactionForm.price),
-      quantity: parseFloat(quantity),
-      investment: parseFloat(transactionForm.amount),
-      balance: parseFloat(transactionForm.amount),
-      avgPrice: parseFloat(transactionForm.price),
+      currentPrice: priceValue,
+      quantity: quantityValue,
+      investment: amountValue,
+      balance: amountValue,
+      avgPrice: priceValue,
       profit: 0,
       profitPercent: 0,
       trend: 'neutral' as const,
@@ -1125,11 +1161,12 @@ export default function PortfolioScreen() {
 
             {/* Wallet Selector */}
             <Text style={[styles.label, { color: colors.text }]}>Carteira</Text>
-            <View
+            <TouchableOpacity
               style={[
                 styles.select,
                 { backgroundColor: colors.surface, borderColor: colors.border },
               ]}
+              onPress={() => setShowWalletPicker(true)}
             >
               <Text
                 style={[
@@ -1143,7 +1180,7 @@ export default function PortfolioScreen() {
               >
                 {transactionForm.wallet || 'Selecione uma carteira'}
               </Text>
-            </View>
+            </TouchableOpacity>
 
             {/* Price */}
             <Text style={[styles.label, { color: colors.text }]}>
@@ -1158,35 +1195,47 @@ export default function PortfolioScreen() {
                   borderColor: colors.border,
                 },
               ]}
-              placeholder="0.00"
+              placeholder="$0.00"
               placeholderTextColor={colors.textTertiary}
               keyboardType="numeric"
               value={transactionForm.price}
-              onChangeText={(text) =>
-                setTransactionForm({ ...transactionForm, price: text })
-              }
+              onChangeText={(text) => {
+                const formatted = formatCurrency(text);
+                setTransactionForm((prev) => ({
+                  ...prev,
+                  price: formatted,
+                  quantity: calculateQuantity(prev.amount, formatted),
+                }));
+              }}
             />
 
             {/* Date */}
             <Text style={[styles.label, { color: colors.text }]}>
               Data do aporte
             </Text>
-            <TextInput
+            <TouchableOpacity
               style={[
                 styles.input,
                 {
                   backgroundColor: colors.surface,
-                  color: colors.text,
                   borderColor: colors.border,
+                  flexDirection: 'row',
+                  alignItems: 'center',
                 },
               ]}
-              placeholder="DD/MM/YYYY"
-              placeholderTextColor={colors.textTertiary}
-              value={transactionForm.date}
-              onChangeText={(text) =>
-                setTransactionForm({ ...transactionForm, date: text })
-              }
-            />
+              onPress={() => setShowDatePicker(true)}
+            >
+              <Text
+                style={{
+                  color: transactionForm.date
+                    ? colors.text
+                    : colors.textTertiary,
+                  fontSize: 16,
+                }}
+              >
+                {transactionForm.date || 'DD/MM/YYYY'}
+              </Text>
+            </TouchableOpacity>
 
             {/* Amount */}
             <Text style={[styles.label, { color: colors.text }]}>
@@ -1201,18 +1250,17 @@ export default function PortfolioScreen() {
                   borderColor: colors.border,
                 },
               ]}
-              placeholder="0.00"
+              placeholder="$0.00"
               placeholderTextColor={colors.textTertiary}
               keyboardType="numeric"
               value={transactionForm.amount}
               onChangeText={(text) => {
-                setTransactionForm({ ...transactionForm, amount: text });
-                if (transactionForm.price) {
-                  const qty = (
-                    parseFloat(text) / parseFloat(transactionForm.price)
-                  ).toFixed(4);
-                  setTransactionForm((prev) => ({ ...prev, quantity: qty }));
-                }
+                const formatted = formatCurrency(text);
+                setTransactionForm((prev) => ({
+                  ...prev,
+                  amount: formatted,
+                  quantity: calculateQuantity(formatted, prev.price),
+                }));
               }}
             />
 
@@ -1224,7 +1272,7 @@ export default function PortfolioScreen() {
               style={[
                 styles.input,
                 {
-                  backgroundColor: colors.surface,
+                  backgroundColor: colors.surface + '80',
                   color: colors.text,
                   borderColor: colors.border,
                 },
@@ -1233,9 +1281,7 @@ export default function PortfolioScreen() {
               placeholderTextColor={colors.textTertiary}
               keyboardType="numeric"
               value={transactionForm.quantity}
-              onChangeText={(text) =>
-                setTransactionForm({ ...transactionForm, quantity: text })
-              }
+              onChangeText={() => {}}
               editable={false}
             />
 
@@ -1276,6 +1322,158 @@ export default function PortfolioScreen() {
               </TouchableOpacity>
             </View>
           </ScrollView>
+        </View>
+      </Modal>
+
+      {/* Wallet Picker Modal */}
+      <Modal visible={showWalletPicker} transparent animationType="slide">
+        <View style={styles.modalOverlay}>
+          <View style={[styles.modalContent, { backgroundColor: colors.card }]}>
+            <Text style={[styles.modalTitle, { color: colors.text }]}>
+              Selecione uma carteira
+            </Text>
+
+            <ScrollView style={{ maxHeight: 400 }}>
+              {wallets.map((wallet) => (
+                <TouchableOpacity
+                  key={wallet.id}
+                  style={[
+                    styles.walletPickerOption,
+                    {
+                      backgroundColor: colors.surface,
+                      borderColor: colors.border,
+                    },
+                    transactionForm.wallet === wallet.name && {
+                      backgroundColor: colors.primary + '20',
+                      borderColor: colors.primary,
+                    },
+                  ]}
+                  onPress={() => {
+                    setTransactionForm({
+                      ...transactionForm,
+                      wallet: wallet.name,
+                    });
+                    setShowWalletPicker(false);
+                  }}
+                >
+                  <Text
+                    style={[
+                      styles.walletPickerText,
+                      {
+                        color:
+                          transactionForm.wallet === wallet.name
+                            ? colors.primary
+                            : colors.text,
+                      },
+                    ]}
+                  >
+                    {wallet.name}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+
+            <TouchableOpacity
+              style={[
+                styles.modalButton,
+                {
+                  backgroundColor: colors.surface || '#f3f4f6',
+                  borderWidth: 1,
+                  borderColor: colors.border,
+                },
+              ]}
+              onPress={() => setShowWalletPicker(false)}
+            >
+              <Text
+                style={[
+                  styles.modalButtonText,
+                  { color: colors.text || '#000000' },
+                ]}
+              >
+                Cancelar
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Date Picker Modal */}
+      <Modal visible={showDatePicker} transparent animationType="fade">
+        <View style={styles.modalOverlay}>
+          <View style={[styles.modalContent, { backgroundColor: colors.card }]}>
+            <Text style={[styles.modalTitle, { color: colors.text }]}>
+              Selecionar data
+            </Text>
+
+            <View
+              style={{
+                flexDirection: 'row',
+                gap: 10,
+                marginTop: 16,
+                maxHeight: 300,
+              }}
+            >
+              {/* Days of month */}
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.label, { color: colors.text }]}>
+                  Dia do mês
+                </Text>
+                <ScrollView style={{ maxHeight: 200 }}>
+                  {Array.from({ length: 31 }, (_, i) => i + 1).map((day) => (
+                    <TouchableOpacity
+                      key={day}
+                      style={[
+                        styles.dayButton,
+                        {
+                          backgroundColor: colors.surface,
+                          borderColor: colors.border,
+                        },
+                      ]}
+                      onPress={() => {
+                        const now = new Date();
+                        const selectedDate = `${day
+                          .toString()
+                          .padStart(2, '0')}/${(now.getMonth() + 1)
+                          .toString()
+                          .padStart(2, '0')}/${now.getFullYear()}`;
+                        setTransactionForm((prev) => ({
+                          ...prev,
+                          date: selectedDate,
+                        }));
+                        setShowDatePicker(false);
+                      }}
+                    >
+                      <Text style={{ color: colors.text, fontWeight: '600' }}>
+                        {day}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </View>
+            </View>
+
+            <TouchableOpacity
+              style={[
+                styles.modalButton,
+                {
+                  backgroundColor: colors.surface || '#f3f4f6',
+                  borderWidth: 1,
+                  borderColor: colors.border,
+                  marginTop: 16,
+                },
+              ]}
+              onPress={() => setShowDatePicker(false)}
+            >
+              <Text
+                style={[
+                  styles.modalButtonText,
+                  { color: colors.text || '#000000' },
+                ]}
+              >
+                Cancelar
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </Modal>
     </View>
@@ -1607,5 +1805,22 @@ const styles = StyleSheet.create({
   },
   selectText: {
     fontSize: 16,
+  },
+  walletPickerOption: {
+    padding: 16,
+    borderRadius: 8,
+    borderWidth: 1,
+    marginBottom: 12,
+  },
+  walletPickerText: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  dayButton: {
+    padding: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    marginBottom: 8,
+    alignItems: 'center',
   },
 });
