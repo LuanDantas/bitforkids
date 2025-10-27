@@ -32,6 +32,7 @@ import {
   Clock,
 } from 'lucide-react-native';
 import LineChart from '@/components/charts/LineChart';
+import Svg, { Polyline } from 'react-native-svg';
 
 const cryptos = [
   { id: 'BTC', name: 'Bitcoin', icon: '₿', color: '#F7931A' },
@@ -41,6 +42,58 @@ const cryptos = [
   { id: 'XRP', name: 'XRP', icon: 'X', color: '#23292F' },
   { id: 'ADA', name: 'Cardano', icon: 'A', color: '#0033AD' },
 ];
+
+// Mini Line Chart Component for Cards
+const MiniLineChart = ({
+  data,
+  color,
+}: {
+  data: { label: string; value: number }[];
+  color: string;
+}) => {
+  const chartWidth = 280;
+  const chartHeight = 60;
+  const padding = 8;
+
+  const maxValue = Math.max(...data.map((d) => d.value));
+  const minValue = Math.min(...data.map((d) => d.value));
+  const range = maxValue - minValue || 1;
+
+  const points = data
+    .map((item, index) => {
+      const x =
+        padding + (index / (data.length - 1)) * (chartWidth - padding * 2);
+      const y =
+        padding +
+        ((maxValue - item.value) / range) * (chartHeight - padding * 2);
+      return `${x},${y}`;
+    })
+    .join(' ');
+
+  return (
+    <View style={{ width: chartWidth, height: chartHeight }}>
+      <LinearGradient
+        colors={[color + '20', color + '05', 'transparent']}
+        style={{
+          position: 'absolute',
+          width: chartWidth,
+          height: chartHeight,
+          borderRadius: 8,
+        }}
+      />
+      <Svg width={chartWidth} height={chartHeight}>
+        <Polyline
+          points={points}
+          fill="none"
+          stroke={color}
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </Svg>
+    </View>
+  );
+};
 
 export default function PortfolioScreen() {
   const { colors, isDark } = useTheme();
@@ -124,7 +177,7 @@ export default function PortfolioScreen() {
     totalAportes: 15000,
     aportesChange: 5.2,
     totalBalance: 21714.58,
-    balanceChange: 12.1,
+    balanceChange: -8.5,
     totalProfit: 3714.58,
     profitChange: 32.8,
   };
@@ -244,6 +297,15 @@ export default function PortfolioScreen() {
         })}`,
         change: portfolioStats.aportesChange,
         trend: calculateTrend(portfolioStats.aportesChange),
+        chartData: [
+          { label: '1', value: 12000 },
+          { label: '2', value: 12500 },
+          { label: '3', value: 13000 },
+          { label: '4', value: 13500 },
+          { label: '5', value: 14000 },
+          { label: '6', value: 14500 },
+          { label: '7', value: 15000 },
+        ],
       },
       {
         title: 'Saldo',
@@ -252,6 +314,15 @@ export default function PortfolioScreen() {
         })}`,
         change: portfolioStats.balanceChange,
         trend: calculateTrend(portfolioStats.balanceChange),
+        chartData: [
+          { label: '1', value: 25000 },
+          { label: '2', value: 24500 },
+          { label: '3', value: 24000 },
+          { label: '4', value: 23500 },
+          { label: '5', value: 23000 },
+          { label: '6', value: 22500 },
+          { label: '7', value: 21714 },
+        ],
       },
       {
         title: 'Lucro',
@@ -260,13 +331,23 @@ export default function PortfolioScreen() {
         })}`,
         change: portfolioStats.profitChange,
         trend: calculateTrend(portfolioStats.profitChange),
+        chartData: [
+          { label: '1', value: 2000 },
+          { label: '2', value: 2200 },
+          { label: '3', value: 2500 },
+          { label: '4', value: 2800 },
+          { label: '5', value: 3100 },
+          { label: '6', value: 3400 },
+          { label: '7', value: 3714 },
+        ],
       },
     ];
 
     return (
-      <View style={styles.cardsGrid}>
+      <View style={styles.cardsContainer}>
         {cards.map((card, index) => {
           const TrendIcon = card.trend.icon;
+          const chartColor = card.change >= 0 ? '#10B981' : '#EF4444';
           return (
             <View
               key={index}
@@ -275,20 +356,27 @@ export default function PortfolioScreen() {
                 { backgroundColor: colors.card, borderColor: colors.border },
               ]}
             >
-              <Text style={[styles.cardTitle, { color: colors.textSecondary }]}>
-                {card.title}
-              </Text>
+              <View style={styles.cardHeader}>
+                <Text
+                  style={[styles.cardTitle, { color: colors.textSecondary }]}
+                >
+                  {card.title}
+                </Text>
+                <View style={styles.cardTrend}>
+                  <TrendIcon size={14} color={card.trend.color} />
+                  <Text
+                    style={[styles.cardTrendText, { color: card.trend.color }]}
+                  >
+                    {card.change > 0 ? '+' : ''}
+                    {card.change.toFixed(1)}%
+                  </Text>
+                </View>
+              </View>
               <Text style={[styles.cardValue, { color: colors.text }]}>
                 {card.value}
               </Text>
-              <View style={styles.cardTrend}>
-                <TrendIcon size={16} color={card.trend.color} />
-                <Text
-                  style={[styles.cardTrendText, { color: card.trend.color }]}
-                >
-                  {card.change > 0 ? '+' : ''}
-                  {card.change.toFixed(1)}%
-                </Text>
+              <View style={styles.cardChart}>
+                <MiniLineChart data={card.chartData} color={chartColor} />
               </View>
             </View>
           );
@@ -1046,27 +1134,29 @@ const styles = StyleSheet.create({
   section: {
     padding: 20,
   },
-  cardsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 12,
+  cardsContainer: {
+    gap: 16,
   },
   card: {
-    width: '30%',
+    width: '100%',
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
-    minWidth: 100,
-    flex: 1,
+  },
+  cardHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
   },
   cardTitle: {
-    fontSize: 12,
-    marginBottom: 8,
+    fontSize: 14,
+    fontWeight: '600',
   },
   cardValue: {
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 8,
+    marginBottom: 16,
   },
   cardTrend: {
     flexDirection: 'row',
@@ -1076,6 +1166,10 @@ const styles = StyleSheet.create({
   cardTrendText: {
     fontSize: 12,
     fontWeight: '600',
+  },
+  cardChart: {
+    alignItems: 'flex-start',
+    marginTop: 8,
   },
   tableContainer: {
     borderRadius: 12,
