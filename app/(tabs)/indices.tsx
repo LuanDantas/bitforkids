@@ -239,6 +239,20 @@ export default function PortfolioScreen() {
       totalValue: 15420.5,
       change: 12.5,
       profit: 1850.75,
+      chartData: [
+        { label: 'Jan', value: 12000 },
+        { label: 'Fev', value: 12800 },
+        { label: 'Mar', value: 13200 },
+        { label: 'Abr', value: 13800 },
+        { label: 'Mai', value: 14200 },
+        { label: 'Jun', value: 14500 },
+        { label: 'Jul', value: 14800 },
+        { label: 'Ago', value: 15000 },
+        { label: 'Set', value: 15150 },
+        { label: 'Out', value: 15300 },
+        { label: 'Nov', value: 15400 },
+        { label: 'Dez', value: 15420.5 },
+      ],
     },
     {
       id: '2',
@@ -246,6 +260,20 @@ export default function PortfolioScreen() {
       totalValue: 8250.25,
       change: -3.2,
       profit: -264.1,
+      chartData: [
+        { label: 'Jan', value: 9000 },
+        { label: 'Fev', value: 8800 },
+        { label: 'Mar', value: 8600 },
+        { label: 'Abr', value: 8700 },
+        { label: 'Mai', value: 8500 },
+        { label: 'Jun', value: 8300 },
+        { label: 'Jul', value: 8350 },
+        { label: 'Ago', value: 8200 },
+        { label: 'Set', value: 8150 },
+        { label: 'Out', value: 8300 },
+        { label: 'Nov', value: 8250 },
+        { label: 'Dez', value: 8250.25 },
+      ],
     },
   ]);
 
@@ -322,6 +350,20 @@ export default function PortfolioScreen() {
       totalValue: 0,
       change: 0,
       profit: 0,
+      chartData: [
+        { label: 'Jan', value: 0 },
+        { label: 'Fev', value: 0 },
+        { label: 'Mar', value: 0 },
+        { label: 'Abr', value: 0 },
+        { label: 'Mai', value: 0 },
+        { label: 'Jun', value: 0 },
+        { label: 'Jul', value: 0 },
+        { label: 'Ago', value: 0 },
+        { label: 'Set', value: 0 },
+        { label: 'Out', value: 0 },
+        { label: 'Nov', value: 0 },
+        { label: 'Dez', value: 0 },
+      ],
     };
 
     setWallets([...wallets, newWallet]);
@@ -909,7 +951,10 @@ export default function PortfolioScreen() {
                   </View>
 
                   <View style={styles.walletChart}>
-                    <TrendIcon size={40} color={profitColor} />
+                    <EnhancedCardChart
+                      data={wallet.chartData}
+                      color={profitColor}
+                    />
                   </View>
                 </View>
               );
@@ -1473,9 +1518,9 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   walletChart: {
-    height: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
+    minHeight: 200,
+    marginTop: 8,
+    overflow: 'hidden',
   },
   addWalletButton: {
     flexDirection: 'row',
