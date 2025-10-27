@@ -781,7 +781,12 @@ export default function PortfolioScreen() {
                     <TouchableOpacity style={styles.actionButton}>
                       <BarChart3 size={14} color={colors.textSecondary} />
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.actionButton}>
+                    <TouchableOpacity
+                      style={styles.actionButton}
+                      onPress={() =>
+                        router.push(`/portfolio/${transaction.id}`)
+                      }
+                    >
                       <Eye size={14} color={colors.textSecondary} />
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.actionButton}>
@@ -1326,7 +1331,12 @@ export default function PortfolioScreen() {
       </Modal>
 
       {/* Wallet Picker Modal */}
-      <Modal visible={showWalletPicker} transparent animationType="slide">
+      <Modal
+        visible={showWalletPicker}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setShowWalletPicker(false)}
+      >
         <View style={styles.modalOverlay}>
           <View style={[styles.modalContent, { backgroundColor: colors.card }]}>
             <Text style={[styles.modalTitle, { color: colors.text }]}>
@@ -1398,7 +1408,12 @@ export default function PortfolioScreen() {
       </Modal>
 
       {/* Date Picker Modal */}
-      <Modal visible={showDatePicker} transparent animationType="fade">
+      <Modal
+        visible={showDatePicker}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowDatePicker(false)}
+      >
         <View style={styles.modalOverlay}>
           <View style={[styles.modalContent, { backgroundColor: colors.card }]}>
             <Text style={[styles.modalTitle, { color: colors.text }]}>
