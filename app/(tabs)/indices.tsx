@@ -32,7 +32,7 @@ import {
   Clock,
 } from 'lucide-react-native';
 import LineChart from '@/components/charts/LineChart';
-import Svg, { Polyline } from 'react-native-svg';
+import Svg, { Polyline, Circle } from 'react-native-svg';
 
 const cryptos = [
   { id: 'BTC', name: 'Bitcoin', icon: '₿', color: '#F7931A' },
@@ -43,54 +43,167 @@ const cryptos = [
   { id: 'ADA', name: 'Cardano', icon: 'A', color: '#0033AD' },
 ];
 
-// Mini Line Chart Component for Cards
-const MiniLineChart = ({
+// Enhanced Line Chart Component for Cards with Axes and Scroll
+const EnhancedCardChart = ({
   data,
   color,
 }: {
   data: { label: string; value: number }[];
   color: string;
 }) => {
-  const chartWidth = 280;
-  const chartHeight = 60;
-  const padding = 8;
+  const { colors: themeColors } = useTheme();
+  const chartWidth = Math.max(600, data.length * 60); // Make it scrollable
+  const chartHeight = 140;
+  const padding = 40;
+  const chartInnerWidth = chartWidth - padding * 2;
+  const chartInnerHeight = chartHeight - padding * 2;
 
   const maxValue = Math.max(...data.map((d) => d.value));
   const minValue = Math.min(...data.map((d) => d.value));
   const range = maxValue - minValue || 1;
 
-  const points = data
-    .map((item, index) => {
-      const x =
-        padding + (index / (data.length - 1)) * (chartWidth - padding * 2);
-      const y =
-        padding +
-        ((maxValue - item.value) / range) * (chartHeight - padding * 2);
-      return `${x},${y}`;
-    })
-    .join(' ');
+  // Round to nice numbers for Y axis
+  const yMax = Math.ceil(maxValue * 1.1);
+  const yMin = Math.floor(minValue * 0.9);
+  const yRange = yMax - yMin;
+  const yStep = yRange / 5;
+
+  const points = data.map((item, index) => {
+    const x = padding + (index / (data.length - 1)) * chartInnerWidth;
+    const y = padding + ((yMax - item.value) / yRange) * chartInnerHeight;
+    return { x, y, value: item.value, label: item.label };
+  });
+
+  const pointsString = points.map((p) => `${p.x},${p.y}`).join(' ');
 
   return (
-    <View style={{ width: chartWidth, height: chartHeight }}>
-      <LinearGradient
-        colors={[color + '20', color + '05', 'transparent']}
-        style={{
-          position: 'absolute',
-          width: chartWidth,
-          height: chartHeight,
-          borderRadius: 8,
-        }}
-      />
-      <Svg width={chartWidth} height={chartHeight}>
-        <Polyline
-          points={points}
-          fill="none"
-          stroke={color}
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </Svg>
+    <View style={{ marginTop: 12, height: 200 }}>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={true}
+        style={{ maxWidth: '100%' }}
+        contentContainerStyle={{ paddingRight: 20 }}
+      >
+        <View style={{ width: chartWidth, height: 190 }}>
+          {/* Y Axis Labels */}
+          <View
+            style={{
+              position: 'absolute',
+              left: 0,
+              top: 0,
+              height: chartHeight,
+              width: padding,
+              justifyContent: 'space-between',
+            }}
+          >
+            {[...Array(6)].map((_, i) => {
+              const value = yMax - yStep * i;
+              return (
+                <Text
+                  key={i}
+                  style={{
+                    fontSize: 10,
+                    color: themeColors.textTertiary,
+                    textAlign: 'right',
+                    paddingRight: 8,
+                  }}
+                >
+                  {value.toLocaleString('en-US', { maximumFractionDigits: 0 })}
+                </Text>
+              );
+            })}
+          </View>
+
+          {/* Chart Area */}
+          <View
+            style={{
+              position: 'absolute',
+              left: padding,
+              top: 0,
+              width: chartInnerWidth,
+              height: chartHeight,
+            }}
+          >
+            <LinearGradient
+              colors={[color + '20', color + '05', 'transparent']}
+              style={{
+                position: 'absolute',
+                width: '100%',
+                height: '100%',
+                borderRadius: 8,
+              }}
+            />
+
+            {/* Y Axis Grid Lines */}
+            <Svg width={chartInnerWidth} height={chartHeight}>
+              {[...Array(6)].map((_, i) => {
+                const y = (i / 5) * chartInnerHeight;
+                return (
+                  <Polyline
+                    key={i}
+                    points={`0,${y} ${chartInnerWidth},${y}`}
+                    stroke={themeColors.border}
+                    strokeWidth="1"
+                    strokeDasharray="2,2"
+                  />
+                );
+              })}
+
+              {/* Main Line */}
+              <Polyline
+                points={pointsString}
+                fill="none"
+                stroke={color}
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+
+              {/* Data Points */}
+              {points.map((point, index) => (
+                <React.Fragment key={index}>
+                  <Circle
+                    cx={point.x - padding}
+                    cy={point.y}
+                    r="5"
+                    fill={color}
+                    stroke="white"
+                    strokeWidth="2"
+                  />
+                </React.Fragment>
+              ))}
+            </Svg>
+
+            {/* X Axis Labels */}
+            <View
+              style={{
+                position: 'absolute',
+                bottom: -30,
+                left: 0,
+                right: 0,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                paddingHorizontal: 20,
+              }}
+            >
+              {data.map((item, index) => (
+                <Text
+                  key={index}
+                  style={{
+                    fontSize: 10,
+                    color: themeColors.textTertiary,
+                    width: chartInnerWidth / data.length - 5,
+                    textAlign: 'center',
+                  }}
+                  numberOfLines={1}
+                >
+                  {item.label}
+                </Text>
+              ))}
+            </View>
+          </View>
+        </View>
+      </ScrollView>
     </View>
   );
 };
@@ -298,13 +411,18 @@ export default function PortfolioScreen() {
         change: portfolioStats.aportesChange,
         trend: calculateTrend(portfolioStats.aportesChange),
         chartData: [
-          { label: '1', value: 12000 },
-          { label: '2', value: 12500 },
-          { label: '3', value: 13000 },
-          { label: '4', value: 13500 },
-          { label: '5', value: 14000 },
-          { label: '6', value: 14500 },
-          { label: '7', value: 15000 },
+          { label: 'Jan', value: 12000 },
+          { label: 'Fev', value: 12500 },
+          { label: 'Mar', value: 13000 },
+          { label: 'Abr', value: 13500 },
+          { label: 'Mai', value: 14000 },
+          { label: 'Jun', value: 14500 },
+          { label: 'Jul', value: 15000 },
+          { label: 'Ago', value: 14800 },
+          { label: 'Set', value: 14600 },
+          { label: 'Out', value: 14900 },
+          { label: 'Nov', value: 15100 },
+          { label: 'Dez', value: 15000 },
         ],
       },
       {
@@ -315,13 +433,18 @@ export default function PortfolioScreen() {
         change: portfolioStats.balanceChange,
         trend: calculateTrend(portfolioStats.balanceChange),
         chartData: [
-          { label: '1', value: 25000 },
-          { label: '2', value: 24500 },
-          { label: '3', value: 24000 },
-          { label: '4', value: 23500 },
-          { label: '5', value: 23000 },
-          { label: '6', value: 22500 },
-          { label: '7', value: 21714 },
+          { label: 'Jan', value: 25000 },
+          { label: 'Fev', value: 24500 },
+          { label: 'Mar', value: 24000 },
+          { label: 'Abr', value: 23500 },
+          { label: 'Mai', value: 23000 },
+          { label: 'Jun', value: 22500 },
+          { label: 'Jul', value: 22000 },
+          { label: 'Ago', value: 21500 },
+          { label: 'Set', value: 21000 },
+          { label: 'Out', value: 21800 },
+          { label: 'Nov', value: 21500 },
+          { label: 'Dez', value: 21714 },
         ],
       },
       {
@@ -332,13 +455,18 @@ export default function PortfolioScreen() {
         change: portfolioStats.profitChange,
         trend: calculateTrend(portfolioStats.profitChange),
         chartData: [
-          { label: '1', value: 2000 },
-          { label: '2', value: 2200 },
-          { label: '3', value: 2500 },
-          { label: '4', value: 2800 },
-          { label: '5', value: 3100 },
-          { label: '6', value: 3400 },
-          { label: '7', value: 3714 },
+          { label: 'Jan', value: 2000 },
+          { label: 'Fev', value: 2200 },
+          { label: 'Mar', value: 2500 },
+          { label: 'Abr', value: 2800 },
+          { label: 'Mai', value: 3100 },
+          { label: 'Jun', value: 3400 },
+          { label: 'Jul', value: 3650 },
+          { label: 'Ago', value: 3700 },
+          { label: 'Set', value: 3680 },
+          { label: 'Out', value: 3750 },
+          { label: 'Nov', value: 3730 },
+          { label: 'Dez', value: 3714 },
         ],
       },
     ];
@@ -376,7 +504,7 @@ export default function PortfolioScreen() {
                 {card.value}
               </Text>
               <View style={styles.cardChart}>
-                <MiniLineChart data={card.chartData} color={chartColor} />
+                <EnhancedCardChart data={card.chartData} color={chartColor} />
               </View>
             </View>
           );
@@ -1170,6 +1298,8 @@ const styles = StyleSheet.create({
   cardChart: {
     alignItems: 'flex-start',
     marginTop: 8,
+    maxHeight: 200,
+    overflow: 'hidden',
   },
   tableContainer: {
     borderRadius: 12,
