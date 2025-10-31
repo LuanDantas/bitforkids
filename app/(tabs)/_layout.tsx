@@ -5,6 +5,7 @@ import {
   User,
   Newspaper,
   TrendingUp,
+  Wallet,
 } from 'lucide-react-native';
 import { useTheme } from '@/contexts/ThemeContext';
 
@@ -66,10 +67,17 @@ export default function TabLayout() {
       <Tabs.Screen
         name="indices"
         options={{
-          title: 'Portfólio',
+          title: 'Índices',
           tabBarIcon: ({ size, color }) => (
             <TrendingUp size={size} color={color} />
           ),
+        }}
+      />
+      <Tabs.Screen
+        name="portfolio"
+        options={{
+          title: 'Portfólio',
+          tabBarIcon: ({ size, color }) => <Wallet size={size} color={color} />,
         }}
       />
       <Tabs.Screen
