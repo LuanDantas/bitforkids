@@ -209,8 +209,8 @@ export default function IndicesScreen() {
         sma20: 69500,
         sma50: 67200,
         volume24h: '28.5B',
-        marketCap: '1.44T'
-      }
+        marketCap: '1.44T',
+      },
     },
     ETH: {
       name: 'Ethereum',
@@ -231,8 +231,8 @@ export default function IndicesScreen() {
         sma20: 3720,
         sma50: 3580,
         volume24h: '15.2B',
-        marketCap: '462.3B'
-      }
+        marketCap: '462.3B',
+      },
     },
     SOL: {
       name: 'Solana',
@@ -253,9 +253,9 @@ export default function IndicesScreen() {
         sma20: 195,
         sma50: 201,
         volume24h: '4.7B',
-        marketCap: '93.8B'
-      }
-    }
+        marketCap: '93.8B',
+      },
+    },
   };
 
   const chartTypes = [
@@ -285,7 +285,10 @@ export default function IndicesScreen() {
 
   const formatPrice = (price: number) => {
     if (price >= 1000) {
-      return `$${price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      return `$${price.toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })}`;
     }
     return `$${price.toFixed(4)}`;
   };
@@ -299,17 +302,25 @@ export default function IndicesScreen() {
 
   const renderChart = () => {
     const data = chartData[selectedChart as keyof typeof chartData];
-    const maxPrice = Math.max(...data.data.map(d => d.price));
-    const minPrice = Math.min(...data.data.map(d => d.price));
+    const maxPrice = Math.max(...data.data.map((d) => d.price));
+    const minPrice = Math.min(...data.data.map((d) => d.price));
     const priceRange = maxPrice - minPrice;
 
     return (
-      <View style={[styles.chartContainer, { backgroundColor: colors.card, borderColor: colors.border }]}>
+      <View
+        style={[
+          styles.chartContainer,
+          { backgroundColor: colors.card, borderColor: colors.border },
+        ]}
+      >
         <View style={styles.chartHeader}>
           <View style={styles.chartInfo}>
-            <Text style={[styles.chartTitle, { color: colors.text }]}>{data.name}</Text>
+            <Text style={[styles.chartTitle, { color: colors.text }]}>
+              {data.name}
+            </Text>
             <Text style={[styles.chartPrice, { color: colors.text }]}>
-              ${data.price.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+              $
+              {data.price.toLocaleString('en-US', { minimumFractionDigits: 2 })}
             </Text>
             <View style={styles.chartChange}>
               {(() => {
@@ -318,7 +329,9 @@ export default function IndicesScreen() {
                 return (
                   <>
                     <ChangeIcon size={14} color={changeColor} />
-                    <Text style={[styles.chartChangeText, { color: changeColor }]}>
+                    <Text
+                      style={[styles.chartChangeText, { color: changeColor }]}
+                    >
                       {Math.abs(data.change).toFixed(1)}%
                     </Text>
                   </>
@@ -326,8 +339,11 @@ export default function IndicesScreen() {
               })()}
             </View>
           </View>
-          <TouchableOpacity 
-            style={[styles.fullscreenButton, { backgroundColor: colors.surface }]}
+          <TouchableOpacity
+            style={[
+              styles.fullscreenButton,
+              { backgroundColor: colors.surface },
+            ]}
             onPress={() => setShowAdvancedCharts(true)}
           >
             <Maximize2 size={16} color={colors.textSecondary} />
@@ -337,17 +353,26 @@ export default function IndicesScreen() {
         {/* Chart Visualization */}
         <View style={styles.chartArea}>
           <LinearGradient
-            colors={data.change > 0 ? 
-              ['rgba(16, 185, 129, 0.3)', 'rgba(16, 185, 129, 0.05)'] : 
-              ['rgba(239, 68, 68, 0.3)', 'rgba(239, 68, 68, 0.05)']}
+            colors={
+              data.change > 0
+                ? ['rgba(16, 185, 129, 0.3)', 'rgba(16, 185, 129, 0.05)']
+                : ['rgba(239, 68, 68, 0.3)', 'rgba(239, 68, 68, 0.05)']
+            }
             style={styles.chartGradient}
           >
             <View style={styles.chartPlaceholder}>
               <LineChartIcon size={48} color={colors.textTertiary} />
-              <Text style={[styles.chartPlaceholderText, { color: colors.textTertiary }]}>
+              <Text
+                style={[
+                  styles.chartPlaceholderText,
+                  { color: colors.textTertiary },
+                ]}
+              >
                 Gráfico de {data.name}
               </Text>
-              <Text style={[styles.chartSubtext, { color: colors.textTertiary }]}>
+              <Text
+                style={[styles.chartSubtext, { color: colors.textTertiary }]}
+              >
                 Dados em tempo real
               </Text>
             </View>
@@ -356,7 +381,9 @@ export default function IndicesScreen() {
 
         {/* Chart Footer */}
         <View style={styles.chartFooter}>
-          <Text style={[styles.chartFooterText, { color: colors.textSecondary }]}>
+          <Text
+            style={[styles.chartFooterText, { color: colors.textSecondary }]}
+          >
             Última atualização: agora
           </Text>
         </View>
@@ -370,21 +397,40 @@ export default function IndicesScreen() {
     const data = chartData[selectedChart as keyof typeof chartData];
 
     return (
-      <View style={[styles.advancedChartsModal, { backgroundColor: colors.background }]}>
-        <View style={[styles.modalHeader, { backgroundColor: colors.card, borderColor: colors.border }]}>
-          <TouchableOpacity 
+      <View
+        style={[
+          styles.advancedChartsModal,
+          { backgroundColor: colors.background },
+        ]}
+      >
+        <View
+          style={[
+            styles.modalHeader,
+            { backgroundColor: colors.card, borderColor: colors.border },
+          ]}
+        >
+          <TouchableOpacity
             style={styles.closeButton}
             onPress={() => setShowAdvancedCharts(false)}
           >
-            <Text style={[styles.closeButtonText, { color: colors.primary }]}>← Voltar</Text>
+            <Text style={[styles.closeButtonText, { color: colors.primary }]}>
+              ← Voltar
+            </Text>
           </TouchableOpacity>
-          <Text style={[styles.modalTitle, { color: colors.text }]}>Gráficos Avançados</Text>
-          <TouchableOpacity style={[styles.settingsButton, { backgroundColor: colors.surface }]}>
+          <Text style={[styles.modalTitle, { color: colors.text }]}>
+            Gráficos Avançados
+          </Text>
+          <TouchableOpacity
+            style={[styles.settingsButton, { backgroundColor: colors.surface }]}
+          >
             <Settings size={20} color={colors.textSecondary} />
           </TouchableOpacity>
         </View>
 
-        <ScrollView style={styles.modalContent} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          style={styles.modalContent}
+          showsVerticalScrollIndicator={false}
+        >
           {/* Chart Type Selector */}
           <View style={styles.chartTypeSelector}>
             {chartTypes.map((type) => {
@@ -394,17 +440,29 @@ export default function IndicesScreen() {
                   key={type.key}
                   style={[
                     styles.chartTypeButton,
-                    { backgroundColor: colors.card, borderColor: colors.border },
-                    chartType === type.key && { backgroundColor: colors.primary }
+                    {
+                      backgroundColor: colors.card,
+                      borderColor: colors.border,
+                    },
+                    chartType === type.key && {
+                      backgroundColor: colors.primary,
+                    },
                   ]}
                   onPress={() => setChartType(type.key)}
                 >
-                  <Icon size={16} color={chartType === type.key ? 'white' : colors.textSecondary} />
-                  <Text style={[
-                    styles.chartTypeText,
-                    { color: colors.textSecondary },
-                    chartType === type.key && { color: 'white' }
-                  ]}>
+                  <Icon
+                    size={16}
+                    color={
+                      chartType === type.key ? 'white' : colors.textSecondary
+                    }
+                  />
+                  <Text
+                    style={[
+                      styles.chartTypeText,
+                      { color: colors.textSecondary },
+                      chartType === type.key && { color: 'white' },
+                    ]}
+                  >
                     {type.label}
                   </Text>
                 </TouchableOpacity>
@@ -420,18 +478,28 @@ export default function IndicesScreen() {
                 style={[
                   styles.cryptoButton,
                   { backgroundColor: colors.card, borderColor: colors.border },
-                  selectedChart === key && { backgroundColor: colors.primary + '20', borderColor: colors.primary }
+                  selectedChart === key && {
+                    backgroundColor: colors.primary + '20',
+                    borderColor: colors.primary,
+                  },
                 ]}
                 onPress={() => setSelectedChart(key)}
               >
-                <Text style={[
-                  styles.cryptoButtonSymbol,
-                  { color: colors.text },
-                  selectedChart === key && { color: colors.primary }
-                ]}>
+                <Text
+                  style={[
+                    styles.cryptoButtonSymbol,
+                    { color: colors.text },
+                    selectedChart === key && { color: colors.primary },
+                  ]}
+                >
                   {crypto.symbol}
                 </Text>
-                <Text style={[styles.cryptoButtonName, { color: colors.textSecondary }]}>
+                <Text
+                  style={[
+                    styles.cryptoButtonName,
+                    { color: colors.textSecondary },
+                  ]}
+                >
                   {crypto.name}
                 </Text>
               </TouchableOpacity>
@@ -439,14 +507,26 @@ export default function IndicesScreen() {
           </View>
 
           {/* Advanced Chart */}
-          <View style={[styles.advancedChart, { backgroundColor: colors.card, borderColor: colors.border }]}>
+          <View
+            style={[
+              styles.advancedChart,
+              { backgroundColor: colors.card, borderColor: colors.border },
+            ]}
+          >
             <View style={styles.advancedChartHeader}>
               <View>
-                <Text style={[styles.advancedChartTitle, { color: colors.text }]}>
+                <Text
+                  style={[styles.advancedChartTitle, { color: colors.text }]}
+                >
                   {data.name} ({data.symbol})
                 </Text>
-                <Text style={[styles.advancedChartPrice, { color: colors.text }]}>
-                  ${data.price.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                <Text
+                  style={[styles.advancedChartPrice, { color: colors.text }]}
+                >
+                  $
+                  {data.price.toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                  })}
                 </Text>
               </View>
               <View style={styles.advancedChartChange}>
@@ -456,8 +536,14 @@ export default function IndicesScreen() {
                   return (
                     <>
                       <ChangeIcon size={20} color={changeColor} />
-                      <Text style={[styles.advancedChartChangeText, { color: changeColor }]}>
-                        {data.change > 0 ? '+' : ''}{data.change.toFixed(1)}%
+                      <Text
+                        style={[
+                          styles.advancedChartChangeText,
+                          { color: changeColor },
+                        ]}
+                      >
+                        {data.change > 0 ? '+' : ''}
+                        {data.change.toFixed(1)}%
                       </Text>
                     </>
                   );
@@ -468,19 +554,36 @@ export default function IndicesScreen() {
             {/* Chart Area */}
             <View style={styles.enhancedChartArea}>
               <LinearGradient
-                colors={data.change > 0 ? 
-                  ['rgba(16, 185, 129, 0.3)', 'rgba(16, 185, 129, 0.05)'] : 
-                  ['rgba(239, 68, 68, 0.3)', 'rgba(239, 68, 68, 0.05)']}
+                colors={
+                  data.change > 0
+                    ? ['rgba(16, 185, 129, 0.3)', 'rgba(16, 185, 129, 0.05)']
+                    : ['rgba(239, 68, 68, 0.3)', 'rgba(239, 68, 68, 0.05)']
+                }
                 style={styles.chartGradient}
               >
                 <View style={styles.chartPlaceholder}>
                   <Activity size={48} color={colors.textTertiary} />
-                  <Text style={[styles.chartPlaceholderText, { color: colors.textTertiary }]}>
-                    Gráfico {chartType === 'line' ? 'de Linha' : 
-                            chartType === 'candle' ? 'Candlestick' : 
-                            chartType === 'area' ? 'de Área' : 'de Volume'}
+                  <Text
+                    style={[
+                      styles.chartPlaceholderText,
+                      { color: colors.textTertiary },
+                    ]}
+                  >
+                    Gráfico{' '}
+                    {chartType === 'line'
+                      ? 'de Linha'
+                      : chartType === 'candle'
+                      ? 'Candlestick'
+                      : chartType === 'area'
+                      ? 'de Área'
+                      : 'de Volume'}
                   </Text>
-                  <Text style={[styles.chartSubtext, { color: colors.textTertiary }]}>
+                  <Text
+                    style={[
+                      styles.chartSubtext,
+                      { color: colors.textTertiary },
+                    ]}
+                  >
                     Análise técnica avançada
                   </Text>
                 </View>
@@ -489,46 +592,112 @@ export default function IndicesScreen() {
           </View>
 
           {/* Technical Indicators */}
-          <View style={[styles.indicatorsSection, { backgroundColor: colors.card, borderColor: colors.border }]}>
-            <Text style={[styles.indicatorsTitle, { color: colors.text }]}>Indicadores Técnicos</Text>
+          <View
+            style={[
+              styles.indicatorsSection,
+              { backgroundColor: colors.card, borderColor: colors.border },
+            ]}
+          >
+            <Text style={[styles.indicatorsTitle, { color: colors.text }]}>
+              Indicadores Técnicos
+            </Text>
             <View style={styles.indicatorsGrid}>
               <View style={styles.indicatorItem}>
-                <Text style={[styles.indicatorLabel, { color: colors.textSecondary }]}>RSI (14)</Text>
-                <Text style={[styles.indicatorValue, { 
-                  color: data.indicators.rsi > 70 ? '#EF4444' : 
-                        data.indicators.rsi < 30 ? '#10B981' : colors.text 
-                }]}>
+                <Text
+                  style={[
+                    styles.indicatorLabel,
+                    { color: colors.textSecondary },
+                  ]}
+                >
+                  RSI (14)
+                </Text>
+                <Text
+                  style={[
+                    styles.indicatorValue,
+                    {
+                      color:
+                        data.indicators.rsi > 70
+                          ? '#EF4444'
+                          : data.indicators.rsi < 30
+                          ? '#10B981'
+                          : colors.text,
+                    },
+                  ]}
+                >
                   {data.indicators.rsi}
                 </Text>
               </View>
               <View style={styles.indicatorItem}>
-                <Text style={[styles.indicatorLabel, { color: colors.textSecondary }]}>MACD</Text>
-                <Text style={[styles.indicatorValue, { 
-                  color: data.indicators.macd === 'Bullish' ? '#10B981' : '#EF4444' 
-                }]}>
+                <Text
+                  style={[
+                    styles.indicatorLabel,
+                    { color: colors.textSecondary },
+                  ]}
+                >
+                  MACD
+                </Text>
+                <Text
+                  style={[
+                    styles.indicatorValue,
+                    {
+                      color:
+                        data.indicators.macd === 'Bullish'
+                          ? '#10B981'
+                          : '#EF4444',
+                    },
+                  ]}
+                >
                   {data.indicators.macd}
                 </Text>
               </View>
               <View style={styles.indicatorItem}>
-                <Text style={[styles.indicatorLabel, { color: colors.textSecondary }]}>SMA 20</Text>
+                <Text
+                  style={[
+                    styles.indicatorLabel,
+                    { color: colors.textSecondary },
+                  ]}
+                >
+                  SMA 20
+                </Text>
                 <Text style={[styles.indicatorValue, { color: colors.text }]}>
                   ${data.indicators.sma20.toLocaleString()}
                 </Text>
               </View>
               <View style={styles.indicatorItem}>
-                <Text style={[styles.indicatorLabel, { color: colors.textSecondary }]}>SMA 50</Text>
+                <Text
+                  style={[
+                    styles.indicatorLabel,
+                    { color: colors.textSecondary },
+                  ]}
+                >
+                  SMA 50
+                </Text>
                 <Text style={[styles.indicatorValue, { color: colors.text }]}>
                   ${data.indicators.sma50.toLocaleString()}
                 </Text>
               </View>
               <View style={styles.indicatorItem}>
-                <Text style={[styles.indicatorLabel, { color: colors.textSecondary }]}>Volume 24h</Text>
+                <Text
+                  style={[
+                    styles.indicatorLabel,
+                    { color: colors.textSecondary },
+                  ]}
+                >
+                  Volume 24h
+                </Text>
                 <Text style={[styles.indicatorValue, { color: colors.text }]}>
                   ${data.indicators.volume24h}
                 </Text>
               </View>
               <View style={styles.indicatorItem}>
-                <Text style={[styles.indicatorLabel, { color: colors.textSecondary }]}>Market Cap</Text>
+                <Text
+                  style={[
+                    styles.indicatorLabel,
+                    { color: colors.textSecondary },
+                  ]}
+                >
+                  Market Cap
+                </Text>
                 <Text style={[styles.indicatorValue, { color: colors.text }]}>
                   ${data.indicators.marketCap}
                 </Text>
@@ -537,26 +706,59 @@ export default function IndicesScreen() {
           </View>
 
           {/* Trading View */}
-          <View style={[styles.tradingSection, { backgroundColor: colors.card, borderColor: colors.border }]}>
-            <Text style={[styles.tradingTitle, { color: colors.text }]}>Análise de Trading</Text>
+          <View
+            style={[
+              styles.tradingSection,
+              { backgroundColor: colors.card, borderColor: colors.border },
+            ]}
+          >
+            <Text style={[styles.tradingTitle, { color: colors.text }]}>
+              Análise de Trading
+            </Text>
             <View style={styles.tradingGrid}>
-              <View style={[styles.tradingCard, { backgroundColor: colors.surface }]}>
-                <Text style={[styles.tradingCardTitle, { color: colors.text }]}>Suporte</Text>
+              <View
+                style={[
+                  styles.tradingCard,
+                  { backgroundColor: colors.surface },
+                ]}
+              >
+                <Text style={[styles.tradingCardTitle, { color: colors.text }]}>
+                  Suporte
+                </Text>
                 <Text style={[styles.tradingCardValue, { color: '#10B981' }]}>
                   ${(data.price * 0.95).toFixed(2)}
                 </Text>
               </View>
-              <View style={[styles.tradingCard, { backgroundColor: colors.surface }]}>
-                <Text style={[styles.tradingCardTitle, { color: colors.text }]}>Resistência</Text>
+              <View
+                style={[
+                  styles.tradingCard,
+                  { backgroundColor: colors.surface },
+                ]}
+              >
+                <Text style={[styles.tradingCardTitle, { color: colors.text }]}>
+                  Resistência
+                </Text>
                 <Text style={[styles.tradingCardValue, { color: '#EF4444' }]}>
                   ${(data.price * 1.05).toFixed(2)}
                 </Text>
               </View>
-              <View style={[styles.tradingCard, { backgroundColor: colors.surface }]}>
-                <Text style={[styles.tradingCardTitle, { color: colors.text }]}>Tendência</Text>
-                <Text style={[styles.tradingCardValue, { 
-                  color: data.change > 0 ? '#10B981' : '#EF4444' 
-                }]}>
+              <View
+                style={[
+                  styles.tradingCard,
+                  { backgroundColor: colors.surface },
+                ]}
+              >
+                <Text style={[styles.tradingCardTitle, { color: colors.text }]}>
+                  Tendência
+                </Text>
+                <Text
+                  style={[
+                    styles.tradingCardValue,
+                    {
+                      color: data.change > 0 ? '#10B981' : '#EF4444',
+                    },
+                  ]}
+                >
                   {data.change > 0 ? 'Alta' : 'Baixa'}
                 </Text>
               </View>
@@ -577,25 +779,31 @@ export default function IndicesScreen() {
         <Text style={styles.headerSubtitle}>
           Acompanhe o mercado de criptomoedas em tempo real
         </Text>
-        
+
         <View style={styles.marketOverview}>
           <View style={styles.overviewItem}>
             <Text style={styles.overviewLabel}>Market Cap</Text>
-            <Text style={styles.overviewValue}>${marketOverview.totalMarketCap}T</Text>
+            <Text style={styles.overviewValue}>
+              ${marketOverview.totalMarketCap}T
+            </Text>
           </View>
           <View style={styles.overviewItem}>
             <Text style={styles.overviewLabel}>Volume 24h</Text>
-            <Text style={styles.overviewValue}>${marketOverview.totalVolume}B</Text>
+            <Text style={styles.overviewValue}>
+              ${marketOverview.totalVolume}B
+            </Text>
           </View>
           <View style={styles.overviewItem}>
             <Text style={styles.overviewLabel}>BTC Dom.</Text>
-            <Text style={styles.overviewValue}>{marketOverview.btcDominance}%</Text>
+            <Text style={styles.overviewValue}>
+              {marketOverview.btcDominance}%
+            </Text>
           </View>
         </View>
       </LinearGradient>
 
-      <ScrollView 
-        style={styles.content} 
+      <ScrollView
+        style={styles.content}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -603,21 +811,49 @@ export default function IndicesScreen() {
       >
         {/* Market Stats */}
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>Estatísticas do Mercado</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>
+            Estatísticas do Mercado
+          </Text>
           <View style={styles.statsGrid}>
             {marketStats.map((stat, index) => {
               const Icon = stat.icon;
               return (
-                <View key={index} style={[styles.statCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+                <View
+                  key={index}
+                  style={[
+                    styles.statCard,
+                    {
+                      backgroundColor: colors.card,
+                      borderColor: colors.border,
+                    },
+                  ]}
+                >
                   <View style={styles.statHeader}>
-                    <View style={[styles.statIcon, { backgroundColor: stat.color + '20' }]}>
+                    <View
+                      style={[
+                        styles.statIcon,
+                        { backgroundColor: stat.color + '20' },
+                      ]}
+                    >
                       <Icon size={20} color={stat.color} />
                     </View>
-                    <Text style={[styles.statChange, { color: stat.color }]}>{stat.change}</Text>
+                    <Text style={[styles.statChange, { color: stat.color }]}>
+                      {stat.change}
+                    </Text>
                   </View>
-                  <Text style={[styles.statValue, { color: colors.text }]}>{stat.value}</Text>
-                  <Text style={[styles.statTitle, { color: colors.textSecondary }]}>{stat.title}</Text>
-                  <Text style={[styles.statLabel, { color: colors.textTertiary }]}>{stat.label}</Text>
+                  <Text style={[styles.statValue, { color: colors.text }]}>
+                    {stat.value}
+                  </Text>
+                  <Text
+                    style={[styles.statTitle, { color: colors.textSecondary }]}
+                  >
+                    {stat.title}
+                  </Text>
+                  <Text
+                    style={[styles.statLabel, { color: colors.textTertiary }]}
+                  >
+                    {stat.label}
+                  </Text>
                 </View>
               );
             })}
@@ -627,15 +863,22 @@ export default function IndicesScreen() {
         {/* Timeframe Selector */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Text style={[styles.sectionTitle, { color: colors.text }]}>Top Criptomoedas</Text>
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>
+              Top Criptomoedas
+            </Text>
             <View style={styles.timeframeSelector}>
               {timeframes.map((timeframe) => (
                 <TouchableOpacity
                   key={timeframe}
                   style={[
                     styles.timeframeButton,
-                    { backgroundColor: colors.card, borderColor: colors.border },
-                    selectedTimeframe === timeframe && { backgroundColor: colors.primary }
+                    {
+                      backgroundColor: colors.card,
+                      borderColor: colors.border,
+                    },
+                    selectedTimeframe === timeframe && {
+                      backgroundColor: colors.primary,
+                    },
                   ]}
                   onPress={() => setSelectedTimeframe(timeframe)}
                 >
@@ -643,7 +886,7 @@ export default function IndicesScreen() {
                     style={[
                       styles.timeframeText,
                       { color: colors.textSecondary },
-                      selectedTimeframe === timeframe && { color: 'white' }
+                      selectedTimeframe === timeframe && { color: 'white' },
                     ]}
                   >
                     {timeframe}
@@ -660,32 +903,60 @@ export default function IndicesScreen() {
             {topCryptos.map((crypto) => {
               const ChangeIcon = getChangeIcon(crypto.change24h);
               const changeColor = getChangeColor(crypto.change24h);
-              
+
               return (
-                <TouchableOpacity 
-                  key={crypto.id} 
-                  style={[styles.cryptoItem, { backgroundColor: colors.card, borderColor: colors.border }]}
+                <TouchableOpacity
+                  key={crypto.id}
+                  style={[
+                    styles.cryptoItem,
+                    {
+                      backgroundColor: colors.card,
+                      borderColor: colors.border,
+                    },
+                  ]}
                   onPress={() => {
                     // Navigate to crypto details (if route exists)
                     // router.push(`/crypto/${crypto.id}` as any);
                   }}
                 >
                   <View style={styles.cryptoRank}>
-                    <Text style={[styles.rankText, { color: colors.textTertiary }]}>{crypto.rank}</Text>
+                    <Text
+                      style={[styles.rankText, { color: colors.textTertiary }]}
+                    >
+                      {crypto.rank}
+                    </Text>
                   </View>
-                  
+
                   <View style={styles.cryptoInfo}>
-                    <View style={[styles.cryptoLogo, { backgroundColor: crypto.color + '20' }]}>
-                      <Text style={[styles.logoText, { color: crypto.color }]}>{crypto.logo}</Text>
+                    <View
+                      style={[
+                        styles.cryptoLogo,
+                        { backgroundColor: crypto.color + '20' },
+                      ]}
+                    >
+                      <Text style={[styles.logoText, { color: crypto.color }]}>
+                        {crypto.logo}
+                      </Text>
                     </View>
                     <View style={styles.cryptoDetails}>
-                      <Text style={[styles.cryptoName, { color: colors.text }]}>{crypto.name}</Text>
-                      <Text style={[styles.cryptoSymbol, { color: colors.textSecondary }]}>{crypto.symbol}</Text>
+                      <Text style={[styles.cryptoName, { color: colors.text }]}>
+                        {crypto.name}
+                      </Text>
+                      <Text
+                        style={[
+                          styles.cryptoSymbol,
+                          { color: colors.textSecondary },
+                        ]}
+                      >
+                        {crypto.symbol}
+                      </Text>
                     </View>
                   </View>
-                  
+
                   <View style={styles.cryptoPrice}>
-                    <Text style={[styles.priceText, { color: colors.text }]}>{formatPrice(crypto.price)}</Text>
+                    <Text style={[styles.priceText, { color: colors.text }]}>
+                      {formatPrice(crypto.price)}
+                    </Text>
                     <View style={styles.changeContainer}>
                       <ChangeIcon size={12} color={changeColor} />
                       <Text style={[styles.changeText, { color: changeColor }]}>
@@ -693,12 +964,22 @@ export default function IndicesScreen() {
                       </Text>
                     </View>
                   </View>
-                  
+
                   <View style={styles.cryptoStats}>
-                    <Text style={[styles.marketCapText, { color: colors.textSecondary }]}>
+                    <Text
+                      style={[
+                        styles.marketCapText,
+                        { color: colors.textSecondary },
+                      ]}
+                    >
                       {formatMarketCap(crypto.marketCap)}
                     </Text>
-                    <Text style={[styles.volumeText, { color: colors.textTertiary }]}>
+                    <Text
+                      style={[
+                        styles.volumeText,
+                        { color: colors.textTertiary },
+                      ]}
+                    >
                       Vol: ${crypto.volume}B
                     </Text>
                   </View>
@@ -710,15 +991,30 @@ export default function IndicesScreen() {
 
         {/* Trending Section */}
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>🔥 Trending</Text>
-          <View style={[styles.trendingContainer, { backgroundColor: colors.card, borderColor: colors.border }]}>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>
+            🔥 Trending
+          </Text>
+          <View
+            style={[
+              styles.trendingContainer,
+              { backgroundColor: colors.card, borderColor: colors.border },
+            ]}
+          >
             {trendingCoins.map((coin, index) => (
               <View key={index} style={styles.trendingItem}>
                 <View style={styles.trendingRank}>
-                  <Text style={[styles.trendingRankText, { color: colors.primary }]}>{coin.rank}</Text>
+                  <Text
+                    style={[styles.trendingRankText, { color: colors.primary }]}
+                  >
+                    {coin.rank}
+                  </Text>
                 </View>
-                <Text style={[styles.trendingName, { color: colors.text }]}>{coin.name}</Text>
-                <Text style={[styles.trendingChange, { color: '#10B981' }]}>{coin.change}</Text>
+                <Text style={[styles.trendingName, { color: colors.text }]}>
+                  {coin.name}
+                </Text>
+                <Text style={[styles.trendingChange, { color: '#10B981' }]}>
+                  {coin.change}
+                </Text>
               </View>
             ))}
           </View>
@@ -726,8 +1022,15 @@ export default function IndicesScreen() {
 
         {/* Market Analysis */}
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>Análise de Mercado</Text>
-          <View style={[styles.analysisCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>
+            Análise de Mercado
+          </Text>
+          <View
+            style={[
+              styles.analysisCard,
+              { backgroundColor: colors.card, borderColor: colors.border },
+            ]}
+          >
             <LinearGradient
               colors={['#10B981', '#059669']}
               style={styles.analysisHeader}
@@ -740,9 +1043,15 @@ export default function IndicesScreen() {
                 <Text style={styles.indexValue}>76</Text>
                 <Text style={styles.indexLabel}>Extreme Greed</Text>
               </View>
-              <Text style={[styles.analysisDescription, { color: colors.textSecondary }]}>
-                O mercado está em estado de "ganância extrema", indicando otimismo elevado entre os investidores. 
-                Historicamente, estes níveis podem preceder correções de mercado.
+              <Text
+                style={[
+                  styles.analysisDescription,
+                  { color: colors.textSecondary },
+                ]}
+              >
+                O mercado está em estado de "ganância extrema", indicando
+                otimismo elevado entre os investidores. Historicamente, estes
+                níveis podem preceder correções de mercado.
               </Text>
             </View>
           </View>
@@ -750,10 +1059,15 @@ export default function IndicesScreen() {
 
         {/* Quick Actions */}
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>Ações Rápidas</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>
+            Ações Rápidas
+          </Text>
           <View style={styles.quickActions}>
-            <TouchableOpacity 
-              style={[styles.quickAction, { backgroundColor: colors.card, borderColor: colors.border }]}
+            <TouchableOpacity
+              style={[
+                styles.quickAction,
+                { backgroundColor: colors.card, borderColor: colors.border },
+              ]}
               onPress={() => setShowAdvancedCharts(true)}
             >
               <LinearGradient
@@ -762,24 +1076,35 @@ export default function IndicesScreen() {
               >
                 <BarChart3 size={24} color="white" />
               </LinearGradient>
-              <Text style={[styles.quickActionText, { color: colors.text }]}>Gráficos Avançados</Text>
+              <Text style={[styles.quickActionText, { color: colors.text }]}>
+                Gráficos Avançados
+              </Text>
             </TouchableOpacity>
-            
-            <TouchableOpacity style={[styles.quickAction, { backgroundColor: colors.card, borderColor: colors.border }]}>
+
+            <TouchableOpacity
+              style={[
+                styles.quickAction,
+                { backgroundColor: colors.card, borderColor: colors.border },
+              ]}
+            >
               <LinearGradient
                 colors={['#10B981', '#059669']}
                 style={styles.quickActionIcon}
               >
                 <PieChartIcon size={24} color="white" />
               </LinearGradient>
-              <Text style={[styles.quickActionText, { color: colors.text }]}>Portfolio Tracker</Text>
+              <Text style={[styles.quickActionText, { color: colors.text }]}>
+                Portfolio Tracker
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
 
         {/* Charts Section */}
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>Gráficos de Análise</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>
+            Gráficos de Análise
+          </Text>
 
           <PieChart
             title="Distribuição de Market Cap"
@@ -832,12 +1157,48 @@ export default function IndicesScreen() {
           <CandlestickChart
             title="Padrão de Candlestick - Bitcoin (6h)"
             data={[
-              { time: '00:00', open: 65000, close: 67500, high: 68000, low: 64500 },
-              { time: '04:00', open: 67500, close: 69200, high: 70000, low: 67000 },
-              { time: '08:00', open: 69200, close: 71800, high: 72500, low: 69000 },
-              { time: '12:00', open: 71800, close: 70500, high: 72800, low: 69800 },
-              { time: '16:00', open: 70500, close: 73250, high: 74000, low: 70000 },
-              { time: '20:00', open: 73250, close: 73250, high: 74500, low: 72500 },
+              {
+                time: '00:00',
+                open: 65000,
+                close: 67500,
+                high: 68000,
+                low: 64500,
+              },
+              {
+                time: '04:00',
+                open: 67500,
+                close: 69200,
+                high: 70000,
+                low: 67000,
+              },
+              {
+                time: '08:00',
+                open: 69200,
+                close: 71800,
+                high: 72500,
+                low: 69000,
+              },
+              {
+                time: '12:00',
+                open: 71800,
+                close: 70500,
+                high: 72800,
+                low: 69800,
+              },
+              {
+                time: '16:00',
+                open: 70500,
+                close: 73250,
+                high: 74000,
+                low: 70000,
+              },
+              {
+                time: '20:00',
+                open: 73250,
+                close: 73250,
+                high: 74500,
+                low: 72500,
+              },
             ]}
           />
         </View>
