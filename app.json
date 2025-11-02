@@ -43,6 +43,19 @@
     "notification": {
       "icon": "./assets/images/icon.png",
       "color": "#8B5CF6"
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "15102c8d-6d22-4833-9213-298d3d58572c"
+      }
+    },
+    "owner": "luandantas",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/15102c8d-6d22-4833-9213-298d3d58572c"
     }
   }
 }
