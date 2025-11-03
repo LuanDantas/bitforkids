@@ -50,9 +50,9 @@
         "projectId": "15102c8d-6d22-4833-9213-298d3d58572c"
       }
     },
-    "owner": "luandantas",
+    "owner": "luan-apps",
     "runtimeVersion": {
-      "policy": "appVersion"
+      "policy": "sdkVersion"
     },
     "updates": {
       "url": "https://u.expo.dev/15102c8d-6d22-4833-9213-298d3d58572c"
