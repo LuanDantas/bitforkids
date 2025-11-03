@@ -1,0 +1,32 @@
+{
+  "expo": {
+    "name": "Bitforkids",
+    "slug": "bitforkids",
+    "version": "1.0.0",
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/858f787a-1882-4924-bf31-7418f0b949c7"
+    }
+  },
+  "cli": {
+    "version": ">= 16.26.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "distribution": "internal"
+    },
+    "production": {
+      "autoIncrement": true
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}
