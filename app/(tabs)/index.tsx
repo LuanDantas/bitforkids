@@ -43,13 +43,13 @@ function SectionTitle({ emoji, title, color }: { emoji: string; title: string; c
   );
 }
 
-function BulletItem({ emoji, title, description, color }: { emoji: string; title: string; description: string; color: string }) {
+function BulletItem({ emoji, title, description, textColor, descColor }: { emoji: string; title: string; description: string; textColor: string; descColor: string }) {
   return (
     <View style={sectionStyles.bulletItem}>
       <Text style={sectionStyles.bulletEmoji}>{emoji}</Text>
       <View style={sectionStyles.bulletContent}>
-        <Text style={[sectionStyles.bulletTitle, { color }]}>{title}</Text>
-        <Text style={[sectionStyles.bulletDesc, { color: color + '99' }]}>{description}</Text>
+        <Text style={[sectionStyles.bulletTitle, { color: textColor }]}>{title}</Text>
+        <Text style={[sectionStyles.bulletDesc, { color: descColor }]}>{description}</Text>
       </View>
     </View>
   );
@@ -137,12 +137,12 @@ export default function HomeScreen() {
           <Text style={[styles.paragraph, { color: colors.text }]}>
             O modelo tradicional não foi criado para a sua liberdade, mas para ditar as regras de como você deve viver. Se você não se encaixa nos padrões impostos, você é excluído.
           </Text>
-          <BulletItem emoji="📋" title="Exclusão e Burocracia" description="Exigem CPF limpo, comprovantes de residência e pilhas de documentos. Sem a papelada, o banco te nega o direito de movimentar o que é seu." color={colors.text} />
-          <BulletItem emoji="📉" title="Inflação" description='Governos imprimem dinheiro sem parar, aplicando um "imposto invisível" que corrói seu poder de compra todos os anos.' color={colors.text} />
-          <BulletItem emoji="🔒" title="Risco de Confisco" description="Seu saldo bancário pode ser bloqueado ou confiscado por decisões políticas ou judiciais em segundos. No banco, o dinheiro não é seu — é apenas uma promessa." color={colors.text} />
-          <BulletItem emoji="👁️" title="Vigilância Total" description="Cada transação é rastreada, vigiada e reportada. Não existe privacidade no seu consumo." color={colors.text} />
-          <BulletItem emoji="🏦" title="Dependência de Terceiros" description='Você precisa de permissão para tudo. Se o banco decidir que sua transação é "suspeita", ele bloqueia seu acesso sem aviso.' color={colors.text} />
-          <BulletItem emoji="⚖️" title="Regras Unilaterais" description="Taxas, limites e horários de transferência são impostos sem que você possa questionar." color={colors.text} />
+          <BulletItem emoji="📋" title="Exclusão e Burocracia" description="Exigem CPF limpo, comprovantes de residência e pilhas de documentos. Sem a papelada, o banco te nega o direito de movimentar o que é seu." textColor={colors.text} descColor={colors.textSecondary} />
+          <BulletItem emoji="📉" title="Inflação" description='Governos imprimem dinheiro sem parar, aplicando um "imposto invisível" que corrói seu poder de compra todos os anos.' textColor={colors.text} descColor={colors.textSecondary} />
+          <BulletItem emoji="🔒" title="Risco de Confisco" description="Seu saldo bancário pode ser bloqueado ou confiscado por decisões políticas ou judiciais em segundos. No banco, o dinheiro não é seu — é apenas uma promessa." textColor={colors.text} descColor={colors.textSecondary} />
+          <BulletItem emoji="👁️" title="Vigilância Total" description="Cada transação é rastreada, vigiada e reportada. Não existe privacidade no seu consumo." textColor={colors.text} descColor={colors.textSecondary} />
+          <BulletItem emoji="🏦" title="Dependência de Terceiros" description='Você precisa de permissão para tudo. Se o banco decidir que sua transação é "suspeita", ele bloqueia seu acesso sem aviso.' textColor={colors.text} descColor={colors.textSecondary} />
+          <BulletItem emoji="⚖️" title="Regras Unilaterais" description="Taxas, limites e horários de transferência são impostos sem que você possa questionar." textColor={colors.text} descColor={colors.textSecondary} />
 
           <View style={styles.divider} />
 
@@ -162,12 +162,12 @@ export default function HomeScreen() {
           <Text style={[styles.paragraph, { color: colors.text }]}>
             A tecnologia desse novo sistema de finanças devolve o poder a quem ele pertence: você. Ao eliminar intermediários como bancos, eliminamos a necessidade de permissão.
           </Text>
-          <BulletItem emoji="🛡️" title="Soberania contra o Confisco" description="Na rede descentralizada, você detém a posse real. Não há autoridade central capaz de bloquear sua conta judicialmente." color={colors.text} />
-          <BulletItem emoji="📊" title="Imunidade à Inflação" description="Com oferta fixa e imutável (21 milhões), o Bitcoin é a defesa definitiva contra a impressão desenfreada de moeda." color={colors.text} />
-          <BulletItem emoji="💵" title="Estabilidade Global com Dólar Criptografado" description="Utilize stablecoins para manter seu poder de compra em dólar, fora do alcance de restrições bancárias ou da desvalorização do Real." color={colors.text} />
-          <BulletItem emoji="🔓" title="Privacidade e Liberdade" description='Um ambiente aberto onde seu direito de transacionar não depende de "ficha limpa" ou autorização de gerentes.' color={colors.text} />
-          <BulletItem emoji="🚫" title="Resistência a Impostos Abusivos" description="Ao retirar seu patrimônio do sistema tradicional, você interrompe a drenagem arbitrária de recursos." color={colors.text} />
-          <BulletItem emoji="🌍" title="Transações Sem Fronteiras" description="Envie qualquer valor para qualquer lugar do mundo em minutos, sem justificativas." color={colors.text} />
+          <BulletItem emoji="🛡️" title="Soberania contra o Confisco" description="Na rede descentralizada, você detém a posse real. Não há autoridade central capaz de bloquear sua conta judicialmente." textColor={colors.text} descColor={colors.textSecondary} />
+          <BulletItem emoji="📊" title="Imunidade à Inflação" description="Com oferta fixa e imutável (21 milhões), o Bitcoin é a defesa definitiva contra a impressão desenfreada de moeda." textColor={colors.text} descColor={colors.textSecondary} />
+          <BulletItem emoji="💵" title="Estabilidade Global com Dólar Criptografado" description="Utilize stablecoins para manter seu poder de compra em dólar, fora do alcance de restrições bancárias ou da desvalorização do Real." textColor={colors.text} descColor={colors.textSecondary} />
+          <BulletItem emoji="🔓" title="Privacidade e Liberdade" description='Um ambiente aberto onde seu direito de transacionar não depende de "ficha limpa" ou autorização de gerentes.' textColor={colors.text} descColor={colors.textSecondary} />
+          <BulletItem emoji="🚫" title="Resistência a Impostos Abusivos" description="Ao retirar seu patrimônio do sistema tradicional, você interrompe a drenagem arbitrária de recursos." textColor={colors.text} descColor={colors.textSecondary} />
+          <BulletItem emoji="🌍" title="Transações Sem Fronteiras" description="Envie qualquer valor para qualquer lugar do mundo em minutos, sem justificativas." textColor={colors.text} descColor={colors.textSecondary} />
 
           <View style={styles.divider} />
 
@@ -212,13 +212,13 @@ export default function HomeScreen() {
 
           {/* O QUE VAI DOMINAR */}
           <SectionTitle emoji="🎯" title="O que você vai dominar" color={colors.text} />
-          <BulletItem emoji="🛡️" title="Blindagem Patrimonial" description="Proteja o suor do seu trabalho contra o efeito corrosivo da inflação e a desvalorização cambial." color={colors.text} />
-          <BulletItem emoji="🟠" title="Domínio do Bitcoin" description='Opere a rede do "ouro digital" com segurança absoluta.' color={colors.text} />
-          <BulletItem emoji="🌐" title="Inteligência em DeFi" description="Desvende as Finanças Descentralizadas e como um sistema financeiro funciona sem gerente de conta." color={colors.text} />
-          <BulletItem emoji="🌍" title="Liberdade de Movimentação Global" description="Transferências internacionais e pagamentos sem fronteiras, taxas abusivas ou bloqueios." color={colors.text} />
-          <BulletItem emoji="💵" title="Dólar Digital na Prática" description="Utilize stablecoins para preservar seu poder de compra com total liquidez e autonomia." color={colors.text} />
-          <BulletItem emoji="🔐" title="Maestria em Autocustódia" description="O método definitivo para guardar suas próprias chaves e garantir que apenas você tenha acesso aos seus ativos." color={colors.text} />
-          <BulletItem emoji="🚫" title="Infraestrutura Sem Permissões" description="Um ecossistema onde você não precisa apresentar documentos ou pedir permissão para transacionar." color={colors.text} />
+          <BulletItem emoji="🛡️" title="Blindagem Patrimonial" description="Proteja o suor do seu trabalho contra o efeito corrosivo da inflação e a desvalorização cambial." textColor={colors.text} descColor={colors.textSecondary} />
+          <BulletItem emoji="🟠" title="Domínio do Bitcoin" description='Opere a rede do "ouro digital" com segurança absoluta.' textColor={colors.text} descColor={colors.textSecondary} />
+          <BulletItem emoji="🌐" title="Inteligência em DeFi" description="Desvende as Finanças Descentralizadas e como um sistema financeiro funciona sem gerente de conta." textColor={colors.text} descColor={colors.textSecondary} />
+          <BulletItem emoji="🌍" title="Liberdade de Movimentação Global" description="Transferências internacionais e pagamentos sem fronteiras, taxas abusivas ou bloqueios." textColor={colors.text} descColor={colors.textSecondary} />
+          <BulletItem emoji="💵" title="Dólar Digital na Prática" description="Utilize stablecoins para preservar seu poder de compra com total liquidez e autonomia." textColor={colors.text} descColor={colors.textSecondary} />
+          <BulletItem emoji="🔐" title="Maestria em Autocustódia" description="O método definitivo para guardar suas próprias chaves e garantir que apenas você tenha acesso aos seus ativos." textColor={colors.text} descColor={colors.textSecondary} />
+          <BulletItem emoji="🚫" title="Infraestrutura Sem Permissões" description="Um ecossistema onde você não precisa apresentar documentos ou pedir permissão para transacionar." textColor={colors.text} descColor={colors.textSecondary} />
 
           <View style={styles.divider} />
 
@@ -227,12 +227,12 @@ export default function HomeScreen() {
           <Text style={[styles.paragraph, { color: colors.text }]}>
             Nosso foco é a sua soberania pessoal. Nossos cursos foram desenhados para resolver seus problemas reais:
           </Text>
-          <BulletItem emoji="🏦" title="Romper a dependência bancária" description="Aprenda a ser o seu próprio banco, sem precisar de permissão para mover o que é seu." color={colors.text} />
-          <BulletItem emoji="🛡️" title="Blindar o patrimônio" description="Proteja o seu futuro contra o confisco, a censura e decisões políticas arbitrárias." color={colors.text} />
-          <BulletItem emoji="🔒" title="Conquistar a privacidade" description="Transacione e guarde valores sem precisar expor seu CPF ou solicitar autorização estatal." color={colors.text} />
-          <BulletItem emoji="🔐" title="Dominar a autocustódia" description="Tire seu dinheiro do alcance de terceiros, corretoras ou governos." color={colors.text} />
-          <BulletItem emoji="📖" title="Simplificar o complexo" description="Traduzimos o Bitcoin e o universo DeFi para que qualquer leigo entenda e aplique hoje mesmo." color={colors.text} />
-          <BulletItem emoji="⚠️" title="Evitar erros fatais" description="Treine o olhar para identificar golpes, evitar armadilhas e manter a segurança absoluta do seu capital." color={colors.text} />
+          <BulletItem emoji="🏦" title="Romper a dependência bancária" description="Aprenda a ser o seu próprio banco, sem precisar de permissão para mover o que é seu." textColor={colors.text} descColor={colors.textSecondary} />
+          <BulletItem emoji="🛡️" title="Blindar o patrimônio" description="Proteja o seu futuro contra o confisco, a censura e decisões políticas arbitrárias." textColor={colors.text} descColor={colors.textSecondary} />
+          <BulletItem emoji="🔒" title="Conquistar a privacidade" description="Transacione e guarde valores sem precisar expor seu CPF ou solicitar autorização estatal." textColor={colors.text} descColor={colors.textSecondary} />
+          <BulletItem emoji="🔐" title="Dominar a autocustódia" description="Tire seu dinheiro do alcance de terceiros, corretoras ou governos." textColor={colors.text} descColor={colors.textSecondary} />
+          <BulletItem emoji="📖" title="Simplificar o complexo" description="Traduzimos o Bitcoin e o universo DeFi para que qualquer leigo entenda e aplique hoje mesmo." textColor={colors.text} descColor={colors.textSecondary} />
+          <BulletItem emoji="⚠️" title="Evitar erros fatais" description="Treine o olhar para identificar golpes, evitar armadilhas e manter a segurança absoluta do seu capital." textColor={colors.text} descColor={colors.textSecondary} />
 
           <View style={styles.divider} />
 
@@ -241,11 +241,11 @@ export default function HomeScreen() {
           <Text style={[styles.paragraph, { color: colors.text }]}>
             Ensinamos como usar essa tecnologia na prática, com a mesma facilidade de um app de banco:
           </Text>
-          <BulletItem emoji="💸" title="Pagamentos e Recebimentos" description="Diretos e sem intermediários." color={colors.text} />
-          <BulletItem emoji="💳" title="Cartões Cripto" description="Gaste seu saldo em cripto ou dólar no comércio." color={colors.text} />
-          <BulletItem emoji="📄" title="Boletos e Contas" description="Quite despesas usando sua carteira digital." color={colors.text} />
-          <BulletItem emoji="🌎" title="Transferências Globais" description="Instantâneas e sem burocracias." color={colors.text} />
-          <BulletItem emoji="📱" title="Apps e Carteiras" description="Transforme seu saldo em um ativo líquido para uso diário." color={colors.text} />
+          <BulletItem emoji="💸" title="Pagamentos e Recebimentos" description="Diretos e sem intermediários." textColor={colors.text} descColor={colors.textSecondary} />
+          <BulletItem emoji="💳" title="Cartões Cripto" description="Gaste seu saldo em cripto ou dólar no comércio." textColor={colors.text} descColor={colors.textSecondary} />
+          <BulletItem emoji="📄" title="Boletos e Contas" description="Quite despesas usando sua carteira digital." textColor={colors.text} descColor={colors.textSecondary} />
+          <BulletItem emoji="🌎" title="Transferências Globais" description="Instantâneas e sem burocracias." textColor={colors.text} descColor={colors.textSecondary} />
+          <BulletItem emoji="📱" title="Apps e Carteiras" description="Transforme seu saldo em um ativo líquido para uso diário." textColor={colors.text} descColor={colors.textSecondary} />
 
           <View style={styles.divider} />
 
@@ -254,10 +254,10 @@ export default function HomeScreen() {
           <Text style={[styles.paragraph, { color: colors.text }]}>
             Não é preciso ser especialista nem ter grandes fortunas.
           </Text>
-          <BulletItem emoji="👣" title="Para iniciantes" description="Passo a passo do básico ao avançado." color={colors.text} />
-          <BulletItem emoji="💰" title="Acessibilidade" description="Comece com pouco dinheiro." color={colors.text} />
-          <BulletItem emoji="🚫" title="Sem intermediários" description='Você nunca precisará "dar o seu dinheiro" para ninguém.' color={colors.text} />
-          <BulletItem emoji="🔐" title="Controle total" description="Domínio completo da sua carteira e autocustódia." color={colors.text} />
+          <BulletItem emoji="👣" title="Para iniciantes" description="Passo a passo do básico ao avançado." textColor={colors.text} descColor={colors.textSecondary} />
+          <BulletItem emoji="💰" title="Acessibilidade" description="Comece com pouco dinheiro." textColor={colors.text} descColor={colors.textSecondary} />
+          <BulletItem emoji="🚫" title="Sem intermediários" description='Você nunca precisará "dar o seu dinheiro" para ninguém.' textColor={colors.text} descColor={colors.textSecondary} />
+          <BulletItem emoji="🔐" title="Controle total" description="Domínio completo da sua carteira e autocustódia." textColor={colors.text} descColor={colors.textSecondary} />
 
           <View style={styles.divider} />
 
@@ -266,9 +266,9 @@ export default function HomeScreen() {
           <Text style={[styles.paragraph, { color: colors.text }]}>
             O meu curso promove uma virada de chave: a transição de "usuário" para "proprietário". Eu traduzo o complexo para o simples, focando em:
           </Text>
-          <BulletItem emoji="💪" title="Mudança de Postura" description="Deixe de pedir permissão para existir financeiramente." color={colors.text} />
-          <BulletItem emoji="🧠" title="Domínio Técnico" description="Veja o dinheiro como um ativo sob seu controle direto." color={colors.text} />
-          <BulletItem emoji="📚" title="Didática Acessível" description="Ensino finanças e DeFi para leigos, focando em segurança e liberdade." color={colors.text} />
+          <BulletItem emoji="💪" title="Mudança de Postura" description="Deixe de pedir permissão para existir financeiramente." textColor={colors.text} descColor={colors.textSecondary} />
+          <BulletItem emoji="🧠" title="Domínio Técnico" description="Veja o dinheiro como um ativo sob seu controle direto." textColor={colors.text} descColor={colors.textSecondary} />
+          <BulletItem emoji="📚" title="Didática Acessível" description="Ensino finanças e DeFi para leigos, focando em segurança e liberdade." textColor={colors.text} descColor={colors.textSecondary} />
           <Text style={[styles.paragraph, { color: colors.text }]}>
             Eu não ensino apenas "onde clicar"; eu ensino como se libertar. Se você busca resultado prático, segurança e o fim da dependência bancária, eu vou te mostrar o caminho mais curto e seguro para você ser, finalmente, o dono do seu próprio patrimônio.
           </Text>
