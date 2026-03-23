@@ -3,7 +3,6 @@ import {
   Chrome as Home,
   BookOpen,
   User,
-  Newspaper,
   TrendingUp,
   Wallet,
 } from 'lucide-react-native';
@@ -45,15 +44,6 @@ export default function TabLayout() {
           title: 'Cursos',
           tabBarIcon: ({ size, color }) => (
             <BookOpen size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="news"
-        options={{
-          title: 'Notícias',
-          tabBarIcon: ({ size, color }) => (
-            <Newspaper size={size} color={color} />
           ),
         }}
       />
