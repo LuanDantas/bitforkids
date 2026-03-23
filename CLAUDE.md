@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-BitForKids is a React Native/Expo cryptocurrency education app for kids. It features courses, Bitcoin price tracking, portfolio management, market indices, and a VSL (Video Sales Letter) monetization system. The app targets iOS, Android, and Web.
+BitForKids is a React Native/Expo cryptocurrency and DeFi education platform by Dani Spitaletti. It offers 3 paid courses (R$397 each) across 2 learning tracks: Bitcoin fundamentals, Ethereum/stablecoins, and autocustody. Also features portfolio management, market indices, and a VSL remarketing system. Targets iOS, Android, and Web.
 
 ## Tech Stack
 
@@ -33,10 +33,13 @@ No test framework is configured.
 
 Expo Router file-based routing:
 - `app/_layout.tsx` — Root layout: `ThemeProvider` → `VSLProvider` → `Stack`
-- `app/index.tsx` — Landing page educativa (entry point do app, CTA para login)
+- `app/index.tsx` — Landing page com banner e CTA para login
 - `app/(tabs)/` — Bottom tab navigation (home, courses, profile, indices, portfolio, admin)
+- `app/(tabs)/index.tsx` — Home: long-form sales page com conteúdo sobre DeFi, Bitcoin, autocustódia, bio da instrutora
+- `app/(tabs)/courses.tsx` — Catálogo: 2 trilhas (Iniciante + Soberania), 3 cursos
 - `app/auth/` — Login, register, forgot-password screens
-- `app/course/[id].tsx`, `app/portfolio/[id].tsx` — Dynamic detail routes
+- `app/course/[id].tsx` — Detalhe do curso (id=1: Bitcoin, id=2: Ethereum, id=3: Autocustódia), com FAQ e CTA de compra R$397
+- `app/portfolio/[id].tsx` — Detalhe de portfolio
 - `app/payments.tsx` — Payment/checkout flow
 - `app/mentoria-completa.tsx` — Complete mentoring sales page
 
@@ -53,7 +56,12 @@ Expo Router file-based routing:
 
 - `charts/` — Five chart types (CandlestickChart, LineChart, PieChart, VerticalBarChart, HorizontalBarChart) using react-native-svg
 - VSL-related components (VSLHero, VSLVideo, VSLBenefits, VSLPricing, VSLTestimonials, VSLModal)
-- Monetization components (SubscriptionPlan, BundleOffer, CrossSellCard, CashbackBanner)
+
+### Assets (assets/images/)
+
+- `hero-banner.png` — Banner principal "Do Zero à Soberania"
+- `dani-profile.png`, `dani-family.png` — Fotos da instrutora Dani Spitaletti
+- `curso-bitcoin.png`, `curso-ethereum.png`, `curso-autocustodia.png` — Banners dos 3 cursos
 
 ## Code Style
 

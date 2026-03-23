@@ -1,1164 +1,716 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  Image,
   Dimensions,
-  Alert,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import CashbackBanner from '@/components/CashbackBanner';
-import CrossSellCard from '@/components/CrossSellCard';
-import SubscriptionPlan from '@/components/SubscriptionPlan';
 import VSLModal from '@/components/VSLModal';
-import BitcoinPriceWidget from '@/components/BitcoinPriceWidget';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useVSL } from '@/contexts/VSLContext';
-import { bitcoinPriceService } from '@/services/BitcoinPriceService';
 import {
-  TrendingUp,
-  Award,
-  Users,
-  Play,
-  Star,
+  Globe,
+  AlertTriangle,
+  Shield,
+  Rocket,
+  Lock,
+  Bitcoin,
+  Target,
+  CreditCard,
+  CheckCircle,
+  Lightbulb,
+  BookOpen,
   ChevronRight,
-  Sun,
-  Moon,
-  Monitor,
   Settings,
   LogOut,
 } from 'lucide-react-native';
 
 const { width } = Dimensions.get('window');
 
+function SectionTitle({ emoji, title, color }: { emoji: string; title: string; color: string }) {
+  return (
+    <View style={sectionStyles.titleRow}>
+      <Text style={sectionStyles.emoji}>{emoji}</Text>
+      <Text style={[sectionStyles.title, { color }]}>{title}</Text>
+    </View>
+  );
+}
+
+function BulletItem({ emoji, title, description, color }: { emoji: string; title: string; description: string; color: string }) {
+  return (
+    <View style={sectionStyles.bulletItem}>
+      <Text style={sectionStyles.bulletEmoji}>{emoji}</Text>
+      <View style={sectionStyles.bulletContent}>
+        <Text style={[sectionStyles.bulletTitle, { color }]}>{title}</Text>
+        <Text style={[sectionStyles.bulletDesc, { color: color + '99' }]}>{description}</Text>
+      </View>
+    </View>
+  );
+}
+
+function CourseTrailCard({ id, title, subtitle, price, image, onPress, colors }: any) {
+  return (
+    <TouchableOpacity style={[sectionStyles.courseCard, { backgroundColor: colors.card }]} onPress={onPress} activeOpacity={0.8}>
+      <Image source={image} style={sectionStyles.courseImage} resizeMode="cover" />
+      <View style={sectionStyles.courseInfo}>
+        <Text style={[sectionStyles.courseTitle, { color: colors.text }]}>{title}</Text>
+        <Text style={[sectionStyles.courseSubtitle, { color: colors.textSecondary }]} numberOfLines={2}>{subtitle}</Text>
+        <View style={sectionStyles.courseFooter}>
+          <Text style={sectionStyles.coursePrice}>R$ {price}</Text>
+          <ChevronRight size={18} color="#8B5CF6" />
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+}
+
 export default function HomeScreen() {
   const router = useRouter();
-  const { colors, theme, toggleTheme, isDark } = useTheme();
+  const { colors } = useTheme();
   const {
     shouldShowVSL,
     showVSLModal,
     hideVSLModal,
     isVSLModalVisible,
-    resetSessionFlag,
   } = useVSL();
-  const [showSubscription, setShowSubscription] = useState(false);
-  const [user] = useState({
-    name: 'João Silva',
-    level: 'Iniciante',
-    progress: 65,
-    coursesCompleted: 3,
-    currentCourse: {
-      id: 1,
-      title: 'Mini Curso GPS Bitcoin para leigos',
-      progress: 65,
-      lessonsCompleted: 13,
-      totalLessons: 20,
-      nextLesson: 'O que é Bitcoin?',
-    },
-  });
 
-  // Check if VSL should be shown for remarketing
   useEffect(() => {
     if (shouldShowVSL) {
-      // Delay showing VSL modal to allow home screen to load first
-      const timer = setTimeout(() => {
-        showVSLModal();
-      }, 2000);
-
+      const timer = setTimeout(() => showVSLModal(), 2000);
       return () => clearTimeout(timer);
     }
-  }, [shouldShowVSL, showVSLModal]);
-
-  // Initialize Bitcoin price monitoring
-  useEffect(() => {
-    bitcoinPriceService.startPriceMonitoring();
-
-    return () => {
-      bitcoinPriceService.stopPriceMonitoring();
-    };
-  }, []);
-
-  const featuredCourses = [
-    {
-      id: 1,
-      title:
-        'Mini Curso GPS Bitcoin para leigos + ebook Bitcoin para iniciantes',
-      instructor: 'Dani Spitaletti',
-      rating: 4.8,
-      students: 1250,
-      image:
-        'https://images.pexels.com/photos/6765363/pexels-photo-6765363.jpeg?auto=compress&cs=tinysrgb&w=400',
-      price: 'R$ 67,00',
-      isFree: false,
-      level: 'Iniciante',
-      description:
-        'Entenda o que só o Bitcoin pode fazer por você e conheça a rede descentralizada',
-    },
-    {
-      id: 2,
-      title: 'Curso Autocustódia - Carteiras Hotwallet e Coldwallet',
-      instructor: 'Dani Spitaletti',
-      rating: 4.9,
-      students: 890,
-      image:
-        'https://images.pexels.com/photos/6802042/pexels-photo-6802042.jpeg?auto=compress&cs=tinysrgb&w=400',
-      price: 'R$ 97,00',
-      isFree: false,
-      level: 'Intermediário',
-      description:
-        'Aprenda a ser seu próprio banco com carteiras digitais seguras',
-    },
-    {
-      id: 3,
-      title: 'Curso Herança Digital - Reserva em Bitcoin e Auto-custódia',
-      instructor: 'Dani Spitaletti',
-      rating: 4.9,
-      students: 650,
-      image:
-        'https://images.pexels.com/photos/6765363/pexels-photo-6765363.jpeg?auto=compress&cs=tinysrgb&w=400',
-      price: 'R$ 397,00',
-      isFree: false,
-      level: 'Avançado',
-      description: 'Curso completo sobre reserva em Bitcoin e auto-custódia',
-    },
-  ];
-
-  // Free courses section
-  const freeCourses = [
-    {
-      id: 7,
-      title: '🧠 Liberte sua mente do Sistema e conheça o Bitcoin',
-      instructor: 'Vinicius da Palavra de Satoshi',
-      rating: 4.5,
-      students: 3200,
-      duration: '2h 15min',
-      price: 'GRÁTIS',
-      isFree: true,
-      level: 'Iniciante',
-      description:
-        'Aula especial com Vinicius da Palavra de Satoshi - Presente para você',
-    },
-  ];
-
-  // Special offers and cross-sell opportunities
-  const specialOffers = [
-    {
-      id: 4,
-      title: 'Curso Finanças Descentralizadas e Rede Ethereum',
-      instructor: 'Dani Spitaletti',
-      rating: 4.9,
-      students: 450,
-      duration: '15h 30min',
-      price: 'R$ 397,00',
-      originalPrice: 'R$ 497,00',
-      discount: 20,
-      level: 'Avançado',
-      category: 'DeFi',
-      description:
-        'Aprenda a usar USDT, pagar contas e usar cartão com criptomoedas',
-    },
-    {
-      id: 5,
-      title: 'Curso Empréstimo Descentralizado - AAVE',
-      instructor: 'Dani Spitaletti',
-      rating: 4.8,
-      students: 320,
-      duration: '8h 45min',
-      price: 'R$ 97,00',
-      originalPrice: 'R$ 147,00',
-      discount: 34,
-      level: 'Intermediário',
-      category: 'DeFi',
-      description: 'Juros de 6% ao ano na plataforma AAVE',
-    },
-    {
-      id: 6,
-      title: 'Pacote Completo - Todos os Cursos',
-      instructor: 'Dani Spitaletti',
-      rating: 4.9,
-      students: 180,
-      duration: '50h+',
-      price: 'R$ 790,00',
-      originalPrice: 'R$ 1.055,00',
-      discount: 25,
-      level: 'Todos',
-      category: 'Pacote',
-      description:
-        'Acesso a todos os cursos por 1 ano + Cashback R$ 20 em Bitcoin',
-    },
-  ];
-
-  const stats = [
-    {
-      icon: TrendingUp,
-      label: 'Progresso',
-      value: `${user.progress}%`,
-      color: '#10B981',
-    },
-    { icon: Users, label: 'Comunidade', value: '12.5k', color: '#3B82F6' },
-  ];
-
-  const handleSubscribe = () => {
-    Alert.alert(
-      'Plano Premium',
-      'Redirecionando para o pagamento do plano anual...',
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        {
-          text: 'Continuar',
-          onPress: () => console.log('Redirect to payment'),
-        },
-      ]
-    );
-  };
-
-  const handleVSLCTAPress = () => {
-    hideVSLModal();
-    setShowSubscription(true);
-  };
-
-  const handleLogout = () => {
-    Alert.alert('Sair', 'Tem certeza que deseja sair?', [
-      { text: 'Cancelar', style: 'cancel' },
-      {
-        text: 'Sair',
-        style: 'destructive',
-        onPress: () => {
-          // Reset VSL session flag on logout
-          resetSessionFlag();
-          router.replace('/auth/login');
-        },
-      },
-    ]);
-  };
-
-  const getThemeIcon = () => {
-    switch (theme) {
-      case 'light':
-        return Sun;
-      case 'dark':
-        return Moon;
-      case 'system':
-        return Monitor;
-      default:
-        return Moon;
-    }
-  };
-
-  const ThemeIcon = getThemeIcon();
-
-  if (showSubscription) {
-    return (
-      <ScrollView
-        style={[styles.container, { backgroundColor: colors.background }]}
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={styles.subscriptionHeader}>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => setShowSubscription(false)}
-          >
-            <Text style={[styles.backButtonText, { color: colors.primary }]}>
-              ← Voltar
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <SubscriptionPlan onSubscribe={handleSubscribe} />
-      </ScrollView>
-    );
-  }
+  }, [shouldShowVSL]);
 
   return (
-    <ScrollView
-      style={[styles.container, { backgroundColor: colors.background }]}
-      showsVerticalScrollIndicator={false}
-    >
-      {/* Header */}
-      <LinearGradient
-        colors={isDark ? ['#1a1a1a', '#2a1a4a'] : ['#8B5CF6', '#3B82F6']}
-        style={styles.header}
-      >
-        <View style={styles.headerTop}>
-          <View style={styles.welcomeSection}>
-            <Text style={styles.welcomeText}>Olá, {user.name} 👋</Text>
-            <Text style={styles.levelText}>Nível: {user.level}</Text>
-          </View>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
 
-          <TouchableOpacity style={styles.themeToggle} onPress={toggleTheme}>
-            <ThemeIcon size={24} color="white" />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.adminButton}
-            onPress={() => router.push('/(tabs)/admin')}
-          >
-            <Settings size={24} color="white" />
-          </TouchableOpacity>
-        </View>
-
-        <TouchableOpacity
-          style={styles.progressCard}
-          onPress={() => router.push(`/course/${user.currentCourse.id}`)}
-        >
-          <View style={styles.progressHeader}>
-            <View style={styles.progressHeaderLeft}>
-              <Play size={20} color="#10B981" />
-              <Text style={[styles.progressTitle, { color: 'white' }]}>
-                Curso Atual
-              </Text>
-            </View>
-            <ChevronRight size={20} color="rgba(255, 255, 255, 0.6)" />
-          </View>
-
-          <Text
-            style={[styles.currentCourseTitle, { color: 'white' }]}
-            numberOfLines={2}
-          >
-            {user.currentCourse.title}
-          </Text>
-
-          <View style={styles.progressDetails}>
-            <View style={styles.lessonProgress}>
-              <Text style={styles.lessonProgressText}>
-                {user.currentCourse.lessonsCompleted}/
-                {user.currentCourse.totalLessons} aulas
-              </Text>
-            </View>
-            <View style={styles.progressBar}>
-              <View
-                style={[
-                  styles.progressFill,
-                  { width: `${user.currentCourse.progress}%` },
-                ]}
-              />
-            </View>
-          </View>
-
-          <View style={styles.nextLesson}>
-            <Text style={styles.nextLessonLabel}>Próxima:</Text>
-            <Text style={styles.nextLessonText} numberOfLines={1}>
-              {user.currentCourse.nextLesson}
-            </Text>
-          </View>
-        </TouchableOpacity>
-      </LinearGradient>
-
-      {/* Bitcoin Price Widget */}
-      <View style={styles.section}>
-        <BitcoinPriceWidget onPress={() => router.push('/(tabs)/indices')} />
-      </View>
-
-      {/* Special Cashback Offer */}
-      <View style={[styles.section, { paddingBottom: 5 }]}>
-        <CashbackBanner
-          cashbackPercentage={20}
-          cashbackAmount="R$ 20,00"
-          onPress={() => setShowSubscription(true)}
-        />
-      </View>
-
-      {/* Premium Subscription CTA */}
-      <View style={[styles.section, styles.sectionNoPadding]}>
-        <TouchableOpacity
-          style={styles.premiumCTA}
-          onPress={() => setShowSubscription(true)}
-        >
+        {/* HERO */}
+        <View style={styles.heroContainer}>
+          <Image
+            source={require('../../assets/images/hero-banner.png')}
+            style={styles.heroBanner}
+            resizeMode="cover"
+          />
           <LinearGradient
-            colors={['#F59E0B', '#D97706']}
-            style={styles.premiumGradient}
-          >
-            <View style={styles.premiumContent}>
-              <View style={styles.premiumIcon}>
-                <Text style={styles.premiumEmoji}>👑</Text>
-              </View>
-              <View style={styles.premiumText}>
-                <Text style={styles.premiumTitle}>Pacote Completo</Text>
-                <Text style={styles.premiumSubtitle}>
-                  Todos os cursos por apenas R$ 790,00 + Cashback R$ 20 em
-                  Bitcoin
-                </Text>
-              </View>
-              <View style={styles.premiumArrow}>
-                <ChevronRight size={20} color="white" />
-              </View>
-            </View>
-          </LinearGradient>
-        </TouchableOpacity>
-      </View>
-
-      {/* Stats */}
-      <View style={styles.statsContainer}>
-        {stats.map((stat, index) => {
-          const Icon = stat.icon;
-          return (
-            <View key={index} style={styles.statCard}>
-              <Icon size={24} color={stat.color} />
-              <Text style={[styles.statValue, { color: colors.text }]}>
-                {stat.value}
-              </Text>
-              <Text style={[styles.statLabel, { color: colors.textSecondary }]}>
-                {stat.label}
-              </Text>
-            </View>
-          );
-        })}
-      </View>
-
-      {/* Featured Courses */}
-      <View style={styles.section}>
-        <View style={styles.sectionHeader}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>
-            Cursos em Destaque
-          </Text>
-          <TouchableOpacity style={styles.seeAllButton}>
-            <Text style={[styles.seeAllText, { color: colors.primary }]}>
-              Ver todos
+            colors={['transparent', 'rgba(0,0,0,0.85)']}
+            style={styles.heroOverlay}
+          />
+          <View style={styles.heroTextContainer}>
+            <Text style={styles.heroText}>
+              Aprenda a dominar uma infraestrutura financeira que não exige CPF e coloque seu dinheiro sob seu controle total — mesmo começando hoje e com pouco para investir.
             </Text>
-            <ChevronRight size={16} color="#8B5CF6" />
-          </TouchableOpacity>
+            <Text style={styles.heroHighlight}>
+              O que você aprenderá aqui é algo que a maioria das pessoas só vai descobrir quando for tarde demais.
+            </Text>
+          </View>
         </View>
 
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {featuredCourses.map((course) => (
+        <View style={styles.content}>
+
+          {/* BEM-VINDO */}
+          <SectionTitle emoji="🌐" title="Bem-vindo à Rede Financeira do Futuro" color={colors.text} />
+          <Text style={[styles.sectionSubtitle, { color: '#8B5CF6' }]}>
+            Chega de depender de bancos para usar o seu próprio dinheiro.
+          </Text>
+          <Text style={[styles.paragraph, { color: colors.text }]}>
+            O objetivo da BITFORKIDS e do DEFI-BIT é simples: libertar você da dependência de instituições financeiras e do controle estatal, permitindo que você assuma a soberania total sobre seu patrimônio. Sem precisar de documentos ou CPF.
+          </Text>
+          <Text style={[styles.paragraph, { color: colors.text }]}>
+            Tudo o que você precisa é de um computador ou celular e acesso à internet.
+          </Text>
+          <Text style={[styles.paragraph, { color: colors.text }]}>
+            Estamos vivendo uma das maiores transformações da história do dinheiro. Pela primeira vez, redes como Bitcoin e Ethereum permitem que qualquer pessoa armazene valor, movimente dinheiro globalmente e utilize serviços financeiros diretamente pela internet, sem precisar pedir permissão para usar o próprio dinheiro.
+          </Text>
+          <Text style={[styles.paragraph, { color: colors.text }]}>
+            Em nossos treinamentos, você vai aprender como usar Bitcoin para preservar valor, utilizar dólar digital para transações globais e manter seus ativos em autocustódia, onde somente você tem controle. Trata-se de uma nova infraestrutura financeira aberta e resistente à censura, onde seu dinheiro não pode ser bloqueado, congelado ou confiscado por bancos ou governos.
+          </Text>
+
+          <View style={styles.divider} />
+
+          {/* ARMADILHA */}
+          <SectionTitle emoji="🌍" title="O Sistema Financeiro é uma Armadilha" color={colors.text} />
+          <Text style={[styles.paragraph, { color: colors.text }]}>
+            O modelo tradicional não foi criado para a sua liberdade, mas para ditar as regras de como você deve viver. Se você não se encaixa nos padrões impostos, você é excluído.
+          </Text>
+          <BulletItem emoji="📋" title="Exclusão e Burocracia" description="Exigem CPF limpo, comprovantes de residência e pilhas de documentos. Sem a papelada, o banco te nega o direito de movimentar o que é seu." color={colors.text} />
+          <BulletItem emoji="📉" title="Inflação" description='Governos imprimem dinheiro sem parar, aplicando um "imposto invisível" que corrói seu poder de compra todos os anos.' color={colors.text} />
+          <BulletItem emoji="🔒" title="Risco de Confisco" description="Seu saldo bancário pode ser bloqueado ou confiscado por decisões políticas ou judiciais em segundos. No banco, o dinheiro não é seu — é apenas uma promessa." color={colors.text} />
+          <BulletItem emoji="👁️" title="Vigilância Total" description="Cada transação é rastreada, vigiada e reportada. Não existe privacidade no seu consumo." color={colors.text} />
+          <BulletItem emoji="🏦" title="Dependência de Terceiros" description='Você precisa de permissão para tudo. Se o banco decidir que sua transação é "suspeita", ele bloqueia seu acesso sem aviso.' color={colors.text} />
+          <BulletItem emoji="⚖️" title="Regras Unilaterais" description="Taxas, limites e horários de transferência são impostos sem que você possa questionar." color={colors.text} />
+
+          <View style={styles.divider} />
+
+          {/* INIMIGO */}
+          <SectionTitle emoji="🛑" title='O Inimigo: A "Coleira Digital"' color={colors.text} />
+          <Text style={[styles.paragraph, { color: colors.text }]}>
+            Além da inflação, o sistema bancário é a maior ferramenta de abuso de poder dos governos. O Estado tem acesso total ao rastro da sua vida financeira, drenando recursos através de impostos automáticos antes mesmo que você possa reagir.
+          </Text>
+          <Text style={[styles.paragraph, { color: colors.text }]}>
+            A conta bancária funciona como uma "coleira digital": sob qualquer pretexto, o governo pode congelar seus bens e tornar seu patrimônio um refém. No sistema atual, o Estado não precisa bater à sua porta para confiscar o que é seu; ele faz isso com um clique.
+          </Text>
+
+          <View style={styles.divider} />
+
+          {/* SOLUÇÃO */}
+          <SectionTitle emoji="🚀" title="A Solução: Fim da Coleira Digital" color={colors.text} />
+          <Text style={[styles.paragraph, { color: colors.text }]}>
+            A tecnologia desse novo sistema de finanças devolve o poder a quem ele pertence: você. Ao eliminar intermediários como bancos, eliminamos a necessidade de permissão.
+          </Text>
+          <BulletItem emoji="🛡️" title="Soberania contra o Confisco" description="Na rede descentralizada, você detém a posse real. Não há autoridade central capaz de bloquear sua conta judicialmente." color={colors.text} />
+          <BulletItem emoji="📊" title="Imunidade à Inflação" description="Com oferta fixa e imutável (21 milhões), o Bitcoin é a defesa definitiva contra a impressão desenfreada de moeda." color={colors.text} />
+          <BulletItem emoji="💵" title="Estabilidade Global com Dólar Criptografado" description="Utilize stablecoins para manter seu poder de compra em dólar, fora do alcance de restrições bancárias ou da desvalorização do Real." color={colors.text} />
+          <BulletItem emoji="🔓" title="Privacidade e Liberdade" description='Um ambiente aberto onde seu direito de transacionar não depende de "ficha limpa" ou autorização de gerentes.' color={colors.text} />
+          <BulletItem emoji="🚫" title="Resistência a Impostos Abusivos" description="Ao retirar seu patrimônio do sistema tradicional, você interrompe a drenagem arbitrária de recursos." color={colors.text} />
+          <BulletItem emoji="🌍" title="Transações Sem Fronteiras" description="Envie qualquer valor para qualquer lugar do mundo em minutos, sem justificativas." color={colors.text} />
+
+          <View style={styles.divider} />
+
+          {/* AUTOCUSTÓDIA */}
+          <SectionTitle emoji="🔐" title="A Chave para Tudo: A Autocustódia" color={colors.text} />
+          <Text style={[styles.paragraph, { color: colors.text }]}>
+            A verdadeira saída para o abuso estatal começa na autocustódia. Enquanto seu patrimônio estiver em bancos ou corretoras, você está apenas pedindo permissão para usar o que é seu.
+          </Text>
+          <Text style={[styles.paragraph, { color: colors.text }]}>
+            A autocustódia é o ato de mover seus ativos para uma carteira onde só você possui a chave privada. É aqui que a "coleira" é rompida: quando você detém a custódia, seu patrimônio torna-se impossível de ser bloqueado ou censurado.
+          </Text>
+          <Text style={[styles.highlightText, { color: colors.text }]}>
+            Se você não guarda suas chaves, você não é o dono do seu dinheiro; você é apenas um usuário sob vigilância.
+          </Text>
+          <View style={styles.noNeedRow}>
+            <Text style={styles.noNeedItem}>❌ bancos</Text>
+            <Text style={styles.noNeedItem}>❌ intermediários</Text>
+            <Text style={styles.noNeedItem}>❌ autorização</Text>
+            <Text style={styles.noNeedItem}>❌ CPF</Text>
+          </View>
+
+          <View style={styles.divider} />
+
+          {/* REDES DA NOVA ECONOMIA */}
+          <SectionTitle emoji="🟠" title="As Redes da Nova Economia" color={colors.text} />
+          <View style={[styles.networkCard, { backgroundColor: colors.card, borderColor: '#F7931A' }]}>
+            <Text style={styles.networkEmoji}>🟠</Text>
+            <Text style={[styles.networkTitle, { color: colors.text }]}>Rede Bitcoin</Text>
+            <Text style={[styles.networkDesc, { color: colors.textSecondary }]}>
+              O dinheiro da nova economia digital. Escasso e descentralizado, focado em reserva de valor.
+            </Text>
+          </View>
+          <View style={[styles.networkCard, { backgroundColor: colors.card, borderColor: '#627EEA' }]}>
+            <Text style={styles.networkEmoji}>🔵</Text>
+            <Text style={[styles.networkTitle, { color: colors.text }]}>Rede Ethereum</Text>
+            <Text style={[styles.networkDesc, { color: colors.textSecondary }]}>
+              A infraestrutura para o sistema financeiro descentralizado (DeFi), onde você utiliza dólares digitais para pagamentos, transferências e serviços financeiros, tudo via internet.
+            </Text>
+          </View>
+
+          <View style={styles.divider} />
+
+          {/* O QUE VAI DOMINAR */}
+          <SectionTitle emoji="🎯" title="O que você vai dominar" color={colors.text} />
+          <BulletItem emoji="🛡️" title="Blindagem Patrimonial" description="Proteja o suor do seu trabalho contra o efeito corrosivo da inflação e a desvalorização cambial." color={colors.text} />
+          <BulletItem emoji="🟠" title="Domínio do Bitcoin" description='Opere a rede do "ouro digital" com segurança absoluta.' color={colors.text} />
+          <BulletItem emoji="🌐" title="Inteligência em DeFi" description="Desvende as Finanças Descentralizadas e como um sistema financeiro funciona sem gerente de conta." color={colors.text} />
+          <BulletItem emoji="🌍" title="Liberdade de Movimentação Global" description="Transferências internacionais e pagamentos sem fronteiras, taxas abusivas ou bloqueios." color={colors.text} />
+          <BulletItem emoji="💵" title="Dólar Digital na Prática" description="Utilize stablecoins para preservar seu poder de compra com total liquidez e autonomia." color={colors.text} />
+          <BulletItem emoji="🔐" title="Maestria em Autocustódia" description="O método definitivo para guardar suas próprias chaves e garantir que apenas você tenha acesso aos seus ativos." color={colors.text} />
+          <BulletItem emoji="🚫" title="Infraestrutura Sem Permissões" description="Um ecossistema onde você não precisa apresentar documentos ou pedir permissão para transacionar." color={colors.text} />
+
+          <View style={styles.divider} />
+
+          {/* POR QUE PARA VOCÊ */}
+          <SectionTitle emoji="🎯" title="Por que nossos treinamentos são para você?" color={colors.text} />
+          <Text style={[styles.paragraph, { color: colors.text }]}>
+            Nosso foco é a sua soberania pessoal. Nossos cursos foram desenhados para resolver seus problemas reais:
+          </Text>
+          <BulletItem emoji="🏦" title="Romper a dependência bancária" description="Aprenda a ser o seu próprio banco, sem precisar de permissão para mover o que é seu." color={colors.text} />
+          <BulletItem emoji="🛡️" title="Blindar o patrimônio" description="Proteja o seu futuro contra o confisco, a censura e decisões políticas arbitrárias." color={colors.text} />
+          <BulletItem emoji="🔒" title="Conquistar a privacidade" description="Transacione e guarde valores sem precisar expor seu CPF ou solicitar autorização estatal." color={colors.text} />
+          <BulletItem emoji="🔐" title="Dominar a autocustódia" description="Tire seu dinheiro do alcance de terceiros, corretoras ou governos." color={colors.text} />
+          <BulletItem emoji="📖" title="Simplificar o complexo" description="Traduzimos o Bitcoin e o universo DeFi para que qualquer leigo entenda e aplique hoje mesmo." color={colors.text} />
+          <BulletItem emoji="⚠️" title="Evitar erros fatais" description="Treine o olhar para identificar golpes, evitar armadilhas e manter a segurança absoluta do seu capital." color={colors.text} />
+
+          <View style={styles.divider} />
+
+          {/* CRIPTO NO DIA A DIA */}
+          <SectionTitle emoji="💳" title="Liberdade Real: Cripto no seu Dia a Dia" color={colors.text} />
+          <Text style={[styles.paragraph, { color: colors.text }]}>
+            Ensinamos como usar essa tecnologia na prática, com a mesma facilidade de um app de banco:
+          </Text>
+          <BulletItem emoji="💸" title="Pagamentos e Recebimentos" description="Diretos e sem intermediários." color={colors.text} />
+          <BulletItem emoji="💳" title="Cartões Cripto" description="Gaste seu saldo em cripto ou dólar no comércio." color={colors.text} />
+          <BulletItem emoji="📄" title="Boletos e Contas" description="Quite despesas usando sua carteira digital." color={colors.text} />
+          <BulletItem emoji="🌎" title="Transferências Globais" description="Instantâneas e sem burocracias." color={colors.text} />
+          <BulletItem emoji="📱" title="Apps e Carteiras" description="Transforme seu saldo em um ativo líquido para uso diário." color={colors.text} />
+
+          <View style={styles.divider} />
+
+          {/* FEITO PARA VOCÊ */}
+          <SectionTitle emoji="✅" title="Feito para você: Comece agora com segurança" color={colors.text} />
+          <Text style={[styles.paragraph, { color: colors.text }]}>
+            Não é preciso ser especialista nem ter grandes fortunas.
+          </Text>
+          <BulletItem emoji="👣" title="Para iniciantes" description="Passo a passo do básico ao avançado." color={colors.text} />
+          <BulletItem emoji="💰" title="Acessibilidade" description="Comece com pouco dinheiro." color={colors.text} />
+          <BulletItem emoji="🚫" title="Sem intermediários" description='Você nunca precisará "dar o seu dinheiro" para ninguém.' color={colors.text} />
+          <BulletItem emoji="🔐" title="Controle total" description="Domínio completo da sua carteira e autocustódia." color={colors.text} />
+
+          <View style={styles.divider} />
+
+          {/* POR QUE APRENDER COMIGO */}
+          <SectionTitle emoji="💡" title="Por que aprender comigo?" color={colors.text} />
+          <Text style={[styles.paragraph, { color: colors.text }]}>
+            O meu curso promove uma virada de chave: a transição de "usuário" para "proprietário". Eu traduzo o complexo para o simples, focando em:
+          </Text>
+          <BulletItem emoji="💪" title="Mudança de Postura" description="Deixe de pedir permissão para existir financeiramente." color={colors.text} />
+          <BulletItem emoji="🧠" title="Domínio Técnico" description="Veja o dinheiro como um ativo sob seu controle direto." color={colors.text} />
+          <BulletItem emoji="📚" title="Didática Acessível" description="Ensino finanças e DeFi para leigos, focando em segurança e liberdade." color={colors.text} />
+          <Text style={[styles.paragraph, { color: colors.text }]}>
+            Eu não ensino apenas "onde clicar"; eu ensino como se libertar. Se você busca resultado prático, segurança e o fim da dependência bancária, eu vou te mostrar o caminho mais curto e seguro para você ser, finalmente, o dono do seu próprio patrimônio.
+          </Text>
+
+          <View style={styles.divider} />
+
+          {/* NOSSOS TREINAMENTOS */}
+          <SectionTitle emoji="📚" title="Nossos Treinamentos: Escolha sua Trilha" color={colors.text} />
+
+          {/* Trilha 1 */}
+          <LinearGradient colors={['#F7931A', '#E2761B'] as const} style={styles.trailBadge}>
+            <Text style={styles.trailBadgeText}>🟠 TRILHA 1: A Jornada do Iniciante</Text>
+          </LinearGradient>
+          <Text style={[styles.trailDesc, { color: colors.textSecondary }]}>
+            Ideal para quem está começando agora e precisa dominar a base, desde os conceitos até a aplicação prática.
+          </Text>
+
+          <CourseTrailCard
+            id={1}
+            title="Bitcoin — A Evolução do Dinheiro"
+            subtitle="Construa um patrimônio que nenhum banco ou governo pode controlar."
+            price="397,00"
+            image={require('../../assets/images/curso-bitcoin.png')}
+            onPress={() => router.push('/course/1')}
+            colors={colors}
+          />
+          <CourseTrailCard
+            id={2}
+            title="Ethereum e Dólar Digital"
+            subtitle="Como usar criptomoedas no dia a dia e acessar o sistema financeiro da internet."
+            price="397,00"
+            image={require('../../assets/images/curso-ethereum.png')}
+            onPress={() => router.push('/course/2')}
+            colors={colors}
+          />
+
+          {/* Trilha 2 */}
+          <LinearGradient colors={['#3B82F6', '#1D4ED8'] as const} style={[styles.trailBadge, { marginTop: 24 }]}>
+            <Text style={styles.trailBadgeText}>🔵 TRILHA 2: A Jornada da Soberania</Text>
+          </LinearGradient>
+          <Text style={[styles.trailDesc, { color: colors.textSecondary }]}>
+            Ideal para quem já possui conhecimento e quer focar 100% em liberdade operacional, privacidade e domínio total do capital.
+          </Text>
+
+          <CourseTrailCard
+            id={3}
+            title="Autocustódia e Criptomoedas no Dia a Dia"
+            subtitle="Aprenda a guardar seus ativos com segurança e utilizar criptomoedas na prática."
+            price="397,00"
+            image={require('../../assets/images/curso-autocustodia.png')}
+            onPress={() => router.push('/course/3')}
+            colors={colors}
+          />
+
+          {/* Garantia */}
+          <View style={[styles.guaranteeCard, { backgroundColor: colors.card }]}>
+            <Text style={styles.guaranteeEmoji}>✅</Text>
+            <Text style={[styles.guaranteeTitle, { color: colors.text }]}>Garantia Total de 7 Dias</Text>
+            <Text style={[styles.guaranteeDesc, { color: colors.textSecondary }]}>
+              Se não for para você, devolvo 100% do valor. Sem perguntas. A decisão é totalmente sua, o risco é todo meu.
+            </Text>
+          </View>
+
+          <View style={styles.divider} />
+
+          {/* MANIFESTO */}
+          <View style={[styles.manifestoCard, { backgroundColor: '#1a0a2e' }]}>
+            <Text style={styles.manifestoTitle}>
+              A Sua Liberdade Financeira Começa no Momento em que Você Decide Parar de Pedir Permissão.
+            </Text>
+            <Text style={styles.manifestoText}>
+              Enquanto o seu patrimônio estiver dentro de um banco ou de uma corretora, a verdade é uma só: você não tem dinheiro, você tem um pedido de permissão. Você acredita que é o dono, mas o sistema apenas te concede o privilégio de usar o que é seu enquanto você se mantém dentro das linhas que eles traçaram.
+            </Text>
+            <Text style={styles.manifestoText}>
+              A liberdade financeira não virá de um gerente de conta, de uma decisão judicial ou de uma política governamental. Ela exige uma mudança de postura brutal e o primeiro passo prático dessa nova era é a autocustódia.
+            </Text>
+            <Text style={styles.manifestoText}>
+              A autocustódia é o divisor de águas: é o momento em que você retira o seu patrimônio das mãos de terceiros e assume, pessoalmente, a guarda das suas chaves privadas. É a decisão de parar de delegar o controle da sua vida para quem lucra com a sua dependência.
+            </Text>
+            <Text style={styles.manifestoHighlight}>
+              É hora de parar de pedir permissão para existir financeiramente e tomar o controle total.
+            </Text>
+          </View>
+
+          <View style={styles.divider} />
+
+          {/* QUEM SOU EU */}
+          <SectionTitle emoji="👩‍💼" title="Quem sou eu" color={colors.text} />
+          <Image
+            source={require('../../assets/images/dani-profile.png')}
+            style={styles.profileImage}
+            resizeMode="cover"
+          />
+          <Text style={[styles.profileName, { color: colors.text }]}>Dani Spitaletti</Text>
+          <Text style={[styles.paragraph, { color: colors.text }]}>
+            Estou no universo das criptomoedas e finanças descentralizadas desde 2021, estudando e utilizando na prática as tecnologias que estão transformando o sistema financeiro global.
+          </Text>
+          <Text style={[styles.paragraph, { color: colors.text }]}>
+            O principal motivo que me levou a entrar nesse mercado foi a busca por mais autonomia financeira e proteção do patrimônio. Queria aprender a não depender de bancos, evitar os riscos de bloqueios de contas, censura financeira e também encontrar uma forma de proteger o dinheiro contra a inflação.
+          </Text>
+          <Text style={[styles.paragraph, { color: colors.text }]}>
+            Desde então, venho estudando e aplicando ferramentas que permitem às pessoas:
+          </Text>
+          <Text style={[styles.paragraph, { color: colors.text }]}>
+            🔐 guardar patrimônio em autocustódia{'\n'}
+            🌍 movimentar dinheiro globalmente{'\n'}
+            💵 utilizar dólar digital e criptomoedas{'\n'}
+            ⚡ acessar serviços financeiros diretamente pela internet
+          </Text>
+          <Text style={[styles.paragraph, { color: colors.text }]}>
+            Sem depender de bancos ou intermediários.
+          </Text>
+
+          <Text style={[styles.subSectionTitle, { color: colors.text }]}>🎯 Minha missão</Text>
+          <Text style={[styles.paragraph, { color: colors.text }]}>
+            Simplificar o acesso a esse novo sistema financeiro, mostrando que qualquer pessoa pode aprender a utilizar essas tecnologias de forma segura e consciente. Acredito que o conhecimento sobre Bitcoin, blockchain e finanças descentralizadas representa uma das maiores transformações da história do dinheiro.
+          </Text>
+
+          <Text style={[styles.subSectionTitle, { color: colors.text }]}>🚀 Por que criei estes treinamentos</Text>
+          <Text style={[styles.paragraph, { color: colors.text }]}>
+            Criei estes treinamentos para ajudar pessoas que desejam proteger seu patrimônio, reduzir a dependência do sistema bancário tradicional, aprender a utilizar criptomoedas com segurança e conquistar mais autonomia sobre o próprio dinheiro. Tudo explicado de forma simples, clara e acessível, mesmo para quem está começando do zero.
+          </Text>
+
+          <View style={styles.divider} />
+
+          {/* FAMÍLIA */}
+          <SectionTitle emoji="👨‍👩‍👧" title="Família e futuro" color={colors.text} />
+          <Image
+            source={require('../../assets/images/dani-family.png')}
+            style={styles.familyImage}
+            resizeMode="cover"
+          />
+          <Text style={[styles.paragraph, { color: colors.text }]}>
+            Mais do que investir, aprender sobre Bitcoin e autocustódia também é uma forma de cuidar do futuro da família. Muitos pais procuram uma maneira segura de construir uma poupança para os filhos, mas vivem em um sistema onde o dinheiro perde valor ao longo do tempo.
+          </Text>
+          <Text style={[styles.paragraph, { color: colors.text }]}>
+            Com as tecnologias descentralizadas é possível construir uma reserva digital guardada em autocustódia, fora do alcance de bloqueios ou confiscos. Assim, pais e mães podem começar desde cedo a criar uma poupança inconfiscável, preservando valor ao longo dos anos e deixando para seus filhos não apenas um patrimônio, mas também o conhecimento sobre soberania financeira.
+          </Text>
+
+          {/* AÇÕES RÁPIDAS */}
+          <View style={styles.divider} />
+          <View style={styles.quickActions}>
             <TouchableOpacity
-              key={course.id}
-              style={styles.courseCard}
-              onPress={() => router.push(`/course/${course.id}`)}
+              style={[styles.quickActionBtn, { backgroundColor: colors.card }]}
+              onPress={() => router.push('/settings')}
             >
-              <View style={styles.courseImageContainer}>
-                <LinearGradient
-                  colors={[
-                    'rgba(139, 92, 246, 0.8)',
-                    'rgba(59, 130, 246, 0.8)',
-                  ]}
-                  style={styles.courseImageOverlay}
-                >
-                  <Play size={32} color="white" />
-                </LinearGradient>
-              </View>
-
-              <View style={styles.courseInfo}>
-                <Text style={styles.courseTitle} numberOfLines={2}>
-                  {course.title}
-                </Text>
-                <Text
-                  style={[styles.instructor, { color: colors.textSecondary }]}
-                >
-                  {course.instructor}
-                </Text>
-
-                <View style={styles.courseStats}>
-                  <View style={styles.rating}>
-                    <Star size={14} color="#F59E0B" fill="#F59E0B" />
-                    <Text style={[styles.ratingText, { color: colors.text }]}>
-                      {course.rating}
-                    </Text>
-                  </View>
-                  <Text
-                    style={[styles.students, { color: colors.textSecondary }]}
-                  >
-                    {course.students} estudantes
-                  </Text>
-                </View>
-
-                <View style={styles.courseBottom}>
-                  <Text style={[styles.price, { color: colors.success }]}>
-                    {course.price}
-                  </Text>
-                  <View
-                    style={[
-                      styles.levelBadge,
-                      course.level === 'Iniciante'
-                        ? styles.beginnerBadge
-                        : course.level === 'Avançado'
-                        ? styles.advancedBadge
-                        : styles.intermediateBadge,
-                    ]}
-                  >
-                    <Text
-                      style={[
-                        styles.levelText,
-                        course.level === 'Iniciante'
-                          ? styles.beginnerText
-                          : course.level === 'Avançado'
-                          ? styles.advancedText
-                          : styles.intermediateText,
-                      ]}
-                    >
-                      {course.level}
-                    </Text>
-                  </View>
-                </View>
-              </View>
-
-              {/* Free course indicator */}
-              {course.isFree && (
-                <View style={styles.freeIndicator}>
-                  <Text style={styles.freeText}>🆓 GRÁTIS</Text>
-                </View>
-              )}
+              <Settings size={20} color="#8B5CF6" />
+              <Text style={[styles.quickActionText, { color: colors.text }]}>Configurações</Text>
             </TouchableOpacity>
-          ))}
-        </ScrollView>
-      </View>
-
-      {/* Free Courses Section */}
-      <View style={styles.section}>
-        <View style={styles.sectionHeader}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>
-            Cursos Gratuitos
-          </Text>
-          <TouchableOpacity style={styles.seeAllButton}>
-            <Text style={[styles.seeAllText, { color: colors.primary }]}>
-              Ver todos
-            </Text>
-            <ChevronRight size={16} color="#8B5CF6" />
-          </TouchableOpacity>
-        </View>
-
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {freeCourses.map((course) => (
             <TouchableOpacity
-              key={course.id}
-              style={styles.freeCourseCard}
-              onPress={() => router.push(`/course/${course.id}`)}
+              style={[styles.quickActionBtn, { backgroundColor: colors.card }]}
+              onPress={() => router.replace('/auth/login')}
             >
-              <View style={styles.freeBadge}>
-                <Text style={styles.freeBadgeText}>GRÁTIS</Text>
-              </View>
-
-              <View style={styles.courseImageContainer}>
-                <LinearGradient
-                  colors={['rgba(16, 185, 129, 0.8)', 'rgba(5, 150, 105, 0.8)']}
-                  style={styles.courseImageOverlay}
-                >
-                  <Play size={32} color="white" />
-                </LinearGradient>
-              </View>
-
-              <View style={styles.courseInfo}>
-                <Text style={styles.courseTitle} numberOfLines={2}>
-                  {course.title}
-                </Text>
-                <Text
-                  style={[styles.instructor, { color: colors.textSecondary }]}
-                >
-                  {course.instructor}
-                </Text>
-
-                <View style={styles.courseStats}>
-                  <View style={styles.rating}>
-                    <Star size={14} color="#F59E0B" fill="#F59E0B" />
-                    <Text style={[styles.ratingText, { color: colors.text }]}>
-                      {course.rating}
-                    </Text>
-                  </View>
-                  <Text
-                    style={[styles.students, { color: colors.textSecondary }]}
-                  >
-                    {course.students} estudantes
-                  </Text>
-                </View>
-
-                <View style={styles.courseBottom}>
-                  <Text style={[styles.freePrice, { color: colors.success }]}>
-                    {course.price}
-                  </Text>
-                  <TouchableOpacity
-                    style={styles.freeAccessButton}
-                    onPress={(e) => {
-                      e.stopPropagation();
-                      router.push(`/course/${course.id}`);
-                    }}
-                  >
-                    <Text style={[styles.freeAccessText, { color: 'white' }]}>
-                      Acessar
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
+              <LogOut size={20} color="#EF4444" />
+              <Text style={[styles.quickActionText, { color: '#EF4444' }]}>Sair</Text>
             </TouchableOpacity>
-          ))}
-        </ScrollView>
-      </View>
+          </View>
 
-      {/* Special Offers */}
-      <View style={styles.section}>
-        <View style={styles.sectionHeader}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>
-            Ofertas Especiais
-          </Text>
-          <TouchableOpacity style={styles.seeAllButton}>
-            <Text style={[styles.seeAllText, { color: colors.primary }]}>
-              Ver todas
-            </Text>
-            <ChevronRight size={16} color="#8B5CF6" />
-          </TouchableOpacity>
+          <View style={{ height: 40 }} />
         </View>
+      </ScrollView>
 
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {specialOffers.map((offer) => (
-            <CrossSellCard
-              key={offer.id}
-              course={offer}
-              type="upsell"
-              onPress={() => router.push(`/course/${offer.id}`)}
-            />
-          ))}
-        </ScrollView>
-      </View>
-
-      {/* Mentorship Section */}
-      <View style={styles.section}>
-        <Text style={[styles.sectionTitle, { color: colors.text }]}>
-          Mentoria Individual
-        </Text>
-
-        <TouchableOpacity
-          style={styles.mentorshipCard}
-          onPress={() => router.push('/mentoria-completa')}
-        >
-          <LinearGradient
-            colors={['#8B5CF6', '#7C3AED']}
-            style={styles.mentorshipGradient}
-          >
-            <View style={styles.mentorshipHeader}>
-              <View style={styles.mentorshipIcon}>
-                <Text style={styles.mentorshipEmoji}>🎯</Text>
-              </View>
-              <View style={styles.mentorshipContent}>
-                <Text style={styles.mentorshipTitle}>Mentoria Completa</Text>
-                <Text style={styles.mentorshipSubtitle}>
-                  Acesso a todos os cursos + 3h de assessoria individual
-                </Text>
-              </View>
-            </View>
-
-            <View style={styles.mentorshipPrice}>
-              <Text style={styles.mentorshipOriginalPrice}>De R$ 1.200,00</Text>
-              <Text style={styles.mentorshipCurrentPrice}>R$ 2.997,00</Text>
-              <Text style={styles.mentorshipCashback}>
-                + Cashback R$ 100 em Bitcoin
-              </Text>
-            </View>
-
-            <View style={styles.mentorshipBenefits}>
-              <Text style={styles.mentorshipBenefit}>
-                ✓ Acesso a todos os cursos
-              </Text>
-              <Text style={styles.mentorshipBenefit}>
-                ✓ 3h de aulas individuais (2 dias)
-              </Text>
-              <Text style={styles.mentorshipBenefit}>
-                ✓ Montagem de carteira inconfiscável
-              </Text>
-              <Text style={styles.mentorshipBenefit}>
-                ✓ Suporte por 1 ano no WhatsApp
-              </Text>
-            </View>
-          </LinearGradient>
-        </TouchableOpacity>
-      </View>
-
-      {/* Quick Actions */}
-      <View style={styles.section}>
-        <Text style={[styles.sectionTitle, { color: colors.text }]}>
-          Ações Rápidas
-        </Text>
-        <View style={styles.quickActions}>
-          <TouchableOpacity style={styles.quickAction}>
-            <LinearGradient
-              colors={['#8B5CF6', '#3B82F6']}
-              style={styles.quickActionIcon}
-            >
-              <Play size={24} color="white" />
-            </LinearGradient>
-            <Text style={[styles.quickActionText, { color: colors.text }]}>
-              Continuar Estudos
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      {/* Logout Button */}
-      <View style={styles.section}>
-        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-          <LinearGradient
-            colors={['#EF4444', '#DC2626']}
-            style={styles.logoutGradient}
-          >
-            <LogOut size={20} color="white" />
-            <Text style={styles.logoutText}>Sair</Text>
-          </LinearGradient>
-        </TouchableOpacity>
-      </View>
-
-      {/* VSL Modal for Remarketing */}
       <VSLModal
         visible={isVSLModalVisible}
         onClose={hideVSLModal}
-        onCTAPress={handleVSLCTAPress}
+        onCTAPress={() => {
+          hideVSLModal();
+          router.push('/auth/register');
+        }}
       />
-    </ScrollView>
+    </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  header: {
-    padding: 20,
-    paddingTop: 60,
-  },
-  headerTop: {
+const sectionStyles = StyleSheet.create({
+  titleRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 20,
-  },
-  welcomeSection: {
-    flex: 1,
-  },
-  welcomeText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: 'white',
-    marginBottom: 4,
-  },
-  levelText: {
-    fontSize: 16,
-    color: '#9CA3AF',
-  },
-  themeToggle: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 4,
-  },
-  adminButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 4,
-    marginLeft: 12,
-  },
-  progressCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    padding: 16,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
-  },
-  progressHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 12,
-  },
-  progressHeaderLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  progressTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  currentCourseTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    marginBottom: 12,
-  },
-  progressDetails: {
-    marginBottom: 12,
-  },
-  lessonProgress: {
-    marginBottom: 8,
-  },
-  lessonProgressText: {
-    fontSize: 12,
-    color: 'rgba(255, 255, 255, 0.7)',
-  },
-  progressBar: {
-    height: 8,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    borderRadius: 4,
-  },
-  progressFill: {
-    height: '100%',
-    backgroundColor: '#10B981',
-    borderRadius: 4,
-  },
-  nextLesson: {
-    flexDirection: 'row',
-    gap: 6,
-  },
-  nextLessonLabel: {
-    fontSize: 12,
-    color: 'rgba(255, 255, 255, 0.6)',
-  },
-  nextLessonText: {
-    fontSize: 12,
-    color: 'rgba(255, 255, 255, 0.9)',
-    fontWeight: '500',
-    flex: 1,
-  },
-  progressText: {
-    fontSize: 14,
-  },
-  statsContainer: {
-    flexDirection: 'row',
-    padding: 20,
-    gap: 12,
-  },
-  statCard: {
-    flex: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    padding: 16,
-    borderRadius: 12,
-    alignItems: 'center',
-    borderWidth: 0,
-  },
-  statValue: {
-    fontSize: 20,
-    fontWeight: 'bold',
     marginTop: 8,
   },
-  statLabel: {
-    fontSize: 12,
-    marginTop: 4,
+  emoji: {
+    fontSize: 24,
+    marginRight: 10,
   },
-  section: {
-    padding: 20,
-  },
-  sectionNoPadding: {
-    paddingTop: 0,
-    paddingBottom: 5,
-  },
-  sectionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  sectionTitle: {
-    fontSize: 20,
+  title: {
+    fontSize: 22,
     fontWeight: 'bold',
+    flex: 1,
   },
-  seeAllButton: {
+  bulletItem: {
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
+    marginBottom: 12,
+    paddingLeft: 4,
   },
-  seeAllText: {
+  bulletEmoji: {
+    fontSize: 18,
+    marginRight: 10,
+    marginTop: 2,
+  },
+  bulletContent: {
+    flex: 1,
+  },
+  bulletTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    marginBottom: 2,
+  },
+  bulletDesc: {
     fontSize: 14,
-    fontWeight: '600',
+    lineHeight: 20,
   },
   courseCard: {
-    width: width * 0.72,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
     borderRadius: 12,
-    marginRight: 16,
-    borderWidth: 0,
     overflow: 'hidden',
+    marginBottom: 16,
   },
-  courseImageContainer: {
-    height: 120,
-    backgroundColor: '#2a2a2a',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  courseImageOverlay: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
+  courseImage: {
+    width: '100%',
+    height: 180,
   },
   courseInfo: {
     padding: 16,
   },
   courseTitle: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: 'bold',
-    color: 'white', // Always white for contrast on gradient cards
     marginBottom: 4,
   },
-  instructor: {
+  courseSubtitle: {
     fontSize: 14,
-    marginBottom: 8,
-  },
-  courseStats: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    lineHeight: 20,
     marginBottom: 12,
   },
-  rating: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
-  ratingText: {
-    fontSize: 14,
-    color: 'white', // Always white for contrast on gradient cards
-    fontWeight: '600',
-  },
-  students: {
-    fontSize: 12,
-  },
-  courseBottom: {
+  courseFooter: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  price: {
-    fontSize: 16,
+  coursePrice: {
+    fontSize: 18,
     fontWeight: 'bold',
-  },
-  levelBadge: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 6,
-  },
-  beginnerBadge: {
-    backgroundColor: 'rgba(16, 185, 129, 0.2)',
-  },
-  advancedBadge: {
-    backgroundColor: 'rgba(245, 158, 11, 0.2)',
-  },
-  intermediateBadge: {
-    backgroundColor: 'rgba(59, 130, 246, 0.2)',
-  },
-  beginnerText: {
     color: '#10B981',
   },
-  advancedText: {
-    color: '#F59E0B',
+});
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
   },
-  intermediateText: {
-    color: '#3B82F6',
+  scrollContent: {
+    flexGrow: 1,
+  },
+  heroContainer: {
+    position: 'relative',
+    height: 360,
+  },
+  heroBanner: {
+    width: '100%',
+    height: '100%',
+  },
+  heroOverlay: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: '60%',
+  },
+  heroTextContainer: {
+    position: 'absolute',
+    bottom: 20,
+    left: 20,
+    right: 20,
+  },
+  heroText: {
+    color: '#FFFFFF',
+    fontSize: 15,
+    lineHeight: 22,
+    marginBottom: 8,
+  },
+  heroHighlight: {
+    color: '#F7931A',
+    fontSize: 15,
+    fontWeight: 'bold',
+    lineHeight: 22,
+  },
+  content: {
+    padding: 20,
+  },
+  sectionSubtitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 12,
+  },
+  paragraph: {
+    fontSize: 15,
+    lineHeight: 24,
+    marginBottom: 12,
+  },
+  highlightText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    fontStyle: 'italic',
+    lineHeight: 24,
+    marginBottom: 16,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: 'rgba(139, 92, 246, 0.2)',
+    marginVertical: 24,
+  },
+  noNeedRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+    marginTop: 8,
+    marginBottom: 8,
+  },
+  noNeedItem: {
+    fontSize: 15,
+    color: '#EF4444',
+    fontWeight: '600',
+  },
+  networkCard: {
+    borderRadius: 12,
+    borderWidth: 1,
+    padding: 16,
+    marginBottom: 12,
+  },
+  networkEmoji: {
+    fontSize: 28,
+    marginBottom: 8,
+  },
+  networkTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 6,
+  },
+  networkDesc: {
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  trailBadge: {
+    borderRadius: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    marginBottom: 8,
+  },
+  trailBadgeText: {
+    color: '#FFFFFF',
+    fontSize: 15,
+    fontWeight: 'bold',
+  },
+  trailDesc: {
+    fontSize: 14,
+    lineHeight: 20,
+    marginBottom: 16,
+  },
+  guaranteeCard: {
+    borderRadius: 12,
+    padding: 20,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  guaranteeEmoji: {
+    fontSize: 32,
+    marginBottom: 8,
+  },
+  guaranteeTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  guaranteeDesc: {
+    fontSize: 14,
+    lineHeight: 20,
+    textAlign: 'center',
+  },
+  manifestoCard: {
+    borderRadius: 12,
+    padding: 24,
+  },
+  manifestoTitle: {
+    color: '#F7931A',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 16,
+    lineHeight: 28,
+  },
+  manifestoText: {
+    color: '#E5E5E5',
+    fontSize: 15,
+    lineHeight: 24,
+    marginBottom: 12,
+  },
+  manifestoHighlight: {
+    color: '#8B5CF6',
+    fontSize: 16,
+    fontWeight: 'bold',
+    lineHeight: 24,
+    marginTop: 8,
+  },
+  profileImage: {
+    width: '100%',
+    height: 400,
+    borderRadius: 16,
+    marginBottom: 16,
+  },
+  profileName: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 12,
+  },
+  subSectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 16,
+    marginBottom: 8,
+  },
+  familyImage: {
+    width: '100%',
+    height: 350,
+    borderRadius: 16,
+    marginBottom: 16,
   },
   quickActions: {
     flexDirection: 'row',
-    gap: 16,
+    gap: 12,
   },
-  quickAction: {
+  quickActionBtn: {
     flex: 1,
+    flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    padding: 20,
-    borderRadius: 12,
-    borderWidth: 0,
-  },
-  quickActionIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
     justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 12,
+    gap: 8,
+    paddingVertical: 14,
+    borderRadius: 12,
   },
   quickActionText: {
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: '600',
-    textAlign: 'center',
-  },
-  subscriptionHeader: {
-    paddingTop: 60,
-    paddingHorizontal: 20,
-    paddingBottom: 10,
-  },
-  backButton: {
-    alignSelf: 'flex-start',
-  },
-  backButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  premiumCTA: {
-    borderRadius: 16,
-    overflow: 'hidden',
-    marginBottom: 8,
-  },
-  premiumGradient: {
-    padding: 20,
-  },
-  premiumContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  premiumIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 16,
-  },
-  premiumEmoji: {
-    fontSize: 24,
-  },
-  premiumText: {
-    flex: 1,
-  },
-  premiumTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: 'white',
-    marginBottom: 4,
-  },
-  premiumSubtitle: {
-    fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.9)',
-  },
-  premiumArrow: {
-    marginLeft: 12,
-  },
-  freeCourseCard: {
-    width: width * 0.72,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    borderRadius: 12,
-    marginRight: 16,
-    borderWidth: 2,
-    borderColor: '#10B981',
-    overflow: 'hidden',
-    position: 'relative',
-  },
-  freeBadge: {
-    position: 'absolute',
-    top: 8,
-    right: 8,
-    backgroundColor: '#10B981',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 6,
-    zIndex: 1,
-  },
-  freeBadgeText: {
-    fontSize: 10,
-    fontWeight: 'bold',
-    color: 'white',
-  },
-  freePrice: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  freeAccessButton: {
-    backgroundColor: '#10B981',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 6,
-  },
-  freeAccessText: {
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  freeIndicator: {
-    position: 'absolute',
-    top: 8,
-    left: 8,
-    backgroundColor: '#10B981',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 6,
-  },
-  freeText: {
-    fontSize: 10,
-    fontWeight: 'bold',
-    color: 'white',
-  },
-  logoutButton: {
-    borderRadius: 12,
-    overflow: 'hidden',
-  },
-  logoutGradient: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 16,
-    gap: 8,
-  },
-  logoutText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: 'white',
-  },
-  mentorshipCard: {
-    borderRadius: 16,
-    overflow: 'hidden',
-    marginTop: 8,
-  },
-  mentorshipGradient: {
-    padding: 20,
-  },
-  mentorshipHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  mentorshipIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 16,
-  },
-  mentorshipEmoji: {
-    fontSize: 24,
-  },
-  mentorshipContent: {
-    flex: 1,
-  },
-  mentorshipTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: 'white',
-    marginBottom: 4,
-  },
-  mentorshipSubtitle: {
-    fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.9)',
-  },
-  mentorshipPrice: {
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  mentorshipOriginalPrice: {
-    fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.7)',
-    textDecorationLine: 'line-through',
-    marginBottom: 4,
-  },
-  mentorshipCurrentPrice: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: 'white',
-    marginBottom: 4,
-  },
-  mentorshipCashback: {
-    fontSize: 14,
-    color: '#F59E0B',
-    fontWeight: '600',
-  },
-  mentorshipBenefits: {
-    gap: 8,
-  },
-  mentorshipBenefit: {
-    fontSize: 14,
-    color: 'rgba(255, 255, 255, 0.9)',
-    fontWeight: '500',
   },
 });

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -14,41 +14,26 @@ export default function LandingPage() {
       style={[styles.container, { backgroundColor: colors.background }]}
       contentContainerStyle={styles.contentContainer}
     >
-      <LinearGradient
-        colors={['#8B5CF6', '#3B82F6']}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={styles.header}
-      >
-        <Text style={styles.emoji}>🌍</Text>
-        <Text style={styles.title}>
-          O Maravilhoso Mundo das Finanças Descentralizadas e do Bitcoin
-        </Text>
-      </LinearGradient>
+      <Image
+        source={require('../assets/images/hero-banner.png')}
+        style={styles.heroBanner}
+        resizeMode="cover"
+      />
 
       <View style={styles.body}>
-        <Text style={[styles.description, { color: colors.text }]}>
-          Uma nova rede financeira global está surgindo. Uma infraestrutura
-          construída diretamente na internet que funciona 24 horas por dia, 7
-          dias por semana — sem bancos, sem governos e sem precisar de CPF.
+        <Text style={[styles.highlight, { color: '#F7931A' }]}>
+          Do Zero à Soberania
         </Text>
 
         <Text style={[styles.description, { color: colors.text }]}>
-          Com apenas um celular, um computador e acesso à internet, qualquer
-          pessoa pode armazenar valor, enviar dinheiro COMO DÓLAR CRIPTOGRAFADO
-          E BITCOIN para qualquer lugar do mundo e acessar serviços financeiros
-          diretamente pela rede.
+          Aprenda a dominar uma infraestrutura financeira que não exige CPF e
+          coloque seu dinheiro sob seu controle total — mesmo começando hoje e
+          com pouco para investir.
         </Text>
 
-        <Text style={[styles.highlight, { color: colors.text }]}>
-          Quem entende como funciona o dinheiro, entende como proteger sua
-          liberdade.
-        </Text>
-
-        <Text style={[styles.description, { color: colors.text }]}>
-          Neste treinamento você aprenderá a usar essa nova rede financeira da
-          internet e parar de depender de bancos para controlar o seu próprio
-          dinheiro. 🚀
+        <Text style={[styles.emphasis, { color: colors.text }]}>
+          O que você aprenderá aqui é algo que a maioria das pessoas só vai
+          descobrir quando for tarde demais.
         </Text>
 
         <TouchableOpacity
@@ -77,22 +62,9 @@ const styles = StyleSheet.create({
   contentContainer: {
     flexGrow: 1,
   },
-  header: {
-    paddingTop: 80,
-    paddingBottom: 40,
-    paddingHorizontal: 24,
-    alignItems: 'center',
-  },
-  emoji: {
-    fontSize: 48,
-    marginBottom: 16,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    textAlign: 'center',
-    lineHeight: 36,
+  heroBanner: {
+    width: '100%',
+    height: 300,
   },
   body: {
     padding: 24,
@@ -105,10 +77,17 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   highlight: {
-    fontSize: 18,
+    fontSize: 26,
     fontWeight: 'bold',
-    lineHeight: 28,
-    marginVertical: 8,
+    lineHeight: 34,
+    marginBottom: 12,
+  },
+  emphasis: {
+    fontSize: 16,
+    fontWeight: '600',
+    fontStyle: 'italic',
+    lineHeight: 24,
+    marginBottom: 8,
   },
   ctaButton: {
     flexDirection: 'row',
