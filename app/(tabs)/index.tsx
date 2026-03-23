@@ -13,6 +13,8 @@ import { useRouter } from 'expo-router';
 import VSLModal from '@/components/VSLModal';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useVSL } from '@/contexts/VSLContext';
+import { StatusBar } from 'expo-status-bar';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   Globe,
   AlertTriangle,
@@ -72,6 +74,7 @@ function CourseTrailCard({ id, title, subtitle, price, image, onPress, colors }:
 export default function HomeScreen() {
   const router = useRouter();
   const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
   const {
     shouldShowVSL,
     showVSLModal,
@@ -88,27 +91,23 @@ export default function HomeScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <StatusBar style="light" />
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
 
         {/* HERO */}
-        <View style={styles.heroContainer}>
-          <Image
-            source={require('../../assets/images/hero-banner.png')}
-            style={styles.heroBanner}
-            resizeMode="cover"
-          />
-          <LinearGradient
-            colors={['transparent', 'rgba(0,0,0,0.85)']}
-            style={styles.heroOverlay}
-          />
-          <View style={styles.heroTextContainer}>
-            <Text style={styles.heroText}>
-              Aprenda a dominar uma infraestrutura financeira que não exige CPF e coloque seu dinheiro sob seu controle total — mesmo começando hoje e com pouco para investir.
-            </Text>
-            <Text style={styles.heroHighlight}>
-              O que você aprenderá aqui é algo que a maioria das pessoas só vai descobrir quando for tarde demais.
-            </Text>
-          </View>
+        <View style={{ height: insets.top }} />
+        <Image
+          source={require('../../assets/images/hero-banner.png')}
+          style={styles.heroBanner}
+          resizeMode="contain"
+        />
+        <View style={styles.heroTextBox}>
+          <Text style={[styles.heroText, { color: colors.text }]}>
+            Aprenda a dominar uma infraestrutura financeira que não exige CPF e coloque seu dinheiro sob seu controle total — mesmo começando hoje e com pouco para investir.
+          </Text>
+          <Text style={styles.heroHighlight}>
+            O que você aprenderá aqui é algo que a maioria das pessoas só vai descobrir quando for tarde demais.
+          </Text>
         </View>
 
         <View style={styles.content}>
@@ -523,29 +522,16 @@ const styles = StyleSheet.create({
   scrollContent: {
     flexGrow: 1,
   },
-  heroContainer: {
-    position: 'relative',
-    height: 360,
-  },
   heroBanner: {
     width: '100%',
-    height: '100%',
+    height: undefined,
+    aspectRatio: 1402 / 935,
   },
-  heroOverlay: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: '60%',
-  },
-  heroTextContainer: {
-    position: 'absolute',
-    bottom: 20,
-    left: 20,
-    right: 20,
+  heroTextBox: {
+    paddingHorizontal: 20,
+    paddingVertical: 16,
   },
   heroText: {
-    color: '#FFFFFF',
     fontSize: 15,
     lineHeight: 22,
     marginBottom: 8,

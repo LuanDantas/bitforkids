@@ -4,20 +4,25 @@ import { useRouter } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
 import { ArrowRight } from 'lucide-react-native';
 import { TouchableOpacity } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { StatusBar } from 'expo-status-bar';
 
 export default function LandingPage() {
   const router = useRouter();
   const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
 
   return (
     <ScrollView
       style={[styles.container, { backgroundColor: colors.background }]}
       contentContainerStyle={styles.contentContainer}
     >
+      <StatusBar style="light" />
+      <View style={{ height: insets.top }} />
       <Image
         source={require('../assets/images/hero-banner.png')}
         style={styles.heroBanner}
-        resizeMode="cover"
+        resizeMode="contain"
       />
 
       <View style={styles.body}>
@@ -64,7 +69,8 @@ const styles = StyleSheet.create({
   },
   heroBanner: {
     width: '100%',
-    height: 300,
+    height: undefined,
+    aspectRatio: 1402 / 935,
   },
   body: {
     padding: 24,
