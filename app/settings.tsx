@@ -302,8 +302,6 @@ export default function SettingsScreen() {
                           }}
                           thumbColor={isEnabled ? 'white' : '#9CA3AF'}
                           ios_backgroundColor="#374151"
-                          disabled={false}
-                          style={{ transform: [{ scaleX: 1 }, { scaleY: 1 }] }}
                         />
                       ) : (
                         <TouchableOpacity

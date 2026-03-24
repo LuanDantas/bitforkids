@@ -274,6 +274,7 @@ export default function NotificationsScreen() {
                       onValueChange={(value) => updateSetting(item.key, value)}
                       trackColor={{ false: '#374151', true: category.color }}
                       thumbColor={item.enabled ? 'white' : '#9CA3AF'}
+                      ios_backgroundColor="#374151"
                     />
                   </View>
                 ))}

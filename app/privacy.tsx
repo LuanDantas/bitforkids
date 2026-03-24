@@ -307,8 +307,6 @@ export default function PrivacyScreen() {
                         trackColor={{ false: '#374151', true: category.color }}
                         thumbColor={isEnabled ? 'white' : '#9CA3AF'}
                         ios_backgroundColor="#374151"
-                        disabled={false}
-                        style={{ transform: [{ scaleX: 1 }, { scaleY: 1 }] }}
                       />
                     </View>
                   );
