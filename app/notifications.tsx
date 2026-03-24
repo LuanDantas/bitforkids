@@ -234,7 +234,7 @@ export default function NotificationsScreen() {
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {/* Status Section */}
         <View style={styles.section}>
-          <View style={[styles.statusCard, { backgroundColor: colors.card, borderColor: colors.card }]}>
+          <View style={[styles.statusCard, { backgroundColor: colors.card, borderColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }]}>
             <View style={styles.statusHeader}>
               <View style={styles.statusIcon}>
                 <Bell size={20} color="#10B981" />
@@ -262,7 +262,7 @@ export default function NotificationsScreen() {
                 <Text style={[styles.categoryTitle, { color: colors.text }]}>{category.title}</Text>
               </View>
 
-              <View style={[styles.settingsList, { backgroundColor: colors.card, borderColor: colors.card }]}>
+              <View style={[styles.settingsList, { backgroundColor: colors.card, borderColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }]}>
                 {category.items.map((item, itemIndex) => (
                   <View key={itemIndex} style={[styles.settingItem, { borderBottomColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }]}>
                     <View style={styles.settingContent}>

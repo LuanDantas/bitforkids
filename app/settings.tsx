@@ -408,7 +408,7 @@ const styles = StyleSheet.create({
   },
   headerSubtitle: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: 'rgba(255, 255, 255, 0.8)',
     marginTop: 2,
   },
   headerRight: {

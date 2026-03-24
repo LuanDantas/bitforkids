@@ -288,7 +288,7 @@ export default function PrivacyScreen() {
                 <Text style={[styles.categoryTitle, { color: colors.text }]}>{category.title}</Text>
               </View>
 
-              <View style={[styles.settingsList, { backgroundColor: colors.card, borderColor: colors.card }]}>
+              <View style={[styles.settingsList, { backgroundColor: colors.card, borderColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }]}>
                 {category.items.map((item, itemIndex) => {
                   const isEnabled = settings[item.key];
                   return (
@@ -321,7 +321,7 @@ export default function PrivacyScreen() {
         {/* Data Actions */}
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { color: colors.text }]}>Gerenciar Dados</Text>
-          <View style={[styles.actionsList, { backgroundColor: colors.card, borderColor: colors.card }]}>
+          <View style={[styles.actionsList, { backgroundColor: colors.card, borderColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }]}>
             {dataActions.map((action, index) => {
               const Icon = action.icon;
               return (
@@ -356,7 +356,7 @@ export default function PrivacyScreen() {
         {/* Legal Documents */}
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { color: colors.text }]}>Documentos Legais</Text>
-          <View style={[styles.legalList, { backgroundColor: colors.card, borderColor: colors.card }]}>
+          <View style={[styles.legalList, { backgroundColor: colors.card, borderColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }]}>
             <TouchableOpacity
               style={[styles.legalItem, { borderBottomColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }]}
               onPress={openPrivacyPolicy}
