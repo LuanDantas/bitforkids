@@ -30,6 +30,7 @@ import {
   HelpCircle,
   Info,
 } from 'lucide-react-native';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface GeneralSettings {
   darkMode: boolean;
@@ -46,6 +47,7 @@ interface GeneralSettings {
 
 export default function SettingsScreen() {
   const router = useRouter();
+  const { colors, isDark } = useTheme();
 
   const [settings, setSettings] = useState<GeneralSettings>({
     darkMode: true,
@@ -234,9 +236,9 @@ export default function SettingsScreen() {
   ];
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       {/* Header */}
-      <LinearGradient colors={['#1a1a1a', '#2a1a4a']} style={styles.header}>
+      <LinearGradient colors={isDark ? ['#1a1a1a', '#2a1a4a'] as const : ['#8B5CF6', '#3B82F6'] as const} style={styles.header}>
         <View style={styles.headerContent}>
           <TouchableOpacity
             style={styles.backButton}
@@ -269,10 +271,10 @@ export default function SettingsScreen() {
                 >
                   <Icon size={20} color={category.color} />
                 </View>
-                <Text style={styles.categoryTitle}>{category.title}</Text>
+                <Text style={[styles.categoryTitle, { color: colors.text }]}>{category.title}</Text>
               </View>
 
-              <View style={styles.settingsList}>
+              <View style={[styles.settingsList, { backgroundColor: colors.card, borderColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }]}>
                 {category.items.map((item, itemIndex) => {
                   const isEnabled =
                     typeof settings[item.key] === 'boolean'
@@ -280,10 +282,10 @@ export default function SettingsScreen() {
                       : false;
 
                   return (
-                    <View key={itemIndex} style={styles.settingItem}>
+                    <View key={itemIndex} style={[styles.settingItem, { borderBottomColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }]}>
                       <View style={styles.settingContent}>
-                        <Text style={styles.settingTitle}>{item.title}</Text>
-                        <Text style={styles.settingSubtitle}>
+                        <Text style={[styles.settingTitle, { color: colors.text }]}>{item.title}</Text>
+                        <Text style={[styles.settingSubtitle, { color: colors.textSecondary }]}>
                           {item.subtitle}
                         </Text>
                       </View>
@@ -310,7 +312,7 @@ export default function SettingsScreen() {
                         >
                           <ArrowLeft
                             size={20}
-                            color="#6B7280"
+                            color={colors.textSecondary}
                             style={{ transform: [{ rotate: '180deg' }] }}
                           />
                         </TouchableOpacity>
@@ -325,14 +327,14 @@ export default function SettingsScreen() {
 
         {/* Support */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Suporte</Text>
-          <View style={styles.supportList}>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>Suporte</Text>
+          <View style={[styles.supportList, { backgroundColor: colors.card, borderColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }]}>
             {supportActions.map((action, index) => {
               const Icon = action.icon;
               return (
                 <TouchableOpacity
                   key={index}
-                  style={styles.supportItem}
+                  style={[styles.supportItem, { borderBottomColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }]}
                   onPress={action.onPress}
                 >
                   <View
@@ -344,14 +346,14 @@ export default function SettingsScreen() {
                     <Icon size={20} color={action.color} />
                   </View>
                   <View style={styles.supportContent}>
-                    <Text style={styles.supportTitle}>{action.title}</Text>
-                    <Text style={styles.supportSubtitle}>
+                    <Text style={[styles.supportTitle, { color: colors.text }]}>{action.title}</Text>
+                    <Text style={[styles.supportSubtitle, { color: colors.textSecondary }]}>
                       {action.subtitle}
                     </Text>
                   </View>
                   <ArrowLeft
                     size={20}
-                    color="#6B7280"
+                    color={colors.textSecondary}
                     style={{ transform: [{ rotate: '180deg' }] }}
                   />
                 </TouchableOpacity>
@@ -362,8 +364,8 @@ export default function SettingsScreen() {
 
         {/* App Info */}
         <View style={styles.appInfo}>
-          <Text style={styles.appVersion}>Bit for Kids 1.0.0</Text>
-          <Text style={styles.appCopyright}>
+          <Text style={[styles.appVersion, { color: colors.textSecondary }]}>Bit for Kids 1.0.0</Text>
+          <Text style={[styles.appCopyright, { color: colors.textSecondary }]}>
             Personalize sua experiência com essas configurações.
           </Text>
         </View>
@@ -375,7 +377,7 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0a0a0a',
+    
   },
   header: {
     paddingTop: 60,
@@ -426,7 +428,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: 'white',
+    
     marginBottom: 16,
   },
   categoryHeader: {
@@ -445,13 +447,12 @@ const styles = StyleSheet.create({
   categoryTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: 'white',
   },
   settingsList: {
-    backgroundColor: '#1a1a1a',
+    
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#2a2a2a',
+    
     overflow: 'hidden',
   },
   settingItem: {
@@ -460,7 +461,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#2a2a2a',
+    
   },
   settingContent: {
     flex: 1,
@@ -469,21 +470,21 @@ const styles = StyleSheet.create({
   settingTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: 'white',
+    
     marginBottom: 2,
   },
   settingSubtitle: {
     fontSize: 14,
-    color: '#9CA3AF',
+    
   },
   actionButton: {
     padding: 8,
   },
   supportList: {
-    backgroundColor: '#1a1a1a',
+    
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#2a2a2a',
+    
     overflow: 'hidden',
   },
   supportItem: {
@@ -491,7 +492,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#2a2a2a',
+    
   },
   supportIcon: {
     width: 40,
@@ -507,12 +508,12 @@ const styles = StyleSheet.create({
   supportTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: 'white',
+    
     marginBottom: 2,
   },
   supportSubtitle: {
     fontSize: 14,
-    color: '#9CA3AF',
+    
   },
   appInfo: {
     padding: 20,
@@ -521,12 +522,12 @@ const styles = StyleSheet.create({
   },
   appVersion: {
     fontSize: 14,
-    color: '#6B7280',
+    
     marginBottom: 4,
   },
   appCopyright: {
     fontSize: 12,
-    color: '#6B7280',
+    
     textAlign: 'center',
   },
 });
