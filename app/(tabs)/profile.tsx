@@ -4,11 +4,12 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  TouchableOpacity,
   Image,
+  Platform,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
+import AnimatedPressable from '@/components/AnimatedPressable';
 import {
   User,
   CreditCard,
@@ -22,8 +23,11 @@ import {
   Coins,
 } from 'lucide-react-native';
 
+import { useTheme } from '@/contexts/ThemeContext';
+
 export default function ProfileScreen() {
   const router = useRouter();
+  const { colors, isDark } = useTheme();
   const [user] = useState({
     name: 'João Silva',
     email: 'joao.silva@email.com',
@@ -69,24 +73,24 @@ export default function ProfileScreen() {
   ];
 
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+    <ScrollView style={[styles.container, { backgroundColor: colors.background }]} showsVerticalScrollIndicator={false}>
       {/* Profile Header */}
-      <LinearGradient colors={['#1a1a1a', '#2a1a4a']} style={styles.header}>
+      <LinearGradient colors={isDark ? ['#1a1a1a', '#2a1a4a'] as const : ['#8B5CF6', '#3B82F6'] as const} style={styles.header}>
         <View style={styles.profileSection}>
           <View style={styles.avatarContainer}>
             <View style={styles.avatar}>
               <User size={40} color="white" />
             </View>
-            <TouchableOpacity style={styles.editButton}>
+            <AnimatedPressable style={styles.editButton}>
               <Edit size={16} color="white" />
-            </TouchableOpacity>
+            </AnimatedPressable>
           </View>
 
           <View style={styles.userInfo}>
             <Text style={styles.userName}>{user.name}</Text>
-            <Text style={styles.userEmail}>{user.email}</Text>
-            <View style={styles.levelBadge}>
-              <Text style={styles.levelText}>{user.level}</Text>
+            <Text style={[styles.userEmail, { color: 'rgba(255,255,255,0.8)' }]}>{user.email}</Text>
+            <View style={[styles.levelBadge, { backgroundColor: 'rgba(255,255,255,0.2)' }]}>
+              <Text style={[styles.levelText, { color: '#FFFFFF' }]}>{user.level}</Text>
             </View>
           </View>
         </View>
@@ -94,7 +98,7 @@ export default function ProfileScreen() {
 
       {/* Cashback Section */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Meu Cashback</Text>
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>Meu Cashback</Text>
         <View style={styles.cashbackContainer}>
           <LinearGradient
             colors={['#10B981', '#059669']}
@@ -112,16 +116,16 @@ export default function ProfileScreen() {
             <Text style={styles.cashbackTotal}>
               Total acumulado: {user.stats.totalCashback}
             </Text>
-            <TouchableOpacity style={styles.withdrawButton}>
+            <AnimatedPressable style={styles.withdrawButton}>
               <Text style={styles.withdrawText}>Resgatar</Text>
-            </TouchableOpacity>
+            </AnimatedPressable>
           </LinearGradient>
         </View>
       </View>
 
       {/* Menu Items */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Configurações</Text>
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>Configurações</Text>
         <View style={styles.menuList}>
           {menuItems.map((item, index) => {
             const Icon = item.icon;
@@ -138,9 +142,9 @@ export default function ProfileScreen() {
             };
 
             return (
-              <TouchableOpacity
+              <AnimatedPressable
                 key={index}
-                style={styles.menuItem}
+                style={[styles.menuItem, { backgroundColor: colors.card }, menuShadow]}
                 onPress={handlePress}
               >
                 <View style={styles.menuItemLeft}>
@@ -153,12 +157,12 @@ export default function ProfileScreen() {
                     <Icon size={20} color={item.color} />
                   </View>
                   <View style={styles.menuText}>
-                    <Text style={styles.menuTitle}>{item.title}</Text>
-                    <Text style={styles.menuSubtitle}>{item.subtitle}</Text>
+                    <Text style={[styles.menuTitle, { color: colors.text }]}>{item.title}</Text>
+                    <Text style={[styles.menuSubtitle, { color: colors.textSecondary }]}>{item.subtitle}</Text>
                   </View>
                 </View>
-                <ChevronRight size={20} color="#6B7280" />
-              </TouchableOpacity>
+                <ChevronRight size={20} color={colors.textSecondary} />
+              </AnimatedPressable>
             );
           })}
         </View>
@@ -166,16 +170,16 @@ export default function ProfileScreen() {
 
       {/* Logout Button */}
       <View style={styles.section}>
-        <TouchableOpacity style={styles.logoutButton}>
+        <AnimatedPressable style={[styles.logoutButton, { backgroundColor: colors.card }, menuShadow]}>
           <LogOut size={20} color="#EF4444" />
           <Text style={styles.logoutText}>Sair da Conta</Text>
-        </TouchableOpacity>
+        </AnimatedPressable>
       </View>
 
       {/* App Info */}
       <View style={styles.appInfo}>
-        <Text style={styles.appVersion}>Bit for Kids 1.0.0</Text>
-        <Text style={styles.appCopyright}>
+        <Text style={[styles.appVersion, { color: colors.textSecondary }]}>Bit for Kids 1.0.0</Text>
+        <Text style={[styles.appCopyright, { color: colors.textSecondary }]}>
           © 2025 Bit for Kids. Todos os direitos reservados.
         </Text>
       </View>
@@ -183,10 +187,20 @@ export default function ProfileScreen() {
   );
 }
 
+const menuShadow = Platform.select({
+  ios: {
+    shadowColor: '#8B5CF6',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+  },
+  android: { elevation: 4 },
+  default: {},
+}) as any;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0a0a0a',
   },
   header: {
     padding: 20,
@@ -222,7 +236,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#1a1a1a',
+    borderColor: 'rgba(255,255,255,0.3)',
   },
   userInfo: {
     flex: 1,
@@ -266,12 +280,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#1a1a1a',
-    borderRadius: 12,
+    borderRadius: 16,
     padding: 16,
     borderWidth: 1,
-    borderColor: '#2a2a2a',
-    marginBottom: 5,
+    borderColor: 'rgba(139, 92, 246, 0.1)',
+    marginBottom: 10,
   },
   menuItemLeft: {
     flexDirection: 'row',
@@ -303,11 +316,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#1a1a1a',
-    borderRadius: 12,
+    borderRadius: 16,
     padding: 16,
     borderWidth: 1,
-    borderColor: 'rgba(239, 68, 68, 0.3)',
+    borderColor: 'rgba(239, 68, 68, 0.2)',
     gap: 8,
   },
   logoutText: {

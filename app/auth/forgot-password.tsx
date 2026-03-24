@@ -11,12 +11,14 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Mail, ArrowLeft, CheckCircle } from 'lucide-react-native';
+import { useTheme } from '@/contexts/ThemeContext';
 
 export default function ForgotPasswordScreen() {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
   const router = useRouter();
+  const { colors, isDark } = useTheme();
 
   const handleResetPassword = async () => {
     if (!email) {
@@ -44,7 +46,7 @@ export default function ForgotPasswordScreen() {
 
   if (emailSent) {
     return (
-      <LinearGradient colors={['#0a0a0a', '#1a0a2a']} style={styles.container}>
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
         <View style={styles.content}>
           <View style={styles.successContainer}>
             <View style={styles.successIcon}>
@@ -82,18 +84,18 @@ export default function ForgotPasswordScreen() {
             </TouchableOpacity>
           </View>
         </View>
-      </LinearGradient>
+      </View>
     );
   }
 
   return (
-    <LinearGradient colors={['#0a0a0a', '#1a0a2a']} style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={styles.content}>
         <TouchableOpacity
           style={styles.backIconButton}
           onPress={handleBackToLogin}
         >
-          <ArrowLeft size={24} color="white" />
+          <ArrowLeft size={24} color={colors.text} />
         </TouchableOpacity>
 
         <View style={styles.header}>
@@ -102,22 +104,22 @@ export default function ForgotPasswordScreen() {
             style={styles.logo}
             resizeMode="contain"
           />
-          <Text style={styles.title}>Esqueceu a senha?</Text>
-          <Text style={styles.subtitle}>
+          <Text style={[styles.title, { color: colors.text }]}>Esqueceu a senha?</Text>
+          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
             Sem problemas! Digite seu email e enviaremos instruções para
             redefinir sua senha.
           </Text>
         </View>
 
         <View style={styles.form}>
-          <View style={styles.inputContainer}>
+          <View style={[styles.inputContainer, { backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)', borderColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)' }]}>
             <View style={styles.inputIcon}>
-              <Mail size={20} color="#9CA3AF" />
+              <Mail size={20} color={colors.textSecondary} />
             </View>
             <TextInput
-              style={styles.input}
+              style={[styles.input, { color: colors.text }]}
               placeholder="Email"
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor={colors.textSecondary}
               value={email}
               onChangeText={setEmail}
               keyboardType="email-address"
@@ -142,13 +144,13 @@ export default function ForgotPasswordScreen() {
         </View>
 
         <View style={styles.footer}>
-          <Text style={styles.footerText}>Lembrou da senha? </Text>
+          <Text style={[styles.footerText, { color: colors.textSecondary }]}>Lembrou da senha? </Text>
           <TouchableOpacity onPress={handleBackToLogin}>
             <Text style={styles.loginText}>Fazer login</Text>
           </TouchableOpacity>
         </View>
       </View>
-    </LinearGradient>
+    </View>
   );
 }
 

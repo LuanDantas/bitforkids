@@ -13,6 +13,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Mail, Lock, User, Eye, EyeOff, Phone } from 'lucide-react-native';
 import { useVSL } from '@/contexts/VSLContext';
+import { useTheme } from '@/contexts/ThemeContext';
 
 export default function RegisterScreen() {
   const [name, setName] = useState('');
@@ -24,6 +25,7 @@ export default function RegisterScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const router = useRouter();
+  const { colors, isDark } = useTheme();
   const { source, plan } = useLocalSearchParams();
   const { trackVSLConversion, resetSessionFlag } = useVSL();
 
@@ -82,7 +84,7 @@ export default function RegisterScreen() {
   };
 
   return (
-    <LinearGradient colors={['#0a0a0a', '#1a0a2a']} style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <ScrollView
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
@@ -95,8 +97,8 @@ export default function RegisterScreen() {
               style={styles.logo}
               resizeMode="contain"
             />
-            <Text style={styles.title}>Criar Conta</Text>
-            <Text style={styles.subtitle}>
+            <Text style={[styles.title, { color: colors.text }]}>Criar Conta</Text>
+            <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
               {source === 'vsl'
                 ? 'Você está a um passo de transformar a educação financeira do seu filho!'
                 : 'Junte-se à nossa comunidade de aprendizado'}
@@ -112,27 +114,27 @@ export default function RegisterScreen() {
 
           {/* Registration Form */}
           <View style={styles.form}>
-            <View style={styles.inputContainer}>
+            <View style={[styles.inputContainer, { backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)', borderColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)' }]}>
               <View style={styles.inputIcon}>
-                <User size={20} color="#9CA3AF" />
+                <User size={20} color={colors.textSecondary} />
               </View>
               <TextInput
-                style={styles.input}
+                style={[styles.input, { color: colors.text }]}
                 placeholder="Nome completo"
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor={colors.textSecondary}
                 value={name}
                 onChangeText={setName}
               />
             </View>
 
-            <View style={styles.inputContainer}>
+            <View style={[styles.inputContainer, { backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)', borderColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)' }]}>
               <View style={styles.inputIcon}>
-                <Mail size={20} color="#9CA3AF" />
+                <Mail size={20} color={colors.textSecondary} />
               </View>
               <TextInput
-                style={styles.input}
+                style={[styles.input, { color: colors.text }]}
                 placeholder="Email"
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor={colors.textSecondary}
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
@@ -140,14 +142,14 @@ export default function RegisterScreen() {
               />
             </View>
 
-            <View style={styles.inputContainer}>
+            <View style={[styles.inputContainer, { backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)', borderColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)' }]}>
               <View style={styles.inputIcon}>
-                <Lock size={20} color="#9CA3AF" />
+                <Lock size={20} color={colors.textSecondary} />
               </View>
               <TextInput
                 style={[styles.input, { paddingRight: 50 }]}
                 placeholder="Senha"
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor={colors.textSecondary}
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry={!showPassword}
@@ -157,21 +159,21 @@ export default function RegisterScreen() {
                 onPress={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? (
-                  <EyeOff size={20} color="#9CA3AF" />
+                  <EyeOff size={20} color={colors.textSecondary} />
                 ) : (
-                  <Eye size={20} color="#9CA3AF" />
+                  <Eye size={20} color={colors.textSecondary} />
                 )}
               </TouchableOpacity>
             </View>
 
-            <View style={styles.inputContainer}>
+            <View style={[styles.inputContainer, { backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)', borderColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)' }]}>
               <View style={styles.inputIcon}>
-                <Lock size={20} color="#9CA3AF" />
+                <Lock size={20} color={colors.textSecondary} />
               </View>
               <TextInput
                 style={[styles.input, { paddingRight: 50 }]}
                 placeholder="Confirmar senha"
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor={colors.textSecondary}
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
                 secureTextEntry={!showConfirmPassword}
@@ -181,9 +183,9 @@ export default function RegisterScreen() {
                 onPress={() => setShowConfirmPassword(!showConfirmPassword)}
               >
                 {showConfirmPassword ? (
-                  <EyeOff size={20} color="#9CA3AF" />
+                  <EyeOff size={20} color={colors.textSecondary} />
                 ) : (
-                  <Eye size={20} color="#9CA3AF" />
+                  <Eye size={20} color={colors.textSecondary} />
                 )}
               </TouchableOpacity>
             </View>
@@ -226,14 +228,14 @@ export default function RegisterScreen() {
 
           {/* Login Link */}
           <View style={styles.footer}>
-            <Text style={styles.footerText}>Já tem uma conta? </Text>
+            <Text style={[styles.footerText, { color: colors.textSecondary }]}>Já tem uma conta? </Text>
             <TouchableOpacity onPress={() => router.push('/auth/login')}>
               <Text style={styles.loginText}>Fazer login</Text>
             </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
-    </LinearGradient>
+    </View>
   );
 }
 

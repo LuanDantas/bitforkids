@@ -13,6 +13,7 @@ import { useRouter } from 'expo-router';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { useVSL } from '@/contexts/VSLContext';
+import { useTheme } from '@/contexts/ThemeContext';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -21,6 +22,7 @@ export default function LoginScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { resetSessionFlag } = useVSL();
+  const { colors, isDark } = useTheme();
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -48,7 +50,7 @@ export default function LoginScreen() {
   };
 
   return (
-    <LinearGradient colors={['#0a0a0a', '#1a0a2a']} style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={styles.content}>
         {/* Logo/Header */}
         <View style={styles.header}>
@@ -57,22 +59,22 @@ export default function LoginScreen() {
             style={styles.logo}
             resizeMode="contain"
           />
-          <Text style={styles.title}>Seja bem vindo</Text>
-          <Text style={styles.subtitle}>
+          <Text style={[styles.title, { color: colors.text }]}>Seja bem vindo</Text>
+          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
             Faça login para continuar seus estudos
           </Text>
         </View>
 
         {/* Login Form */}
         <View style={styles.form}>
-          <View style={styles.inputContainer}>
+          <View style={[styles.inputContainer, { backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)', borderColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)' }]}>
             <View style={styles.inputIcon}>
-              <Mail size={20} color="#9CA3AF" />
+              <Mail size={20} color={colors.textSecondary} />
             </View>
             <TextInput
-              style={styles.input}
+              style={[styles.input, { color: colors.text }]}
               placeholder="Email"
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor={colors.textSecondary}
               value={email}
               onChangeText={setEmail}
               keyboardType="email-address"
@@ -80,14 +82,14 @@ export default function LoginScreen() {
             />
           </View>
 
-          <View style={styles.inputContainer}>
+          <View style={[styles.inputContainer, { backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)', borderColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)' }]}>
             <View style={styles.inputIcon}>
-              <Lock size={20} color="#9CA3AF" />
+              <Lock size={20} color={colors.textSecondary} />
             </View>
             <TextInput
-              style={[styles.input, { paddingRight: 50 }]}
+              style={[styles.input, { paddingRight: 50, color: colors.text }]}
               placeholder="Senha"
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor={colors.textSecondary}
               value={password}
               onChangeText={setPassword}
               secureTextEntry={!showPassword}
@@ -97,9 +99,9 @@ export default function LoginScreen() {
               onPress={() => setShowPassword(!showPassword)}
             >
               {showPassword ? (
-                <EyeOff size={20} color="#9CA3AF" />
+                <EyeOff size={20} color={colors.textSecondary} />
               ) : (
-                <Eye size={20} color="#9CA3AF" />
+                <Eye size={20} color={colors.textSecondary} />
               )}
             </TouchableOpacity>
           </View>
@@ -128,38 +130,38 @@ export default function LoginScreen() {
 
           {/* Divider */}
           <View style={styles.divider}>
-            <View style={styles.dividerLine} />
-            <Text style={styles.dividerText}>ou</Text>
-            <View style={styles.dividerLine} />
+            <View style={[styles.dividerLine, { backgroundColor: isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)' }]} />
+            <Text style={[styles.dividerText, { color: colors.textSecondary }]}>ou</Text>
+            <View style={[styles.dividerLine, { backgroundColor: isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)' }]} />
           </View>
 
           {/* Social Login */}
           <View style={styles.socialButtons}>
             <TouchableOpacity
-              style={styles.socialButton}
+              style={[styles.socialButton, { backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)', borderColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)' }]}
               onPress={() => handleSocialLogin('Google')}
             >
-              <FontAwesome name="google" size={20} color="white" />
+              <FontAwesome name="google" size={20} color={colors.text} />
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={styles.socialButton}
+              style={[styles.socialButton, { backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)', borderColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)' }]}
               onPress={() => handleSocialLogin('Facebook')}
             >
-              <FontAwesome name="facebook" size={20} color="white" />
+              <FontAwesome name="facebook" size={20} color={colors.text} />
             </TouchableOpacity>
           </View>
         </View>
 
         {/* Sign Up Link */}
         <View style={styles.footer}>
-          <Text style={styles.footerText}>Não tem uma conta? </Text>
+          <Text style={[styles.footerText, { color: colors.textSecondary }]}>Não tem uma conta? </Text>
           <TouchableOpacity onPress={() => router.push('/auth/register')}>
             <Text style={styles.signUpText}>Criar conta</Text>
           </TouchableOpacity>
         </View>
       </View>
-    </LinearGradient>
+    </View>
   );
 }
 

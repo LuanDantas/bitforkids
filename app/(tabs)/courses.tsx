@@ -92,7 +92,7 @@ function CourseCard({ course, onPress, colors }: any) {
 
 export default function CoursesScreen() {
   const router = useRouter();
-  const { colors } = useTheme();
+  const { colors, isDark } = useTheme();
 
   const trail1 = courses.filter(c => c.trail === 1);
   const trail2 = courses.filter(c => c.trail === 2);
@@ -104,7 +104,7 @@ export default function CoursesScreen() {
       showsVerticalScrollIndicator={false}
     >
       {/* Header */}
-      <LinearGradient colors={['#1a1a1a', '#2a1a4a'] as const} style={styles.header}>
+      <LinearGradient colors={isDark ? ['#1a1a1a', '#2a1a4a'] as const : ['#8B5CF6', '#3B82F6'] as const} style={styles.header}>
         <Text style={styles.headerTitle}>Nossos Treinamentos</Text>
         <Text style={styles.headerSubtitle}>
           Escolha sua trilha e comece sua jornada rumo à soberania financeira
@@ -212,11 +212,11 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: 'bold',
     color: '#FFFFFF',
-    marginBottom: 8,
+    marginBottom: 4,
   },
   headerSubtitle: {
-    fontSize: 15,
-    color: '#A0A0A0',
+    fontSize: 16,
+    color: 'rgba(255, 255, 255, 0.8)',
     lineHeight: 22,
   },
   content: {
