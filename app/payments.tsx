@@ -278,17 +278,14 @@ export default function PaymentsScreen() {
         <TouchableOpacity
           style={[
             styles.tab,
-            selectedTab === 'history' && styles.tabActive,
-            selectedTab === 'history' && { backgroundColor: colors.primary },
+            { backgroundColor: selectedTab === 'history' ? '#8B5CF6' : colors.card },
           ]}
           onPress={() => setSelectedTab('history')}
         >
           <Text
             style={[
               styles.tabText,
-              selectedTab === 'history' && styles.tabTextActive,
-              selectedTab === 'history' && { color: 'white' },
-              { color: colors.text },
+              { color: selectedTab === 'history' ? '#FFFFFF' : colors.text },
             ]}
           >
             Histórico
@@ -298,17 +295,14 @@ export default function PaymentsScreen() {
         <TouchableOpacity
           style={[
             styles.tab,
-            selectedTab === 'methods' && styles.tabActive,
-            selectedTab === 'methods' && { backgroundColor: colors.primary },
+            { backgroundColor: selectedTab === 'methods' ? '#8B5CF6' : colors.card },
           ]}
           onPress={() => setSelectedTab('methods')}
         >
           <Text
             style={[
               styles.tabText,
-              selectedTab === 'methods' && styles.tabTextActive,
-              selectedTab === 'methods' && { color: 'white' },
-              { color: colors.text },
+              { color: selectedTab === 'methods' ? '#FFFFFF' : colors.text },
             ]}
           >
             Métodos
@@ -744,10 +738,6 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 12,
     alignItems: 'center',
-    backgroundColor: '#1a1a1a',
-  },
-  tabActive: {
-    backgroundColor: '#8B5CF6',
   },
   tabText: {
     fontSize: 14,

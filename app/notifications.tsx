@@ -24,6 +24,7 @@ import {
   VolumeX,
 } from 'lucide-react-native';
 import { useNotifications } from '../hooks/useNotifications';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface NotificationSettings {
   pushNotifications: boolean;
@@ -40,6 +41,7 @@ interface NotificationSettings {
 
 export default function NotificationsScreen() {
   const router = useRouter();
+  const { colors, isDark } = useTheme();
   const { 
     expoPushToken, 
     scheduleBitcoinPriceNotification,
@@ -209,9 +211,9 @@ export default function NotificationsScreen() {
   ];
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       {/* Header */}
-      <LinearGradient colors={['#1a1a1a', '#2a1a4a']} style={styles.header}>
+      <LinearGradient colors={isDark ? ['#1a1a1a', '#2a1a4a'] as const : ['#8B5CF6', '#3B82F6'] as const} style={styles.header}>
         <View style={styles.headerContent}>
           <TouchableOpacity
             style={styles.backButton}
@@ -232,17 +234,17 @@ export default function NotificationsScreen() {
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {/* Status Section */}
         <View style={styles.section}>
-          <View style={styles.statusCard}>
+          <View style={[styles.statusCard, { backgroundColor: colors.card, borderColor: colors.card }]}>
             <View style={styles.statusHeader}>
               <View style={styles.statusIcon}>
                 <Bell size={20} color="#10B981" />
               </View>
-              <Text style={styles.statusTitle}>Status das Notificações</Text>
+              <Text style={[styles.statusTitle, { color: colors.text }]}>Status das Notificações</Text>
             </View>
             <Text style={styles.statusText}>
               {expoPushToken ? 'Notificações ativas' : 'Notificações desativadas'}
             </Text>
-            <Text style={styles.statusSubtext}>
+            <Text style={[styles.statusSubtext, { color: colors.textSecondary }]}>
               {scheduledCount} notificação(ões) agendada(s)
             </Text>
           </View>
@@ -257,15 +259,15 @@ export default function NotificationsScreen() {
                 <View style={[styles.categoryIcon, { backgroundColor: `${category.color}20` }]}>
                   <Icon size={20} color={category.color} />
                 </View>
-                <Text style={styles.categoryTitle}>{category.title}</Text>
+                <Text style={[styles.categoryTitle, { color: colors.text }]}>{category.title}</Text>
               </View>
-              
-              <View style={styles.settingsList}>
+
+              <View style={[styles.settingsList, { backgroundColor: colors.card, borderColor: colors.card }]}>
                 {category.items.map((item, itemIndex) => (
-                  <View key={itemIndex} style={styles.settingItem}>
+                  <View key={itemIndex} style={[styles.settingItem, { borderBottomColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }]}>
                     <View style={styles.settingContent}>
-                      <Text style={styles.settingTitle}>{item.title}</Text>
-                      <Text style={styles.settingSubtitle}>{item.subtitle}</Text>
+                      <Text style={[styles.settingTitle, { color: colors.text }]}>{item.title}</Text>
+                      <Text style={[styles.settingSubtitle, { color: colors.textSecondary }]}>{item.subtitle}</Text>
                     </View>
                     <Switch
                       value={item.enabled}
@@ -282,7 +284,7 @@ export default function NotificationsScreen() {
 
         {/* Test Notifications */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Testar Notificações</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>Testar Notificações</Text>
           <View style={styles.testButtons}>
             <TouchableOpacity
               style={[styles.testButton, { backgroundColor: '#F59E0B' }]}
@@ -313,7 +315,7 @@ export default function NotificationsScreen() {
         {/* Clear All Notifications */}
         <View style={styles.section}>
           <TouchableOpacity
-            style={styles.clearButton}
+            style={[styles.clearButton, { backgroundColor: colors.card }]}
             onPress={clearAllNotifications}
           >
             <BellOff size={20} color="#EF4444" />
@@ -323,8 +325,8 @@ export default function NotificationsScreen() {
 
         {/* App Info */}
         <View style={styles.appInfo}>
-          <Text style={styles.appVersion}>Bit for Kids 1.0.0</Text>
-          <Text style={styles.appCopyright}>
+          <Text style={[styles.appVersion, { color: colors.textSecondary }]}>Bit for Kids 1.0.0</Text>
+          <Text style={[styles.appCopyright, { color: colors.textSecondary }]}>
             Configure suas preferências de notificação para uma melhor experiência.
           </Text>
         </View>
@@ -336,7 +338,7 @@ export default function NotificationsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0a0a0a',
+    
   },
   header: {
     paddingTop: 60,
@@ -367,7 +369,7 @@ const styles = StyleSheet.create({
   },
   headerSubtitle: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: 'rgba(255, 255, 255, 0.8)',
     marginTop: 2,
   },
   headerRight: {
@@ -387,15 +389,15 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: 'white',
+    
     marginBottom: 16,
   },
   statusCard: {
-    backgroundColor: '#1a1a1a',
+    
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
-    borderColor: '#2a2a2a',
+    
   },
   statusHeader: {
     flexDirection: 'row',
@@ -414,7 +416,7 @@ const styles = StyleSheet.create({
   statusTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: 'white',
+    
   },
   statusText: {
     fontSize: 14,
@@ -423,7 +425,7 @@ const styles = StyleSheet.create({
   },
   statusSubtext: {
     fontSize: 12,
-    color: '#9CA3AF',
+    
   },
   categoryHeader: {
     flexDirection: 'row',
@@ -441,13 +443,13 @@ const styles = StyleSheet.create({
   categoryTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: 'white',
+    
   },
   settingsList: {
-    backgroundColor: '#1a1a1a',
+    
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#2a2a2a',
+    
     overflow: 'hidden',
   },
   settingItem: {
@@ -456,7 +458,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#2a2a2a',
+    
   },
   settingContent: {
     flex: 1,
@@ -465,12 +467,12 @@ const styles = StyleSheet.create({
   settingTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: 'white',
+    
     marginBottom: 2,
   },
   settingSubtitle: {
     fontSize: 14,
-    color: '#9CA3AF',
+    
   },
   testButtons: {
     flexDirection: 'row',
@@ -495,7 +497,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#1a1a1a',
+    
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
