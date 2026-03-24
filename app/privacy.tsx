@@ -29,6 +29,7 @@ import {
   FileText,
   AlertTriangle,
 } from 'lucide-react-native';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface PrivacySettings {
   profileVisibility: boolean;
@@ -45,6 +46,7 @@ interface PrivacySettings {
 
 export default function PrivacyScreen() {
   const router = useRouter();
+  const { colors, isDark } = useTheme();
 
   const [settings, setSettings] = useState<PrivacySettings>({
     profileVisibility: true,
@@ -229,9 +231,9 @@ export default function PrivacyScreen() {
   ];
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       {/* Header */}
-      <LinearGradient colors={['#1a1a1a', '#2a1a4a']} style={styles.header}>
+      <LinearGradient colors={isDark ? ['#1a1a1a', '#2a1a4a'] as const : ['#8B5CF6', '#3B82F6'] as const} style={styles.header}>
         <View style={styles.headerContent}>
           <TouchableOpacity
             style={styles.backButton}
@@ -252,17 +254,17 @@ export default function PrivacyScreen() {
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {/* Security Info */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Segurança dos Dados</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>Segurança dos Dados</Text>
           {securityInfo.map((info, index) => {
             const Icon = info.icon;
             return (
-              <View key={index} style={styles.infoCard}>
+              <View key={index} style={[styles.infoCard, { backgroundColor: colors.card, borderColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }]}>
                 <View style={styles.infoIcon}>
                   <Icon size={20} color="#10B981" />
                 </View>
                 <View style={styles.infoContent}>
-                  <Text style={styles.infoTitle}>{info.title}</Text>
-                  <Text style={styles.infoDescription}>{info.description}</Text>
+                  <Text style={[styles.infoTitle, { color: colors.text }]}>{info.title}</Text>
+                  <Text style={[styles.infoDescription, { color: colors.textSecondary }]}>{info.description}</Text>
                 </View>
               </View>
             );
@@ -283,17 +285,17 @@ export default function PrivacyScreen() {
                 >
                   <Icon size={20} color={category.color} />
                 </View>
-                <Text style={styles.categoryTitle}>{category.title}</Text>
+                <Text style={[styles.categoryTitle, { color: colors.text }]}>{category.title}</Text>
               </View>
 
-              <View style={styles.settingsList}>
+              <View style={[styles.settingsList, { backgroundColor: colors.card, borderColor: colors.card }]}>
                 {category.items.map((item, itemIndex) => {
                   const isEnabled = settings[item.key];
                   return (
-                    <View key={itemIndex} style={styles.settingItem}>
+                    <View key={itemIndex} style={[styles.settingItem, { borderBottomColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }]}>
                       <View style={styles.settingContent}>
-                        <Text style={styles.settingTitle}>{item.title}</Text>
-                        <Text style={styles.settingSubtitle}>
+                        <Text style={[styles.settingTitle, { color: colors.text }]}>{item.title}</Text>
+                        <Text style={[styles.settingSubtitle, { color: colors.textSecondary }]}>
                           {item.subtitle}
                         </Text>
                       </View>
@@ -318,14 +320,14 @@ export default function PrivacyScreen() {
 
         {/* Data Actions */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Gerenciar Dados</Text>
-          <View style={styles.actionsList}>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>Gerenciar Dados</Text>
+          <View style={[styles.actionsList, { backgroundColor: colors.card, borderColor: colors.card }]}>
             {dataActions.map((action, index) => {
               const Icon = action.icon;
               return (
                 <TouchableOpacity
                   key={index}
-                  style={styles.actionItem}
+                  style={[styles.actionItem, { borderBottomColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }]}
                   onPress={action.onPress}
                 >
                   <View
@@ -337,12 +339,12 @@ export default function PrivacyScreen() {
                     <Icon size={20} color={action.color} />
                   </View>
                   <View style={styles.actionContent}>
-                    <Text style={styles.actionTitle}>{action.title}</Text>
-                    <Text style={styles.actionSubtitle}>{action.subtitle}</Text>
+                    <Text style={[styles.actionTitle, { color: colors.text }]}>{action.title}</Text>
+                    <Text style={[styles.actionSubtitle, { color: colors.textSecondary }]}>{action.subtitle}</Text>
                   </View>
                   <ArrowLeft
                     size={20}
-                    color="#6B7280"
+                    color={colors.textSecondary}
                     style={{ transform: [{ rotate: '180deg' }] }}
                   />
                 </TouchableOpacity>
@@ -353,44 +355,44 @@ export default function PrivacyScreen() {
 
         {/* Legal Documents */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Documentos Legais</Text>
-          <View style={styles.legalList}>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>Documentos Legais</Text>
+          <View style={[styles.legalList, { backgroundColor: colors.card, borderColor: colors.card }]}>
             <TouchableOpacity
-              style={styles.legalItem}
+              style={[styles.legalItem, { borderBottomColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }]}
               onPress={openPrivacyPolicy}
             >
               <View style={styles.legalIcon}>
                 <FileText size={20} color="#3B82F6" />
               </View>
               <View style={styles.legalContent}>
-                <Text style={styles.legalTitle}>Política de Privacidade</Text>
-                <Text style={styles.legalSubtitle}>
+                <Text style={[styles.legalTitle, { color: colors.text }]}>Política de Privacidade</Text>
+                <Text style={[styles.legalSubtitle, { color: colors.textSecondary }]}>
                   Como coletamos e usamos seus dados
                 </Text>
               </View>
               <ArrowLeft
                 size={20}
-                color="#6B7280"
+                color={colors.textSecondary}
                 style={{ transform: [{ rotate: '180deg' }] }}
               />
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={styles.legalItem}
+              style={[styles.legalItem, { borderBottomColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }]}
               onPress={openTermsOfService}
             >
               <View style={styles.legalIcon}>
                 <FileText size={20} color="#8B5CF6" />
               </View>
               <View style={styles.legalContent}>
-                <Text style={styles.legalTitle}>Termos de Serviço</Text>
-                <Text style={styles.legalSubtitle}>
+                <Text style={[styles.legalTitle, { color: colors.text }]}>Termos de Serviço</Text>
+                <Text style={[styles.legalSubtitle, { color: colors.textSecondary }]}>
                   Condições de uso da plataforma
                 </Text>
               </View>
               <ArrowLeft
                 size={20}
-                color="#6B7280"
+                color={colors.textSecondary}
                 style={{ transform: [{ rotate: '180deg' }] }}
               />
             </TouchableOpacity>
@@ -399,13 +401,13 @@ export default function PrivacyScreen() {
 
         {/* Contact Support */}
         <View style={styles.section}>
-          <View style={styles.supportCard}>
+          <View style={[styles.supportCard, { backgroundColor: colors.card, borderColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }]}>
             <View style={styles.supportIcon}>
               <AlertTriangle size={24} color="#F59E0B" />
             </View>
             <View style={styles.supportContent}>
-              <Text style={styles.supportTitle}>Precisa de Ajuda?</Text>
-              <Text style={styles.supportDescription}>
+              <Text style={[styles.supportTitle, { color: colors.text }]}>Precisa de Ajuda?</Text>
+              <Text style={[styles.supportDescription, { color: colors.textSecondary }]}>
                 Entre em contato conosco se tiver dúvidas sobre privacidade ou
                 segurança.
               </Text>
@@ -419,8 +421,8 @@ export default function PrivacyScreen() {
 
         {/* App Info */}
         <View style={styles.appInfo}>
-          <Text style={styles.appVersion}>Bit for Kids 1.0.0</Text>
-          <Text style={styles.appCopyright}>
+          <Text style={[styles.appVersion, { color: colors.textSecondary }]}>Bit for Kids 1.0.0</Text>
+          <Text style={[styles.appCopyright, { color: colors.textSecondary }]}>
             Sua privacidade é nossa prioridade. Mantenha suas configurações
             atualizadas.
           </Text>
@@ -433,7 +435,6 @@ export default function PrivacyScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0a0a0a',
   },
   header: {
     paddingTop: 60,
@@ -464,7 +465,7 @@ const styles = StyleSheet.create({
   },
   headerSubtitle: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: 'rgba(255, 255, 255, 0.8)',
     marginTop: 2,
   },
   headerRight: {
@@ -484,17 +485,17 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: 'white',
+    
     marginBottom: 16,
   },
   infoCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a1a',
+    
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
-    borderColor: '#2a2a2a',
+    
     marginBottom: 12,
   },
   infoIcon: {
@@ -512,12 +513,12 @@ const styles = StyleSheet.create({
   infoTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: 'white',
+    
     marginBottom: 4,
   },
   infoDescription: {
     fontSize: 14,
-    color: '#9CA3AF',
+    
   },
   categoryHeader: {
     flexDirection: 'row',
@@ -535,13 +536,13 @@ const styles = StyleSheet.create({
   categoryTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: 'white',
+    
   },
   settingsList: {
-    backgroundColor: '#1a1a1a',
+    
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#2a2a2a',
+    
     overflow: 'hidden',
   },
   settingItem: {
@@ -550,7 +551,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#2a2a2a',
+    
   },
   settingContent: {
     flex: 1,
@@ -559,18 +560,18 @@ const styles = StyleSheet.create({
   settingTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: 'white',
+    
     marginBottom: 2,
   },
   settingSubtitle: {
     fontSize: 14,
-    color: '#9CA3AF',
+    
   },
   actionsList: {
-    backgroundColor: '#1a1a1a',
+    
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#2a2a2a',
+    
     overflow: 'hidden',
   },
   actionItem: {
@@ -578,7 +579,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#2a2a2a',
+    
   },
   actionIcon: {
     width: 40,
@@ -594,18 +595,18 @@ const styles = StyleSheet.create({
   actionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: 'white',
+    
     marginBottom: 2,
   },
   actionSubtitle: {
     fontSize: 14,
-    color: '#9CA3AF',
+    
   },
   legalList: {
-    backgroundColor: '#1a1a1a',
+    
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#2a2a2a',
+    
     overflow: 'hidden',
   },
   legalItem: {
@@ -613,7 +614,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#2a2a2a',
+    
   },
   legalIcon: {
     width: 40,
@@ -630,21 +631,21 @@ const styles = StyleSheet.create({
   legalTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: 'white',
+    
     marginBottom: 2,
   },
   legalSubtitle: {
     fontSize: 14,
-    color: '#9CA3AF',
+    
   },
   supportCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#1a1a1a',
+    
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
-    borderColor: '#2a2a2a',
+    
   },
   supportIcon: {
     width: 48,
@@ -661,12 +662,12 @@ const styles = StyleSheet.create({
   supportTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: 'white',
+    
     marginBottom: 4,
   },
   supportDescription: {
     fontSize: 14,
-    color: '#9CA3AF',
+    
   },
   supportButton: {
     flexDirection: 'row',
