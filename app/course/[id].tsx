@@ -7,10 +7,14 @@ import {
   TouchableOpacity,
   Image,
   Alert,
+  Platform,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
+import AnimatedSection from '@/components/AnimatedSection';
+import AnimatedPressable from '@/components/AnimatedPressable';
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import {
   ArrowLeft,
   ChevronDown,
@@ -349,18 +353,41 @@ const courseDataMap: Record<string, CourseData> = {
 
 function FAQItem({ item, colors }: { item: FAQ; colors: any }) {
   const [open, setOpen] = useState(false);
+  const rotation = useSharedValue(0);
+  const answerOpacity = useSharedValue(0);
+
+  const chevronStyle = useAnimatedStyle(() => ({
+    transform: [{ rotate: `${rotation.value}deg` }],
+  }));
+
+  const answerStyle = useAnimatedStyle(() => ({
+    opacity: answerOpacity.value,
+  }));
+
+  const toggle = () => {
+    const willOpen = !open;
+    setOpen(willOpen);
+    rotation.value = withTiming(willOpen ? 180 : 0, { duration: 250 });
+    answerOpacity.value = withTiming(willOpen ? 1 : 0, { duration: 250 });
+  };
+
   return (
-    <TouchableOpacity
+    <AnimatedPressable
       style={[faqStyles.item, { backgroundColor: colors.card }]}
-      onPress={() => setOpen(!open)}
-      activeOpacity={0.7}
+      onPress={toggle}
     >
       <View style={faqStyles.questionRow}>
         <Text style={[faqStyles.question, { color: colors.text }]}>{item.q}</Text>
-        {open ? <ChevronUp size={18} color="#8B5CF6" /> : <ChevronDown size={18} color="#8B5CF6" />}
+        <Animated.View style={chevronStyle}>
+          <ChevronDown size={18} color="#8B5CF6" />
+        </Animated.View>
       </View>
-      {open && <Text style={[faqStyles.answer, { color: colors.textSecondary }]}>{item.a}</Text>}
-    </TouchableOpacity>
+      {open && (
+        <Animated.View style={answerStyle}>
+          <Text style={[faqStyles.answer, { color: colors.textSecondary }]}>{item.a}</Text>
+        </Animated.View>
+      )}
+    </AnimatedPressable>
   );
 }
 
@@ -413,7 +440,7 @@ export default function CourseDetailScreen() {
 
           {/* Sections */}
           {course.sections.map((section, sIdx) => (
-            <View key={sIdx}>
+            <AnimatedSection key={sIdx}>
               <Text style={[styles.sectionTitle, { color: colors.text }]}>{section.title}</Text>
               {section.items.map((item, iIdx) => (
                 <View key={iIdx} style={styles.sectionItem}>
@@ -421,7 +448,7 @@ export default function CourseDetailScreen() {
                 </View>
               ))}
               <View style={styles.divider} />
-            </View>
+            </AnimatedSection>
           ))}
 
           {/* FAQ */}
@@ -454,11 +481,11 @@ export default function CourseDetailScreen() {
           <Text style={styles.footerLabel}>Investimento</Text>
           <Text style={styles.footerPrice}>R$ {course.price},00</Text>
         </View>
-        <TouchableOpacity activeOpacity={0.8} onPress={handleBuy}>
+        <AnimatedPressable onPress={handleBuy}>
           <LinearGradient colors={['#8B5CF6', '#6D28D9'] as const} style={styles.buyBtn}>
             <Text style={styles.buyBtnText}>Garantir Acesso</Text>
           </LinearGradient>
-        </TouchableOpacity>
+        </AnimatedPressable>
       </View>
     </View>
   );
@@ -466,9 +493,11 @@ export default function CourseDetailScreen() {
 
 const faqStyles = StyleSheet.create({
   item: {
-    borderRadius: 10,
+    borderRadius: 12,
     padding: 14,
     marginBottom: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.05)',
   },
   questionRow: {
     flexDirection: 'row',
@@ -598,6 +627,10 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingBottom: 34,
     borderTopWidth: 1,
+    ...Platform.select({
+      ios: { shadowColor: '#000', shadowOffset: { width: 0, height: -4 }, shadowOpacity: 0.15, shadowRadius: 12 },
+      android: { elevation: 8 },
+    }),
   },
   footerLabel: {
     fontSize: 12,

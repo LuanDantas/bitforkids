@@ -4,16 +4,24 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  TouchableOpacity,
   Image,
+  Platform,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
+import AnimatedSection from '@/components/AnimatedSection';
+import AnimatedPressable from '@/components/AnimatedPressable';
 import {
   ChevronRight,
   Shield,
 } from 'lucide-react-native';
+
+const cardShadow = Platform.select({
+  ios: { shadowColor: '#8B5CF6', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.15, shadowRadius: 12 },
+  android: { elevation: 6 },
+  default: {},
+}) as any;
 
 const courses = [
   {
@@ -54,10 +62,9 @@ const targetAudience = [
 
 function CourseCard({ course, onPress, colors }: any) {
   return (
-    <TouchableOpacity
-      style={[styles.courseCard, { backgroundColor: colors.card }]}
+    <AnimatedPressable
+      style={[styles.courseCard, { backgroundColor: colors.card }, cardShadow]}
       onPress={onPress}
-      activeOpacity={0.8}
     >
       <Image source={course.image} style={styles.courseImage} resizeMode="cover" />
       <View style={styles.courseContent}>
@@ -79,7 +86,7 @@ function CourseCard({ course, onPress, colors }: any) {
           </LinearGradient>
         </View>
       </View>
-    </TouchableOpacity>
+    </AnimatedPressable>
   );
 }
 
@@ -107,6 +114,7 @@ export default function CoursesScreen() {
       <View style={styles.content}>
 
         {/* Para quem são */}
+        <AnimatedSection>
         <Text style={[styles.sectionTitle, { color: colors.text }]}>
           Para quem são nossos cursos?
         </Text>
@@ -123,10 +131,12 @@ export default function CoursesScreen() {
             </View>
           </View>
         ))}
+        </AnimatedSection>
 
         <View style={styles.divider} />
 
         {/* Trilha 1 */}
+        <AnimatedSection>
         <LinearGradient colors={['#F7931A', '#E2761B'] as const} style={styles.trailBadge}>
           <Text style={styles.trailBadgeText}>🟠 TRILHA 1: A Jornada do Iniciante</Text>
         </LinearGradient>
@@ -142,10 +152,12 @@ export default function CoursesScreen() {
             colors={colors}
           />
         ))}
+        </AnimatedSection>
 
         <View style={styles.divider} />
 
         {/* Trilha 2 */}
+        <AnimatedSection>
         <LinearGradient colors={['#3B82F6', '#1D4ED8'] as const} style={styles.trailBadge}>
           <Text style={styles.trailBadgeText}>🔵 TRILHA 2: A Jornada da Soberania</Text>
         </LinearGradient>
@@ -161,10 +173,12 @@ export default function CoursesScreen() {
             colors={colors}
           />
         ))}
+        </AnimatedSection>
 
         <View style={styles.divider} />
 
         {/* Garantia */}
+        <AnimatedSection>
         <View style={[styles.guaranteeCard, { backgroundColor: colors.card }]}>
           <Shield size={32} color="#10B981" />
           <Text style={[styles.guaranteeTitle, { color: colors.text }]}>
@@ -174,6 +188,7 @@ export default function CoursesScreen() {
             Se não for para você, devolvo 100% do valor. Sem perguntas. A decisão é totalmente sua, o risco é todo meu.
           </Text>
         </View>
+        </AnimatedSection>
 
         <View style={{ height: 40 }} />
       </View>
@@ -220,13 +235,22 @@ const styles = StyleSheet.create({
   audienceItem: {
     flexDirection: 'row',
     padding: 14,
-    borderRadius: 12,
+    borderRadius: 16,
     marginBottom: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.05)',
   },
   audienceEmoji: {
-    fontSize: 24,
+    fontSize: 20,
     marginRight: 12,
-    marginTop: 2,
+    marginTop: 4,
+    width: 40,
+    height: 40,
+    textAlign: 'center',
+    lineHeight: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(139, 92, 246, 0.1)',
+    overflow: 'hidden',
   },
   audienceContent: {
     flex: 1,
@@ -262,9 +286,11 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   courseCard: {
-    borderRadius: 12,
+    borderRadius: 16,
     overflow: 'hidden',
     marginBottom: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.05)',
   },
   courseImage: {
     width: '100%',
@@ -312,9 +338,15 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   guaranteeCard: {
-    borderRadius: 12,
+    borderRadius: 16,
     padding: 24,
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(16, 185, 129, 0.2)',
+    ...Platform.select({
+      ios: { shadowColor: '#10B981', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.15, shadowRadius: 10 },
+      android: { elevation: 4 },
+    }),
   },
   guaranteeTitle: {
     fontSize: 18,

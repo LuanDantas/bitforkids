@@ -4,35 +4,23 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  TouchableOpacity,
   Image,
-  Dimensions,
+  Platform,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import VSLModal from '@/components/VSLModal';
+import AnimatedSection from '@/components/AnimatedSection';
+import AnimatedPressable from '@/components/AnimatedPressable';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useVSL } from '@/contexts/VSLContext';
 import { StatusBar } from 'expo-status-bar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
-  Globe,
-  AlertTriangle,
-  Shield,
-  Rocket,
-  Lock,
-  Bitcoin,
-  Target,
-  CreditCard,
-  CheckCircle,
-  Lightbulb,
-  BookOpen,
   ChevronRight,
   Settings,
   LogOut,
 } from 'lucide-react-native';
-
-const { width } = Dimensions.get('window');
 
 function SectionTitle({ emoji, title, color }: { emoji: string; title: string; color: string }) {
   return (
@@ -57,7 +45,7 @@ function BulletItem({ emoji, title, description, textColor, descColor }: { emoji
 
 function CourseTrailCard({ id, title, subtitle, price, image, onPress, colors }: any) {
   return (
-    <TouchableOpacity style={[sectionStyles.courseCard, { backgroundColor: colors.card }]} onPress={onPress} activeOpacity={0.8}>
+    <AnimatedPressable onPress={onPress} style={[sectionStyles.courseCard, { backgroundColor: colors.card }, shadowStyle]}>
       <Image source={image} style={sectionStyles.courseImage} resizeMode="cover" />
       <View style={sectionStyles.courseInfo}>
         <Text style={[sectionStyles.courseTitle, { color: colors.text }]}>{title}</Text>
@@ -67,9 +55,22 @@ function CourseTrailCard({ id, title, subtitle, price, image, onPress, colors }:
           <ChevronRight size={18} color="#8B5CF6" />
         </View>
       </View>
-    </TouchableOpacity>
+    </AnimatedPressable>
   );
 }
+
+const shadowStyle = Platform.select({
+  ios: {
+    shadowColor: '#8B5CF6',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
+  },
+  android: {
+    elevation: 6,
+  },
+  default: {},
+}) as any;
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -113,10 +114,11 @@ export default function HomeScreen() {
         <View style={styles.content}>
 
           {/* BEM-VINDO */}
-          <SectionTitle emoji="🌐" title="Bem-vindo à Rede Financeira do Futuro" color={colors.text} />
-          <Text style={[styles.sectionSubtitle, { color: '#8B5CF6' }]}>
-            Chega de depender de bancos para usar o seu próprio dinheiro.
-          </Text>
+          <AnimatedSection>
+            <SectionTitle emoji="🌐" title="Bem-vindo à Rede Financeira do Futuro" color={colors.text} />
+            <Text style={[styles.sectionSubtitle, { color: '#8B5CF6' }]}>
+              Chega de depender de bancos para usar o seu próprio dinheiro.
+            </Text>
           <Text style={[styles.paragraph, { color: colors.text }]}>
             O objetivo da BITFORKIDS e do DEFI-BIT é simples: libertar você da dependência de instituições financeiras e do controle estatal, permitindo que você assuma a soberania total sobre seu patrimônio. Sem precisar de documentos ou CPF.
           </Text>
@@ -129,8 +131,10 @@ export default function HomeScreen() {
           <Text style={[styles.paragraph, { color: colors.text }]}>
             Em nossos treinamentos, você vai aprender como usar Bitcoin para preservar valor, utilizar dólar digital para transações globais e manter seus ativos em autocustódia, onde somente você tem controle. Trata-se de uma nova infraestrutura financeira aberta e resistente à censura, onde seu dinheiro não pode ser bloqueado, congelado ou confiscado por bancos ou governos.
           </Text>
+          </AnimatedSection>
 
           <View style={styles.divider} />
+          <AnimatedSection>
 
           {/* ARMADILHA */}
           <SectionTitle emoji="🌍" title="O Sistema Financeiro é uma Armadilha" color={colors.text} />
@@ -144,7 +148,9 @@ export default function HomeScreen() {
           <BulletItem emoji="🏦" title="Dependência de Terceiros" description='Você precisa de permissão para tudo. Se o banco decidir que sua transação é "suspeita", ele bloqueia seu acesso sem aviso.' textColor={colors.text} descColor={colors.textSecondary} />
           <BulletItem emoji="⚖️" title="Regras Unilaterais" description="Taxas, limites e horários de transferência são impostos sem que você possa questionar." textColor={colors.text} descColor={colors.textSecondary} />
 
+          </AnimatedSection>
           <View style={styles.divider} />
+          <AnimatedSection>
 
           {/* INIMIGO */}
           <SectionTitle emoji="🛑" title='O Inimigo: A "Coleira Digital"' color={colors.text} />
@@ -155,7 +161,9 @@ export default function HomeScreen() {
             A conta bancária funciona como uma "coleira digital": sob qualquer pretexto, o governo pode congelar seus bens e tornar seu patrimônio um refém. No sistema atual, o Estado não precisa bater à sua porta para confiscar o que é seu; ele faz isso com um clique.
           </Text>
 
+          </AnimatedSection>
           <View style={styles.divider} />
+          <AnimatedSection>
 
           {/* SOLUÇÃO */}
           <SectionTitle emoji="🚀" title="A Solução: Fim da Coleira Digital" color={colors.text} />
@@ -169,7 +177,9 @@ export default function HomeScreen() {
           <BulletItem emoji="🚫" title="Resistência a Impostos Abusivos" description="Ao retirar seu patrimônio do sistema tradicional, você interrompe a drenagem arbitrária de recursos." textColor={colors.text} descColor={colors.textSecondary} />
           <BulletItem emoji="🌍" title="Transações Sem Fronteiras" description="Envie qualquer valor para qualquer lugar do mundo em minutos, sem justificativas." textColor={colors.text} descColor={colors.textSecondary} />
 
+          </AnimatedSection>
           <View style={styles.divider} />
+          <AnimatedSection>
 
           {/* AUTOCUSTÓDIA */}
           <SectionTitle emoji="🔐" title="A Chave para Tudo: A Autocustódia" color={colors.text} />
@@ -189,7 +199,9 @@ export default function HomeScreen() {
             <Text style={styles.noNeedItem}>❌ CPF</Text>
           </View>
 
+          </AnimatedSection>
           <View style={styles.divider} />
+          <AnimatedSection>
 
           {/* REDES DA NOVA ECONOMIA */}
           <SectionTitle emoji="🟠" title="As Redes da Nova Economia" color={colors.text} />
@@ -208,7 +220,9 @@ export default function HomeScreen() {
             </Text>
           </View>
 
+          </AnimatedSection>
           <View style={styles.divider} />
+          <AnimatedSection>
 
           {/* O QUE VAI DOMINAR */}
           <SectionTitle emoji="🎯" title="O que você vai dominar" color={colors.text} />
@@ -220,7 +234,9 @@ export default function HomeScreen() {
           <BulletItem emoji="🔐" title="Maestria em Autocustódia" description="O método definitivo para guardar suas próprias chaves e garantir que apenas você tenha acesso aos seus ativos." textColor={colors.text} descColor={colors.textSecondary} />
           <BulletItem emoji="🚫" title="Infraestrutura Sem Permissões" description="Um ecossistema onde você não precisa apresentar documentos ou pedir permissão para transacionar." textColor={colors.text} descColor={colors.textSecondary} />
 
+          </AnimatedSection>
           <View style={styles.divider} />
+          <AnimatedSection>
 
           {/* POR QUE PARA VOCÊ */}
           <SectionTitle emoji="🎯" title="Por que nossos treinamentos são para você?" color={colors.text} />
@@ -234,7 +250,9 @@ export default function HomeScreen() {
           <BulletItem emoji="📖" title="Simplificar o complexo" description="Traduzimos o Bitcoin e o universo DeFi para que qualquer leigo entenda e aplique hoje mesmo." textColor={colors.text} descColor={colors.textSecondary} />
           <BulletItem emoji="⚠️" title="Evitar erros fatais" description="Treine o olhar para identificar golpes, evitar armadilhas e manter a segurança absoluta do seu capital." textColor={colors.text} descColor={colors.textSecondary} />
 
+          </AnimatedSection>
           <View style={styles.divider} />
+          <AnimatedSection>
 
           {/* CRIPTO NO DIA A DIA */}
           <SectionTitle emoji="💳" title="Liberdade Real: Cripto no seu Dia a Dia" color={colors.text} />
@@ -247,7 +265,9 @@ export default function HomeScreen() {
           <BulletItem emoji="🌎" title="Transferências Globais" description="Instantâneas e sem burocracias." textColor={colors.text} descColor={colors.textSecondary} />
           <BulletItem emoji="📱" title="Apps e Carteiras" description="Transforme seu saldo em um ativo líquido para uso diário." textColor={colors.text} descColor={colors.textSecondary} />
 
+          </AnimatedSection>
           <View style={styles.divider} />
+          <AnimatedSection>
 
           {/* FEITO PARA VOCÊ */}
           <SectionTitle emoji="✅" title="Feito para você: Comece agora com segurança" color={colors.text} />
@@ -259,7 +279,9 @@ export default function HomeScreen() {
           <BulletItem emoji="🚫" title="Sem intermediários" description='Você nunca precisará "dar o seu dinheiro" para ninguém.' textColor={colors.text} descColor={colors.textSecondary} />
           <BulletItem emoji="🔐" title="Controle total" description="Domínio completo da sua carteira e autocustódia." textColor={colors.text} descColor={colors.textSecondary} />
 
+          </AnimatedSection>
           <View style={styles.divider} />
+          <AnimatedSection>
 
           {/* POR QUE APRENDER COMIGO */}
           <SectionTitle emoji="💡" title="Por que aprender comigo?" color={colors.text} />
@@ -273,7 +295,9 @@ export default function HomeScreen() {
             Eu não ensino apenas "onde clicar"; eu ensino como se libertar. Se você busca resultado prático, segurança e o fim da dependência bancária, eu vou te mostrar o caminho mais curto e seguro para você ser, finalmente, o dono do seu próprio patrimônio.
           </Text>
 
+          </AnimatedSection>
           <View style={styles.divider} />
+          <AnimatedSection>
 
           {/* NOSSOS TREINAMENTOS */}
           <SectionTitle emoji="📚" title="Nossos Treinamentos: Escolha sua Trilha" color={colors.text} />
@@ -332,7 +356,9 @@ export default function HomeScreen() {
             </Text>
           </View>
 
+          </AnimatedSection>
           <View style={styles.divider} />
+          <AnimatedSection>
 
           {/* MANIFESTO */}
           <View style={[styles.manifestoCard, { backgroundColor: '#1a0a2e' }]}>
@@ -353,7 +379,9 @@ export default function HomeScreen() {
             </Text>
           </View>
 
+          </AnimatedSection>
           <View style={styles.divider} />
+          <AnimatedSection>
 
           {/* QUEM SOU EU */}
           <SectionTitle emoji="👩‍💼" title="Quem sou eu" color={colors.text} />
@@ -392,7 +420,9 @@ export default function HomeScreen() {
             Criei estes treinamentos para ajudar pessoas que desejam proteger seu patrimônio, reduzir a dependência do sistema bancário tradicional, aprender a utilizar criptomoedas com segurança e conquistar mais autonomia sobre o próprio dinheiro. Tudo explicado de forma simples, clara e acessível, mesmo para quem está começando do zero.
           </Text>
 
+          </AnimatedSection>
           <View style={styles.divider} />
+          <AnimatedSection>
 
           {/* FAMÍLIA */}
           <SectionTitle emoji="👨‍👩‍👧" title="Família e futuro" color={colors.text} />
@@ -409,22 +439,23 @@ export default function HomeScreen() {
           </Text>
 
           {/* AÇÕES RÁPIDAS */}
+          </AnimatedSection>
           <View style={styles.divider} />
           <View style={styles.quickActions}>
-            <TouchableOpacity
-              style={[styles.quickActionBtn, { backgroundColor: colors.card }]}
+            <AnimatedPressable
+              style={[styles.quickActionBtn, { backgroundColor: colors.card }, shadowStyle]}
               onPress={() => router.push('/settings')}
             >
               <Settings size={20} color="#8B5CF6" />
               <Text style={[styles.quickActionText, { color: colors.text }]}>Configurações</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.quickActionBtn, { backgroundColor: colors.card }]}
+            </AnimatedPressable>
+            <AnimatedPressable
+              style={[styles.quickActionBtn, { backgroundColor: colors.card }, shadowStyle]}
               onPress={() => router.replace('/auth/login')}
             >
               <LogOut size={20} color="#EF4444" />
               <Text style={[styles.quickActionText, { color: '#EF4444' }]}>Sair</Text>
-            </TouchableOpacity>
+            </AnimatedPressable>
           </View>
 
           <View style={{ height: 40 }} />
@@ -482,9 +513,11 @@ const sectionStyles = StyleSheet.create({
     lineHeight: 20,
   },
   courseCard: {
-    borderRadius: 12,
+    borderRadius: 16,
     overflow: 'hidden',
     marginBottom: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.05)',
   },
   courseImage: {
     width: '100%',
@@ -580,10 +613,14 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   networkCard: {
-    borderRadius: 12,
+    borderRadius: 16,
     borderWidth: 1,
     padding: 16,
     marginBottom: 12,
+    ...Platform.select({
+      ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.15, shadowRadius: 8 },
+      android: { elevation: 4 },
+    }),
   },
   networkEmoji: {
     fontSize: 28,
@@ -615,10 +652,16 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   guaranteeCard: {
-    borderRadius: 12,
+    borderRadius: 16,
     padding: 20,
     alignItems: 'center',
     marginTop: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(16, 185, 129, 0.2)',
+    ...Platform.select({
+      ios: { shadowColor: '#10B981', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.15, shadowRadius: 10 },
+      android: { elevation: 4 },
+    }),
   },
   guaranteeEmoji: {
     fontSize: 32,
@@ -636,8 +679,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   manifestoCard: {
-    borderRadius: 12,
+    borderRadius: 16,
     padding: 24,
+    borderWidth: 1,
+    borderColor: 'rgba(139, 92, 246, 0.2)',
+    ...Platform.select({
+      ios: { shadowColor: '#8B5CF6', shadowOffset: { width: 0, height: 6 }, shadowOpacity: 0.2, shadowRadius: 12 },
+      android: { elevation: 6 },
+    }),
   },
   manifestoTitle: {
     color: '#F7931A',

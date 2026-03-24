@@ -1,11 +1,12 @@
-import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
 import { ArrowRight } from 'lucide-react-native';
-import { TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
+import AnimatedPressable from '@/components/AnimatedPressable';
+import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 
 export default function LandingPage() {
   const router = useRouter();
@@ -19,42 +20,53 @@ export default function LandingPage() {
     >
       <StatusBar style="light" />
       <View style={{ height: insets.top }} />
-      <Image
-        source={require('../assets/images/hero-banner.png')}
-        style={styles.heroBanner}
-        resizeMode="contain"
-      />
+
+      <Animated.View entering={FadeIn.duration(600)}>
+        <Image
+          source={require('../assets/images/hero-banner.png')}
+          style={styles.heroBanner}
+          resizeMode="contain"
+        />
+      </Animated.View>
 
       <View style={styles.body}>
-        <Text style={[styles.highlight, { color: '#F7931A' }]}>
+        <Animated.Text
+          entering={FadeInDown.delay(200).duration(500)}
+          style={[styles.highlight, { color: '#F7931A' }]}
+        >
           Do Zero à Soberania
-        </Text>
+        </Animated.Text>
 
-        <Text style={[styles.description, { color: colors.text }]}>
+        <Animated.Text
+          entering={FadeInDown.delay(400).duration(500)}
+          style={[styles.description, { color: colors.text }]}
+        >
           Aprenda a dominar uma infraestrutura financeira que não exige CPF e
           coloque seu dinheiro sob seu controle total — mesmo começando hoje e
           com pouco para investir.
-        </Text>
+        </Animated.Text>
 
-        <Text style={[styles.emphasis, { color: colors.text }]}>
+        <Animated.Text
+          entering={FadeInDown.delay(600).duration(500)}
+          style={[styles.emphasis, { color: colors.text }]}
+        >
           O que você aprenderá aqui é algo que a maioria das pessoas só vai
           descobrir quando for tarde demais.
-        </Text>
+        </Animated.Text>
 
-        <TouchableOpacity
-          activeOpacity={0.8}
-          onPress={() => router.push('/auth/login')}
-        >
-          <LinearGradient
-            colors={['#8B5CF6', '#6D28D9']}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={styles.ctaButton}
-          >
-            <Text style={styles.ctaText}>Começar Agora</Text>
-            <ArrowRight size={20} color="#FFFFFF" />
-          </LinearGradient>
-        </TouchableOpacity>
+        <Animated.View entering={FadeInDown.delay(800).duration(500)}>
+          <AnimatedPressable onPress={() => router.push('/auth/login')}>
+            <LinearGradient
+              colors={['#8B5CF6', '#6D28D9']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.ctaButton}
+            >
+              <Text style={styles.ctaText}>Começar Agora</Text>
+              <ArrowRight size={20} color="#FFFFFF" />
+            </LinearGradient>
+          </AnimatedPressable>
+        </Animated.View>
       </View>
     </ScrollView>
   );
@@ -103,6 +115,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginTop: 24,
     gap: 8,
+    ...Platform.select({
+      ios: { shadowColor: '#8B5CF6', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 10 },
+      android: { elevation: 6 },
+    }),
   },
   ctaText: {
     color: '#FFFFFF',

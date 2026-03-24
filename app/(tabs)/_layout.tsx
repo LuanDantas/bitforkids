@@ -1,3 +1,4 @@
+import { Platform } from 'react-native';
 import { Tabs } from 'expo-router';
 import {
   Chrome as Home,
@@ -17,17 +18,27 @@ export default function TabLayout() {
         headerShown: false,
         tabBarStyle: {
           backgroundColor: colors.tabBar,
-          borderTopColor: colors.tabBarBorder,
-          borderTopWidth: 1,
+          borderTopColor: 'transparent',
+          borderTopWidth: 0,
           paddingBottom: 8,
-          paddingTop: 8,
-          height: 70,
+          paddingTop: 10,
+          height: 72,
+          ...Platform.select({
+            ios: {
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: -4 },
+              shadowOpacity: 0.1,
+              shadowRadius: 12,
+            },
+            android: { elevation: 8 },
+          }),
         },
         tabBarActiveTintColor: '#8B5CF6',
         tabBarInactiveTintColor: colors.textTertiary,
         tabBarLabelStyle: {
-          fontSize: 12,
+          fontSize: 11,
           fontWeight: '600',
+          marginTop: 2,
         },
       }}
     >
