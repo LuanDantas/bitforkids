@@ -13,6 +13,7 @@ import VSLModal from '@/components/VSLModal';
 import AnimatedSection from '@/components/AnimatedSection';
 import AnimatedPressable from '@/components/AnimatedPressable';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { useVSL } from '@/contexts/VSLContext';
 import { StatusBar } from 'expo-status-bar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -75,6 +76,7 @@ const shadowStyle = Platform.select({
 export default function HomeScreen() {
   const router = useRouter();
   const { colors } = useTheme();
+  const { t } = useLanguage();
   const insets = useSafeAreaInsets();
   const {
     shouldShowVSL,
@@ -104,10 +106,10 @@ export default function HomeScreen() {
         />
         <View style={styles.heroTextBox}>
           <Text style={[styles.heroText, { color: colors.text }]}>
-            Aprenda a dominar uma infraestrutura financeira que não exige CPF e coloque seu dinheiro sob seu controle total — mesmo começando hoje e com pouco para investir.
+            {t('home.heroText')}
           </Text>
           <Text style={styles.heroHighlight}>
-            O que você aprenderá aqui é algo que a maioria das pessoas só vai descobrir quando for tarde demais.
+            {t('home.heroHighlight')}
           </Text>
         </View>
 
@@ -115,21 +117,21 @@ export default function HomeScreen() {
 
           {/* BEM-VINDO */}
           <AnimatedSection>
-            <SectionTitle emoji="🌐" title="Bem-vindo à Rede Financeira do Futuro" color={colors.text} />
+            <SectionTitle emoji="🌐" title={t('home.welcomeTitle')} color={colors.text} />
             <Text style={[styles.sectionSubtitle, { color: '#8B5CF6' }]}>
-              Chega de depender de bancos para usar o seu próprio dinheiro.
+              {t('home.welcomeSubtitle')}
             </Text>
           <Text style={[styles.paragraph, { color: colors.text }]}>
-            O objetivo da BITFORKIDS e do DEFI-BIT é simples: libertar você da dependência de instituições financeiras e do controle estatal, permitindo que você assuma a soberania total sobre seu patrimônio. Sem precisar de documentos ou CPF.
+            {t('home.welcomeParagraph1')}
           </Text>
           <Text style={[styles.paragraph, { color: colors.text }]}>
-            Tudo o que você precisa é de um computador ou celular e acesso à internet.
+            {t('home.welcomeParagraph2')}
           </Text>
           <Text style={[styles.paragraph, { color: colors.text }]}>
-            Estamos vivendo uma das maiores transformações da história do dinheiro. Pela primeira vez, redes como Bitcoin e Ethereum permitem que qualquer pessoa armazene valor, movimente dinheiro globalmente e utilize serviços financeiros diretamente pela internet, sem precisar pedir permissão para usar o próprio dinheiro.
+            {t('home.welcomeParagraph3')}
           </Text>
           <Text style={[styles.paragraph, { color: colors.text }]}>
-            Em nossos treinamentos, você vai aprender como usar Bitcoin para preservar valor, utilizar dólar digital para transações globais e manter seus ativos em autocustódia, onde somente você tem controle. Trata-se de uma nova infraestrutura financeira aberta e resistente à censura, onde seu dinheiro não pode ser bloqueado, congelado ou confiscado por bancos ou governos.
+            {t('home.welcomeParagraph4')}
           </Text>
           </AnimatedSection>
 
@@ -137,17 +139,17 @@ export default function HomeScreen() {
           <AnimatedSection>
 
           {/* ARMADILHA */}
-          <SectionTitle emoji="🌍" title="O Sistema Financeiro é uma Armadilha" color={colors.text} />
+          <SectionTitle emoji="🌍" title={t('home.trapTitle')} color={colors.text} />
           <Text style={[styles.paragraph, { color: colors.text }]}>
-            O modelo tradicional não foi criado para a sua liberdade, mas para ditar as regras de como você deve viver.
+            {t('home.trapIntro')}
           </Text>
           <View style={[styles.sectionCard, { backgroundColor: colors.card }, shadowStyle]}>
-            <BulletItem emoji="📋" title="Exclusão e Burocracia" description="Exigem CPF limpo, comprovantes e pilhas de documentos." textColor={colors.text} descColor={colors.textSecondary} />
-            <BulletItem emoji="📉" title="Inflação" description="Imposto invisível que corrói seu poder de compra." textColor={colors.text} descColor={colors.textSecondary} />
-            <BulletItem emoji="🔒" title="Risco de Confisco" description="Seu saldo pode ser bloqueado em segundos." textColor={colors.text} descColor={colors.textSecondary} />
-            <BulletItem emoji="👁️" title="Vigilância Total" description="Cada transação é rastreada e reportada." textColor={colors.text} descColor={colors.textSecondary} />
-            <BulletItem emoji="🏦" title="Dependência de Terceiros" description="Você precisa de permissão para tudo." textColor={colors.text} descColor={colors.textSecondary} />
-            <BulletItem emoji="⚖️" title="Regras Unilaterais" description="Taxas e limites impostos sem questionamento." textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="📋" title={t('home.trapBullet1Title')} description={t('home.trapBullet1Desc')} textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="📉" title={t('home.trapBullet2Title')} description={t('home.trapBullet2Desc')} textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="🔒" title={t('home.trapBullet3Title')} description={t('home.trapBullet3Desc')} textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="👁️" title={t('home.trapBullet4Title')} description={t('home.trapBullet4Desc')} textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="🏦" title={t('home.trapBullet5Title')} description={t('home.trapBullet5Desc')} textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="⚖️" title={t('home.trapBullet6Title')} description={t('home.trapBullet6Desc')} textColor={colors.text} descColor={colors.textSecondary} />
           </View>
 
           </AnimatedSection>
@@ -155,12 +157,12 @@ export default function HomeScreen() {
           <AnimatedSection>
 
           {/* INIMIGO */}
-          <SectionTitle emoji="🛑" title='O Inimigo: A "Coleira Digital"' color={colors.text} />
+          <SectionTitle emoji="🛑" title={t('home.enemyTitle')} color={colors.text} />
           <Text style={[styles.paragraph, { color: colors.text }]}>
-            Além da inflação, o sistema bancário é a maior ferramenta de abuso de poder dos governos. O Estado tem acesso total ao rastro da sua vida financeira, drenando recursos através de impostos automáticos antes mesmo que você possa reagir.
+            {t('home.enemyParagraph1')}
           </Text>
           <Text style={[styles.paragraph, { color: colors.text }]}>
-            A conta bancária funciona como uma "coleira digital": sob qualquer pretexto, o governo pode congelar seus bens e tornar seu patrimônio um refém. No sistema atual, o Estado não precisa bater à sua porta para confiscar o que é seu; ele faz isso com um clique.
+            {t('home.enemyParagraph2')}
           </Text>
 
           </AnimatedSection>
@@ -168,17 +170,17 @@ export default function HomeScreen() {
           <AnimatedSection>
 
           {/* SOLUÇÃO */}
-          <SectionTitle emoji="🚀" title="A Solução: Fim da Coleira Digital" color={colors.text} />
+          <SectionTitle emoji="🚀" title={t('home.solutionTitle')} color={colors.text} />
           <Text style={[styles.paragraph, { color: colors.text }]}>
-            A tecnologia desse novo sistema de finanças devolve o poder a quem ele pertence: você. Ao eliminar intermediários como bancos, eliminamos a necessidade de permissão.
+            {t('home.solutionIntro')}
           </Text>
           <View style={[styles.sectionCard, { backgroundColor: colors.card }, shadowStyle]}>
-            <BulletItem emoji="🛡️" title="Soberania contra o Confisco" description="Você detém a posse real. Ninguém pode bloquear sua conta." textColor={colors.text} descColor={colors.textSecondary} />
-            <BulletItem emoji="📊" title="Imunidade à Inflação" description="21 milhões — defesa contra impressão de moeda." textColor={colors.text} descColor={colors.textSecondary} />
-            <BulletItem emoji="💵" title="Dólar Criptografado" description="Stablecoins para manter poder de compra em dólar." textColor={colors.text} descColor={colors.textSecondary} />
-            <BulletItem emoji="🔓" title="Privacidade e Liberdade" description="Transacione sem ficha limpa ou autorização." textColor={colors.text} descColor={colors.textSecondary} />
-            <BulletItem emoji="🚫" title="Sem Impostos Abusivos" description="Interrompa a drenagem arbitrária de recursos." textColor={colors.text} descColor={colors.textSecondary} />
-            <BulletItem emoji="🌍" title="Sem Fronteiras" description="Envie qualquer valor para qualquer lugar do mundo." textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="🛡️" title={t('home.solutionBullet1Title')} description={t('home.solutionBullet1Desc')} textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="📊" title={t('home.solutionBullet2Title')} description={t('home.solutionBullet2Desc')} textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="💵" title={t('home.solutionBullet3Title')} description={t('home.solutionBullet3Desc')} textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="🔓" title={t('home.solutionBullet4Title')} description={t('home.solutionBullet4Desc')} textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="🚫" title={t('home.solutionBullet5Title')} description={t('home.solutionBullet5Desc')} textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="🌍" title={t('home.solutionBullet6Title')} description={t('home.solutionBullet6Desc')} textColor={colors.text} descColor={colors.textSecondary} />
           </View>
 
           </AnimatedSection>
@@ -186,21 +188,21 @@ export default function HomeScreen() {
           <AnimatedSection>
 
           {/* AUTOCUSTÓDIA */}
-          <SectionTitle emoji="🔐" title="A Chave para Tudo: A Autocustódia" color={colors.text} />
+          <SectionTitle emoji="🔐" title={t('home.custodyTitle')} color={colors.text} />
           <Text style={[styles.paragraph, { color: colors.text }]}>
-            A verdadeira saída para o abuso estatal começa na autocustódia. Enquanto seu patrimônio estiver em bancos ou corretoras, você está apenas pedindo permissão para usar o que é seu.
+            {t('home.custodyParagraph1')}
           </Text>
           <Text style={[styles.paragraph, { color: colors.text }]}>
-            A autocustódia é o ato de mover seus ativos para uma carteira onde só você possui a chave privada. É aqui que a "coleira" é rompida: quando você detém a custódia, seu patrimônio torna-se impossível de ser bloqueado ou censurado.
+            {t('home.custodyParagraph2')}
           </Text>
           <Text style={[styles.highlightText, { color: colors.text }]}>
-            Se você não guarda suas chaves, você não é o dono do seu dinheiro; você é apenas um usuário sob vigilância.
+            {t('home.custodyHighlight')}
           </Text>
           <View style={styles.noNeedRow}>
-            <Text style={styles.noNeedItem}>❌ bancos</Text>
-            <Text style={styles.noNeedItem}>❌ intermediários</Text>
-            <Text style={styles.noNeedItem}>❌ autorização</Text>
-            <Text style={styles.noNeedItem}>❌ CPF</Text>
+            <Text style={styles.noNeedItem}>❌ {t('home.custodyNoNeed1')}</Text>
+            <Text style={styles.noNeedItem}>❌ {t('home.custodyNoNeed2')}</Text>
+            <Text style={styles.noNeedItem}>❌ {t('home.custodyNoNeed3')}</Text>
+            <Text style={styles.noNeedItem}>❌ {t('home.custodyNoNeed4')}</Text>
           </View>
 
           </AnimatedSection>
@@ -208,19 +210,19 @@ export default function HomeScreen() {
           <AnimatedSection>
 
           {/* REDES DA NOVA ECONOMIA */}
-          <SectionTitle emoji="🟠" title="As Redes da Nova Economia" color={colors.text} />
+          <SectionTitle emoji="🟠" title={t('home.networksTitle')} color={colors.text} />
           <View style={[styles.networkCard, { backgroundColor: colors.card, borderColor: '#F7931A' }]}>
             <Text style={styles.networkEmoji}>🟠</Text>
-            <Text style={[styles.networkTitle, { color: colors.text }]}>Rede Bitcoin</Text>
+            <Text style={[styles.networkTitle, { color: colors.text }]}>{t('home.networkBitcoinTitle')}</Text>
             <Text style={[styles.networkDesc, { color: colors.textSecondary }]}>
-              O dinheiro da nova economia digital. Escasso e descentralizado, focado em reserva de valor.
+              {t('home.networkBitcoinDesc')}
             </Text>
           </View>
           <View style={[styles.networkCard, { backgroundColor: colors.card, borderColor: '#627EEA' }]}>
             <Text style={styles.networkEmoji}>🔵</Text>
-            <Text style={[styles.networkTitle, { color: colors.text }]}>Rede Ethereum</Text>
+            <Text style={[styles.networkTitle, { color: colors.text }]}>{t('home.networkEthereumTitle')}</Text>
             <Text style={[styles.networkDesc, { color: colors.textSecondary }]}>
-              A infraestrutura para o sistema financeiro descentralizado (DeFi), onde você utiliza dólares digitais para pagamentos, transferências e serviços financeiros, tudo via internet.
+              {t('home.networkEthereumDesc')}
             </Text>
           </View>
 
@@ -229,15 +231,15 @@ export default function HomeScreen() {
           <AnimatedSection>
 
           {/* O QUE VAI DOMINAR */}
-          <SectionTitle emoji="🎯" title="O que você vai dominar" color={colors.text} />
+          <SectionTitle emoji="🎯" title={t('home.masterTitle')} color={colors.text} />
           <View style={[styles.sectionCard, { backgroundColor: colors.card }, shadowStyle]}>
-            <BulletItem emoji="🛡️" title="Blindagem Patrimonial" description="Proteja contra inflação e desvalorização." textColor={colors.text} descColor={colors.textSecondary} />
-            <BulletItem emoji="🟠" title="Domínio do Bitcoin" description="Opere o ouro digital com segurança absoluta." textColor={colors.text} descColor={colors.textSecondary} />
-            <BulletItem emoji="🌐" title="Inteligência em DeFi" description="Sistema financeiro sem gerente de conta." textColor={colors.text} descColor={colors.textSecondary} />
-            <BulletItem emoji="🌍" title="Movimentação Global" description="Transferências sem fronteiras ou bloqueios." textColor={colors.text} descColor={colors.textSecondary} />
-            <BulletItem emoji="💵" title="Dólar Digital na Prática" description="Stablecoins com total liquidez e autonomia." textColor={colors.text} descColor={colors.textSecondary} />
-            <BulletItem emoji="🔐" title="Maestria em Autocustódia" description="Guarde suas chaves, controle seus ativos." textColor={colors.text} descColor={colors.textSecondary} />
-            <BulletItem emoji="🚫" title="Sem Permissões" description="Sem documentos ou aprovação para transacionar." textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="🛡️" title={t('home.masterBullet1Title')} description={t('home.masterBullet1Desc')} textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="🟠" title={t('home.masterBullet2Title')} description={t('home.masterBullet2Desc')} textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="🌐" title={t('home.masterBullet3Title')} description={t('home.masterBullet3Desc')} textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="🌍" title={t('home.masterBullet4Title')} description={t('home.masterBullet4Desc')} textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="💵" title={t('home.masterBullet5Title')} description={t('home.masterBullet5Desc')} textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="🔐" title={t('home.masterBullet6Title')} description={t('home.masterBullet6Desc')} textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="🚫" title={t('home.masterBullet7Title')} description={t('home.masterBullet7Desc')} textColor={colors.text} descColor={colors.textSecondary} />
           </View>
 
           </AnimatedSection>
@@ -245,17 +247,17 @@ export default function HomeScreen() {
           <AnimatedSection>
 
           {/* POR QUE PARA VOCÊ */}
-          <SectionTitle emoji="🎯" title="Por que nossos treinamentos são para você?" color={colors.text} />
+          <SectionTitle emoji="🎯" title={t('home.whyForYouTitle')} color={colors.text} />
           <Text style={[styles.paragraph, { color: colors.text }]}>
-            Nosso foco é a sua soberania pessoal. Nossos cursos foram desenhados para resolver seus problemas reais:
+            {t('home.whyForYouIntro')}
           </Text>
           <View style={[styles.sectionCard, { backgroundColor: colors.card }, shadowStyle]}>
-            <BulletItem emoji="🏦" title="Romper a dependência bancária" description="Seja o seu próprio banco." textColor={colors.text} descColor={colors.textSecondary} />
-            <BulletItem emoji="🛡️" title="Blindar o patrimônio" description="Proteção contra confisco e censura." textColor={colors.text} descColor={colors.textSecondary} />
-            <BulletItem emoji="🔒" title="Conquistar a privacidade" description="Sem expor CPF ou pedir autorização." textColor={colors.text} descColor={colors.textSecondary} />
-            <BulletItem emoji="🔐" title="Dominar a autocustódia" description="Fora do alcance de terceiros." textColor={colors.text} descColor={colors.textSecondary} />
-            <BulletItem emoji="📖" title="Simplificar o complexo" description="Do zero ao domínio prático." textColor={colors.text} descColor={colors.textSecondary} />
-            <BulletItem emoji="⚠️" title="Evitar erros fatais" description="Identifique golpes e proteja seu capital." textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="🏦" title={t('home.whyForYouBullet1Title')} description={t('home.whyForYouBullet1Desc')} textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="🛡️" title={t('home.whyForYouBullet2Title')} description={t('home.whyForYouBullet2Desc')} textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="🔒" title={t('home.whyForYouBullet3Title')} description={t('home.whyForYouBullet3Desc')} textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="🔐" title={t('home.whyForYouBullet4Title')} description={t('home.whyForYouBullet4Desc')} textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="📖" title={t('home.whyForYouBullet5Title')} description={t('home.whyForYouBullet5Desc')} textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="⚠️" title={t('home.whyForYouBullet6Title')} description={t('home.whyForYouBullet6Desc')} textColor={colors.text} descColor={colors.textSecondary} />
           </View>
 
           </AnimatedSection>
@@ -263,16 +265,16 @@ export default function HomeScreen() {
           <AnimatedSection>
 
           {/* CRIPTO NO DIA A DIA */}
-          <SectionTitle emoji="💳" title="Liberdade Real: Cripto no seu Dia a Dia" color={colors.text} />
+          <SectionTitle emoji="💳" title={t('home.cryptoDailyTitle')} color={colors.text} />
           <Text style={[styles.paragraph, { color: colors.text }]}>
-            Ensinamos como usar essa tecnologia na prática, com a mesma facilidade de um app de banco:
+            {t('home.cryptoDailyIntro')}
           </Text>
           <View style={[styles.sectionCard, { backgroundColor: colors.card }, shadowStyle]}>
-            <BulletItem emoji="💸" title="Pagamentos e Recebimentos" description="Diretos e sem intermediários." textColor={colors.text} descColor={colors.textSecondary} />
-            <BulletItem emoji="💳" title="Cartões Cripto" description="Gaste seu saldo em cripto ou dólar." textColor={colors.text} descColor={colors.textSecondary} />
-            <BulletItem emoji="📄" title="Boletos e Contas" description="Quite despesas com sua carteira digital." textColor={colors.text} descColor={colors.textSecondary} />
-            <BulletItem emoji="🌎" title="Transferências Globais" description="Instantâneas e sem burocracias." textColor={colors.text} descColor={colors.textSecondary} />
-            <BulletItem emoji="📱" title="Apps e Carteiras" description="Ativo líquido para uso diário." textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="💸" title={t('home.cryptoDailyBullet1Title')} description={t('home.cryptoDailyBullet1Desc')} textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="💳" title={t('home.cryptoDailyBullet2Title')} description={t('home.cryptoDailyBullet2Desc')} textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="📄" title={t('home.cryptoDailyBullet3Title')} description={t('home.cryptoDailyBullet3Desc')} textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="🌎" title={t('home.cryptoDailyBullet4Title')} description={t('home.cryptoDailyBullet4Desc')} textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="📱" title={t('home.cryptoDailyBullet5Title')} description={t('home.cryptoDailyBullet5Desc')} textColor={colors.text} descColor={colors.textSecondary} />
           </View>
 
           </AnimatedSection>
@@ -280,15 +282,15 @@ export default function HomeScreen() {
           <AnimatedSection>
 
           {/* FEITO PARA VOCÊ */}
-          <SectionTitle emoji="✅" title="Feito para você: Comece agora com segurança" color={colors.text} />
+          <SectionTitle emoji="✅" title={t('home.madeForYouTitle')} color={colors.text} />
           <Text style={[styles.paragraph, { color: colors.text }]}>
-            Não é preciso ser especialista nem ter grandes fortunas.
+            {t('home.madeForYouIntro')}
           </Text>
           <View style={[styles.sectionCard, { backgroundColor: colors.card }, shadowStyle]}>
-            <BulletItem emoji="👣" title="Para iniciantes" description="Passo a passo do básico ao avançado." textColor={colors.text} descColor={colors.textSecondary} />
-            <BulletItem emoji="💰" title="Acessibilidade" description="Comece com pouco dinheiro." textColor={colors.text} descColor={colors.textSecondary} />
-            <BulletItem emoji="🚫" title="Sem intermediários" description="Nunca dará seu dinheiro para ninguém." textColor={colors.text} descColor={colors.textSecondary} />
-            <BulletItem emoji="🔐" title="Controle total" description="Domínio completo da sua carteira." textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="👣" title={t('home.madeForYouBullet1Title')} description={t('home.madeForYouBullet1Desc')} textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="💰" title={t('home.madeForYouBullet2Title')} description={t('home.madeForYouBullet2Desc')} textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="🚫" title={t('home.madeForYouBullet3Title')} description={t('home.madeForYouBullet3Desc')} textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="🔐" title={t('home.madeForYouBullet4Title')} description={t('home.madeForYouBullet4Desc')} textColor={colors.text} descColor={colors.textSecondary} />
           </View>
 
           </AnimatedSection>
@@ -296,17 +298,17 @@ export default function HomeScreen() {
           <AnimatedSection>
 
           {/* POR QUE APRENDER COMIGO */}
-          <SectionTitle emoji="💡" title="Por que aprender comigo?" color={colors.text} />
+          <SectionTitle emoji="💡" title={t('home.whyLearnTitle')} color={colors.text} />
           <Text style={[styles.paragraph, { color: colors.text }]}>
-            O meu curso promove uma virada de chave: a transição de "usuário" para "proprietário". Eu traduzo o complexo para o simples, focando em:
+            {t('home.whyLearnIntro')}
           </Text>
           <View style={[styles.sectionCard, { backgroundColor: colors.card }, shadowStyle]}>
-            <BulletItem emoji="💪" title="Mudança de Postura" description="Pare de pedir permissão financeira." textColor={colors.text} descColor={colors.textSecondary} />
-            <BulletItem emoji="🧠" title="Domínio Técnico" description="Dinheiro como ativo sob seu controle." textColor={colors.text} descColor={colors.textSecondary} />
-            <BulletItem emoji="📚" title="Didática Acessível" description="Finanças e DeFi para leigos." textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="💪" title={t('home.whyLearnBullet1Title')} description={t('home.whyLearnBullet1Desc')} textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="🧠" title={t('home.whyLearnBullet2Title')} description={t('home.whyLearnBullet2Desc')} textColor={colors.text} descColor={colors.textSecondary} />
+            <BulletItem emoji="📚" title={t('home.whyLearnBullet3Title')} description={t('home.whyLearnBullet3Desc')} textColor={colors.text} descColor={colors.textSecondary} />
           </View>
           <Text style={[styles.paragraph, { color: colors.text, marginTop: 12 }]}>
-            Eu não ensino apenas "onde clicar"; eu ensino como se libertar. Se você busca resultado prático, segurança e o fim da dependência bancária, eu vou te mostrar o caminho mais curto e seguro para você ser, finalmente, o dono do seu próprio patrimônio.
+            {t('home.whyLearnClosing')}
           </Text>
 
           </AnimatedSection>
@@ -314,20 +316,20 @@ export default function HomeScreen() {
           <AnimatedSection>
 
           {/* NOSSOS TREINAMENTOS */}
-          <SectionTitle emoji="📚" title="Nossos Treinamentos" color={colors.text} />
+          <SectionTitle emoji="📚" title={t('home.trainingsTitle')} color={colors.text} />
 
           {/* Trilha 1 — Card Container */}
           <View style={[styles.trailCard, { backgroundColor: colors.card }, shadowStyle]}>
             <LinearGradient colors={['#F7931A', '#E2761B'] as const} style={styles.trailCardHeader}>
-              <Text style={styles.trailCardHeaderText}>🟠 TRILHA 1</Text>
-              <Text style={styles.trailCardHeaderTitle}>A Jornada do Iniciante</Text>
-              <Text style={styles.trailCardHeaderSub}>Fundamentos das Redes — Teoria e Prática</Text>
+              <Text style={styles.trailCardHeaderText}>🟠 {t('home.trail1Label')}</Text>
+              <Text style={styles.trailCardHeaderTitle}>{t('home.trail1Title')}</Text>
+              <Text style={styles.trailCardHeaderSub}>{t('home.trail1Subtitle')}</Text>
             </LinearGradient>
             <View style={styles.trailCardBody}>
               <CourseTrailCard
                 id={1}
-                title="Bitcoin — A Evolução do Dinheiro"
-                subtitle="Construa um patrimônio que nenhum banco ou governo pode controlar."
+                title={t('home.course1Title')}
+                subtitle={t('home.course1Subtitle')}
                 price="397,00"
                 image={require('../../assets/images/curso-bitcoin.png')}
                 onPress={() => router.push('/course/1')}
@@ -335,8 +337,8 @@ export default function HomeScreen() {
               />
               <CourseTrailCard
                 id={2}
-                title="Ethereum e Dólar Digital"
-                subtitle="Como usar criptomoedas no dia a dia e acessar o sistema financeiro da internet."
+                title={t('home.course2Title')}
+                subtitle={t('home.course2Subtitle')}
                 price="397,00"
                 image={require('../../assets/images/curso-ethereum.png')}
                 onPress={() => router.push('/course/2')}
@@ -348,15 +350,15 @@ export default function HomeScreen() {
           {/* Trilha 2 — Card Container */}
           <View style={[styles.trailCard, { backgroundColor: colors.card, marginTop: 20 }, shadowStyle]}>
             <LinearGradient colors={['#3B82F6', '#1D4ED8'] as const} style={styles.trailCardHeader}>
-              <Text style={styles.trailCardHeaderText}>🔵 TRILHA 2</Text>
-              <Text style={styles.trailCardHeaderTitle}>A Jornada da Soberania</Text>
-              <Text style={styles.trailCardHeaderSub}>Domínio Técnico Avançado</Text>
+              <Text style={styles.trailCardHeaderText}>🔵 {t('home.trail2Label')}</Text>
+              <Text style={styles.trailCardHeaderTitle}>{t('home.trail2Title')}</Text>
+              <Text style={styles.trailCardHeaderSub}>{t('home.trail2Subtitle')}</Text>
             </LinearGradient>
             <View style={styles.trailCardBody}>
               <CourseTrailCard
                 id={3}
-                title="Autocustódia e Criptomoedas no Dia a Dia"
-                subtitle="Aprenda a guardar seus ativos com segurança e utilizar criptomoedas na prática."
+                title={t('home.course3Title')}
+                subtitle={t('home.course3Subtitle')}
                 price="397,00"
                 image={require('../../assets/images/curso-autocustodia.png')}
                 onPress={() => router.push('/course/3')}
@@ -368,9 +370,9 @@ export default function HomeScreen() {
           {/* Garantia */}
           <View style={[styles.guaranteeCard, { backgroundColor: colors.card }]}>
             <Text style={styles.guaranteeEmoji}>✅</Text>
-            <Text style={[styles.guaranteeTitle, { color: colors.text }]}>Garantia Total de 7 Dias</Text>
+            <Text style={[styles.guaranteeTitle, { color: colors.text }]}>{t('home.guaranteeTitle')}</Text>
             <Text style={[styles.guaranteeDesc, { color: colors.textSecondary }]}>
-              Se não for para você, devolvo 100% do valor. Sem perguntas. A decisão é totalmente sua, o risco é todo meu.
+              {t('home.guaranteeDesc')}
             </Text>
           </View>
 
@@ -381,19 +383,19 @@ export default function HomeScreen() {
           {/* MANIFESTO */}
           <View style={[styles.manifestoCard, { backgroundColor: '#1a0a2e' }]}>
             <Text style={styles.manifestoTitle}>
-              A Sua Liberdade Financeira Começa no Momento em que Você Decide Parar de Pedir Permissão.
+              {t('home.manifestoTitle')}
             </Text>
             <Text style={styles.manifestoText}>
-              Enquanto o seu patrimônio estiver dentro de um banco ou de uma corretora, a verdade é uma só: você não tem dinheiro, você tem um pedido de permissão. Você acredita que é o dono, mas o sistema apenas te concede o privilégio de usar o que é seu enquanto você se mantém dentro das linhas que eles traçaram.
+              {t('home.manifestoParagraph1')}
             </Text>
             <Text style={styles.manifestoText}>
-              A liberdade financeira não virá de um gerente de conta, de uma decisão judicial ou de uma política governamental. Ela exige uma mudança de postura brutal e o primeiro passo prático dessa nova era é a autocustódia.
+              {t('home.manifestoParagraph2')}
             </Text>
             <Text style={styles.manifestoText}>
-              A autocustódia é o divisor de águas: é o momento em que você retira o seu patrimônio das mãos de terceiros e assume, pessoalmente, a guarda das suas chaves privadas. É a decisão de parar de delegar o controle da sua vida para quem lucra com a sua dependência.
+              {t('home.manifestoParagraph3')}
             </Text>
             <Text style={styles.manifestoHighlight}>
-              É hora de parar de pedir permissão para existir financeiramente e tomar o controle total.
+              {t('home.manifestoHighlight')}
             </Text>
           </View>
 
@@ -402,43 +404,40 @@ export default function HomeScreen() {
           <AnimatedSection>
 
           {/* QUEM SOU EU */}
-          <SectionTitle emoji="👩‍💼" title="Quem sou eu" color={colors.text} />
+          <SectionTitle emoji="👩‍💼" title={t('home.aboutMeTitle')} color={colors.text} />
           <View style={[styles.profileCard, { backgroundColor: colors.card }, shadowStyle]}>
             <Image
               source={require('../../assets/images/dani-profile.png')}
               style={styles.profileImage}
               resizeMode="cover"
             />
-            <Text style={[styles.profileName, { color: colors.text }]}>Dani Spitaletti</Text>
-            <Text style={[styles.profileRole, { color: '#8B5CF6' }]}>Especialista em Bitcoin, DeFi e Autocustódia</Text>
+            <Text style={[styles.profileName, { color: colors.text }]}>{t('home.aboutMeName')}</Text>
+            <Text style={[styles.profileRole, { color: '#8B5CF6' }]}>{t('home.aboutMeRole')}</Text>
           </View>
           <Text style={[styles.paragraph, { color: colors.text }]}>
-            Estou no universo das criptomoedas e finanças descentralizadas desde 2021, estudando e utilizando na prática as tecnologias que estão transformando o sistema financeiro global.
+            {t('home.aboutMeParagraph1')}
           </Text>
           <Text style={[styles.paragraph, { color: colors.text }]}>
-            O principal motivo que me levou a entrar nesse mercado foi a busca por mais autonomia financeira e proteção do patrimônio. Queria aprender a não depender de bancos, evitar os riscos de bloqueios de contas, censura financeira e também encontrar uma forma de proteger o dinheiro contra a inflação.
+            {t('home.aboutMeParagraph2')}
           </Text>
           <Text style={[styles.paragraph, { color: colors.text }]}>
-            Desde então, venho estudando e aplicando ferramentas que permitem às pessoas:
+            {t('home.aboutMeParagraph3')}
           </Text>
           <Text style={[styles.paragraph, { color: colors.text }]}>
-            🔐 guardar patrimônio em autocustódia{'\n'}
-            🌍 movimentar dinheiro globalmente{'\n'}
-            💵 utilizar dólar digital e criptomoedas{'\n'}
-            ⚡ acessar serviços financeiros diretamente pela internet
+            {t('home.aboutMeTools')}
           </Text>
           <Text style={[styles.paragraph, { color: colors.text }]}>
-            Sem depender de bancos ou intermediários.
+            {t('home.aboutMeToolsClosing')}
           </Text>
 
-          <Text style={[styles.subSectionTitle, { color: colors.text }]}>🎯 Minha missão</Text>
+          <Text style={[styles.subSectionTitle, { color: colors.text }]}>🎯 {t('home.aboutMeMissionTitle')}</Text>
           <Text style={[styles.paragraph, { color: colors.text }]}>
-            Simplificar o acesso a esse novo sistema financeiro, mostrando que qualquer pessoa pode aprender a utilizar essas tecnologias de forma segura e consciente. Acredito que o conhecimento sobre Bitcoin, blockchain e finanças descentralizadas representa uma das maiores transformações da história do dinheiro.
+            {t('home.aboutMeMissionText')}
           </Text>
 
-          <Text style={[styles.subSectionTitle, { color: colors.text }]}>🚀 Por que criei estes treinamentos</Text>
+          <Text style={[styles.subSectionTitle, { color: colors.text }]}>🚀 {t('home.aboutMeWhyTitle')}</Text>
           <Text style={[styles.paragraph, { color: colors.text }]}>
-            Criei estes treinamentos para ajudar pessoas que desejam proteger seu patrimônio, reduzir a dependência do sistema bancário tradicional, aprender a utilizar criptomoedas com segurança e conquistar mais autonomia sobre o próprio dinheiro. Tudo explicado de forma simples, clara e acessível, mesmo para quem está começando do zero.
+            {t('home.aboutMeWhyText')}
           </Text>
 
           </AnimatedSection>
@@ -446,7 +445,7 @@ export default function HomeScreen() {
           <AnimatedSection>
 
           {/* FAMÍLIA */}
-          <SectionTitle emoji="👨‍👩‍👧" title="Família e futuro" color={colors.text} />
+          <SectionTitle emoji="👨‍👩‍👧" title={t('home.familyTitle')} color={colors.text} />
           <View style={[styles.familyCard, { backgroundColor: colors.card }, shadowStyle]}>
             <Image
               source={require('../../assets/images/dani-family.png')}
@@ -455,10 +454,10 @@ export default function HomeScreen() {
             />
           </View>
           <Text style={[styles.paragraph, { color: colors.text }]}>
-            Mais do que investir, aprender sobre Bitcoin e autocustódia também é uma forma de cuidar do futuro da família. Muitos pais procuram uma maneira segura de construir uma poupança para os filhos, mas vivem em um sistema onde o dinheiro perde valor ao longo do tempo.
+            {t('home.familyParagraph1')}
           </Text>
           <Text style={[styles.paragraph, { color: colors.text }]}>
-            Com as tecnologias descentralizadas é possível construir uma reserva digital guardada em autocustódia, fora do alcance de bloqueios ou confiscos. Assim, pais e mães podem começar desde cedo a criar uma poupança inconfiscável, preservando valor ao longo dos anos e deixando para seus filhos não apenas um patrimônio, mas também o conhecimento sobre soberania financeira.
+            {t('home.familyParagraph2')}
           </Text>
 
           {/* AÇÕES RÁPIDAS */}
@@ -470,14 +469,14 @@ export default function HomeScreen() {
               onPress={() => router.push('/settings')}
             >
               <Settings size={20} color="#8B5CF6" />
-              <Text style={[styles.quickActionText, { color: colors.text }]}>Configurações</Text>
+              <Text style={[styles.quickActionText, { color: colors.text }]}>{t('home.quickSettings')}</Text>
             </AnimatedPressable>
             <AnimatedPressable
               style={[styles.quickActionBtn, { backgroundColor: colors.card }, shadowStyle]}
               onPress={() => router.replace('/auth/login')}
             >
               <LogOut size={20} color="#EF4444" />
-              <Text style={[styles.quickActionText, { color: '#EF4444' }]}>Sair</Text>
+              <Text style={[styles.quickActionText, { color: '#EF4444' }]}>{t('home.quickLogout')}</Text>
             </AnimatedPressable>
           </View>
 

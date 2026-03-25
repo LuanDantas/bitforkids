@@ -24,10 +24,12 @@ import {
 } from 'lucide-react-native';
 
 import { useTheme } from '@/contexts/ThemeContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function ProfileScreen() {
   const router = useRouter();
   const { colors, isDark } = useTheme();
+  const { t } = useLanguage();
   const [user] = useState({
     name: 'João Silva',
     email: 'joao.silva@email.com',
@@ -48,26 +50,26 @@ export default function ProfileScreen() {
   const menuItems = [
     {
       icon: CreditCard,
-      title: 'Pagamentos',
-      subtitle: 'Histórico e métodos',
+      title: t('profile.menuPaymentsTitle'),
+      subtitle: t('profile.menuPaymentsSubtitle'),
       color: '#10B981',
     },
     {
       icon: Bell,
-      title: 'Notificações',
-      subtitle: 'Preferências de aviso',
+      title: t('profile.menuNotificationsTitle'),
+      subtitle: t('profile.menuNotificationsSubtitle'),
       color: '#3B82F6',
     },
     {
       icon: Shield,
-      title: 'Privacidade',
-      subtitle: 'Dados e segurança',
+      title: t('profile.menuPrivacyTitle'),
+      subtitle: t('profile.menuPrivacySubtitle'),
       color: '#8B5CF6',
     },
     {
       icon: Settings,
-      title: 'Configurações',
-      subtitle: 'Preferências gerais',
+      title: t('profile.menuSettingsTitle'),
+      subtitle: t('profile.menuSettingsSubtitle'),
       color: '#6B7280',
     },
   ];
@@ -98,7 +100,7 @@ export default function ProfileScreen() {
 
       {/* Cashback Section */}
       <View style={styles.section}>
-        <Text style={[styles.sectionTitle, { color: colors.text }]}>Meu Cashback</Text>
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('profile.cashbackTitle')}</Text>
         <View style={styles.cashbackContainer}>
           <LinearGradient
             colors={['#10B981', '#059669']}
@@ -108,16 +110,16 @@ export default function ProfileScreen() {
               <View style={styles.cashbackIcon}>
                 <Coins size={24} color="white" />
               </View>
-              <Text style={styles.cashbackTitle}>Saldo Disponível</Text>
+              <Text style={styles.cashbackTitle}>{t('profile.cashbackAvailable')}</Text>
             </View>
             <Text style={styles.cashbackAmount}>
               {user.stats.availableCashback}
             </Text>
             <Text style={styles.cashbackTotal}>
-              Total acumulado: {user.stats.totalCashback}
+              {t('profile.cashbackTotal')} {user.stats.totalCashback}
             </Text>
             <AnimatedPressable style={styles.withdrawButton}>
-              <Text style={styles.withdrawText}>Resgatar</Text>
+              <Text style={styles.withdrawText}>{t('profile.cashbackWithdraw')}</Text>
             </AnimatedPressable>
           </LinearGradient>
         </View>
@@ -125,20 +127,13 @@ export default function ProfileScreen() {
 
       {/* Menu Items */}
       <View style={styles.section}>
-        <Text style={[styles.sectionTitle, { color: colors.text }]}>Configurações</Text>
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('profile.settingsSection')}</Text>
         <View style={styles.menuList}>
           {menuItems.map((item, index) => {
             const Icon = item.icon;
+            const routes = ['/payments', '/notifications', '/privacy', '/settings'] as const;
             const handlePress = () => {
-              if (item.title === 'Pagamentos') {
-                router.push('/payments');
-              } else if (item.title === 'Notificações') {
-                router.push('/notifications');
-              } else if (item.title === 'Privacidade') {
-                router.push('/privacy');
-              } else if (item.title === 'Configurações') {
-                router.push('/settings');
-              }
+              router.push(routes[index] as any);
             };
 
             return (
@@ -172,15 +167,15 @@ export default function ProfileScreen() {
       <View style={styles.section}>
         <AnimatedPressable style={[styles.logoutButton, { backgroundColor: colors.card }, menuShadow]}>
           <LogOut size={20} color="#EF4444" />
-          <Text style={styles.logoutText}>Sair da Conta</Text>
+          <Text style={styles.logoutText}>{t('profile.logout')}</Text>
         </AnimatedPressable>
       </View>
 
       {/* App Info */}
       <View style={styles.appInfo}>
-        <Text style={[styles.appVersion, { color: colors.textSecondary }]}>Bit for Kids 1.0.0</Text>
+        <Text style={[styles.appVersion, { color: colors.textSecondary }]}>{t('profile.appVersion')}</Text>
         <Text style={[styles.appCopyright, { color: colors.textSecondary }]}>
-          © 2025 Bit for Kids. Todos os direitos reservados.
+          {t('profile.appCopyright')}
         </Text>
       </View>
     </ScrollView>

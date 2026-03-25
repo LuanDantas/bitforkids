@@ -12,6 +12,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Mail, ArrowLeft, CheckCircle } from 'lucide-react-native';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function ForgotPasswordScreen() {
   const [email, setEmail] = useState('');
@@ -19,16 +20,17 @@ export default function ForgotPasswordScreen() {
   const [emailSent, setEmailSent] = useState(false);
   const router = useRouter();
   const { colors, isDark } = useTheme();
+  const { t } = useLanguage();
 
   const handleResetPassword = async () => {
     if (!email) {
-      Alert.alert('Erro', 'Por favor, insira seu email');
+      Alert.alert(t('auth.forgotPassword.errorTitle'), t('auth.forgotPassword.errorNoEmail'));
       return;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      Alert.alert('Erro', 'Por favor, insira um email válido');
+      Alert.alert(t('auth.forgotPassword.errorTitle'), t('auth.forgotPassword.errorInvalidEmail'));
       return;
     }
 
@@ -53,15 +55,14 @@ export default function ForgotPasswordScreen() {
               <CheckCircle size={64} color="#10B981" />
             </View>
 
-            <Text style={styles.successTitle}>Email Enviado!</Text>
+            <Text style={styles.successTitle}>{t('auth.forgotPassword.successTitle')}</Text>
             <Text style={styles.successMessage}>
-              Enviamos um link de recuperação de senha para{'\n'}
+              {t('auth.forgotPassword.successMessage')}{'\n'}
               <Text style={styles.emailText}>{email}</Text>
             </Text>
 
             <Text style={styles.instructionText}>
-              Verifique sua caixa de entrada e siga as instruções para redefinir
-              sua senha.
+              {t('auth.forgotPassword.successInstruction')}
             </Text>
 
             <TouchableOpacity
@@ -72,7 +73,7 @@ export default function ForgotPasswordScreen() {
                 colors={['#8B5CF6', '#3B82F6']}
                 style={styles.backGradient}
               >
-                <Text style={styles.backButtonText}>Voltar ao Login</Text>
+                <Text style={styles.backButtonText}>{t('auth.forgotPassword.backToLogin')}</Text>
               </LinearGradient>
             </TouchableOpacity>
 
@@ -80,7 +81,7 @@ export default function ForgotPasswordScreen() {
               style={styles.resendButton}
               onPress={handleResetPassword}
             >
-              <Text style={styles.resendText}>Reenviar email</Text>
+              <Text style={styles.resendText}>{t('auth.forgotPassword.resendEmail')}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -104,10 +105,9 @@ export default function ForgotPasswordScreen() {
             style={styles.logo}
             resizeMode="contain"
           />
-          <Text style={[styles.title, { color: colors.text }]}>Esqueceu a senha?</Text>
+          <Text style={[styles.title, { color: colors.text }]}>{t('auth.forgotPassword.title')}</Text>
           <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-            Sem problemas! Digite seu email e enviaremos instruções para
-            redefinir sua senha.
+            {t('auth.forgotPassword.subtitle')}
           </Text>
         </View>
 
@@ -118,7 +118,7 @@ export default function ForgotPasswordScreen() {
             </View>
             <TextInput
               style={[styles.input, { color: colors.text }]}
-              placeholder="Email"
+              placeholder={t('auth.forgotPassword.emailPlaceholder')}
               placeholderTextColor={colors.textSecondary}
               value={email}
               onChangeText={setEmail}
@@ -137,16 +137,16 @@ export default function ForgotPasswordScreen() {
               style={styles.resetGradient}
             >
               <Text style={styles.resetText}>
-                {isLoading ? 'Enviando...' : 'Enviar Link de Recuperação'}
+                {isLoading ? t('auth.forgotPassword.sendButtonLoading') : t('auth.forgotPassword.sendButton')}
               </Text>
             </LinearGradient>
           </TouchableOpacity>
         </View>
 
         <View style={styles.footer}>
-          <Text style={[styles.footerText, { color: colors.textSecondary }]}>Lembrou da senha? </Text>
+          <Text style={[styles.footerText, { color: colors.textSecondary }]}>{t('auth.forgotPassword.rememberedPassword')}</Text>
           <TouchableOpacity onPress={handleBackToLogin}>
-            <Text style={styles.loginText}>Fazer login</Text>
+            <Text style={styles.loginText}>{t('auth.forgotPassword.loginLink')}</Text>
           </TouchableOpacity>
         </View>
       </View>

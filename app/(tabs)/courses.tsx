@@ -10,6 +10,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import AnimatedSection from '@/components/AnimatedSection';
 import AnimatedPressable from '@/components/AnimatedPressable';
 import {
@@ -60,7 +61,7 @@ const targetAudience = [
   { emoji: '💰', title: 'Cansado da desvalorização', desc: 'Guardar em moedas fortes, como Dólar e Bitcoin.' },
 ];
 
-function CourseCard({ course, onPress, colors }: any) {
+function CourseCard({ course, onPress, colors, t }: any) {
   return (
     <AnimatedPressable
       style={[styles.courseCard, { backgroundColor: colors.card }, cardShadow]}
@@ -74,14 +75,14 @@ function CourseCard({ course, onPress, colors }: any) {
         </Text>
         <View style={styles.courseFooter}>
           <View>
-            <Text style={styles.priceLabel}>Investimento</Text>
+            <Text style={styles.priceLabel}>{t('courses.priceLabel')}</Text>
             <Text style={styles.coursePrice}>R$ {course.price}</Text>
           </View>
           <LinearGradient
             colors={['#8B5CF6', '#6D28D9'] as const}
             style={styles.courseBtn}
           >
-            <Text style={styles.courseBtnText}>Ver curso</Text>
+            <Text style={styles.courseBtnText}>{t('courses.viewCourse')}</Text>
             <ChevronRight size={16} color="#FFF" />
           </LinearGradient>
         </View>
@@ -93,9 +94,28 @@ function CourseCard({ course, onPress, colors }: any) {
 export default function CoursesScreen() {
   const router = useRouter();
   const { colors, isDark } = useTheme();
+  const { t } = useLanguage();
 
-  const trail1 = courses.filter(c => c.trail === 1);
-  const trail2 = courses.filter(c => c.trail === 2);
+  const translatedCourses = courses.map(c => {
+    const courseKey = `course${c.id}` as 'course1' | 'course2' | 'course3';
+    return {
+      ...c,
+      title: t(`courses.${courseKey}Title`),
+      subtitle: t(`courses.${courseKey}Subtitle`),
+    };
+  });
+
+  const translatedAudience = targetAudience.map((item, index) => {
+    const idx = index + 1;
+    return {
+      ...item,
+      title: t(`courses.target${idx}Title`),
+      desc: t(`courses.target${idx}Desc`),
+    };
+  });
+
+  const trail1 = translatedCourses.filter(c => c.trail === 1);
+  const trail2 = translatedCourses.filter(c => c.trail === 2);
 
   return (
     <ScrollView
@@ -105,9 +125,9 @@ export default function CoursesScreen() {
     >
       {/* Header */}
       <LinearGradient colors={isDark ? ['#1a1a1a', '#2a1a4a'] as const : ['#8B5CF6', '#3B82F6'] as const} style={styles.header}>
-        <Text style={styles.headerTitle}>Nossos Treinamentos</Text>
+        <Text style={styles.headerTitle}>{t('courses.headerTitle')}</Text>
         <Text style={styles.headerSubtitle}>
-          Escolha sua trilha e comece sua jornada rumo à soberania financeira
+          {t('courses.headerSubtitle')}
         </Text>
       </LinearGradient>
 
@@ -116,13 +136,13 @@ export default function CoursesScreen() {
         {/* Para quem são */}
         <AnimatedSection>
         <Text style={[styles.sectionTitle, { color: colors.text }]}>
-          Para quem são nossos cursos?
+          {t('courses.targetTitle')}
         </Text>
         <Text style={[styles.sectionDesc, { color: colors.textSecondary }]}>
-          Para quem quer ter controle total sobre o próprio dinheiro, guardar patrimônio e fazer transações sem depender de bancos, governos ou intermediários.
+          {t('courses.targetDesc')}
         </Text>
 
-        {targetAudience.map((item, index) => (
+        {translatedAudience.map((item, index) => (
           <View key={index} style={[styles.audienceItem, { backgroundColor: colors.card }]}>
             <Text style={styles.audienceEmoji}>{item.emoji}</Text>
             <View style={styles.audienceContent}>
@@ -138,10 +158,10 @@ export default function CoursesScreen() {
         {/* Trilha 1 */}
         <AnimatedSection>
         <LinearGradient colors={['#F7931A', '#E2761B'] as const} style={styles.trailBadge}>
-          <Text style={styles.trailBadgeText}>🟠 TRILHA 1: A Jornada do Iniciante</Text>
+          <Text style={styles.trailBadgeText}>🟠 {t('courses.trail1Badge')}</Text>
         </LinearGradient>
         <Text style={[styles.trailSubtitle, { color: colors.textSecondary }]}>
-          Fundamentos das Redes — Teoria e Prática. Ideal para quem está começando agora e precisa dominar a base.
+          {t('courses.trail1Subtitle')}
         </Text>
 
         {trail1.map(course => (
@@ -150,6 +170,7 @@ export default function CoursesScreen() {
             course={course}
             onPress={() => router.push(`/course/${course.id}`)}
             colors={colors}
+            t={t}
           />
         ))}
         </AnimatedSection>
@@ -159,10 +180,10 @@ export default function CoursesScreen() {
         {/* Trilha 2 */}
         <AnimatedSection>
         <LinearGradient colors={['#3B82F6', '#1D4ED8'] as const} style={styles.trailBadge}>
-          <Text style={styles.trailBadgeText}>🔵 TRILHA 2: A Jornada da Soberania</Text>
+          <Text style={styles.trailBadgeText}>🔵 {t('courses.trail2Badge')}</Text>
         </LinearGradient>
         <Text style={[styles.trailSubtitle, { color: colors.textSecondary }]}>
-          Domínio Técnico Avançado. Ideal para quem quer focar 100% em liberdade operacional, privacidade e domínio total do capital.
+          {t('courses.trail2Subtitle')}
         </Text>
 
         {trail2.map(course => (
@@ -171,6 +192,7 @@ export default function CoursesScreen() {
             course={course}
             onPress={() => router.push(`/course/${course.id}`)}
             colors={colors}
+            t={t}
           />
         ))}
         </AnimatedSection>
@@ -182,10 +204,10 @@ export default function CoursesScreen() {
         <View style={[styles.guaranteeCard, { backgroundColor: colors.card }]}>
           <Shield size={32} color="#10B981" />
           <Text style={[styles.guaranteeTitle, { color: colors.text }]}>
-            Garantia Total de 7 Dias
+            {t('courses.guaranteeTitle')}
           </Text>
           <Text style={[styles.guaranteeDesc, { color: colors.textSecondary }]}>
-            Se não for para você, devolvo 100% do valor. Sem perguntas. A decisão é totalmente sua, o risco é todo meu.
+            {t('courses.guaranteeDesc')}
           </Text>
         </View>
         </AnimatedSection>

@@ -30,6 +30,7 @@ import {
   AlertTriangle,
 } from 'lucide-react-native';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface PrivacySettings {
   profileVisibility: boolean;
@@ -47,6 +48,7 @@ interface PrivacySettings {
 export default function PrivacyScreen() {
   const router = useRouter();
   const { colors, isDark } = useTheme();
+  const { t } = useLanguage();
 
   const [settings, setSettings] = useState<PrivacySettings>({
     profileVisibility: true,
@@ -70,16 +72,16 @@ export default function PrivacyScreen() {
 
   const handleDataExport = () => {
     Alert.alert(
-      'Exportar Dados',
-      'Você receberá um email com um link para baixar todos os seus dados em formato JSON.',
+      t('privacy.exportAlertTitle'),
+      t('privacy.exportAlertMessage'),
       [
-        { text: 'Cancelar', style: 'cancel' },
+        { text: t('privacy.exportAlertCancel'), style: 'cancel' },
         {
-          text: 'Exportar',
+          text: t('privacy.exportAlertConfirm'),
           onPress: () => {
             Alert.alert(
-              'Sucesso',
-              'Email de exportação enviado! Verifique sua caixa de entrada.'
+              t('privacy.exportSuccessTitle'),
+              t('privacy.exportSuccessMessage')
             );
           },
         },
@@ -89,26 +91,26 @@ export default function PrivacyScreen() {
 
   const handleDataDeletion = () => {
     Alert.alert(
-      'Excluir Conta',
-      'Esta ação é irreversível. Todos os seus dados serão permanentemente removidos.',
+      t('privacy.deleteAlertTitle'),
+      t('privacy.deleteAlertMessage'),
       [
-        { text: 'Cancelar', style: 'cancel' },
+        { text: t('privacy.deleteAlertCancel'), style: 'cancel' },
         {
-          text: 'Excluir',
+          text: t('privacy.deleteAlertConfirm'),
           style: 'destructive',
           onPress: () => {
             Alert.alert(
-              'Confirmação Final',
-              'Digite "EXCLUIR" para confirmar a exclusão da sua conta.',
+              t('privacy.deleteConfirmTitle'),
+              t('privacy.deleteConfirmMessage'),
               [
-                { text: 'Cancelar', style: 'cancel' },
+                { text: t('privacy.deleteConfirmCancel'), style: 'cancel' },
                 {
-                  text: 'Confirmar',
+                  text: t('privacy.deleteConfirmButton'),
                   style: 'destructive',
                   onPress: () => {
                     Alert.alert(
-                      'Conta Excluída',
-                      'Sua conta foi excluída com sucesso.'
+                      t('privacy.deleteSuccessTitle'),
+                      t('privacy.deleteSuccessMessage')
                     );
                   },
                 },
@@ -130,63 +132,63 @@ export default function PrivacyScreen() {
 
   const privacyCategories = [
     {
-      title: 'Visibilidade do Perfil',
+      title: t('privacy.categoryProfileVisibility'),
       icon: Eye,
       color: '#3B82F6',
       items: [
         {
           key: 'profileVisibility' as keyof PrivacySettings,
-          title: 'Perfil Público',
-          subtitle: 'Permitir que outros usuários vejam seu perfil',
+          title: t('privacy.publicProfile'),
+          subtitle: t('privacy.publicProfileDesc'),
         },
         {
           key: 'emailNotifications' as keyof PrivacySettings,
-          title: 'Notificações por Email',
-          subtitle: 'Receber emails sobre atividades da conta',
+          title: t('privacy.emailNotifications'),
+          subtitle: t('privacy.emailNotificationsDesc'),
         },
         {
           key: 'marketingEmails' as keyof PrivacySettings,
-          title: 'Emails de Marketing',
-          subtitle: 'Receber ofertas e novidades por email',
+          title: t('privacy.marketingEmails'),
+          subtitle: t('privacy.marketingEmailsDesc'),
         },
       ],
     },
     {
-      title: 'Segurança da Conta',
+      title: t('privacy.categoryAccountSecurity'),
       icon: Lock,
       color: '#10B981',
       items: [
         {
           key: 'twoFactorAuth' as keyof PrivacySettings,
-          title: 'Autenticação de Dois Fatores',
-          subtitle: 'Adicionar camada extra de segurança',
+          title: t('privacy.twoFactorAuth'),
+          subtitle: t('privacy.twoFactorAuthDesc'),
         },
         {
           key: 'biometricAuth' as keyof PrivacySettings,
-          title: 'Autenticação Biométrica',
-          subtitle: 'Usar impressão digital ou Face ID',
+          title: t('privacy.biometricAuth'),
+          subtitle: t('privacy.biometricAuthDesc'),
         },
         {
           key: 'autoLogout' as keyof PrivacySettings,
-          title: 'Logout Automático',
-          subtitle: 'Sair automaticamente após inatividade',
+          title: t('privacy.autoLogout'),
+          subtitle: t('privacy.autoLogoutDesc'),
         },
       ],
     },
     {
-      title: 'Dados e Análises',
+      title: t('privacy.categoryDataAnalytics'),
       icon: Database,
       color: '#8B5CF6',
       items: [
         {
           key: 'dataAnalytics' as keyof PrivacySettings,
-          title: 'Análise de Dados',
-          subtitle: 'Permitir coleta de dados para melhorias',
+          title: t('privacy.dataAnalytics'),
+          subtitle: t('privacy.dataAnalyticsDesc'),
         },
         {
           key: 'crashReports' as keyof PrivacySettings,
-          title: 'Relatórios de Erro',
-          subtitle: 'Enviar relatórios automáticos de crashes',
+          title: t('privacy.crashReports'),
+          subtitle: t('privacy.crashReportsDesc'),
         },
       ],
     },
@@ -195,15 +197,15 @@ export default function PrivacyScreen() {
   const dataActions = [
     {
       icon: Download,
-      title: 'Exportar Dados',
-      subtitle: 'Baixar todos os seus dados pessoais',
+      title: t('privacy.exportData'),
+      subtitle: t('privacy.exportDataDesc'),
       color: '#3B82F6',
       onPress: handleDataExport,
     },
     {
       icon: Trash2,
-      title: 'Excluir Conta',
-      subtitle: 'Remover permanentemente sua conta e dados',
+      title: t('privacy.deleteAccount'),
+      subtitle: t('privacy.deleteAccountDesc'),
       color: '#EF4444',
       onPress: handleDataDeletion,
     },
@@ -212,21 +214,18 @@ export default function PrivacyScreen() {
   const securityInfo = [
     {
       icon: Shield,
-      title: 'Seus dados estão seguros',
-      description:
-        'Utilizamos criptografia de ponta a ponta para proteger suas informações.',
+      title: t('privacy.securityInfo1Title'),
+      description: t('privacy.securityInfo1Desc'),
     },
     {
       icon: Lock,
-      title: 'Conformidade com LGPD',
-      description:
-        'Seguimos rigorosamente a Lei Geral de Proteção de Dados brasileira.',
+      title: t('privacy.securityInfo2Title'),
+      description: t('privacy.securityInfo2Desc'),
     },
     {
       icon: Key,
-      title: 'Controle total',
-      description:
-        'Você tem controle completo sobre seus dados e pode excluí-los a qualquer momento.',
+      title: t('privacy.securityInfo3Title'),
+      description: t('privacy.securityInfo3Desc'),
     },
   ];
 
@@ -242,8 +241,8 @@ export default function PrivacyScreen() {
             <ArrowLeft size={24} color="white" />
           </TouchableOpacity>
           <View style={styles.headerText}>
-            <Text style={styles.headerTitle}>Privacidade</Text>
-            <Text style={styles.headerSubtitle}>Dados e segurança</Text>
+            <Text style={styles.headerTitle}>{t('privacy.headerTitle')}</Text>
+            <Text style={styles.headerSubtitle}>{t('privacy.headerSubtitle')}</Text>
           </View>
           <View style={styles.headerRight}>
             <Shield size={24} color="white" />
@@ -254,7 +253,7 @@ export default function PrivacyScreen() {
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {/* Security Info */}
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>Segurança dos Dados</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('privacy.securityTitle')}</Text>
           {securityInfo.map((info, index) => {
             const Icon = info.icon;
             return (
@@ -318,7 +317,7 @@ export default function PrivacyScreen() {
 
         {/* Data Actions */}
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>Gerenciar Dados</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('privacy.manageDataTitle')}</Text>
           <View style={[styles.actionsList, { backgroundColor: colors.card, borderColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }]}>
             {dataActions.map((action, index) => {
               const Icon = action.icon;
@@ -353,7 +352,7 @@ export default function PrivacyScreen() {
 
         {/* Legal Documents */}
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>Documentos Legais</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('privacy.legalTitle')}</Text>
           <View style={[styles.legalList, { backgroundColor: colors.card, borderColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }]}>
             <TouchableOpacity
               style={[styles.legalItem, { borderBottomColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }]}
@@ -363,9 +362,9 @@ export default function PrivacyScreen() {
                 <FileText size={20} color="#3B82F6" />
               </View>
               <View style={styles.legalContent}>
-                <Text style={[styles.legalTitle, { color: colors.text }]}>Política de Privacidade</Text>
+                <Text style={[styles.legalTitle, { color: colors.text }]}>{t('privacy.privacyPolicy')}</Text>
                 <Text style={[styles.legalSubtitle, { color: colors.textSecondary }]}>
-                  Como coletamos e usamos seus dados
+                  {t('privacy.privacyPolicyDesc')}
                 </Text>
               </View>
               <ArrowLeft
@@ -383,9 +382,9 @@ export default function PrivacyScreen() {
                 <FileText size={20} color="#8B5CF6" />
               </View>
               <View style={styles.legalContent}>
-                <Text style={[styles.legalTitle, { color: colors.text }]}>Termos de Serviço</Text>
+                <Text style={[styles.legalTitle, { color: colors.text }]}>{t('privacy.termsOfService')}</Text>
                 <Text style={[styles.legalSubtitle, { color: colors.textSecondary }]}>
-                  Condições de uso da plataforma
+                  {t('privacy.termsOfServiceDesc')}
                 </Text>
               </View>
               <ArrowLeft
@@ -404,25 +403,23 @@ export default function PrivacyScreen() {
               <AlertTriangle size={24} color="#F59E0B" />
             </View>
             <View style={styles.supportContent}>
-              <Text style={[styles.supportTitle, { color: colors.text }]}>Precisa de Ajuda?</Text>
+              <Text style={[styles.supportTitle, { color: colors.text }]}>{t('privacy.helpTitle')}</Text>
               <Text style={[styles.supportDescription, { color: colors.textSecondary }]}>
-                Entre em contato conosco se tiver dúvidas sobre privacidade ou
-                segurança.
+                {t('privacy.helpDesc')}
               </Text>
             </View>
             <TouchableOpacity style={styles.supportButton}>
               <Mail size={16} color="white" />
-              <Text style={styles.supportButtonText}>Contatar</Text>
+              <Text style={styles.supportButtonText}>{t('privacy.helpContact')}</Text>
             </TouchableOpacity>
           </View>
         </View>
 
         {/* App Info */}
         <View style={styles.appInfo}>
-          <Text style={[styles.appVersion, { color: colors.textSecondary }]}>Bit for Kids 1.0.0</Text>
+          <Text style={[styles.appVersion, { color: colors.textSecondary }]}>{t('privacy.appVersion')}</Text>
           <Text style={[styles.appCopyright, { color: colors.textSecondary }]}>
-            Sua privacidade é nossa prioridade. Mantenha suas configurações
-            atualizadas.
+            {t('privacy.appCopyright')}
           </Text>
         </View>
       </ScrollView>

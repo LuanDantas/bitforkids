@@ -49,7 +49,7 @@ interface GeneralSettings {
 export default function SettingsScreen() {
   const router = useRouter();
   const { colors, isDark, setDarkMode } = useTheme();
-  const { locale, setLocale } = useLanguage();
+  const { locale, setLocale, t } = useLanguage();
 
   const [settings, setSettings] = useState<GeneralSettings>({
     darkMode: false,
@@ -81,26 +81,26 @@ export default function SettingsScreen() {
   };
 
   const handleLanguageChange = () => {
-    Alert.alert('Idioma', 'Selecione o idioma preferido:', [
+    Alert.alert(t('settings.languageAlertTitle'), t('settings.languageAlertMessage'), [
       {
-        text: 'Português (BR)',
+        text: t('settings.languagePortuguese'),
         onPress: () => updateSetting('language', 'pt-BR'),
       },
       {
-        text: 'English (US)',
+        text: t('settings.languageEnglish'),
         onPress: () => updateSetting('language', 'en-US'),
       },
-      { text: 'Español', onPress: () => updateSetting('language', 'es-ES') },
-      { text: 'Cancelar', style: 'cancel' },
+      { text: t('settings.languageSpanish'), onPress: () => updateSetting('language', 'es-ES') },
+      { text: t('settings.cancel'), style: 'cancel' },
     ]);
   };
 
   const handleCurrencyChange = () => {
-    Alert.alert('Moeda', 'Selecione a moeda preferida:', [
-      { text: 'Real (R$)', onPress: () => updateSetting('currency', 'BRL') },
-      { text: 'Dólar ($)', onPress: () => updateSetting('currency', 'USD') },
-      { text: 'Euro (€)', onPress: () => updateSetting('currency', 'EUR') },
-      { text: 'Cancelar', style: 'cancel' },
+    Alert.alert(t('settings.currencyAlertTitle'), t('settings.currencyAlertMessage'), [
+      { text: t('settings.currencyBRL'), onPress: () => updateSetting('currency', 'BRL') },
+      { text: t('settings.currencyUSD'), onPress: () => updateSetting('currency', 'USD') },
+      { text: t('settings.currencyEUR'), onPress: () => updateSetting('currency', 'EUR') },
+      { text: t('settings.cancel'), style: 'cancel' },
     ]);
   };
 
@@ -110,116 +110,116 @@ export default function SettingsScreen() {
 
   const openAbout = () => {
     Alert.alert(
-      'Sobre o App',
-      'Bit for Kids v1.0.0\n\nUm aplicativo educativo sobre Bitcoin e criptomoedas para crianças e jovens.\n\nDesenvolvido com ❤️ para educação financeira.',
-      [{ text: 'OK' }]
+      t('settings.aboutAlertTitle'),
+      t('settings.aboutAlertMessage'),
+      [{ text: t('common.ok') }]
     );
   };
 
   const settingsCategories = [
     {
-      title: 'Aparência',
+      title: t('settings.categoryAppearance'),
       icon: Palette,
       color: '#8B5CF6',
       items: [
         {
           key: 'darkMode' as keyof GeneralSettings,
-          title: 'Modo Escuro',
-          subtitle: 'Usar tema escuro do app',
+          title: t('settings.darkMode'),
+          subtitle: t('settings.darkModeDesc'),
           type: 'switch',
         },
         {
           key: 'language' as keyof GeneralSettings,
-          title: 'Idioma',
+          title: t('settings.language'),
           subtitle:
             settings.language === 'pt-BR'
-              ? 'Português (BR)'
+              ? t('settings.languagePortuguese')
               : settings.language === 'en-US'
-              ? 'English (US)'
-              : 'Español',
+              ? t('settings.languageEnglish')
+              : t('settings.languageSpanish'),
           type: 'action',
           onPress: handleLanguageChange,
         },
       ],
     },
     {
-      title: 'Som e Vibração',
+      title: t('settings.categorySoundVibration'),
       icon: Volume2,
       color: '#F59E0B',
       items: [
         {
           key: 'soundEffects' as keyof GeneralSettings,
-          title: 'Efeitos Sonoros',
-          subtitle: 'Reproduzir sons de interface',
+          title: t('settings.soundEffects'),
+          subtitle: t('settings.soundEffectsDesc'),
           type: 'switch',
         },
         {
           key: 'hapticFeedback' as keyof GeneralSettings,
-          title: 'Feedback Tátil',
-          subtitle: 'Vibrar ao tocar elementos',
+          title: t('settings.hapticFeedback'),
+          subtitle: t('settings.hapticFeedbackDesc'),
           type: 'switch',
         },
       ],
     },
     {
-      title: 'Moeda e Localização',
+      title: t('settings.categoryCurrencyLocation'),
       icon: Globe,
       color: '#10B981',
       items: [
         {
           key: 'currency' as keyof GeneralSettings,
-          title: 'Moeda',
+          title: t('settings.currency'),
           subtitle:
             settings.currency === 'BRL'
-              ? 'Real (R$)'
+              ? t('settings.currencyBRL')
               : settings.currency === 'USD'
-              ? 'Dólar ($)'
-              : 'Euro (€)',
+              ? t('settings.currencyUSD')
+              : t('settings.currencyEUR'),
           type: 'action',
           onPress: handleCurrencyChange,
         },
       ],
     },
     {
-      title: 'Performance',
+      title: t('settings.categoryPerformance'),
       icon: Smartphone,
       color: '#3B82F6',
       items: [
         {
           key: 'autoUpdate' as keyof GeneralSettings,
-          title: 'Atualização Automática',
-          subtitle: 'Baixar atualizações automaticamente',
+          title: t('settings.autoUpdate'),
+          subtitle: t('settings.autoUpdateDesc'),
           type: 'switch',
         },
         {
           key: 'dataSaver' as keyof GeneralSettings,
-          title: 'Economia de Dados',
-          subtitle: 'Reduzir uso de dados móveis',
+          title: t('settings.dataSaver'),
+          subtitle: t('settings.dataSaverDesc'),
           type: 'switch',
         },
         {
           key: 'cacheManagement' as keyof GeneralSettings,
-          title: 'Gerenciamento de Cache',
-          subtitle: 'Limpar cache automaticamente',
+          title: t('settings.cacheManagement'),
+          subtitle: t('settings.cacheManagementDesc'),
           type: 'switch',
         },
       ],
     },
     {
-      title: 'Privacidade',
+      title: t('settings.categoryPrivacy'),
       icon: Shield,
       color: '#EF4444',
       items: [
         {
           key: 'analytics' as keyof GeneralSettings,
-          title: 'Análise de Uso',
-          subtitle: 'Enviar dados de uso para melhorias',
+          title: t('settings.analytics'),
+          subtitle: t('settings.analyticsDesc'),
           type: 'switch',
         },
         {
           key: 'crashReports' as keyof GeneralSettings,
-          title: 'Relatórios de Erro',
-          subtitle: 'Enviar relatórios de crashes',
+          title: t('settings.crashReports'),
+          subtitle: t('settings.crashReportsDesc'),
           type: 'switch',
         },
       ],
@@ -229,15 +229,15 @@ export default function SettingsScreen() {
   const supportActions = [
     {
       icon: HelpCircle,
-      title: 'Central de Ajuda',
-      subtitle: 'Encontre respostas para suas dúvidas',
+      title: t('settings.helpCenter'),
+      subtitle: t('settings.helpCenterDesc'),
       color: '#10B981',
       onPress: openHelpCenter,
     },
     {
       icon: Info,
-      title: 'Sobre o App',
-      subtitle: 'Informações sobre o Bit for Kids',
+      title: t('settings.aboutApp'),
+      subtitle: t('settings.aboutAppDesc'),
       color: '#8B5CF6',
       onPress: openAbout,
     },
@@ -255,8 +255,8 @@ export default function SettingsScreen() {
             <ArrowLeft size={24} color="white" />
           </TouchableOpacity>
           <View style={styles.headerText}>
-            <Text style={styles.headerTitle}>Configurações</Text>
-            <Text style={styles.headerSubtitle}>Preferências gerais</Text>
+            <Text style={styles.headerTitle}>{t('settings.headerTitle')}</Text>
+            <Text style={styles.headerSubtitle}>{t('settings.headerSubtitle')}</Text>
           </View>
           <View style={styles.headerRight}>
             <Settings size={24} color="white" />
@@ -333,7 +333,7 @@ export default function SettingsScreen() {
 
         {/* Support */}
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>Suporte</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('settings.supportTitle')}</Text>
           <View style={[styles.supportList, { backgroundColor: colors.card, borderColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }]}>
             {supportActions.map((action, index) => {
               const Icon = action.icon;
@@ -370,9 +370,9 @@ export default function SettingsScreen() {
 
         {/* App Info */}
         <View style={styles.appInfo}>
-          <Text style={[styles.appVersion, { color: colors.textSecondary }]}>Bit for Kids 1.0.0</Text>
+          <Text style={[styles.appVersion, { color: colors.textSecondary }]}>{t('settings.appVersion')}</Text>
           <Text style={[styles.appCopyright, { color: colors.textSecondary }]}>
-            Personalize sua experiência com essas configurações.
+            {t('settings.appCopyright')}
           </Text>
         </View>
       </ScrollView>

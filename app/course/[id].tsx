@@ -12,6 +12,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import AnimatedSection from '@/components/AnimatedSection';
 import AnimatedPressable from '@/components/AnimatedPressable';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
@@ -39,317 +40,319 @@ interface CourseData {
   faq: FAQ[];
 }
 
-const courseDataMap: Record<string, CourseData> = {
-  '1': {
-    title: 'Bitcoin — A Evolução do Dinheiro',
-    subtitle: 'Do zero ao avançado. Construa um patrimônio que nenhum banco ou governo pode controlar.',
-    price: '397',
-    image: require('../../assets/images/curso-bitcoin.png'),
-    trailColor: ['#F7931A', '#E2761B'] as const,
-    trailLabel: 'Trilha 1 — Jornada do Iniciante',
-    sections: [
-      {
-        title: '🟠 O que o Bitcoin pode fazer por você',
-        emoji: '',
-        items: [
-          '🛡️ Blindagem contra a inflação — Proteja o poder de compra do seu dinheiro.',
-          '📈 Reserva de valor de longo prazo — Construa uma base financeira sólida que atravessa gerações.',
-          '💰 Poupança inconfiscável — Comece hoje, mesmo com pequenos aportes.',
-          '🌍 Blindagem patrimonial — Retire parte do capital do sistema financeiro tradicional.',
-          '🚫 Proteção contra bloqueios — Elimine a vulnerabilidade a bloqueios de contas.',
-          '👨‍👩‍👧 Proteção familiar — Garanta um patrimônio soberano para sua família.',
-          '🧓 Aposentadoria independente — Construa uma alternativa real para o seu futuro.',
-          '📊 Inteligência de mercado — Entenda os ciclos do Bitcoin.',
-          '🧠 Controle emocional — Evite decisões impulsivas.',
-          '📅 Estratégia de longo prazo — Saia da especulação e torne-se um investidor.',
-        ],
-      },
-      {
-        title: '🔐 Autocustódia — o verdadeiro poder do Bitcoin',
-        emoji: '',
-        items: [
-          'No mundo do Bitcoin existe uma regra fundamental: "Se você não controla suas chaves, você não controla seu dinheiro."',
-          'O que são carteiras digitais (wallets)',
-          'Como funcionam chaves públicas e privadas',
-          'Como escolher a carteira ideal',
-          'Como guardar seus Bitcoins com segurança absoluta',
-          'Quando usar corretoras e quando retirar seus ativos',
-        ],
-      },
-      {
-        title: '📚 O que você vai aprender',
-        emoji: '',
-        items: [
-          'O que é Bitcoin e por que ele foi criado',
-          'Como funciona a blockchain',
-          'Como funcionam as transações',
-          'O papel da mineração',
-          'Por que existem apenas 21 milhões de Bitcoins',
-          'Como comprar Bitcoin com segurança',
-          'Como usar corretoras e P2P',
-          'Como armazenar Bitcoin corretamente em autocustódia',
-          'Como utilizar chaves públicas e privadas',
-          'Como evitar golpes e erros comuns',
-          'Como entender os ciclos de mercado',
-        ],
-      },
-      {
-        title: '🏦 Torne-se seu próprio banco',
-        emoji: '',
-        items: [
-          'Comprar Bitcoin com segurança',
-          'Guardar seus ativos sob sua própria custódia',
-          'Proteger seu patrimônio da inflação',
-          'Evitar golpes e erros comuns',
-          'Entender os ciclos do mercado',
-          'Construir uma reserva financeira soberana',
-          '🌍 Mover dinheiro globalmente',
-          '🔐 Guardar patrimônio em autocustódia',
-          '⚡ Utilizar uma rede financeira que funciona 24 horas por dia',
-        ],
-      },
-      {
-        title: '👣 Este curso foi criado para iniciantes',
-        emoji: '',
-        items: [
-          '✔ Nunca comprou Bitcoin',
-          '✔ Quer começar com pouco dinheiro',
-          '✔ Busca segurança para proteger o patrimônio',
-          '✔ Quer aprender de forma simples e prática',
-        ],
-      },
-      {
-        title: '👨‍👩‍👧 O Legado da Família',
-        emoji: '',
-        items: [
-          'Proteção contra a desvalorização: O Bitcoin preserva valor através das décadas.',
-          'Patrimônio Inconfiscável: Um ativo que não depende de governos ou bancos.',
-          'Soberania Digital: Mais do que dinheiro, você transfere conhecimento.',
-          'Imunidade Sistêmica: Proteção contra crises políticas e instabilidade.',
-          'Um Ato de Amor e Responsabilidade: Uma ferramenta de liberdade financeira real.',
-        ],
-      },
-    ],
-    extraContent: [
-      'Bitcoin: um novo sistema financeiro — O Bitcoin é uma rede financeira global que funciona sem bancos e sem autoridades centrais. Ele permite que qualquer pessoa armazene riqueza de forma independente, transfira dinheiro globalmente e participe de uma rede financeira aberta.',
-      'Existe um limite matemático programado no código: apenas 21 milhões de Bitcoins existirão. Essa escassez digital é o que torna o Bitcoin um dos ativos mais sólidos da era digital.',
-    ],
-    faq: [
-      { q: 'Preciso entender de tecnologia?', a: 'Não. O curso foi criado para pessoas que estão começando do zero.' },
-      { q: 'Quanto preciso para começar?', a: 'Você pode comprar frações de Bitcoin. É possível começar com valores pequenos.' },
-      { q: 'Como eu compro Bitcoin?', a: 'No curso você aprenderá diferentes formas: corretoras de criptomoedas e compra P2P (direto entre pessoas).' },
-      { q: 'Bitcoin não é arriscado?', a: 'O curso ensina uma abordagem de longo prazo, mostrando como evitar erros comuns e construir reserva de valor com estratégia.' },
-      { q: 'O que é autocustódia?', a: 'Autocustódia significa que somente você controla seus Bitcoins. No curso você aprenderá como utilizar carteiras digitais (wallets) para armazenar seus ativos com segurança.' },
-      { q: 'Posso perder meus Bitcoins?', a: 'Se você aprender autocustódia corretamente, seus Bitcoins ficam sob seu controle. O curso ensina boas práticas de segurança.' },
-      { q: 'O Bitcoin é legal?', a: 'Sim. O Bitcoin é uma tecnologia aberta utilizada por milhões de pessoas no mundo inteiro.' },
-      { q: 'O curso ensina como guardar Bitcoin com segurança?', a: 'Sim. Você aprenderá como funcionam as carteiras digitais e como utilizá-las com segurança.' },
-      { q: 'Bitcoin pode ser usado como reserva de valor?', a: 'Sim. O curso ensina como muitas pessoas utilizam Bitcoin como reserva de valor no longo prazo.' },
-      { q: 'Posso acessar o curso de qualquer lugar?', a: 'Sim. O curso é 100% online e pode ser acessado de qualquer lugar do mundo.' },
-      { q: 'Tem garantia?', a: 'Sim. Garantia total de 7 dias. Se não for para você, devolvo 100% do valor.' },
-    ],
-  },
-  '2': {
-    title: 'Ethereum, Dólar Digital e Finanças Descentralizadas',
-    subtitle: 'Como usar criptomoedas no dia a dia e acessar o sistema financeiro da internet.',
-    price: '397',
-    image: require('../../assets/images/curso-ethereum.png'),
-    trailColor: ['#627EEA', '#3B5998'] as const,
-    trailLabel: 'Trilha 1 — Jornada do Iniciante',
-    sections: [
-      {
-        title: '🌐 O sistema financeiro da internet',
-        emoji: '',
-        items: [
-          'Se o Bitcoin representa o dinheiro da nova economia, a Ethereum representa o sistema financeiro onde esse dinheiro circula.',
-          'A rede Ethereum permite criar aplicações financeiras que funcionam diretamente na blockchain através de smart contracts (contratos inteligentes).',
-          'Exchanges descentralizadas, empréstimos digitais, aplicações financeiras globais, pagamentos internacionais e movimentação de dólar digital — tudo funcionando diretamente na internet.',
-        ],
-      },
-      {
-        title: '💵 O que você vai aprender',
-        emoji: '',
-        items: [
-          '🔵 O que é a rede Ethereum e como funciona',
-          '🔗 O que são smart contracts (contratos inteligentes)',
-          '💵 O que são stablecoins (dólar digital)',
-          '🏦 Diferença entre corretoras centralizadas e descentralizadas',
-          '🌐 Como funcionam as finanças descentralizadas (DeFi)',
-          '📱 Como utilizar criptomoedas no dia a dia',
-          '🔐 Como utilizar autocustódia para controlar seus ativos',
-          'Aplicações: Uniswap (corretora) e Aave (empréstimos)',
-        ],
-      },
-      {
-        title: '💳 Usando criptomoedas no dia a dia',
-        emoji: '',
-        items: [
-          '💸 Enviar e receber dinheiro para qualquer lugar do mundo',
-          '🌎 Realizar transferências internacionais rapidamente',
-          '💳 Utilizar cartões vinculados a criptomoedas',
-          '📲 Pagar contas e serviços utilizando dólar digital',
-          '⚡ Movimentar dinheiro diretamente pela blockchain',
-        ],
-      },
-      {
-        title: '💵 Entenda o dólar digital (Stablecoins)',
-        emoji: '',
-        items: [
-          'Stablecoins são criptomoedas pareadas ao valor do dólar.',
-          '🌎 Enviar dólares para qualquer lugar do mundo',
-          '⚡ Realizar transferências rápidas',
-          '📱 Movimentar dinheiro diretamente pela blockchain',
-          '💳 Realizar pagamentos digitais',
-          'Exemplos: USDT, USDC, DAI',
-        ],
-      },
-      {
-        title: '🔐 Autocustódia: controle real sobre seu dinheiro',
-        emoji: '',
-        items: [
-          'Como utilizar carteiras digitais (wallets)',
-          'Como guardar seus ativos com segurança',
-          'Como manter controle total sobre seus fundos',
-          '🚫 Nenhum banco controla seu dinheiro',
-          '🚫 Nenhum governo pode congelar seus ativos',
-          '🚫 Ninguém pode acessar seus fundos sem sua autorização',
-        ],
-      },
-      {
-        title: '🎯 Ao final deste treinamento',
-        emoji: '',
-        items: [
-          '✔ Entender como funciona a rede Ethereum',
-          '✔ Utilizar dólar digital (stablecoins)',
-          '✔ Enviar e receber dinheiro globalmente pela blockchain',
-          '✔ Utilizar criptomoedas no dia a dia',
-          '✔ Operar em corretoras centralizadas e descentralizadas',
-          '✔ Acessar aplicações DeFi como Aave e Uniswap',
-          '✔ Manter seus ativos em autocustódia com segurança',
-        ],
-      },
-      {
-        title: '👣 Para quem é este treinamento',
-        emoji: '',
-        items: [
-          '💵 Quer aprender a usar dólar digital (stablecoins)',
-          '🌎 Quer enviar e receber dinheiro globalmente',
-          '📱 Quer utilizar criptomoedas no dia a dia',
-          '🔄 Quer entender exchanges descentralizadas e DeFi',
-          '🏦 Quer acessar serviços financeiros sem depender de bancos',
-          '🔐 Quer aprender autocustódia',
-          '🚫 Quer um sistema financeiro que não exige CPF',
-        ],
-      },
-    ],
-    extraContent: [
-      'O Bitcoin criou o dinheiro da nova economia. A Ethereum criou o sistema financeiro que funciona na internet. Aprender a utilizar essas duas tecnologias significa entender como o dinheiro do futuro funciona.',
-    ],
-    faq: [
-      { q: 'Preciso entender de tecnologia para usar Ethereum ou DeFi?', a: 'Não. Este treinamento foi criado para pessoas começando do zero.' },
-      { q: 'O que é Ethereum?', a: 'Ethereum é uma rede blockchain que permite criar aplicações financeiras que funcionam diretamente na internet, sem depender de bancos.' },
-      { q: 'O que são stablecoins (dólar digital)?', a: 'Stablecoins são criptomoedas com valor pareado ao dólar. Exemplos: USDT, USDC, DAI.' },
-      { q: 'Preciso ter conta em banco ou CPF para usar DeFi?', a: 'Não. Basta ter uma carteira digital (wallet) para utilizar aplicações descentralizadas.' },
-      { q: 'O que são finanças descentralizadas (DeFi)?', a: 'São aplicações financeiras que funcionam diretamente na blockchain: troca de criptomoedas, empréstimos e aplicações, sem depender de bancos.' },
-      { q: 'O que é uma DEX (exchange descentralizada)?', a: 'É uma plataforma que permite trocar criptomoedas diretamente na blockchain, sem intermediários.' },
-      { q: 'O que é o protocolo Aave?', a: 'Aave é uma plataforma de empréstimos descentralizados que funciona diretamente na blockchain.' },
-      { q: 'Posso usar criptomoedas no dia a dia?', a: 'Sim. No treinamento você aprenderá como enviar dinheiro, usar cartões cripto, pagar contas e fazer transferências.' },
-      { q: 'O que é autocustódia?', a: 'Autocustódia significa que somente você controla suas chaves e seus ativos digitais.' },
-      { q: 'DeFi é seguro?', a: 'As tecnologias blockchain são seguras, mas é importante saber utilizá-las. O curso ensina como identificar protocolos confiáveis e evitar golpes.' },
-      { q: 'Posso perder dinheiro usando DeFi?', a: 'Como qualquer sistema financeiro, existem riscos. O treinamento ensina boas práticas de segurança e uso responsável.' },
-      { q: 'Posso acessar o curso de qualquer lugar?', a: 'Sim. O treinamento é 100% online.' },
-    ],
-  },
-  '3': {
-    title: 'Autocustódia e Criptomoedas no Dia a Dia',
-    subtitle: 'Aprenda a guardar seus ativos com segurança e utilizar criptomoedas na prática.',
-    price: '397',
-    image: require('../../assets/images/curso-autocustodia.png'),
-    trailColor: ['#3B82F6', '#1D4ED8'] as const,
-    trailLabel: 'Trilha 2 — Jornada da Soberania',
-    sections: [
-      {
-        title: '🟠 O que é autocustódia?',
-        emoji: '',
-        items: [
-          'Autocustódia significa que você mesmo guarda e controla suas criptomoedas, sem depender de bancos, corretoras ou terceiros.',
-          'Quem possui a chave privada controla o dinheiro.',
-          '🚫 Nenhum banco controla seu dinheiro',
-          '🚫 Nenhuma instituição pode bloquear seus ativos',
-          '🚫 Ninguém pode acessar seus fundos sem sua autorização',
-          'Seu patrimônio passa a existir diretamente na blockchain, sob seu controle.',
-        ],
-      },
-      {
-        title: '🔑 O que você vai aprender',
-        emoji: '',
-        items: [
-          '🔐 O que são chaves privadas e chaves públicas',
-          '💻 O que é uma wallet (carteira digital)',
-          '📱 Diferença entre hot wallet e cold wallet',
-          '🛡️ Como proteger suas chaves e seus ativos',
-        ],
-      },
-      {
-        title: '📲 Tipos de carteiras',
-        emoji: '',
-        items: [
-          '📱 Hot Wallets — carteiras conectadas à internet',
-          '🔐 Cold Wallets — carteiras offline para maior segurança',
-          'Quando utilizar cada uma delas.',
-        ],
-      },
-      {
-        title: '🛡️ Segurança na autocustódia',
-        emoji: '',
-        items: [
-          '⚠️ Como evitar golpes e fraudes',
-          '⚠️ Como proteger sua seed phrase (frase de recuperação)',
-          '⚠️ Como fazer backups seguros',
-        ],
-      },
-      {
-        title: '📱 Aplicativos para usar criptomoedas no dia a dia',
-        emoji: '',
-        items: [
-          '💸 Enviar e receber PIX',
-          '📄 Pagar boletos',
-          '💳 Utilizar cartão de débito global',
-          '🌎 Movimentar dinheiro internacionalmente',
-          '📲 Pagar serviços e compras do dia a dia',
-          '⚡ Converter criptomoedas automaticamente no momento do pagamento',
-          'Pagar compras no Brasil e no exterior, utilizar cartão internacional sem IOF e movimentar dinheiro globalmente.',
-        ],
-      },
-      {
-        title: '🎯 Ao final deste treinamento',
-        emoji: '',
-        items: [
-          '✔️ Criar e configurar sua própria carteira',
-          '✔️ Guardar Bitcoin e criptomoedas com segurança',
-          '✔️ Proteger suas chaves privadas',
-          '✔️ Evitar erros comuns que fazem pessoas perderem dinheiro',
-          '✔️ Utilizar aplicativos para pagamentos e transferências',
-          '✔️ Movimentar dinheiro sem depender de bancos',
-        ],
-      },
-      {
-        title: '🏦 Torne-se seu próprio banco',
-        emoji: '',
-        items: [
-          '🔐 Controle seu patrimônio',
-          '🌍 Mova dinheiro globalmente',
-          '⚡ Utilize redes financeiras descentralizadas',
-          '📱 Realize pagamentos no dia a dia',
-          'Tenha privacidade e liberdade. Sem depender de bancos.',
-        ],
-      },
-    ],
-    extraContent: [
-      'Não é apenas sobre tecnologia — É sobre liberdade financeira. Quando você entende autocustódia, você deixa de depender de instituições para controlar o que é seu. Você passa a ter controle real sobre o seu dinheiro.',
-    ],
-    faq: [],
-  },
-};
+function getCourseData(t: (key: string) => string): Record<string, CourseData> {
+  return {
+    '1': {
+      title: t('courseDetail.course1.title'),
+      subtitle: t('courseDetail.course1.subtitle'),
+      price: '397',
+      image: require('../../assets/images/curso-bitcoin.png'),
+      trailColor: ['#F7931A', '#E2761B'] as const,
+      trailLabel: t('courseDetail.course1.trailLabel'),
+      sections: [
+        {
+          title: '🟠 ' + t('courseDetail.course1.section1Title'),
+          emoji: '',
+          items: [
+            '🛡️ ' + t('courseDetail.course1.section1Item1'),
+            '📈 ' + t('courseDetail.course1.section1Item2'),
+            '💰 ' + t('courseDetail.course1.section1Item3'),
+            '🌍 ' + t('courseDetail.course1.section1Item4'),
+            '🚫 ' + t('courseDetail.course1.section1Item5'),
+            '👨‍👩‍👧 ' + t('courseDetail.course1.section1Item6'),
+            '🧓 ' + t('courseDetail.course1.section1Item7'),
+            '📊 ' + t('courseDetail.course1.section1Item8'),
+            '🧠 ' + t('courseDetail.course1.section1Item9'),
+            '📅 ' + t('courseDetail.course1.section1Item10'),
+          ],
+        },
+        {
+          title: '🔐 ' + t('courseDetail.course1.section2Title'),
+          emoji: '',
+          items: [
+            t('courseDetail.course1.section2Item1'),
+            t('courseDetail.course1.section2Item2'),
+            t('courseDetail.course1.section2Item3'),
+            t('courseDetail.course1.section2Item4'),
+            t('courseDetail.course1.section2Item5'),
+            t('courseDetail.course1.section2Item6'),
+          ],
+        },
+        {
+          title: '📚 ' + t('courseDetail.course1.section3Title'),
+          emoji: '',
+          items: [
+            t('courseDetail.course1.section3Item1'),
+            t('courseDetail.course1.section3Item2'),
+            t('courseDetail.course1.section3Item3'),
+            t('courseDetail.course1.section3Item4'),
+            t('courseDetail.course1.section3Item5'),
+            t('courseDetail.course1.section3Item6'),
+            t('courseDetail.course1.section3Item7'),
+            t('courseDetail.course1.section3Item8'),
+            t('courseDetail.course1.section3Item9'),
+            t('courseDetail.course1.section3Item10'),
+            t('courseDetail.course1.section3Item11'),
+          ],
+        },
+        {
+          title: '🏦 ' + t('courseDetail.course1.section4Title'),
+          emoji: '',
+          items: [
+            t('courseDetail.course1.section4Item1'),
+            t('courseDetail.course1.section4Item2'),
+            t('courseDetail.course1.section4Item3'),
+            t('courseDetail.course1.section4Item4'),
+            t('courseDetail.course1.section4Item5'),
+            t('courseDetail.course1.section4Item6'),
+            '🌍 ' + t('courseDetail.course1.section4Item7'),
+            '🔐 ' + t('courseDetail.course1.section4Item8'),
+            '⚡ ' + t('courseDetail.course1.section4Item9'),
+          ],
+        },
+        {
+          title: '👣 ' + t('courseDetail.course1.section5Title'),
+          emoji: '',
+          items: [
+            '✔ ' + t('courseDetail.course1.section5Item1'),
+            '✔ ' + t('courseDetail.course1.section5Item2'),
+            '✔ ' + t('courseDetail.course1.section5Item3'),
+            '✔ ' + t('courseDetail.course1.section5Item4'),
+          ],
+        },
+        {
+          title: '👨‍👩‍👧 ' + t('courseDetail.course1.section6Title'),
+          emoji: '',
+          items: [
+            t('courseDetail.course1.section6Item1'),
+            t('courseDetail.course1.section6Item2'),
+            t('courseDetail.course1.section6Item3'),
+            t('courseDetail.course1.section6Item4'),
+            t('courseDetail.course1.section6Item5'),
+          ],
+        },
+      ],
+      extraContent: [
+        t('courseDetail.course1.extra1'),
+        t('courseDetail.course1.extra2'),
+      ],
+      faq: [
+        { q: t('courseDetail.course1.faq1q'), a: t('courseDetail.course1.faq1a') },
+        { q: t('courseDetail.course1.faq2q'), a: t('courseDetail.course1.faq2a') },
+        { q: t('courseDetail.course1.faq3q'), a: t('courseDetail.course1.faq3a') },
+        { q: t('courseDetail.course1.faq4q'), a: t('courseDetail.course1.faq4a') },
+        { q: t('courseDetail.course1.faq5q'), a: t('courseDetail.course1.faq5a') },
+        { q: t('courseDetail.course1.faq6q'), a: t('courseDetail.course1.faq6a') },
+        { q: t('courseDetail.course1.faq7q'), a: t('courseDetail.course1.faq7a') },
+        { q: t('courseDetail.course1.faq8q'), a: t('courseDetail.course1.faq8a') },
+        { q: t('courseDetail.course1.faq9q'), a: t('courseDetail.course1.faq9a') },
+        { q: t('courseDetail.course1.faq10q'), a: t('courseDetail.course1.faq10a') },
+        { q: t('courseDetail.course1.faq11q'), a: t('courseDetail.course1.faq11a') },
+      ],
+    },
+    '2': {
+      title: t('courseDetail.course2.title'),
+      subtitle: t('courseDetail.course2.subtitle'),
+      price: '397',
+      image: require('../../assets/images/curso-ethereum.png'),
+      trailColor: ['#627EEA', '#3B5998'] as const,
+      trailLabel: t('courseDetail.course2.trailLabel'),
+      sections: [
+        {
+          title: '🌐 ' + t('courseDetail.course2.section1Title'),
+          emoji: '',
+          items: [
+            t('courseDetail.course2.section1Item1'),
+            t('courseDetail.course2.section1Item2'),
+            t('courseDetail.course2.section1Item3'),
+          ],
+        },
+        {
+          title: '💵 ' + t('courseDetail.course2.section2Title'),
+          emoji: '',
+          items: [
+            '🔵 ' + t('courseDetail.course2.section2Item1'),
+            '🔗 ' + t('courseDetail.course2.section2Item2'),
+            '💵 ' + t('courseDetail.course2.section2Item3'),
+            '🏦 ' + t('courseDetail.course2.section2Item4'),
+            '🌐 ' + t('courseDetail.course2.section2Item5'),
+            '📱 ' + t('courseDetail.course2.section2Item6'),
+            '🔐 ' + t('courseDetail.course2.section2Item7'),
+            t('courseDetail.course2.section2Item8'),
+          ],
+        },
+        {
+          title: '💳 ' + t('courseDetail.course2.section3Title'),
+          emoji: '',
+          items: [
+            '💸 ' + t('courseDetail.course2.section3Item1'),
+            '🌎 ' + t('courseDetail.course2.section3Item2'),
+            '💳 ' + t('courseDetail.course2.section3Item3'),
+            '📲 ' + t('courseDetail.course2.section3Item4'),
+            '⚡ ' + t('courseDetail.course2.section3Item5'),
+          ],
+        },
+        {
+          title: '💵 ' + t('courseDetail.course2.section4Title'),
+          emoji: '',
+          items: [
+            t('courseDetail.course2.section4Item1'),
+            '🌎 ' + t('courseDetail.course2.section4Item2'),
+            '⚡ ' + t('courseDetail.course2.section4Item3'),
+            '📱 ' + t('courseDetail.course2.section4Item4'),
+            '💳 ' + t('courseDetail.course2.section4Item5'),
+            t('courseDetail.course2.section4Item6'),
+          ],
+        },
+        {
+          title: '🔐 ' + t('courseDetail.course2.section5Title'),
+          emoji: '',
+          items: [
+            t('courseDetail.course2.section5Item1'),
+            t('courseDetail.course2.section5Item2'),
+            t('courseDetail.course2.section5Item3'),
+            '🚫 ' + t('courseDetail.course2.section5Item4'),
+            '🚫 ' + t('courseDetail.course2.section5Item5'),
+            '🚫 ' + t('courseDetail.course2.section5Item6'),
+          ],
+        },
+        {
+          title: '🎯 ' + t('courseDetail.course2.section6Title'),
+          emoji: '',
+          items: [
+            '✔ ' + t('courseDetail.course2.section6Item1'),
+            '✔ ' + t('courseDetail.course2.section6Item2'),
+            '✔ ' + t('courseDetail.course2.section6Item3'),
+            '✔ ' + t('courseDetail.course2.section6Item4'),
+            '✔ ' + t('courseDetail.course2.section6Item5'),
+            '✔ ' + t('courseDetail.course2.section6Item6'),
+            '✔ ' + t('courseDetail.course2.section6Item7'),
+          ],
+        },
+        {
+          title: '👣 ' + t('courseDetail.course2.section7Title'),
+          emoji: '',
+          items: [
+            '💵 ' + t('courseDetail.course2.section7Item1'),
+            '🌎 ' + t('courseDetail.course2.section7Item2'),
+            '📱 ' + t('courseDetail.course2.section7Item3'),
+            '🔄 ' + t('courseDetail.course2.section7Item4'),
+            '🏦 ' + t('courseDetail.course2.section7Item5'),
+            '🔐 ' + t('courseDetail.course2.section7Item6'),
+            '🚫 ' + t('courseDetail.course2.section7Item7'),
+          ],
+        },
+      ],
+      extraContent: [
+        t('courseDetail.course2.extra1'),
+      ],
+      faq: [
+        { q: t('courseDetail.course2.faq1q'), a: t('courseDetail.course2.faq1a') },
+        { q: t('courseDetail.course2.faq2q'), a: t('courseDetail.course2.faq2a') },
+        { q: t('courseDetail.course2.faq3q'), a: t('courseDetail.course2.faq3a') },
+        { q: t('courseDetail.course2.faq4q'), a: t('courseDetail.course2.faq4a') },
+        { q: t('courseDetail.course2.faq5q'), a: t('courseDetail.course2.faq5a') },
+        { q: t('courseDetail.course2.faq6q'), a: t('courseDetail.course2.faq6a') },
+        { q: t('courseDetail.course2.faq7q'), a: t('courseDetail.course2.faq7a') },
+        { q: t('courseDetail.course2.faq8q'), a: t('courseDetail.course2.faq8a') },
+        { q: t('courseDetail.course2.faq9q'), a: t('courseDetail.course2.faq9a') },
+        { q: t('courseDetail.course2.faq10q'), a: t('courseDetail.course2.faq10a') },
+        { q: t('courseDetail.course2.faq11q'), a: t('courseDetail.course2.faq11a') },
+        { q: t('courseDetail.course2.faq12q'), a: t('courseDetail.course2.faq12a') },
+      ],
+    },
+    '3': {
+      title: t('courseDetail.course3.title'),
+      subtitle: t('courseDetail.course3.subtitle'),
+      price: '397',
+      image: require('../../assets/images/curso-autocustodia.png'),
+      trailColor: ['#3B82F6', '#1D4ED8'] as const,
+      trailLabel: t('courseDetail.course3.trailLabel'),
+      sections: [
+        {
+          title: '🟠 ' + t('courseDetail.course3.section1Title'),
+          emoji: '',
+          items: [
+            t('courseDetail.course3.section1Item1'),
+            t('courseDetail.course3.section1Item2'),
+            '🚫 ' + t('courseDetail.course3.section1Item3'),
+            '🚫 ' + t('courseDetail.course3.section1Item4'),
+            '🚫 ' + t('courseDetail.course3.section1Item5'),
+            t('courseDetail.course3.section1Item6'),
+          ],
+        },
+        {
+          title: '🔑 ' + t('courseDetail.course3.section2Title'),
+          emoji: '',
+          items: [
+            '🔐 ' + t('courseDetail.course3.section2Item1'),
+            '💻 ' + t('courseDetail.course3.section2Item2'),
+            '📱 ' + t('courseDetail.course3.section2Item3'),
+            '🛡️ ' + t('courseDetail.course3.section2Item4'),
+          ],
+        },
+        {
+          title: '📲 ' + t('courseDetail.course3.section3Title'),
+          emoji: '',
+          items: [
+            '📱 ' + t('courseDetail.course3.section3Item1'),
+            '🔐 ' + t('courseDetail.course3.section3Item2'),
+            t('courseDetail.course3.section3Item3'),
+          ],
+        },
+        {
+          title: '🛡️ ' + t('courseDetail.course3.section4Title'),
+          emoji: '',
+          items: [
+            '⚠️ ' + t('courseDetail.course3.section4Item1'),
+            '⚠️ ' + t('courseDetail.course3.section4Item2'),
+            '⚠️ ' + t('courseDetail.course3.section4Item3'),
+          ],
+        },
+        {
+          title: '📱 ' + t('courseDetail.course3.section5Title'),
+          emoji: '',
+          items: [
+            '💸 ' + t('courseDetail.course3.section5Item1'),
+            '📄 ' + t('courseDetail.course3.section5Item2'),
+            '💳 ' + t('courseDetail.course3.section5Item3'),
+            '🌎 ' + t('courseDetail.course3.section5Item4'),
+            '📲 ' + t('courseDetail.course3.section5Item5'),
+            '⚡ ' + t('courseDetail.course3.section5Item6'),
+            t('courseDetail.course3.section5Item7'),
+          ],
+        },
+        {
+          title: '🎯 ' + t('courseDetail.course3.section6Title'),
+          emoji: '',
+          items: [
+            '✔️ ' + t('courseDetail.course3.section6Item1'),
+            '✔️ ' + t('courseDetail.course3.section6Item2'),
+            '✔️ ' + t('courseDetail.course3.section6Item3'),
+            '✔️ ' + t('courseDetail.course3.section6Item4'),
+            '✔️ ' + t('courseDetail.course3.section6Item5'),
+            '✔️ ' + t('courseDetail.course3.section6Item6'),
+          ],
+        },
+        {
+          title: '🏦 ' + t('courseDetail.course3.section7Title'),
+          emoji: '',
+          items: [
+            '🔐 ' + t('courseDetail.course3.section7Item1'),
+            '🌍 ' + t('courseDetail.course3.section7Item2'),
+            '⚡ ' + t('courseDetail.course3.section7Item3'),
+            '📱 ' + t('courseDetail.course3.section7Item4'),
+            t('courseDetail.course3.section7Item5'),
+          ],
+        },
+      ],
+      extraContent: [
+        t('courseDetail.course3.extra1'),
+      ],
+      faq: [],
+    },
+  };
+}
 
 function FAQItem({ item, colors }: { item: FAQ; colors: any }) {
   const [open, setOpen] = useState(false);
@@ -395,18 +398,23 @@ export default function CourseDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const { colors } = useTheme();
+  const { t } = useLanguage();
 
+  const courseDataMap = getCourseData(t);
   const course = courseDataMap[id || '1'];
   if (!course) {
     return (
       <View style={[styles.container, { backgroundColor: colors.background, justifyContent: 'center', alignItems: 'center' }]}>
-        <Text style={{ color: colors.text }}>Curso não encontrado</Text>
+        <Text style={{ color: colors.text }}>{t('courseDetail.courseNotFound')}</Text>
       </View>
     );
   }
 
   const handleBuy = () => {
-    Alert.alert('Compra', `Redirecionando para pagamento do curso: ${course.title}\nValor: R$ ${course.price},00`);
+    const message = t('courseDetail.buyAlertMessage')
+      .replace('{{title}}', course.title)
+      .replace('{{price}}', course.price);
+    Alert.alert(t('courseDetail.buyAlertTitle'), message);
   };
 
   return (
@@ -454,7 +462,7 @@ export default function CourseDetailScreen() {
           {/* FAQ */}
           {course.faq.length > 0 && (
             <>
-              <Text style={[styles.sectionTitle, { color: colors.text }]}>❓ Perguntas Frequentes</Text>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>{'❓ ' + t('courseDetail.faqTitle')}</Text>
               {course.faq.map((item, idx) => (
                 <FAQItem key={idx} item={item} colors={colors} />
               ))}
@@ -465,9 +473,9 @@ export default function CourseDetailScreen() {
           {/* Guarantee */}
           <View style={[styles.guaranteeCard, { backgroundColor: colors.card }]}>
             <Shield size={28} color="#10B981" />
-            <Text style={[styles.guaranteeTitle, { color: colors.text }]}>Garantia Total de 7 Dias</Text>
+            <Text style={[styles.guaranteeTitle, { color: colors.text }]}>{t('courseDetail.guaranteeTitle')}</Text>
             <Text style={[styles.guaranteeDesc, { color: colors.textSecondary }]}>
-              Se não for para você, devolvo 100% do valor. Sem perguntas.
+              {t('courseDetail.guaranteeDesc')}
             </Text>
           </View>
 
@@ -478,12 +486,12 @@ export default function CourseDetailScreen() {
       {/* Footer CTA */}
       <View style={[styles.footer, { backgroundColor: colors.background, borderTopColor: colors.card }]}>
         <View>
-          <Text style={styles.footerLabel}>Investimento</Text>
+          <Text style={styles.footerLabel}>{t('courseDetail.investmentLabel')}</Text>
           <Text style={styles.footerPrice}>R$ {course.price},00</Text>
         </View>
         <AnimatedPressable onPress={handleBuy}>
           <LinearGradient colors={['#8B5CF6', '#6D28D9'] as const} style={styles.buyBtn}>
-            <Text style={styles.buyBtnText}>Garantir Acesso</Text>
+            <Text style={styles.buyBtnText}>{t('courseDetail.buyButton')}</Text>
           </LinearGradient>
         </AnimatedPressable>
       </View>

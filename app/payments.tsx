@@ -13,6 +13,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import {
   ArrowLeft,
   CreditCard,
@@ -34,6 +35,7 @@ const { width } = Dimensions.get('window');
 export default function PaymentsScreen() {
   const router = useRouter();
   const { colors, isDark } = useTheme();
+  const { t } = useLanguage();
   const [selectedTab, setSelectedTab] = useState('history');
   const [showAddModal, setShowAddModal] = useState(false);
   const [newCard, setNewCard] = useState({
@@ -69,7 +71,7 @@ export default function PaymentsScreen() {
     {
       id: 1,
       type: 'purchase',
-      description: 'Mini Curso GPS Bitcoin',
+      description: t('payments.transactionMiniCurso'),
       amount: 67.0,
       date: '15/01/2024',
       status: 'completed',
@@ -78,7 +80,7 @@ export default function PaymentsScreen() {
     {
       id: 2,
       type: 'purchase',
-      description: 'Curso Autocustódia',
+      description: t('payments.transactionAutocustodia'),
       amount: 97.0,
       date: '10/01/2024',
       status: 'completed',
@@ -87,7 +89,7 @@ export default function PaymentsScreen() {
     {
       id: 3,
       type: 'cashback',
-      description: 'Cashback acumulado',
+      description: t('payments.transactionCashback'),
       amount: 20.0,
       date: '10/01/2024',
       status: 'completed',
@@ -96,7 +98,7 @@ export default function PaymentsScreen() {
     {
       id: 4,
       type: 'purchase',
-      description: 'Curso DeFi e Ethereum',
+      description: t('payments.transactionDeFi'),
       amount: 397.0,
       date: '05/01/2024',
       status: 'completed',
@@ -105,7 +107,7 @@ export default function PaymentsScreen() {
     {
       id: 5,
       type: 'purchase',
-      description: 'Pacote Completo',
+      description: t('payments.transactionPacote'),
       amount: 790.0,
       date: '01/01/2024',
       status: 'refunded',
@@ -140,7 +142,7 @@ export default function PaymentsScreen() {
       !newCard.expiryYear ||
       !newCard.cvv
     ) {
-      Alert.alert('Erro', 'Por favor, preencha todos os campos');
+      Alert.alert(t('payments.errorTitle'), t('payments.errorFillAll'));
       return;
     }
 
@@ -149,7 +151,7 @@ export default function PaymentsScreen() {
       newCard.number.replace(/\s/g, '').length < 13 ||
       newCard.number.replace(/\s/g, '').length > 19
     ) {
-      Alert.alert('Erro', 'Número do cartão inválido');
+      Alert.alert(t('payments.errorTitle'), t('payments.errorInvalidCard'));
       return;
     }
 
@@ -177,7 +179,7 @@ export default function PaymentsScreen() {
       cvv: '',
     });
 
-    Alert.alert('Sucesso', 'Cartão adicionado com sucesso!');
+    Alert.alert(t('payments.successTitle'), t('payments.cardAdded'));
   };
 
   // Handle set default card
@@ -189,8 +191,8 @@ export default function PaymentsScreen() {
     setPaymentMethods(updatedMethods);
     const card = paymentMethods.find((c) => c.id === id);
     Alert.alert(
-      'Sucesso',
-      `${card?.brand} •••• ${card?.last4} agora é seu cartão padrão!`
+      t('payments.successTitle'),
+      t('payments.cardNowDefault').replace('{{brand}}', card?.brand || '').replace('{{last4}}', card?.last4 || '')
     );
   };
 
@@ -200,23 +202,23 @@ export default function PaymentsScreen() {
 
     if (cardToRemove?.isDefault) {
       Alert.alert(
-        'Aviso',
-        'Você não pode remover o cartão padrão. Defina outro cartão como padrão primeiro.'
+        t('payments.warningTitle'),
+        t('payments.cannotRemoveDefault')
       );
       return;
     }
 
     Alert.alert(
-      'Remover Cartão',
-      `Tem certeza que deseja remover o cartão ${cardToRemove?.brand} •••• ${cardToRemove?.last4}?`,
+      t('payments.removeCardTitle'),
+      t('payments.removeCardMessage').replace('{{brand}}', cardToRemove?.brand || '').replace('{{last4}}', cardToRemove?.last4 || ''),
       [
-        { text: 'Cancelar', style: 'cancel' },
+        { text: t('payments.removeCardCancel'), style: 'cancel' },
         {
-          text: 'Remover',
+          text: t('payments.removeCardConfirm'),
           style: 'destructive',
           onPress: () => {
             setPaymentMethods(paymentMethods.filter((card) => card.id !== id));
-            Alert.alert('Sucesso', 'Cartão removido com sucesso!');
+            Alert.alert(t('payments.successTitle'), t('payments.cardRemoved'));
           },
         },
       ]
@@ -246,7 +248,7 @@ export default function PaymentsScreen() {
         >
           <ArrowLeft size={24} color="white" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Pagamentos</Text>
+        <Text style={styles.headerTitle}>{t('payments.headerTitle')}</Text>
         <View style={styles.headerRight} />
       </LinearGradient>
 
@@ -258,7 +260,7 @@ export default function PaymentsScreen() {
             R$ {stats.totalSpent.toFixed(2).replace('.', ',')}
           </Text>
           <Text style={[styles.statLabel, { color: colors.textSecondary }]}>
-            Total Gasto
+            {t('payments.totalSpent')}
           </Text>
         </View>
 
@@ -268,7 +270,7 @@ export default function PaymentsScreen() {
             R$ {stats.cashbackReceived.toFixed(2).replace('.', ',')}
           </Text>
           <Text style={[styles.statLabel, { color: colors.textSecondary }]}>
-            Cashback
+            {t('payments.cashbackReceived')}
           </Text>
         </View>
       </View>
@@ -288,7 +290,7 @@ export default function PaymentsScreen() {
               { color: selectedTab === 'history' ? '#FFFFFF' : colors.text },
             ]}
           >
-            Histórico
+            {t('payments.tabHistory')}
           </Text>
         </TouchableOpacity>
 
@@ -305,7 +307,7 @@ export default function PaymentsScreen() {
               { color: selectedTab === 'methods' ? '#FFFFFF' : colors.text },
             ]}
           >
-            Métodos
+            {t('payments.tabMethods')}
           </Text>
         </TouchableOpacity>
       </View>
@@ -315,7 +317,7 @@ export default function PaymentsScreen() {
         <View style={styles.content}>
           <View style={styles.section}>
             <Text style={[styles.sectionTitle, { color: colors.text }]}>
-              Últimas Transações
+              {t('payments.lastTransactions')}
             </Text>
 
             {transactions.map((transaction) => (
@@ -386,7 +388,7 @@ export default function PaymentsScreen() {
                   {transaction.status === 'completed' && (
                     <View style={styles.statusBadge}>
                       <Check size={12} color="#10B981" />
-                      <Text style={styles.statusText}>Concluído</Text>
+                      <Text style={styles.statusText}>{t('payments.statusCompleted')}</Text>
                     </View>
                   )}
                   {transaction.status === 'refunded' && (
@@ -397,7 +399,7 @@ export default function PaymentsScreen() {
                       ]}
                     >
                       <Text style={[styles.statusText, { color: '#92400E' }]}>
-                        Reembolsado
+                        {t('payments.statusRefunded')}
                       </Text>
                     </View>
                   )}
@@ -408,7 +410,7 @@ export default function PaymentsScreen() {
             <TouchableOpacity style={styles.downloadButton}>
               <Download size={20} color={colors.primary} />
               <Text style={[styles.downloadText, { color: colors.primary }]}>
-                Baixar Extrato Completo
+                {t('payments.downloadStatement')}
               </Text>
             </TouchableOpacity>
           </View>
@@ -420,14 +422,14 @@ export default function PaymentsScreen() {
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
               <Text style={[styles.sectionTitle, { color: colors.text }]}>
-                Cartões Salvos
+                {t('payments.savedCards')}
               </Text>
               <TouchableOpacity
                 style={styles.addButton}
                 onPress={() => setShowAddModal(true)}
               >
                 <Plus size={20} color="white" />
-                <Text style={styles.addButtonText}>Adicionar</Text>
+                <Text style={styles.addButtonText}>{t('payments.addButton')}</Text>
               </TouchableOpacity>
             </View>
 
@@ -459,7 +461,7 @@ export default function PaymentsScreen() {
                       </Text>
                       {method.isDefault && (
                         <View style={styles.defaultBadge}>
-                          <Text style={styles.defaultText}>Padrão</Text>
+                          <Text style={styles.defaultText}>{t('payments.defaultBadge')}</Text>
                         </View>
                       )}
                     </View>
@@ -477,13 +479,13 @@ export default function PaymentsScreen() {
                         { color: colors.textSecondary },
                       ]}
                     >
-                      {method.holder} • Expira em {method.expiryDate}
+                      {method.holder} • {t('payments.expiresIn')} {method.expiryDate}
                     </Text>
                     {!method.isDefault && (
                       <Text
                         style={[styles.tapToDefault, { color: colors.primary }]}
                       >
-                        Toque para definir como padrão
+                        {t('payments.tapToDefault')}
                       </Text>
                     )}
                   </View>
@@ -505,12 +507,12 @@ export default function PaymentsScreen() {
             <View style={styles.emptyMethods}>
               <Wallet size={48} color={colors.textTertiary} />
               <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
-                Você pode adicionar múltiplos cartões
+                {t('payments.multipleCards')}
               </Text>
               <Text
                 style={[styles.emptySubtext, { color: colors.textTertiary }]}
               >
-                Seus dados são criptografados e seguros
+                {t('payments.dataEncrypted')}
               </Text>
             </View>
           </View>
@@ -530,7 +532,7 @@ export default function PaymentsScreen() {
           >
             <View style={styles.modalHeader}>
               <Text style={[styles.modalTitle, { color: colors.text }]}>
-                Adicionar Cartão
+                {t('payments.addCardTitle')}
               </Text>
               <TouchableOpacity
                 onPress={() => setShowAddModal(false)}
@@ -543,7 +545,7 @@ export default function PaymentsScreen() {
             <ScrollView showsVerticalScrollIndicator={false}>
               <View style={styles.formGroup}>
                 <Text style={[styles.label, { color: colors.text }]}>
-                  Número do Cartão
+                  {t('payments.cardNumberLabel')}
                 </Text>
                 <TextInput
                   style={[
@@ -566,7 +568,7 @@ export default function PaymentsScreen() {
 
               <View style={styles.formGroup}>
                 <Text style={[styles.label, { color: colors.text }]}>
-                  Nome no Cartão
+                  {t('payments.cardNameLabel')}
                 </Text>
                 <TextInput
                   style={[
@@ -586,7 +588,7 @@ export default function PaymentsScreen() {
               <View style={styles.row}>
                 <View style={[styles.formGroup, { flex: 1, marginRight: 8 }]}>
                   <Text style={[styles.label, { color: colors.text }]}>
-                    Validade
+                    {t('payments.expiryLabel')}
                   </Text>
                   <View style={styles.expiryRow}>
                     <TextInput
@@ -642,7 +644,7 @@ export default function PaymentsScreen() {
 
                 <View style={[styles.formGroup, { flex: 1, marginLeft: 8 }]}>
                   <Text style={[styles.label, { color: colors.text }]}>
-                    CVV
+                    {t('payments.cvvLabel')}
                   </Text>
                   <TextInput
                     style={[
@@ -670,7 +672,7 @@ export default function PaymentsScreen() {
                 style={styles.submitButton}
                 onPress={handleAddCard}
               >
-                <Text style={styles.submitButtonText}>Adicionar Cartão</Text>
+                <Text style={styles.submitButtonText}>{t('payments.addCardButton')}</Text>
               </TouchableOpacity>
             </ScrollView>
           </View>

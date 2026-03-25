@@ -25,6 +25,7 @@ import {
 } from 'lucide-react-native';
 import { useNotifications } from '../hooks/useNotifications';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface NotificationSettings {
   pushNotifications: boolean;
@@ -42,6 +43,7 @@ interface NotificationSettings {
 export default function NotificationsScreen() {
   const router = useRouter();
   const { colors, isDark } = useTheme();
+  const { t } = useLanguage();
   const { 
     expoPushToken, 
     scheduleBitcoinPriceNotification,
@@ -100,26 +102,26 @@ export default function NotificationsScreen() {
           await scheduleCourseReminder('Introdução ao Bitcoin', 0);
           break;
       }
-      Alert.alert('Sucesso', 'Notificação de teste enviada!');
+      Alert.alert(t('notifications.testSuccessTitle'), t('notifications.testSuccessMessage'));
       loadScheduledNotifications();
     } catch (error) {
-      Alert.alert('Erro', 'Falha ao enviar notificação de teste');
+      Alert.alert(t('notifications.testErrorTitle'), t('notifications.testErrorMessage'));
     }
   };
 
   const clearAllNotifications = () => {
     Alert.alert(
-      'Limpar Notificações',
-      'Tem certeza que deseja cancelar todas as notificações agendadas?',
+      t('notifications.clearAlertTitle'),
+      t('notifications.clearAlertMessage'),
       [
-        { text: 'Cancelar', style: 'cancel' },
+        { text: t('notifications.clearAlertCancel'), style: 'cancel' },
         {
-          text: 'Limpar',
+          text: t('notifications.clearAlertConfirm'),
           style: 'destructive',
           onPress: async () => {
             await cancelAllNotifications();
             setScheduledCount(0);
-            Alert.alert('Sucesso', 'Todas as notificações foram canceladas');
+            Alert.alert(t('notifications.clearSuccessTitle'), t('notifications.clearSuccessMessage'));
           },
         },
       ]
@@ -128,82 +130,82 @@ export default function NotificationsScreen() {
 
   const notificationCategories = [
     {
-      title: 'Notificações Push',
+      title: t('notifications.categoryPush'),
       icon: Smartphone,
       color: '#3B82F6',
       items: [
         {
           key: 'pushNotifications' as keyof NotificationSettings,
-          title: 'Ativar Notificações',
-          subtitle: 'Receber notificações do app',
+          title: t('notifications.enableNotifications'),
+          subtitle: t('notifications.enableNotificationsDesc'),
           enabled: settings.pushNotifications,
         },
         {
           key: 'soundEnabled' as keyof NotificationSettings,
-          title: 'Som',
-          subtitle: 'Reproduzir som nas notificações',
+          title: t('notifications.sound'),
+          subtitle: t('notifications.soundDesc'),
           enabled: settings.soundEnabled,
         },
         {
           key: 'vibrationEnabled' as keyof NotificationSettings,
-          title: 'Vibração',
-          subtitle: 'Vibrar ao receber notificações',
+          title: t('notifications.vibration'),
+          subtitle: t('notifications.vibrationDesc'),
           enabled: settings.vibrationEnabled,
         },
       ],
     },
     {
-      title: 'Bitcoin',
+      title: t('notifications.categoryBitcoin'),
       icon: TrendingUp,
       color: '#F59E0B',
       items: [
         {
           key: 'bitcoinPriceAlerts' as keyof NotificationSettings,
-          title: 'Alertas de Preço',
-          subtitle: 'Notificar mudanças significativas no preço',
+          title: t('notifications.priceAlerts'),
+          subtitle: t('notifications.priceAlertsDesc'),
           enabled: settings.bitcoinPriceAlerts,
         },
         {
           key: 'dailyPriceUpdates' as keyof NotificationSettings,
-          title: 'Atualizações Diárias',
-          subtitle: 'Receber preço do Bitcoin diariamente',
+          title: t('notifications.dailyUpdates'),
+          subtitle: t('notifications.dailyUpdatesDesc'),
           enabled: settings.dailyPriceUpdates,
         },
         {
           key: 'morningPrice' as keyof NotificationSettings,
-          title: 'Preço da Manhã',
-          subtitle: 'Notificação às 8h',
+          title: t('notifications.morningPrice'),
+          subtitle: t('notifications.morningPriceDesc'),
           enabled: settings.morningPrice,
         },
         {
           key: 'eveningPrice' as keyof NotificationSettings,
-          title: 'Preço da Noite',
-          subtitle: 'Notificação às 20h',
+          title: t('notifications.eveningPrice'),
+          subtitle: t('notifications.eveningPriceDesc'),
           enabled: settings.eveningPrice,
         },
         {
           key: 'motivationMessages' as keyof NotificationSettings,
-          title: 'Mensagens Motivacionais',
-          subtitle: 'Dicas e motivação sobre Bitcoin',
+          title: t('notifications.motivationMessages'),
+          subtitle: t('notifications.motivationMessagesDesc'),
           enabled: settings.motivationMessages,
         },
       ],
     },
     {
-      title: 'Cursos e Cashback',
+      title: t('notifications.categoryCoursesCashback'),
       icon: BookOpen,
       color: '#10B981',
       items: [
         {
           key: 'courseReminders' as keyof NotificationSettings,
-          title: 'Lembretes de Curso',
-          subtitle: 'Notificar para continuar assistindo',
+          title: t('notifications.courseReminders'),
+          subtitle: t('notifications.courseRemindersDesc'),
           enabled: settings.courseReminders,
         },
         {
           key: 'cashbackNotifications' as keyof NotificationSettings,
-          title: 'Cashback',
-          subtitle: 'Notificar sobre cashback disponível',
+          title: t('notifications.cashback'),
+          subtitle: t('notifications.cashbackDesc'),
           enabled: settings.cashbackNotifications,
         },
       ],
@@ -222,8 +224,8 @@ export default function NotificationsScreen() {
             <ArrowLeft size={24} color="white" />
           </TouchableOpacity>
           <View style={styles.headerText}>
-            <Text style={styles.headerTitle}>Notificações</Text>
-            <Text style={styles.headerSubtitle}>Preferências de avisos</Text>
+            <Text style={styles.headerTitle}>{t('notifications.headerTitle')}</Text>
+            <Text style={styles.headerSubtitle}>{t('notifications.headerSubtitle')}</Text>
           </View>
           <View style={styles.headerRight}>
             <Bell size={24} color="white" />
@@ -239,13 +241,13 @@ export default function NotificationsScreen() {
               <View style={styles.statusIcon}>
                 <Bell size={20} color="#10B981" />
               </View>
-              <Text style={[styles.statusTitle, { color: colors.text }]}>Status das Notificações</Text>
+              <Text style={[styles.statusTitle, { color: colors.text }]}>{t('notifications.statusTitle')}</Text>
             </View>
             <Text style={styles.statusText}>
-              {expoPushToken ? 'Notificações ativas' : 'Notificações desativadas'}
+              {expoPushToken ? t('notifications.statusActive') : t('notifications.statusInactive')}
             </Text>
             <Text style={[styles.statusSubtext, { color: colors.textSecondary }]}>
-              {scheduledCount} notificação(ões) agendada(s)
+              {t('notifications.statusScheduled').replace('{{count}}', String(scheduledCount))}
             </Text>
           </View>
         </View>
@@ -285,30 +287,30 @@ export default function NotificationsScreen() {
 
         {/* Test Notifications */}
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>Testar Notificações</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('notifications.testTitle')}</Text>
           <View style={styles.testButtons}>
             <TouchableOpacity
               style={[styles.testButton, { backgroundColor: '#F59E0B' }]}
               onPress={() => testNotification('price')}
             >
               <TrendingUp size={16} color="white" />
-              <Text style={styles.testButtonText}>Preço Bitcoin</Text>
+              <Text style={styles.testButtonText}>{t('notifications.testBitcoinPrice')}</Text>
             </TouchableOpacity>
-            
+
             <TouchableOpacity
               style={[styles.testButton, { backgroundColor: '#8B5CF6' }]}
               onPress={() => testNotification('motivation')}
             >
               <Gift size={16} color="white" />
-              <Text style={styles.testButtonText}>Motivação</Text>
+              <Text style={styles.testButtonText}>{t('notifications.testMotivation')}</Text>
             </TouchableOpacity>
-            
+
             <TouchableOpacity
               style={[styles.testButton, { backgroundColor: '#10B981' }]}
               onPress={() => testNotification('course')}
             >
               <BookOpen size={16} color="white" />
-              <Text style={styles.testButtonText}>Curso</Text>
+              <Text style={styles.testButtonText}>{t('notifications.testCourse')}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -320,15 +322,15 @@ export default function NotificationsScreen() {
             onPress={clearAllNotifications}
           >
             <BellOff size={20} color="#EF4444" />
-            <Text style={styles.clearButtonText}>Limpar Todas as Notificações</Text>
+            <Text style={styles.clearButtonText}>{t('notifications.clearAll')}</Text>
           </TouchableOpacity>
         </View>
 
         {/* App Info */}
         <View style={styles.appInfo}>
-          <Text style={[styles.appVersion, { color: colors.textSecondary }]}>Bit for Kids 1.0.0</Text>
+          <Text style={[styles.appVersion, { color: colors.textSecondary }]}>{t('notifications.appVersion')}</Text>
           <Text style={[styles.appCopyright, { color: colors.textSecondary }]}>
-            Configure suas preferências de notificação para uma melhor experiência.
+            {t('notifications.appCopyright')}
           </Text>
         </View>
       </ScrollView>

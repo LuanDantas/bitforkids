@@ -14,6 +14,7 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Mail, Lock, User, Eye, EyeOff, Phone } from 'lucide-react-native';
 import { useVSL } from '@/contexts/VSLContext';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function RegisterScreen() {
   const [name, setName] = useState('');
@@ -26,6 +27,7 @@ export default function RegisterScreen() {
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const router = useRouter();
   const { colors, isDark } = useTheme();
+  const { t } = useLanguage();
   const { source, plan } = useLocalSearchParams();
   const { trackVSLConversion, resetSessionFlag } = useVSL();
 
@@ -38,22 +40,22 @@ export default function RegisterScreen() {
 
   const handleRegister = async () => {
     if (!name || !email || !password || !confirmPassword) {
-      Alert.alert('Erro', 'Por favor, preencha todos os campos');
+      Alert.alert(t('auth.register.errorTitle'), t('auth.register.errorFillAll'));
       return;
     }
 
     if (password !== confirmPassword) {
-      Alert.alert('Erro', 'As senhas não coincidem');
+      Alert.alert(t('auth.register.errorTitle'), t('auth.register.errorPasswordMismatch'));
       return;
     }
 
     if (password.length < 6) {
-      Alert.alert('Erro', 'A senha deve ter pelo menos 6 caracteres');
+      Alert.alert(t('auth.register.errorTitle'), t('auth.register.errorPasswordLength'));
       return;
     }
 
     if (!acceptedTerms) {
-      Alert.alert('Erro', 'Você deve aceitar os termos e condições');
+      Alert.alert(t('auth.register.errorTitle'), t('auth.register.errorAcceptTerms'));
       return;
     }
 
@@ -63,11 +65,11 @@ export default function RegisterScreen() {
     setTimeout(() => {
       setIsLoading(false);
       Alert.alert(
-        'Sucesso!',
-        'Conta criada com sucesso! Você será redirecionado para a plataforma.',
+        t('auth.register.successTitle'),
+        t('auth.register.successMessage'),
         [
           {
-            text: 'Continuar',
+            text: t('auth.register.successButton'),
             onPress: () => {
               // Track purchase conversion if coming from VSL with premium plan
               if (source === 'vsl' && plan === 'premium') {
@@ -97,16 +99,16 @@ export default function RegisterScreen() {
               style={styles.logo}
               resizeMode="contain"
             />
-            <Text style={[styles.title, { color: colors.text }]}>Criar Conta</Text>
+            <Text style={[styles.title, { color: colors.text }]}>{t('auth.register.title')}</Text>
             <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
               {source === 'vsl'
-                ? 'Você está a um passo de transformar a educação financeira do seu filho!'
-                : 'Junte-se à nossa comunidade de aprendizado'}
+                ? t('auth.register.subtitleVSL')
+                : t('auth.register.subtitleDefault')}
             </Text>
             {source === 'vsl' && plan === 'premium' && (
               <View style={styles.vslBadge}>
                 <Text style={styles.vslBadgeText}>
-                  🎯 Você escolheu o Plano Premium - Acesso completo garantido!
+                  🎯 {t('auth.register.vslBadge')}
                 </Text>
               </View>
             )}
@@ -120,7 +122,7 @@ export default function RegisterScreen() {
               </View>
               <TextInput
                 style={[styles.input, { color: colors.text }]}
-                placeholder="Nome completo"
+                placeholder={t('auth.register.namePlaceholder')}
                 placeholderTextColor={colors.textSecondary}
                 value={name}
                 onChangeText={setName}
@@ -133,7 +135,7 @@ export default function RegisterScreen() {
               </View>
               <TextInput
                 style={[styles.input, { color: colors.text }]}
-                placeholder="Email"
+                placeholder={t('auth.register.emailPlaceholder')}
                 placeholderTextColor={colors.textSecondary}
                 value={email}
                 onChangeText={setEmail}
@@ -148,7 +150,7 @@ export default function RegisterScreen() {
               </View>
               <TextInput
                 style={[styles.input, { paddingRight: 50 }]}
-                placeholder="Senha"
+                placeholder={t('auth.register.passwordPlaceholder')}
                 placeholderTextColor={colors.textSecondary}
                 value={password}
                 onChangeText={setPassword}
@@ -172,7 +174,7 @@ export default function RegisterScreen() {
               </View>
               <TextInput
                 style={[styles.input, { paddingRight: 50 }]}
-                placeholder="Confirmar senha"
+                placeholder={t('auth.register.confirmPasswordPlaceholder')}
                 placeholderTextColor={colors.textSecondary}
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
@@ -204,9 +206,9 @@ export default function RegisterScreen() {
                 {acceptedTerms && <Text style={styles.checkmark}>✓</Text>}
               </View>
               <Text style={styles.termsText}>
-                Aceito os{' '}
-                <Text style={styles.termsLink}>Termos e Condições</Text> e a{' '}
-                <Text style={styles.termsLink}>Política de Privacidade</Text>
+                {t('auth.register.termsPrefix')}
+                <Text style={styles.termsLink}>{t('auth.register.termsLink')}</Text>{t('auth.register.termsAnd')}
+                <Text style={styles.termsLink}>{t('auth.register.privacyLink')}</Text>
               </Text>
             </TouchableOpacity>
 
@@ -220,7 +222,7 @@ export default function RegisterScreen() {
                 style={styles.registerGradient}
               >
                 <Text style={styles.registerText}>
-                  {isLoading ? 'Criando conta...' : 'Criar Conta'}
+                  {isLoading ? t('auth.register.registerButtonLoading') : t('auth.register.registerButton')}
                 </Text>
               </LinearGradient>
             </TouchableOpacity>
@@ -228,9 +230,9 @@ export default function RegisterScreen() {
 
           {/* Login Link */}
           <View style={styles.footer}>
-            <Text style={[styles.footerText, { color: colors.textSecondary }]}>Já tem uma conta? </Text>
+            <Text style={[styles.footerText, { color: colors.textSecondary }]}>{t('auth.register.hasAccount')}</Text>
             <TouchableOpacity onPress={() => router.push('/auth/login')}>
-              <Text style={styles.loginText}>Fazer login</Text>
+              <Text style={styles.loginText}>{t('auth.register.loginLink')}</Text>
             </TouchableOpacity>
           </View>
         </View>
