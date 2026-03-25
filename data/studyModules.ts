@@ -7,10 +7,11 @@ export interface QuizQuestion {
 export interface Lesson {
   id: string;
   title: string;
-  type: 'text' | 'quiz';
+  type: 'text' | 'quiz' | 'video';
   content: string;
   duration: number; // minutes
   quiz?: QuizQuestion[];
+  videoUrl?: string;
 }
 
 export interface StudyModule {
@@ -50,6 +51,14 @@ Pense no Bitcoin como dinheiro da internet. Assim como você envia um e-mail sem
 Cada Bitcoin pode ser dividido em 100 milhões de partes menores chamadas "satoshis" (ou "sats"). Isso significa que você não precisa comprar um Bitcoin inteiro — pode comprar frações muito pequenas, acessíveis para qualquer orçamento familiar.
 
 O Bitcoin funciona através de uma rede global de computadores que validam todas as transações. Essa rede é chamada de blockchain, e é ela que garante que ninguém consiga gastar o mesmo Bitcoin duas vezes ou criar Bitcoins falsos.`
+      },
+      {
+        id: 'btc-intro-video',
+        title: 'Vídeo: O Bitcoin em 5 minutos',
+        type: 'video',
+        duration: 5,
+        content: 'Assista este vídeo introdutório para entender os conceitos fundamentais do Bitcoin de forma visual e dinâmica.',
+        videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
       },
       {
         id: 'btc-intro-2',
@@ -124,6 +133,14 @@ Cada "página" desse caderno é chamada de "bloco". Cada bloco contém um grupo 
 Se alguém tentasse alterar uma transação em um bloco antigo, a impressão digital mudaria e todos os blocos seguintes ficariam inválidos. Isso torna a blockchain praticamente impossível de ser fraudada, pois seria necessário alterar todos os blocos em mais da metade dos computadores da rede ao mesmo tempo.
 
 A blockchain do Bitcoin é pública, o que significa que qualquer pessoa pode verificar qualquer transação que já aconteceu desde 2009. Essa transparência é uma das grandes vantagens do sistema, pois garante que tudo é auditável.`
+      },
+      {
+        id: 'btc-blockchain-video',
+        title: 'Vídeo: Como funciona a Blockchain',
+        type: 'video',
+        duration: 4,
+        content: 'Uma explicação visual de como as transações são registradas e validadas na blockchain do Bitcoin.',
+        videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
       },
       {
         id: 'btc-blockchain-2',
@@ -283,6 +300,14 @@ Existem dois tipos principais de carteiras: hot wallets (carteiras quentes) e co
 Quando você cria uma carteira, ela gera uma "frase semente" (seed phrase) — geralmente 12 ou 24 palavras em ordem específica. Essa frase é a chave mestra que permite recuperar todos os seus Bitcoins caso perca o dispositivo. Sem ela, seus Bitcoins ficam inacessíveis para sempre.
 
 Para a família, é essencial que mais de uma pessoa saiba onde a seed phrase está guardada (de forma segura). Muitos Bitcoins já foram perdidos porque o dono faleceu e ninguém tinha acesso às chaves.`
+      },
+      {
+        id: 'btc-custody-video',
+        title: 'Vídeo: Configurando sua primeira carteira',
+        type: 'video',
+        duration: 6,
+        content: 'Acompanhe o passo a passo para criar e configurar sua primeira carteira de Bitcoin com segurança.',
+        videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
       },
       {
         id: 'btc-custody-2',

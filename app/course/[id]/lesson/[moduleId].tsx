@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
+import { Video, ResizeMode } from 'expo-av';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -233,6 +234,35 @@ export default function LessonScreen() {
                     {paragraph.trim()}
                   </Text>
                 ))}
+            </View>
+          )}
+
+          {currentLesson.type === 'video' && (
+            <View style={styles.videoContent}>
+              <View style={[styles.videoContainer, { backgroundColor: '#000' }]}>
+                <Video
+                  source={{ uri: currentLesson.videoUrl || '' }}
+                  style={styles.video}
+                  useNativeControls
+                  resizeMode={ResizeMode.CONTAIN}
+                  shouldPlay={false}
+                />
+              </View>
+              {currentLesson.content ? (
+                <View style={styles.textContent}>
+                  {(currentLesson.content || '')
+                    .split('\n')
+                    .filter((p: string) => p.trim().length > 0)
+                    .map((paragraph: string, idx: number) => (
+                      <Text
+                        key={idx}
+                        style={[styles.paragraph, { color: colors.text }]}
+                      >
+                        {paragraph.trim()}
+                      </Text>
+                    ))}
+                </View>
+              ) : null}
             </View>
           )}
 
@@ -511,6 +541,18 @@ const styles = StyleSheet.create({
   },
   textContent: {
     gap: 0,
+  },
+  videoContent: {
+    gap: 16,
+  },
+  videoContainer: {
+    borderRadius: 12,
+    overflow: 'hidden',
+    aspectRatio: 16 / 9,
+  },
+  video: {
+    width: '100%',
+    height: '100%',
   },
   paragraph: {
     fontSize: 16,
