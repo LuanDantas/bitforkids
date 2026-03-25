@@ -25,14 +25,16 @@ import {
 
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useUser } from '@/contexts/UserContext';
 
 export default function ProfileScreen() {
   const router = useRouter();
   const { colors, isDark } = useTheme();
   const { t } = useLanguage();
+  const { user: authUser, logout } = useUser();
   const [user] = useState({
-    name: 'João Silva',
-    email: 'joao.silva@email.com',
+    name: authUser?.name || 'Usuário',
+    email: authUser?.email || '',
     level: 'Intermediário',
     joinDate: '2023',
     avatar:
@@ -165,7 +167,10 @@ export default function ProfileScreen() {
 
       {/* Logout Button */}
       <View style={styles.section}>
-        <AnimatedPressable style={[styles.logoutButton, { backgroundColor: colors.card }, menuShadow]}>
+        <AnimatedPressable
+          style={[styles.logoutButton, { backgroundColor: colors.card }, menuShadow]}
+          onPress={() => { logout(); router.replace('/auth/login'); }}
+        >
           <LogOut size={20} color="#EF4444" />
           <Text style={styles.logoutText}>{t('profile.logout')}</Text>
         </AnimatedPressable>

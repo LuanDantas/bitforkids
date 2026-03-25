@@ -15,6 +15,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { useVSL } from '@/contexts/VSLContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useUser } from '@/contexts/UserContext';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -25,6 +26,7 @@ export default function LoginScreen() {
   const { resetSessionFlag } = useVSL();
   const { colors, isDark } = useTheme();
   const { t } = useLanguage();
+  const { login } = useUser();
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -34,17 +36,18 @@ export default function LoginScreen() {
 
     setIsLoading(true);
 
-    setTimeout(() => {
-      setIsLoading(false);
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
-      if (email === 'teste@bitforkids.com' && password === 'admin123') {
-        // Reset VSL session flag on successful login
-        resetSessionFlag();
-        router.replace('/(tabs)');
-      } else {
-        Alert.alert(t('auth.login.errorTitle'), t('auth.login.errorInvalidCredentials'));
-      }
-    }, 1500);
+    const result = await login(email, password);
+    setIsLoading(false);
+
+    if (result.success) {
+      resetSessionFlag();
+      router.replace('/(tabs)');
+    } else {
+      Alert.alert(t('auth.login.errorTitle'), t('auth.login.errorInvalidCredentials'));
+    }
   };
 
   const handleSocialLogin = (provider: string) => {

@@ -11,6 +11,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useUser } from '@/contexts/UserContext';
 import AnimatedSection from '@/components/AnimatedSection';
 import AnimatedPressable from '@/components/AnimatedPressable';
 import {
@@ -61,13 +62,18 @@ const targetAudience = [
   { emoji: '💰', title: 'Cansado da desvalorização', desc: 'Guardar em moedas fortes, como Dólar e Bitcoin.' },
 ];
 
-function CourseCard({ course, onPress, colors, t }: any) {
+function CourseCard({ course, onPress, colors, t, owned }: any) {
   return (
     <AnimatedPressable
       style={[styles.courseCard, { backgroundColor: colors.card }, cardShadow]}
       onPress={onPress}
     >
       <Image source={course.image} style={styles.courseImage} resizeMode="cover" />
+      {owned && (
+        <View style={styles.ownedBadge}>
+          <Text style={styles.ownedBadgeText}>✅ {t('courses.owned') || 'Adquirido'}</Text>
+        </View>
+      )}
       <View style={styles.courseContent}>
         <Text style={[styles.courseTitle, { color: colors.text }]}>{course.title}</Text>
         <Text style={[styles.courseSubtitle, { color: colors.textSecondary }]} numberOfLines={3}>
@@ -75,14 +81,20 @@ function CourseCard({ course, onPress, colors, t }: any) {
         </Text>
         <View style={styles.courseFooter}>
           <View>
-            <Text style={styles.priceLabel}>{t('courses.priceLabel')}</Text>
-            <Text style={styles.coursePrice}>R$ {course.price}</Text>
+            {owned ? (
+              <Text style={[styles.coursePrice, { color: '#10B981' }]}>✅</Text>
+            ) : (
+              <>
+                <Text style={styles.priceLabel}>{t('courses.priceLabel')}</Text>
+                <Text style={styles.coursePrice}>R$ {course.price}</Text>
+              </>
+            )}
           </View>
           <LinearGradient
-            colors={['#8B5CF6', '#6D28D9'] as const}
+            colors={owned ? ['#10B981', '#059669'] as const : ['#8B5CF6', '#6D28D9'] as const}
             style={styles.courseBtn}
           >
-            <Text style={styles.courseBtnText}>{t('courses.viewCourse')}</Text>
+            <Text style={styles.courseBtnText}>{owned ? (t('courses.access') || 'Acessar') : t('courses.viewCourse')}</Text>
             <ChevronRight size={16} color="#FFF" />
           </LinearGradient>
         </View>
@@ -95,6 +107,7 @@ export default function CoursesScreen() {
   const router = useRouter();
   const { colors, isDark } = useTheme();
   const { t } = useLanguage();
+  const { hasCourseAccess } = useUser();
 
   const translatedCourses = courses.map(c => {
     const courseKey = `course${c.id}` as 'course1' | 'course2' | 'course3';
@@ -171,6 +184,7 @@ export default function CoursesScreen() {
             onPress={() => router.push(`/course/${course.id}`)}
             colors={colors}
             t={t}
+            owned={hasCourseAccess(course.id)}
           />
         ))}
         </AnimatedSection>
@@ -193,6 +207,7 @@ export default function CoursesScreen() {
             onPress={() => router.push(`/course/${course.id}`)}
             colors={colors}
             t={t}
+            owned={hasCourseAccess(course.id)}
           />
         ))}
         </AnimatedSection>
@@ -317,6 +332,21 @@ const styles = StyleSheet.create({
   courseImage: {
     width: '100%',
     height: 180,
+  },
+  ownedBadge: {
+    position: 'absolute',
+    top: 12,
+    right: 12,
+    backgroundColor: '#10B981',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 8,
+    zIndex: 1,
+  },
+  ownedBadgeText: {
+    color: '#FFF',
+    fontSize: 12,
+    fontWeight: '700',
   },
   courseContent: {
     padding: 16,

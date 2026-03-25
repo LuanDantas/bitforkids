@@ -298,6 +298,8 @@ const enUS = {
     // Card
     priceLabel: 'Investment',
     viewCourse: 'View Course',
+    owned: 'Purchased',
+    access: 'Access',
 
     // Guarantee
     guaranteeTitle: 'Full 7-Day Guarantee',
@@ -317,6 +319,11 @@ const enUS = {
     buyButton: 'Get Access',
     buyAlertTitle: 'Purchase',
     buyAlertMessage: 'Redirecting to payment for the course: {{title}}\nPrice: R$ {{price}},00',
+    purchaseSuccess: 'Course purchased successfully!',
+    courseOwned: 'Course purchased',
+    accessCourse: 'Access Course',
+    paywallTitle: 'Exclusive content for students',
+    paywallDesc: 'Purchase this course to get full access to all lessons, materials, and exclusive content.',
 
     // ---------- COURSE 1: Bitcoin ----------
     course1: {

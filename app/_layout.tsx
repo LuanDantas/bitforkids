@@ -5,6 +5,7 @@ import { useFrameworkReady } from '@/hooks/useFrameworkReady';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { LanguageProvider } from '@/contexts/LanguageContext';
 import { VSLProvider } from '@/contexts/VSLContext';
+import { UserProvider } from '@/contexts/UserContext';
 
 export default function RootLayout() {
   useFrameworkReady();
@@ -12,12 +13,14 @@ export default function RootLayout() {
   return (
     <ThemeProvider>
       <LanguageProvider>
+      <UserProvider>
       <VSLProvider>
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="+not-found" />
         </Stack>
         <StatusBar style="auto" />
       </VSLProvider>
+      </UserProvider>
       </LanguageProvider>
     </ThemeProvider>
   );

@@ -298,6 +298,8 @@ const ptBR = {
     // Card
     priceLabel: 'Investimento',
     viewCourse: 'Ver curso',
+    owned: 'Adquirido',
+    access: 'Acessar',
 
     // Garantia
     guaranteeTitle: 'Garantia Total de 7 Dias',
@@ -317,6 +319,11 @@ const ptBR = {
     buyButton: 'Garantir Acesso',
     buyAlertTitle: 'Compra',
     buyAlertMessage: 'Redirecionando para pagamento do curso: {{title}}\nValor: R$ {{price}},00',
+    purchaseSuccess: 'Curso adquirido com sucesso!',
+    courseOwned: 'Curso adquirido',
+    accessCourse: 'Acessar Curso',
+    paywallTitle: 'Conteúdo exclusivo para alunos',
+    paywallDesc: 'Adquira este curso para ter acesso completo a todas as aulas, materiais e conteúdo exclusivo.',
 
     // ---------- COURSE 1: Bitcoin ----------
     course1: {

@@ -13,6 +13,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useUser } from '@/contexts/UserContext';
 import AnimatedSection from '@/components/AnimatedSection';
 import AnimatedPressable from '@/components/AnimatedPressable';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
@@ -399,6 +400,10 @@ export default function CourseDetailScreen() {
   const router = useRouter();
   const { colors } = useTheme();
   const { t } = useLanguage();
+  const { hasCourseAccess, purchaseCourse } = useUser();
+
+  const courseId = parseInt(id || '1', 10);
+  const hasAccess = hasCourseAccess(courseId);
 
   const courseDataMap = getCourseData(t);
   const course = courseDataMap[id || '1'];
@@ -411,10 +416,20 @@ export default function CourseDetailScreen() {
   }
 
   const handleBuy = () => {
-    const message = t('courseDetail.buyAlertMessage')
-      .replace('{{title}}', course.title)
-      .replace('{{price}}', course.price);
-    Alert.alert(t('courseDetail.buyAlertTitle'), message);
+    Alert.alert(
+      t('courseDetail.buyAlertTitle'),
+      t('courseDetail.buyAlertMessage').replace('{{title}}', course.title).replace('{{price}}', course.price),
+      [
+        { text: t('common.cancel'), style: 'cancel' },
+        {
+          text: t('courseDetail.buyButton'),
+          onPress: () => {
+            purchaseCourse(courseId);
+            Alert.alert('✅', t('courseDetail.purchaseSuccess') || 'Curso adquirido com sucesso!');
+          },
+        },
+      ]
+    );
   };
 
   return (
@@ -446,26 +461,44 @@ export default function CourseDetailScreen() {
 
           <View style={styles.divider} />
 
-          {/* Sections */}
-          {course.sections.map((section, sIdx) => (
-            <AnimatedSection key={sIdx}>
-              <Text style={[styles.sectionTitle, { color: colors.text }]}>{section.title}</Text>
-              {section.items.map((item, iIdx) => (
-                <View key={iIdx} style={styles.sectionItem}>
-                  <Text style={[styles.sectionItemText, { color: colors.text }]}>{item}</Text>
-                </View>
-              ))}
-              <View style={styles.divider} />
-            </AnimatedSection>
-          ))}
-
-          {/* FAQ */}
-          {course.faq.length > 0 && (
+          {hasAccess ? (
             <>
-              <Text style={[styles.sectionTitle, { color: colors.text }]}>{'❓ ' + t('courseDetail.faqTitle')}</Text>
-              {course.faq.map((item, idx) => (
-                <FAQItem key={idx} item={item} colors={colors} />
+              {/* Full content — user has access */}
+              {course.sections.map((section, sIdx) => (
+                <AnimatedSection key={sIdx}>
+                  <Text style={[styles.sectionTitle, { color: colors.text }]}>{section.title}</Text>
+                  {section.items.map((item, iIdx) => (
+                    <View key={iIdx} style={styles.sectionItem}>
+                      <Text style={[styles.sectionItemText, { color: colors.text }]}>{item}</Text>
+                    </View>
+                  ))}
+                  <View style={styles.divider} />
+                </AnimatedSection>
               ))}
+
+              {/* FAQ */}
+              {course.faq.length > 0 && (
+                <>
+                  <Text style={[styles.sectionTitle, { color: colors.text }]}>{'❓ ' + t('courseDetail.faqTitle')}</Text>
+                  {course.faq.map((item, idx) => (
+                    <FAQItem key={idx} item={item} colors={colors} />
+                  ))}
+                  <View style={styles.divider} />
+                </>
+              )}
+            </>
+          ) : (
+            <>
+              {/* Paywall — user doesn't have access */}
+              <View style={[styles.paywallCard, { backgroundColor: colors.card, borderColor: '#8B5CF6' }]}>
+                <Text style={styles.paywallEmoji}>🔒</Text>
+                <Text style={[styles.paywallTitle, { color: colors.text }]}>
+                  {t('courseDetail.paywallTitle') || 'Conteúdo exclusivo para alunos'}
+                </Text>
+                <Text style={[styles.paywallDesc, { color: colors.textSecondary }]}>
+                  {t('courseDetail.paywallDesc') || 'Adquira este curso para ter acesso completo a todas as aulas, materiais e conteúdo exclusivo.'}
+                </Text>
+              </View>
               <View style={styles.divider} />
             </>
           )}
@@ -485,15 +518,26 @@ export default function CourseDetailScreen() {
 
       {/* Footer CTA */}
       <View style={[styles.footer, { backgroundColor: colors.background, borderTopColor: colors.card }]}>
-        <View>
-          <Text style={styles.footerLabel}>{t('courseDetail.investmentLabel')}</Text>
-          <Text style={styles.footerPrice}>R$ {course.price},00</Text>
-        </View>
-        <AnimatedPressable onPress={handleBuy}>
-          <LinearGradient colors={['#8B5CF6', '#6D28D9'] as const} style={styles.buyBtn}>
-            <Text style={styles.buyBtnText}>{t('courseDetail.buyButton')}</Text>
-          </LinearGradient>
-        </AnimatedPressable>
+        {hasAccess ? (
+          <>
+            <Text style={[styles.footerLabel, { color: '#10B981', fontSize: 14, fontWeight: '600' }]}>✅ {t('courseDetail.courseOwned') || 'Curso adquirido'}</Text>
+            <View style={[styles.buyBtn, { backgroundColor: '#10B981' }]}>
+              <Text style={styles.buyBtnText}>{t('courseDetail.accessCourse') || 'Acessar Curso'}</Text>
+            </View>
+          </>
+        ) : (
+          <>
+            <View>
+              <Text style={styles.footerLabel}>{t('courseDetail.investmentLabel')}</Text>
+              <Text style={styles.footerPrice}>R$ {course.price},00</Text>
+            </View>
+            <AnimatedPressable onPress={handleBuy}>
+              <LinearGradient colors={['#8B5CF6', '#6D28D9'] as const} style={styles.buyBtn}>
+                <Text style={styles.buyBtnText}>{t('courseDetail.buyButton')}</Text>
+              </LinearGradient>
+            </AnimatedPressable>
+          </>
+        )}
       </View>
     </View>
   );
@@ -606,6 +650,28 @@ const styles = StyleSheet.create({
   sectionItemText: {
     fontSize: 15,
     lineHeight: 22,
+  },
+  paywallCard: {
+    borderRadius: 16,
+    padding: 24,
+    alignItems: 'center',
+    borderWidth: 2,
+    marginBottom: 16,
+  },
+  paywallEmoji: {
+    fontSize: 40,
+    marginBottom: 12,
+  },
+  paywallTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  paywallDesc: {
+    fontSize: 14,
+    lineHeight: 20,
+    textAlign: 'center',
   },
   guaranteeCard: {
     borderRadius: 12,
