@@ -47,7 +47,7 @@ function getCourseData(t: (key: string) => string): Record<string, CourseData> {
       title: t('courseDetail.course1.title'),
       subtitle: t('courseDetail.course1.subtitle'),
       price: '397',
-      image: require('../../assets/images/curso-bitcoin.png'),
+      image: require('../../../assets/images/curso-bitcoin.png'),
       trailColor: ['#F7931A', '#E2761B'] as const,
       trailLabel: t('courseDetail.course1.trailLabel'),
       sections: [
@@ -155,7 +155,7 @@ function getCourseData(t: (key: string) => string): Record<string, CourseData> {
       title: t('courseDetail.course2.title'),
       subtitle: t('courseDetail.course2.subtitle'),
       price: '397',
-      image: require('../../assets/images/curso-ethereum.png'),
+      image: require('../../../assets/images/curso-ethereum.png'),
       trailColor: ['#627EEA', '#3B5998'] as const,
       trailLabel: t('courseDetail.course2.trailLabel'),
       sections: [
@@ -266,7 +266,7 @@ function getCourseData(t: (key: string) => string): Record<string, CourseData> {
       title: t('courseDetail.course3.title'),
       subtitle: t('courseDetail.course3.subtitle'),
       price: '397',
-      image: require('../../assets/images/curso-autocustodia.png'),
+      image: require('../../../assets/images/curso-autocustodia.png'),
       trailColor: ['#3B82F6', '#1D4ED8'] as const,
       trailLabel: t('courseDetail.course3.trailLabel'),
       sections: [
@@ -520,10 +520,12 @@ export default function CourseDetailScreen() {
       <View style={[styles.footer, { backgroundColor: colors.background, borderTopColor: colors.card }]}>
         {hasAccess ? (
           <>
-            <Text style={[styles.footerLabel, { color: '#10B981', fontSize: 14, fontWeight: '600' }]}>✅ {t('courseDetail.courseOwned') || 'Curso adquirido'}</Text>
-            <View style={[styles.buyBtn, { backgroundColor: '#10B981' }]}>
-              <Text style={styles.buyBtnText}>{t('courseDetail.accessCourse') || 'Acessar Curso'}</Text>
-            </View>
+            <Text style={[styles.footerLabel, { color: '#10B981', fontSize: 14, fontWeight: '600' }]}>✅ {t('courseDetail.courseOwned')}</Text>
+            <AnimatedPressable onPress={() => router.push(`/course/${id}/study`)}>
+              <View style={[styles.buyBtn, { backgroundColor: '#10B981' }]}>
+                <Text style={styles.buyBtnText}>{t('courseDetail.accessCourse')}</Text>
+              </View>
+            </AnimatedPressable>
           </>
         ) : (
           <>
