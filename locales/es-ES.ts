@@ -1122,6 +1122,26 @@ const esES = {
   },
 
   // =====================
+  // STUDY
+  // =====================
+  study: {
+    courseNotFound: 'Curso no encontrado',
+    moduleNotFound: 'Módulo no encontrado',
+    yourJourney: 'Tu camino de aprendizaje',
+    overallProgress: 'Progreso general',
+    lessons: 'lecciones',
+    lessonOf: 'Lección',
+    of: 'de',
+    previous: 'Anterior',
+    nextLesson: 'Siguiente Lección',
+    concludeModule: 'Completar Módulo',
+    correct: '¡Correcto!',
+    incorrect: 'Incorrecto',
+    correctFeedback: '¡Excelente! Has acertado.',
+    incorrectFeedback: 'La respuesta correcta está resaltada en verde.',
+  },
+
+  // =====================
   // COMMON
   // =====================
   common: {

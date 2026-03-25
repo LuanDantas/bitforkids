@@ -1122,6 +1122,26 @@ const enUS = {
   },
 
   // =====================
+  // STUDY
+  // =====================
+  study: {
+    courseNotFound: 'Course not found',
+    moduleNotFound: 'Module not found',
+    yourJourney: 'Your learning journey',
+    overallProgress: 'Overall progress',
+    lessons: 'lessons',
+    lessonOf: 'Lesson',
+    of: 'of',
+    previous: 'Previous',
+    nextLesson: 'Next Lesson',
+    concludeModule: 'Complete Module',
+    correct: 'Correct!',
+    incorrect: 'Incorrect',
+    correctFeedback: 'Excellent! You got it right.',
+    incorrectFeedback: 'The correct answer is highlighted in green.',
+  },
+
+  // =====================
   // COMMON
   // =====================
   common: {

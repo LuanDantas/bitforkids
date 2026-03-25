@@ -1122,6 +1122,26 @@ const ptBR = {
   },
 
   // =====================
+  // STUDY
+  // =====================
+  study: {
+    courseNotFound: 'Curso não encontrado',
+    moduleNotFound: 'Módulo não encontrado',
+    yourJourney: 'Sua jornada de aprendizado',
+    overallProgress: 'Progresso geral',
+    lessons: 'lições',
+    lessonOf: 'Lição',
+    of: 'de',
+    previous: 'Anterior',
+    nextLesson: 'Próxima Lição',
+    concludeModule: 'Concluir Módulo',
+    correct: 'Correto!',
+    incorrect: 'Incorreto',
+    correctFeedback: 'Excelente! Você acertou.',
+    incorrectFeedback: 'A resposta correta está destacada em verde.',
+  },
+
+  // =====================
   // COMMON
   // =====================
   common: {
