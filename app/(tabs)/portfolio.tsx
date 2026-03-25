@@ -14,6 +14,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import {
   Search,
   Wallet,
@@ -246,6 +247,7 @@ const calculateQuantity = (amount: string, price: string): string => {
 
 export default function PortfolioScreen() {
   const { colors, isDark } = useTheme();
+  const { t } = useLanguage();
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [refreshing, setRefreshing] = useState(false);
@@ -363,10 +365,10 @@ export default function PortfolioScreen() {
 
   const calculateTrend = (value: number) => {
     if (value > 5)
-      return { label: 'Alta Forte', color: '#10B981', icon: TrendingUp };
+      return { label: t('portfolio.strongUp'), color: '#10B981', icon: TrendingUp };
     if (value < -5)
-      return { label: 'Baixa Forte', color: '#EF4444', icon: TrendingDown };
-    return { label: 'Neutro', color: '#F59E0B', icon: Minus };
+      return { label: t('portfolio.strongDown'), color: '#EF4444', icon: TrendingDown };
+    return { label: t('portfolio.neutral'), color: '#F59E0B', icon: Minus };
   };
 
   const onRefresh = () => {
@@ -378,7 +380,7 @@ export default function PortfolioScreen() {
 
   const handleAddWallet = () => {
     if (!newWalletName.trim()) {
-      Alert.alert('Erro', 'Por favor, informe o nome da carteira');
+      Alert.alert(t('portfolio.errorTitle'), t('portfolio.errorWalletName'));
       return;
     }
 
@@ -407,7 +409,7 @@ export default function PortfolioScreen() {
     setWallets([...wallets, newWallet]);
     setNewWalletName('');
     setShowWalletModal(false);
-    Alert.alert('Sucesso', 'Carteira criada com sucesso!');
+    Alert.alert(t('portfolio.successTitle'), t('portfolio.walletCreated'));
   };
 
   const handleEditWallet = (id: string) => {
@@ -419,12 +421,12 @@ export default function PortfolioScreen() {
 
   const handleDeleteWallet = (id: string) => {
     Alert.alert(
-      'Confirmar exclusão',
-      'Tem certeza que deseja excluir esta carteira?',
+      t('portfolio.confirmDelete'),
+      t('portfolio.confirmDeleteMessage'),
       [
-        { text: 'Cancelar', style: 'cancel' },
+        { text: t('portfolio.cancel'), style: 'cancel' },
         {
-          text: 'Excluir',
+          text: t('portfolio.delete'),
           style: 'destructive',
           onPress: () => {
             setWallets(wallets.filter((w) => w.id !== id));
@@ -441,7 +443,7 @@ export default function PortfolioScreen() {
       !transactionForm.price ||
       !transactionForm.amount
     ) {
-      Alert.alert('Erro', 'Por favor, preencha todos os campos obrigatórios');
+      Alert.alert(t('portfolio.errorTitle'), t('portfolio.errorFillFields'));
       return;
     }
 
@@ -476,13 +478,13 @@ export default function PortfolioScreen() {
     });
     setShowTransactionModal(false);
     setSelectedTransactionType(null);
-    Alert.alert('Sucesso', 'Transação cadastrada com sucesso!');
+    Alert.alert(t('portfolio.successTitle'), t('portfolio.transactionCreated'));
   };
 
   const renderPortfolioCards = () => {
     const cards = [
       {
-        title: 'Aportes',
+        title: t('portfolio.deposits'),
         value: `$${portfolioStats.totalAportes.toLocaleString('en-US', {
           minimumFractionDigits: 2,
         })}`,
@@ -504,7 +506,7 @@ export default function PortfolioScreen() {
         ],
       },
       {
-        title: 'Saldo',
+        title: t('portfolio.balance'),
         value: `$${portfolioStats.totalBalance.toLocaleString('en-US', {
           minimumFractionDigits: 2,
         })}`,
@@ -526,7 +528,7 @@ export default function PortfolioScreen() {
         ],
       },
       {
-        title: 'Lucro',
+        title: t('portfolio.profit'),
         value: `$${portfolioStats.totalProfit.toLocaleString('en-US', {
           minimumFractionDigits: 2,
         })}`,
@@ -600,7 +602,7 @@ export default function PortfolioScreen() {
         ]}
       >
         <Text style={[styles.tableTitle, { color: colors.text }]}>
-          Lucros e Prejuízos
+          {t('portfolio.profitAndLoss')}
         </Text>
 
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -612,7 +614,7 @@ export default function PortfolioScreen() {
                   { color: colors.textSecondary },
                 ]}
               >
-                Crypto
+                {t('portfolio.crypto')}
               </Text>
               <Text
                 style={[
@@ -620,7 +622,7 @@ export default function PortfolioScreen() {
                   { color: colors.textSecondary },
                 ]}
               >
-                Preço atual
+                {t('portfolio.currentPrice')}
               </Text>
               <Text
                 style={[
@@ -628,7 +630,7 @@ export default function PortfolioScreen() {
                   { color: colors.textSecondary },
                 ]}
               >
-                Qtde
+                {t('portfolio.quantity')}
               </Text>
               <Text
                 style={[
@@ -636,7 +638,7 @@ export default function PortfolioScreen() {
                   { color: colors.textSecondary },
                 ]}
               >
-                Aporte
+                {t('portfolio.deposit')}
               </Text>
               <Text
                 style={[
@@ -644,7 +646,7 @@ export default function PortfolioScreen() {
                   { color: colors.textSecondary },
                 ]}
               >
-                Saldo
+                {t('portfolio.balance')}
               </Text>
               <Text
                 style={[
@@ -652,7 +654,7 @@ export default function PortfolioScreen() {
                   { color: colors.textSecondary },
                 ]}
               >
-                $ Médio
+                {t('portfolio.avgPrice')}
               </Text>
               <Text
                 style={[
@@ -660,7 +662,7 @@ export default function PortfolioScreen() {
                   { color: colors.textSecondary },
                 ]}
               >
-                Lucro
+                {t('portfolio.profit')}
               </Text>
               <Text
                 style={[
@@ -668,7 +670,7 @@ export default function PortfolioScreen() {
                   { color: colors.textSecondary },
                 ]}
               >
-                % Lucro
+                {t('portfolio.profitPercent')}
               </Text>
               <Text
                 style={[
@@ -676,7 +678,7 @@ export default function PortfolioScreen() {
                   { color: colors.textSecondary },
                 ]}
               >
-                Trend
+                {t('portfolio.trend')}
               </Text>
               <Text
                 style={[
@@ -684,7 +686,7 @@ export default function PortfolioScreen() {
                   { color: colors.textSecondary },
                 ]}
               >
-                Ações
+                {t('portfolio.actions')}
               </Text>
             </View>
 
@@ -809,9 +811,9 @@ export default function PortfolioScreen() {
         colors={isDark ? ['#1a1a1a', '#2a1a4a'] : ['#8B5CF6', '#3B82F6']}
         style={styles.header}
       >
-        <Text style={styles.headerTitle}>Portfólio</Text>
+        <Text style={styles.headerTitle}>{t('portfolio.headerTitle')}</Text>
         <Text style={styles.headerSubtitle}>
-          Gerencie seus investimentos em criptomoedas
+          {t('portfolio.headerSubtitle')}
         </Text>
 
         {/* Search and Icons */}
@@ -825,7 +827,7 @@ export default function PortfolioScreen() {
             <Search size={20} color="white" />
             <TextInput
               style={styles.searchInput}
-              placeholder="Buscar..."
+              placeholder={t('portfolio.search')}
               placeholderTextColor="rgba(255, 255, 255, 0.6)"
               value={searchQuery}
               onChangeText={setSearchQuery}
@@ -870,7 +872,7 @@ export default function PortfolioScreen() {
         <View style={styles.modalOverlay}>
           <View style={[styles.modalContent, { backgroundColor: colors.card }]}>
             <Text style={[styles.modalTitle, { color: colors.text }]}>
-              Cadastro de carteira
+              {t('portfolio.walletRegistration')}
             </Text>
 
             <TextInput
@@ -882,7 +884,7 @@ export default function PortfolioScreen() {
                   borderColor: colors.border,
                 },
               ]}
-              placeholder="Digite o nome da carteira"
+              placeholder={t('portfolio.walletNamePlaceholder')}
               placeholderTextColor={colors.textTertiary}
               value={newWalletName}
               onChangeText={setNewWalletName}
@@ -909,7 +911,7 @@ export default function PortfolioScreen() {
                     { color: colors.text || '#000000' },
                   ]}
                 >
-                  Cancelar
+                  {t('portfolio.cancel')}
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -920,7 +922,7 @@ export default function PortfolioScreen() {
                 onPress={handleAddWallet}
               >
                 <Text style={[styles.modalButtonText, { color: 'white' }]}>
-                  Salvar
+                  {t('portfolio.save')}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -940,7 +942,7 @@ export default function PortfolioScreen() {
             <TouchableOpacity onPress={() => setShowWalletsList(false)}>
               <ChevronLeft size={24} color="white" />
             </TouchableOpacity>
-            <Text style={styles.modalHeaderTitle}>Carteiras</Text>
+            <Text style={styles.modalHeaderTitle}>{t('portfolio.wallets')}</Text>
             <View style={{ width: 24 }} />
           </LinearGradient>
 
@@ -1025,7 +1027,7 @@ export default function PortfolioScreen() {
             }}
           >
             <Plus size={24} color="white" />
-            <Text style={styles.addWalletText}>Adicionar Carteira</Text>
+            <Text style={styles.addWalletText}>{t('portfolio.addWallet')}</Text>
           </TouchableOpacity>
         </View>
       </Modal>
@@ -1039,7 +1041,7 @@ export default function PortfolioScreen() {
         <View style={styles.modalOverlay}>
           <View style={[styles.modalContent, { backgroundColor: colors.card }]}>
             <Text style={[styles.modalTitle, { color: colors.text }]}>
-              Tipo de Transação
+              {t('portfolio.transactionType')}
             </Text>
             <TouchableOpacity
               style={[
@@ -1052,7 +1054,7 @@ export default function PortfolioScreen() {
               <Text
                 style={[styles.transactionTypeText, { color: colors.text }]}
               >
-                Aporte
+                {t('portfolio.depositType')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -1066,7 +1068,7 @@ export default function PortfolioScreen() {
               <Text
                 style={[styles.transactionTypeText, { color: colors.text }]}
               >
-                Retirada
+                {t('portfolio.withdrawal')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -1082,7 +1084,7 @@ export default function PortfolioScreen() {
               }}
             >
               <Text style={[styles.modalButtonText, { color: '#FFFFFF' }]}>
-                Cancelar
+                {t('portfolio.cancel')}
               </Text>
             </TouchableOpacity>
           </View>
@@ -1103,11 +1105,11 @@ export default function PortfolioScreen() {
             ]}
           >
             <Text style={[styles.modalTitle, { color: colors.text }]}>
-              Cadastrar Aporte
+              {t('portfolio.registerDeposit')}
             </Text>
 
             {/* Crypto Selector */}
-            <Text style={[styles.label, { color: colors.text }]}>Moeda</Text>
+            <Text style={[styles.label, { color: colors.text }]}>{t('portfolio.coin')}</Text>
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}
@@ -1165,7 +1167,7 @@ export default function PortfolioScreen() {
             </ScrollView>
 
             {/* Wallet Selector */}
-            <Text style={[styles.label, { color: colors.text }]}>Carteira</Text>
+            <Text style={[styles.label, { color: colors.text }]}>{t('portfolio.wallet')}</Text>
             <TouchableOpacity
               style={[
                 styles.select,
@@ -1183,13 +1185,13 @@ export default function PortfolioScreen() {
                   },
                 ]}
               >
-                {transactionForm.wallet || 'Selecione uma carteira'}
+                {transactionForm.wallet || t('portfolio.selectWallet')}
               </Text>
             </TouchableOpacity>
 
             {/* Price */}
             <Text style={[styles.label, { color: colors.text }]}>
-              Preço da moeda (USD)
+              {t('portfolio.coinPrice')}
             </Text>
             <TextInput
               style={[
@@ -1216,7 +1218,7 @@ export default function PortfolioScreen() {
 
             {/* Date */}
             <Text style={[styles.label, { color: colors.text }]}>
-              Data do aporte
+              {t('portfolio.depositDate')}
             </Text>
             <TouchableOpacity
               style={[
@@ -1244,7 +1246,7 @@ export default function PortfolioScreen() {
 
             {/* Amount */}
             <Text style={[styles.label, { color: colors.text }]}>
-              Valor aportado (USD)
+              {t('portfolio.depositValue')}
             </Text>
             <TextInput
               style={[
@@ -1271,7 +1273,7 @@ export default function PortfolioScreen() {
 
             {/* Quantity */}
             <Text style={[styles.label, { color: colors.text }]}>
-              Quantidade de moedas
+              {t('portfolio.coinQuantity')}
             </Text>
             <TextInput
               style={[
@@ -1282,7 +1284,7 @@ export default function PortfolioScreen() {
                   borderColor: colors.border,
                 },
               ]}
-              placeholder="Calculado automaticamente"
+              placeholder={t('portfolio.autoCalculated')}
               placeholderTextColor={colors.textTertiary}
               keyboardType="numeric"
               value={transactionForm.quantity}
@@ -1311,7 +1313,7 @@ export default function PortfolioScreen() {
                     { color: colors.text || '#000000' },
                   ]}
                 >
-                  Cancelar
+                  {t('portfolio.cancel')}
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -1322,7 +1324,7 @@ export default function PortfolioScreen() {
                 onPress={handleAddTransaction}
               >
                 <Text style={[styles.modalButtonText, { color: 'white' }]}>
-                  Salvar
+                  {t('portfolio.save')}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -1340,7 +1342,7 @@ export default function PortfolioScreen() {
         <View style={styles.modalOverlay}>
           <View style={[styles.modalContent, { backgroundColor: colors.card }]}>
             <Text style={[styles.modalTitle, { color: colors.text }]}>
-              Selecione uma carteira
+              {t('portfolio.selectWallet')}
             </Text>
 
             <ScrollView style={{ maxHeight: 400 }}>
@@ -1400,7 +1402,7 @@ export default function PortfolioScreen() {
                   { color: colors.text || '#000000' },
                 ]}
               >
-                Cancelar
+                {t('portfolio.cancel')}
               </Text>
             </TouchableOpacity>
           </View>
@@ -1417,7 +1419,7 @@ export default function PortfolioScreen() {
         <View style={styles.modalOverlay}>
           <View style={[styles.modalContent, { backgroundColor: colors.card }]}>
             <Text style={[styles.modalTitle, { color: colors.text }]}>
-              Selecionar data
+              {t('portfolio.selectDate')}
             </Text>
 
             <View
@@ -1431,7 +1433,7 @@ export default function PortfolioScreen() {
               {/* Days of month */}
               <View style={{ flex: 1 }}>
                 <Text style={[styles.label, { color: colors.text }]}>
-                  Dia do mês
+                  {t('portfolio.dayOfMonth')}
                 </Text>
                 <ScrollView style={{ maxHeight: 200 }}>
                   {Array.from({ length: 31 }, (_, i) => i + 1).map((day) => (
@@ -1485,7 +1487,7 @@ export default function PortfolioScreen() {
                   { color: colors.text || '#000000' },
                 ]}
               >
-                Cancelar
+                {t('portfolio.cancel')}
               </Text>
             </TouchableOpacity>
           </View>

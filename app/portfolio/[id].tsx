@@ -10,6 +10,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import {
   ChevronLeft,
   TrendingUp,
@@ -133,6 +134,7 @@ const getTransactionDetails = (id: string) => {
 
 export default function TransactionDetailsScreen() {
   const { colors, isDark } = useTheme();
+  const { t } = useLanguage();
   const router = useRouter();
   const { id } = useLocalSearchParams();
 
@@ -173,7 +175,7 @@ export default function TransactionDetailsScreen() {
         >
           <ChevronLeft size={24} color="white" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Detalhes do Registro</Text>
+        <Text style={styles.headerTitle}>{t('portfolioDetail.title')}</Text>
         <View style={{ width: 24 }} />
       </LinearGradient>
 
@@ -217,7 +219,7 @@ export default function TransactionDetailsScreen() {
           <View style={styles.statsGrid}>
             <View style={styles.statItem}>
               <Text style={[styles.statLabel, { color: colors.textSecondary }]}>
-                Preço Atual
+                {t('portfolioDetail.currentPrice')}
               </Text>
               <Text style={[styles.statValue, { color: colors.text }]}>
                 $
@@ -228,7 +230,7 @@ export default function TransactionDetailsScreen() {
             </View>
             <View style={styles.statItem}>
               <Text style={[styles.statLabel, { color: colors.textSecondary }]}>
-                Quantidade
+                {t('portfolioDetail.quantity')}
               </Text>
               <Text style={[styles.statValue, { color: colors.text }]}>
                 {transaction.quantity}
@@ -236,7 +238,7 @@ export default function TransactionDetailsScreen() {
             </View>
             <View style={styles.statItem}>
               <Text style={[styles.statLabel, { color: colors.textSecondary }]}>
-                Preço Médio
+                {t('portfolioDetail.avgPrice')}
               </Text>
               <Text style={[styles.statValue, { color: colors.text }]}>
                 $
@@ -256,7 +258,7 @@ export default function TransactionDetailsScreen() {
           ]}
         >
           <Text style={[styles.sectionTitle, { color: colors.text }]}>
-            Resumo Financeiro
+            {t('portfolioDetail.financialSummary')}
           </Text>
 
           <View style={styles.financialGrid}>
@@ -264,7 +266,7 @@ export default function TransactionDetailsScreen() {
               <Text
                 style={[styles.financialLabel, { color: colors.textSecondary }]}
               >
-                Investimento
+                {t('portfolioDetail.investment')}
               </Text>
               <View style={styles.financialValueContainer}>
                 <DollarSign size={16} color={colors.textSecondary} />
@@ -281,7 +283,7 @@ export default function TransactionDetailsScreen() {
               <Text
                 style={[styles.financialLabel, { color: colors.textSecondary }]}
               >
-                Saldo Atual
+                {t('portfolioDetail.currentBalance')}
               </Text>
               <View style={styles.financialValueContainer}>
                 <DollarSign size={16} color={colors.primary} />
@@ -298,7 +300,7 @@ export default function TransactionDetailsScreen() {
               <Text
                 style={[styles.financialLabel, { color: colors.textSecondary }]}
               >
-                Lucro/Prejuízo
+                {t('portfolioDetail.profitLoss')}
               </Text>
               <View style={styles.financialValueContainer}>
                 <Text
@@ -319,7 +321,7 @@ export default function TransactionDetailsScreen() {
               <Text
                 style={[styles.financialLabel, { color: colors.textSecondary }]}
               >
-                Percentual
+                {t('portfolioDetail.percentage')}
               </Text>
               <View
                 style={[
@@ -344,7 +346,7 @@ export default function TransactionDetailsScreen() {
           ]}
         >
           <Text style={[styles.sectionTitle, { color: colors.text }]}>
-            Histórico de Performance
+            {t('portfolioDetail.performanceHistory')}
           </Text>
           <EnhancedCardChart
             data={transaction.historicalData}
@@ -360,7 +362,7 @@ export default function TransactionDetailsScreen() {
           ]}
         >
           <Text style={[styles.sectionTitle, { color: colors.text }]}>
-            Distribuição por Carteiras
+            {t('portfolioDetail.walletDistribution')}
           </Text>
 
           <View style={styles.walletsList}>

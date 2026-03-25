@@ -11,6 +11,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import {
   TrendingUp,
   TrendingDown,
@@ -46,6 +47,7 @@ const { width } = Dimensions.get('window');
 
 export default function IndicesScreen() {
   const { colors, isDark } = useTheme();
+  const { t } = useLanguage();
   const router = useRouter();
   const [refreshing, setRefreshing] = useState(false);
   const [selectedTimeframe, setSelectedTimeframe] = useState('24h');
@@ -259,10 +261,10 @@ export default function IndicesScreen() {
   };
 
   const chartTypes = [
-    { key: 'line', label: 'Linha', icon: LineChartIcon },
-    { key: 'candle', label: 'Candlestick', icon: CandlestickIcon },
-    { key: 'area', label: 'Área', icon: AreaChart },
-    { key: 'volume', label: 'Volume', icon: Volume2 },
+    { key: 'line', label: t('indices.chartLine'), icon: LineChartIcon },
+    { key: 'candle', label: t('indices.chartCandlestick'), icon: CandlestickIcon },
+    { key: 'area', label: t('indices.chartArea'), icon: AreaChart },
+    { key: 'volume', label: t('indices.chartVolume'), icon: Volume2 },
   ];
   const onRefresh = () => {
     setRefreshing(true);
@@ -368,12 +370,12 @@ export default function IndicesScreen() {
                   { color: colors.textTertiary },
                 ]}
               >
-                Gráfico de {data.name}
+                {`${t('indices.chartAnalysis')} ${data.name}`}
               </Text>
               <Text
                 style={[styles.chartSubtext, { color: colors.textTertiary }]}
               >
-                Dados em tempo real
+                {t('indices.realtimeData')}
               </Text>
             </View>
           </LinearGradient>
@@ -384,7 +386,7 @@ export default function IndicesScreen() {
           <Text
             style={[styles.chartFooterText, { color: colors.textSecondary }]}
           >
-            Última atualização: agora
+            {t('indices.lastUpdate')}
           </Text>
         </View>
       </View>
@@ -414,11 +416,11 @@ export default function IndicesScreen() {
             onPress={() => setShowAdvancedCharts(false)}
           >
             <Text style={[styles.closeButtonText, { color: colors.primary }]}>
-              ← Voltar
+              {`← ${t('indices.back')}`}
             </Text>
           </TouchableOpacity>
           <Text style={[styles.modalTitle, { color: colors.text }]}>
-            Gráficos Avançados
+            {t('indices.advancedCharts')}
           </Text>
           <TouchableOpacity
             style={[styles.settingsButton, { backgroundColor: colors.surface }]}
@@ -569,14 +571,13 @@ export default function IndicesScreen() {
                       { color: colors.textTertiary },
                     ]}
                   >
-                    Gráfico{' '}
                     {chartType === 'line'
-                      ? 'de Linha'
+                      ? t('indices.chartLine')
                       : chartType === 'candle'
-                      ? 'Candlestick'
+                      ? t('indices.chartCandlestick')
                       : chartType === 'area'
-                      ? 'de Área'
-                      : 'de Volume'}
+                      ? t('indices.chartArea')
+                      : t('indices.chartVolume')}
                   </Text>
                   <Text
                     style={[
@@ -584,7 +585,7 @@ export default function IndicesScreen() {
                       { color: colors.textTertiary },
                     ]}
                   >
-                    Análise técnica avançada
+                    {t('indices.technicalAnalysis')}
                   </Text>
                 </View>
               </LinearGradient>
@@ -599,7 +600,7 @@ export default function IndicesScreen() {
             ]}
           >
             <Text style={[styles.indicatorsTitle, { color: colors.text }]}>
-              Indicadores Técnicos
+              {t('indices.technicalIndicators')}
             </Text>
             <View style={styles.indicatorsGrid}>
               <View style={styles.indicatorItem}>
@@ -713,7 +714,7 @@ export default function IndicesScreen() {
             ]}
           >
             <Text style={[styles.tradingTitle, { color: colors.text }]}>
-              Análise de Trading
+              {t('indices.marketAnalysis')}
             </Text>
             <View style={styles.tradingGrid}>
               <View
@@ -723,7 +724,7 @@ export default function IndicesScreen() {
                 ]}
               >
                 <Text style={[styles.tradingCardTitle, { color: colors.text }]}>
-                  Suporte
+                  {t('indices.support')}
                 </Text>
                 <Text style={[styles.tradingCardValue, { color: '#10B981' }]}>
                   ${(data.price * 0.95).toFixed(2)}
@@ -736,7 +737,7 @@ export default function IndicesScreen() {
                 ]}
               >
                 <Text style={[styles.tradingCardTitle, { color: colors.text }]}>
-                  Resistência
+                  {t('indices.resistance')}
                 </Text>
                 <Text style={[styles.tradingCardValue, { color: '#EF4444' }]}>
                   ${(data.price * 1.05).toFixed(2)}
@@ -749,7 +750,7 @@ export default function IndicesScreen() {
                 ]}
               >
                 <Text style={[styles.tradingCardTitle, { color: colors.text }]}>
-                  Tendência
+                  {t('indices.trend')}
                 </Text>
                 <Text
                   style={[
@@ -759,7 +760,7 @@ export default function IndicesScreen() {
                     },
                   ]}
                 >
-                  {data.change > 0 ? 'Alta' : 'Baixa'}
+                  {data.change > 0 ? t('indices.high') : t('indices.low')}
                 </Text>
               </View>
             </View>
@@ -775,9 +776,9 @@ export default function IndicesScreen() {
         colors={isDark ? ['#1a1a1a', '#2a1a4a'] : ['#8B5CF6', '#3B82F6']}
         style={styles.header}
       >
-        <Text style={styles.headerTitle}>Índices de Mercado</Text>
+        <Text style={styles.headerTitle}>{t('indices.headerTitle')}</Text>
         <Text style={styles.headerSubtitle}>
-          Acompanhe o mercado de criptomoedas em tempo real
+          {t('indices.headerSubtitle')}
         </Text>
 
         <View style={styles.marketOverview}>
@@ -812,7 +813,7 @@ export default function IndicesScreen() {
         {/* Market Stats */}
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { color: colors.text }]}>
-            Estatísticas do Mercado
+            {t('indices.marketStats')}
           </Text>
           <View style={styles.statsGrid}>
             {marketStats.map((stat, index) => {
@@ -864,7 +865,7 @@ export default function IndicesScreen() {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Text style={[styles.sectionTitle, { color: colors.text }]}>
-              Top Criptomoedas
+              {t('indices.topCryptos')}
             </Text>
             <View style={styles.timeframeSelector}>
               {timeframes.map((timeframe) => (
@@ -992,7 +993,7 @@ export default function IndicesScreen() {
         {/* Trending Section */}
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { color: colors.text }]}>
-            🔥 Trending
+            {t('indices.trending')}
           </Text>
           <View
             style={[
@@ -1023,7 +1024,7 @@ export default function IndicesScreen() {
         {/* Market Analysis */}
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { color: colors.text }]}>
-            Análise de Mercado
+            {t('indices.marketAnalysis')}
           </Text>
           <View
             style={[
@@ -1049,9 +1050,7 @@ export default function IndicesScreen() {
                   { color: colors.textSecondary },
                 ]}
               >
-                O mercado está em estado de "ganância extrema", indicando
-                otimismo elevado entre os investidores. Historicamente, estes
-                níveis podem preceder correções de mercado.
+                {t('indices.marketAnalysisText')}
               </Text>
             </View>
           </View>
@@ -1060,7 +1059,7 @@ export default function IndicesScreen() {
         {/* Quick Actions */}
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { color: colors.text }]}>
-            Ações Rápidas
+            {t('indices.quickActions')}
           </Text>
           <View style={styles.quickActions}>
             <TouchableOpacity
@@ -1077,7 +1076,7 @@ export default function IndicesScreen() {
                 <BarChart3 size={24} color="white" />
               </LinearGradient>
               <Text style={[styles.quickActionText, { color: colors.text }]}>
-                Gráficos Avançados
+                {t('indices.advancedCharts')}
               </Text>
             </TouchableOpacity>
 
@@ -1094,7 +1093,7 @@ export default function IndicesScreen() {
                 <PieChartIcon size={24} color="white" />
               </LinearGradient>
               <Text style={[styles.quickActionText, { color: colors.text }]}>
-                Portfolio Tracker
+                {t('indices.portfolioTracker')}
               </Text>
             </TouchableOpacity>
           </View>
@@ -1103,11 +1102,11 @@ export default function IndicesScreen() {
         {/* Charts Section */}
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { color: colors.text }]}>
-            Gráficos de Análise
+            {t('indices.chartAnalysis')}
           </Text>
 
           <PieChart
-            title="Distribuição de Market Cap"
+            title={t('indices.marketCapDistribution')}
             data={[
               { label: 'Bitcoin', value: 52.3, color: '#F7931A' },
               { label: 'Ethereum', value: 17.2, color: '#627EEA' },
@@ -1118,7 +1117,7 @@ export default function IndicesScreen() {
           />
 
           <HorizontalBarChart
-            title="Performance 24h (%)"
+            title={t('indices.performance24h')}
             data={[
               { label: 'Bitcoin (BTC)', value: 12.5, color: '#10B981' },
               { label: 'Ethereum (ETH)', value: 8.2, color: '#10B981' },
@@ -1130,7 +1129,7 @@ export default function IndicesScreen() {
           />
 
           <VerticalBarChart
-            title="Volume de Negociação (Bilhões USD)"
+            title={t('indices.tradingVolume')}
             data={[
               { label: 'BTC', value: 28.5, color: '#F7931A' },
               { label: 'ETH', value: 15.2, color: '#627EEA' },
@@ -1142,7 +1141,7 @@ export default function IndicesScreen() {
           />
 
           <LineChart
-            title="Tendência de Preço BTC (24h)"
+            title={t('indices.btcPriceTrend')}
             data={[
               { label: '00:00', value: 65000 },
               { label: '04:00', value: 67500 },
@@ -1155,7 +1154,7 @@ export default function IndicesScreen() {
           />
 
           <CandlestickChart
-            title="Padrão de Candlestick - Bitcoin (6h)"
+            title={t('indices.candlestickPattern')}
             data={[
               {
                 time: '00:00',
