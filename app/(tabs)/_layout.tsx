@@ -8,9 +8,11 @@ import {
   Wallet,
 } from 'lucide-react-native';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function TabLayout() {
   const { colors } = useTheme();
+  const { t } = useLanguage();
 
   return (
     <Tabs
@@ -45,14 +47,14 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
+          title: t('tabs.home'),
           tabBarIcon: ({ size, color }) => <Home size={size} color={color} />,
         }}
       />
       <Tabs.Screen
         name="courses"
         options={{
-          title: 'Cursos',
+          title: t('tabs.courses'),
           tabBarIcon: ({ size, color }) => (
             <BookOpen size={size} color={color} />
           ),
@@ -61,14 +63,14 @@ export default function TabLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          title: 'Perfil',
+          title: t('tabs.profile'),
           tabBarIcon: ({ size, color }) => <User size={size} color={color} />,
         }}
       />
       <Tabs.Screen
         name="indices"
         options={{
-          title: 'Índices',
+          title: t('tabs.indices'),
           tabBarIcon: ({ size, color }) => (
             <TrendingUp size={size} color={color} />
           ),
@@ -77,7 +79,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="portfolio"
         options={{
-          title: 'Portfólio',
+          title: t('tabs.portfolio'),
           tabBarIcon: ({ size, color }) => <Wallet size={size} color={color} />,
         }}
       />

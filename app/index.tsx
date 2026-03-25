@@ -6,11 +6,13 @@ import { ArrowRight } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import AnimatedPressable from '@/components/AnimatedPressable';
+import { useLanguage } from '@/contexts/LanguageContext';
 import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 
 export default function LandingPage() {
   const router = useRouter();
   const { colors } = useTheme();
+  const { t } = useLanguage();
   const insets = useSafeAreaInsets();
 
   return (
@@ -34,24 +36,21 @@ export default function LandingPage() {
           entering={FadeInDown.delay(200).duration(500)}
           style={[styles.highlight, { color: '#F7931A' }]}
         >
-          Do Zero à Soberania
+          {t('landing.highlight')}
         </Animated.Text>
 
         <Animated.Text
           entering={FadeInDown.delay(400).duration(500)}
           style={[styles.description, { color: colors.text }]}
         >
-          Aprenda a dominar uma infraestrutura financeira que não exige CPF e
-          coloque seu dinheiro sob seu controle total — mesmo começando hoje e
-          com pouco para investir.
+          {t('landing.description')}
         </Animated.Text>
 
         <Animated.Text
           entering={FadeInDown.delay(600).duration(500)}
           style={[styles.emphasis, { color: colors.text }]}
         >
-          O que você aprenderá aqui é algo que a maioria das pessoas só vai
-          descobrir quando for tarde demais.
+          {t('landing.emphasis')}
         </Animated.Text>
 
         <Animated.View entering={FadeInDown.delay(800).duration(500)}>
@@ -62,7 +61,7 @@ export default function LandingPage() {
               end={{ x: 1, y: 0 }}
               style={styles.ctaButton}
             >
-              <Text style={styles.ctaText}>Começar Agora</Text>
+              <Text style={styles.ctaText}>{t('landing.cta')}</Text>
               <ArrowRight size={20} color="#FFFFFF" />
             </LinearGradient>
           </AnimatedPressable>

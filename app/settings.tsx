@@ -31,6 +31,7 @@ import {
   Info,
 } from 'lucide-react-native';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface GeneralSettings {
   darkMode: boolean;
@@ -47,11 +48,12 @@ interface GeneralSettings {
 
 export default function SettingsScreen() {
   const router = useRouter();
-  const { colors, isDark } = useTheme();
+  const { colors, isDark, setDarkMode } = useTheme();
+  const { locale, setLocale } = useLanguage();
 
   const [settings, setSettings] = useState<GeneralSettings>({
-    darkMode: true,
-    language: 'pt-BR',
+    darkMode: false,
+    language: locale,
     currency: 'BRL',
     soundEffects: true,
     hapticFeedback: true,
@@ -70,6 +72,12 @@ export default function SettingsScreen() {
       ...prev,
       [key]: value,
     }));
+    if (key === 'darkMode' && typeof value === 'boolean') {
+      setDarkMode(value);
+    }
+    if (key === 'language' && typeof value === 'string') {
+      setLocale(value as 'pt-BR' | 'en-US' | 'es-ES');
+    }
   };
 
   const handleLanguageChange = () => {

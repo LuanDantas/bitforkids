@@ -14,6 +14,7 @@ import { Mail, Lock, Eye, EyeOff } from 'lucide-react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { useVSL } from '@/contexts/VSLContext';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -23,10 +24,11 @@ export default function LoginScreen() {
   const router = useRouter();
   const { resetSessionFlag } = useVSL();
   const { colors, isDark } = useTheme();
+  const { t } = useLanguage();
 
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert('Erro', 'Por favor, preencha todos os campos');
+      Alert.alert(t('auth.login.errorTitle'), t('auth.login.errorFillAll'));
       return;
     }
 
@@ -40,13 +42,13 @@ export default function LoginScreen() {
         resetSessionFlag();
         router.replace('/(tabs)');
       } else {
-        Alert.alert('Erro', 'Email ou senha incorretos');
+        Alert.alert(t('auth.login.errorTitle'), t('auth.login.errorInvalidCredentials'));
       }
     }, 1500);
   };
 
   const handleSocialLogin = (provider: string) => {
-    Alert.alert('Em breve', `Login com ${provider} será implementado`);
+    Alert.alert(t('auth.login.socialComingSoonTitle'), t('auth.login.socialComingSoonMessage').replace('{{provider}}', provider));
   };
 
   return (
@@ -59,9 +61,9 @@ export default function LoginScreen() {
             style={styles.logo}
             resizeMode="contain"
           />
-          <Text style={[styles.title, { color: colors.text }]}>Seja bem vindo</Text>
+          <Text style={[styles.title, { color: colors.text }]}>{t('auth.login.title')}</Text>
           <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-            Faça login para continuar seus estudos
+            {t('auth.login.subtitle')}
           </Text>
         </View>
 
@@ -73,7 +75,7 @@ export default function LoginScreen() {
             </View>
             <TextInput
               style={[styles.input, { color: colors.text }]}
-              placeholder="Email"
+              placeholder={t('auth.login.emailPlaceholder')}
               placeholderTextColor={colors.textSecondary}
               value={email}
               onChangeText={setEmail}
@@ -88,7 +90,7 @@ export default function LoginScreen() {
             </View>
             <TextInput
               style={[styles.input, { paddingRight: 50, color: colors.text }]}
-              placeholder="Senha"
+              placeholder={t('auth.login.passwordPlaceholder')}
               placeholderTextColor={colors.textSecondary}
               value={password}
               onChangeText={setPassword}
@@ -110,7 +112,7 @@ export default function LoginScreen() {
             style={styles.forgotPassword}
             onPress={() => router.push('/auth/forgot-password')}
           >
-            <Text style={styles.forgotPasswordText}>Esqueceu a senha?</Text>
+            <Text style={styles.forgotPasswordText}>{t('auth.login.forgotPassword')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -123,7 +125,7 @@ export default function LoginScreen() {
               style={styles.loginGradient}
             >
               <Text style={styles.loginText}>
-                {isLoading ? 'Entrando...' : 'Entrar'}
+                {isLoading ? t('auth.login.loginButtonLoading') : t('auth.login.loginButton')}
               </Text>
             </LinearGradient>
           </TouchableOpacity>
@@ -131,7 +133,7 @@ export default function LoginScreen() {
           {/* Divider */}
           <View style={styles.divider}>
             <View style={[styles.dividerLine, { backgroundColor: isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)' }]} />
-            <Text style={[styles.dividerText, { color: colors.textSecondary }]}>ou</Text>
+            <Text style={[styles.dividerText, { color: colors.textSecondary }]}>{t('auth.login.divider')}</Text>
             <View style={[styles.dividerLine, { backgroundColor: isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)' }]} />
           </View>
 
@@ -155,9 +157,9 @@ export default function LoginScreen() {
 
         {/* Sign Up Link */}
         <View style={styles.footer}>
-          <Text style={[styles.footerText, { color: colors.textSecondary }]}>Não tem uma conta? </Text>
+          <Text style={[styles.footerText, { color: colors.textSecondary }]}>{t('auth.login.noAccount')}</Text>
           <TouchableOpacity onPress={() => router.push('/auth/register')}>
-            <Text style={styles.signUpText}>Criar conta</Text>
+            <Text style={styles.signUpText}>{t('auth.login.signUp')}</Text>
           </TouchableOpacity>
         </View>
       </View>
