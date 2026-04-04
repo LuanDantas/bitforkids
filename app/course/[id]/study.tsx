@@ -80,7 +80,7 @@ export default function StudyDashboardScreen() {
       <LinearGradient
         colors={
           isDark
-            ? (['#1a1025', '#0a0a0a'] as const)
+            ? (['#0f172a', '#1e293b'] as const)
             : (['#4f46e5', '#3b82f6'] as const)
         }
         style={styles.header}
