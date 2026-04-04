@@ -337,30 +337,21 @@ export default function HomeScreen() {
             snapToAlignment="start"
             contentContainerStyle={styles.carouselContent}
           >
-            {trail1Courses.map((course) => (
+            {trail1Courses.map((course) => {
+              const progress = getCourseProgress(course.id);
+              return (
                 <AnimatedPressable
                   key={course.id}
                   onPress={() => router.push(`/course/${course.id}`)}
                   style={{ width: CARD_WIDTH, marginRight: CARD_SPACING }}
                 >
                   <View style={styles.courseCard}>
-                    {/* Background image */}
+                    {/* Image on top */}
                     <Image
                       source={course.image}
                       style={styles.courseImage}
-                      resizeMode="cover"
                     />
-                    {/* Dark overlay */}
-                    <LinearGradient
-                      colors={[
-                        'rgba(15,23,42,0.2)',
-                        'rgba(15,23,42,0.65)',
-                        'rgba(15,23,42,0.92)',
-                      ] as const}
-                      locations={[0, 0.45, 0.85]}
-                      style={styles.courseOverlay}
-                    />
-                    {/* Content at bottom */}
+                    {/* Content below */}
                     <View style={styles.courseContent}>
                       <Text
                         style={[
@@ -371,9 +362,28 @@ export default function HomeScreen() {
                       >
                         {t(course.titleKey)}
                       </Text>
-                      {/* Accent line */}
-                      <View style={[styles.courseAccentLine, { backgroundColor: course.trailColors[0] }]} />
-                      {/* CTA */}
+                      {/* Progress bar */}
+                      <View style={styles.courseProgressRow}>
+                        <View style={styles.courseProgressBar}>
+                          <View
+                            style={[
+                              styles.courseProgressFill,
+                              {
+                                width: `${progress}%`,
+                                backgroundColor: course.trailColors[0],
+                              },
+                            ]}
+                          />
+                        </View>
+                        <Text
+                          style={[
+                            styles.courseProgressText,
+                            { fontFamily: fonts.bodySemiBold },
+                          ]}
+                        >
+                          {progress}%
+                        </Text>
+                      </View>
                       <View style={[styles.courseCta, { borderColor: course.trailColors[0] }]}>
                         <ChevronRight size={16} color="#fff" />
                         <Text
@@ -388,7 +398,8 @@ export default function HomeScreen() {
                     </View>
                   </View>
                 </AnimatedPressable>
-              ))}
+              );
+            })}
           </ScrollView>
         </AnimatedSection>
 
@@ -578,7 +589,7 @@ const styles = StyleSheet.create({
 
   // Trail header
   trailHeader: {
-    marginTop: 24,
+    marginTop: 40,
     marginBottom: 4,
   },
   trailSubtitle: {
@@ -589,26 +600,19 @@ const styles = StyleSheet.create({
 
   // Course cards — image as background
   courseCard: {
+    backgroundColor: 'rgba(30, 27, 75, 0.9)',
     borderRadius: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(99, 102, 241, 0.25)',
     overflow: 'hidden',
-    height: 280,
-    position: 'relative',
   },
   courseImage: {
-    ...StyleSheet.absoluteFillObject,
     width: '100%',
-    height: '100%',
-  },
-  courseOverlay: {
-    ...StyleSheet.absoluteFillObject,
+    height: 130,
   },
   courseContent: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
     paddingHorizontal: 16,
-    paddingBottom: 20,
+    paddingVertical: 16,
     alignItems: 'center',
   },
   courseTitle: {
@@ -618,11 +622,26 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 12,
   },
-  courseAccentLine: {
-    width: 48,
-    height: 3,
-    borderRadius: 2,
+  courseProgressRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    width: '100%',
     marginBottom: 14,
+  },
+  courseProgressBar: {
+    flex: 1,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+  },
+  courseProgressFill: {
+    height: 4,
+    borderRadius: 2,
+  },
+  courseProgressText: {
+    color: 'rgba(255,255,255,0.7)',
+    fontSize: 12,
   },
   courseCta: {
     flexDirection: 'row',
