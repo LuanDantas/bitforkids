@@ -337,79 +337,58 @@ export default function HomeScreen() {
             snapToAlignment="start"
             contentContainerStyle={styles.carouselContent}
           >
-            {trail1Courses.map((course) => {
-              const progress = getCourseProgress(course.id);
-              return (
+            {trail1Courses.map((course) => (
                 <AnimatedPressable
                   key={course.id}
                   onPress={() => router.push(`/course/${course.id}`)}
                   style={{ width: CARD_WIDTH, marginRight: CARD_SPACING }}
                 >
-                  <GlassCard style={styles.courseCard} borderRadius={16}>
-                    <View style={{ margin: -16 }}>
-                      <Image
-                        source={course.image}
-                        style={styles.courseImage}
-                        resizeMode="cover"
-                      />
-                      <View style={styles.courseInfo}>
+                  <View style={styles.courseCard}>
+                    {/* Background image */}
+                    <Image
+                      source={course.image}
+                      style={styles.courseImage}
+                      resizeMode="cover"
+                    />
+                    {/* Dark overlay */}
+                    <LinearGradient
+                      colors={[
+                        'rgba(15,23,42,0.2)',
+                        'rgba(15,23,42,0.65)',
+                        'rgba(15,23,42,0.92)',
+                      ] as const}
+                      locations={[0, 0.45, 0.85]}
+                      style={styles.courseOverlay}
+                    />
+                    {/* Content at bottom */}
+                    <View style={styles.courseContent}>
+                      <Text
+                        style={[
+                          styles.courseTitle,
+                          { fontFamily: fonts.display },
+                        ]}
+                        numberOfLines={2}
+                      >
+                        {t(course.titleKey)}
+                      </Text>
+                      {/* Accent line */}
+                      <View style={[styles.courseAccentLine, { backgroundColor: course.trailColors[0] }]} />
+                      {/* CTA */}
+                      <View style={[styles.courseCta, { borderColor: course.trailColors[0] }]}>
+                        <ChevronRight size={16} color="#fff" />
                         <Text
                           style={[
-                            styles.courseTitle,
-                            {
-                              color: colors.text,
-                              fontFamily: fonts.bodySemiBold,
-                            },
+                            styles.courseCtaText,
+                            { fontFamily: fonts.bodySemiBold },
                           ]}
-                          numberOfLines={2}
                         >
-                          {t(course.titleKey)}
+                          {t('dashboard.startCourse')}
                         </Text>
-                        {progress > 0 && (
-                          <View style={styles.courseProgressContainer}>
-                            <View
-                              style={[
-                                styles.courseProgressBar,
-                                { backgroundColor: colors.border },
-                              ]}
-                            >
-                              <View
-                                style={[
-                                  styles.courseProgressFill,
-                                  { width: `${progress}%` },
-                                ]}
-                              />
-                            </View>
-                            <Text
-                              style={[
-                                styles.courseProgressText,
-                                {
-                                  color: colors.textTertiary,
-                                  fontFamily: fonts.bodySemiBold,
-                                },
-                              ]}
-                            >
-                              {progress}%
-                            </Text>
-                          </View>
-                        )}
-                        <View style={styles.courseFooter}>
-                          <LinearGradient
-                            colors={course.trailColors}
-                            style={styles.trailBadge}
-                          >
-                            <Text style={[styles.trailBadgeText, { fontFamily: fonts.secondaryMedium }]}>
-                              {t('dashboard.trail1Title')}
-                            </Text>
-                          </LinearGradient>
-                          <ChevronRight size={16} color="#6366f1" />
-                        </View>
                       </View>
                     </View>
-                  </GlassCard>
+                  </View>
                 </AnimatedPressable>
-              );
-            })}
+              ))}
           </ScrollView>
         </AnimatedSection>
 
@@ -608,55 +587,55 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
 
-  // Course cards
+  // Course cards — image as background
   courseCard: {
+    borderRadius: 20,
     overflow: 'hidden',
+    height: 280,
+    position: 'relative',
   },
   courseImage: {
+    ...StyleSheet.absoluteFillObject,
     width: '100%',
-    height: 140,
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
+    height: '100%',
   },
-  courseInfo: {
-    padding: 12,
+  courseOverlay: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  courseContent: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    paddingHorizontal: 16,
+    paddingBottom: 20,
+    alignItems: 'center',
   },
   courseTitle: {
-    fontSize: 15,
-    lineHeight: 20,
-    marginBottom: 8,
-  },
-  courseProgressContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    marginBottom: 8,
-  },
-  courseProgressBar: {
-    flex: 1,
-    height: 4,
-    borderRadius: 2,
-  },
-  courseProgressFill: {
-    height: 4,
-    borderRadius: 2,
-    backgroundColor: '#6366f1',
-  },
-  courseProgressText: {
-    fontSize: 12,
-  },
-  courseFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  trailBadge: {
-    paddingVertical: 4,
-    paddingHorizontal: 10,
-    borderRadius: 8,
-  },
-  trailBadgeText: {
+    fontSize: 20,
+    lineHeight: 26,
     color: '#fff',
-    fontSize: 11,
+    textAlign: 'center',
+    marginBottom: 12,
+  },
+  courseAccentLine: {
+    width: 48,
+    height: 3,
+    borderRadius: 2,
+    marginBottom: 14,
+  },
+  courseCta: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    borderWidth: 1.5,
+    borderRadius: 24,
+    paddingVertical: 10,
+    paddingHorizontal: 24,
+  },
+  courseCtaText: {
+    color: '#fff',
+    fontSize: 14,
   },
 });
