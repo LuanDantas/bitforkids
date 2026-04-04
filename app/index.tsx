@@ -2,7 +2,8 @@ import { View, Text, StyleSheet, ScrollView, Image, Platform } from 'react-nativ
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
-import { ArrowRight } from 'lucide-react-native';
+import { useUser } from '@/contexts/UserContext';
+import { ArrowRight, Zap } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import AnimatedPressable from '@/components/AnimatedPressable';
@@ -12,8 +13,16 @@ import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 export default function LandingPage() {
   const router = useRouter();
   const { colors, fonts } = useTheme();
+  const { login } = useUser();
   const { t } = useLanguage();
   const insets = useSafeAreaInsets();
+
+  const handleQuickLogin = async () => {
+    const result = await login('root@bitforkids.com', 'root123');
+    if (result.success) {
+      router.replace('/(tabs)');
+    }
+  };
 
   return (
     <ScrollView
@@ -67,6 +76,17 @@ export default function LandingPage() {
           </AnimatedPressable>
         </Animated.View>
       </View>
+
+      {/* TEMP: Quick login button */}
+      <AnimatedPressable
+        onPress={handleQuickLogin}
+        style={[styles.floatingBtn, { bottom: insets.bottom + 16 }]}
+      >
+        <Zap size={18} color="#fff" fill="#fff" />
+        <Text style={[styles.floatingBtnText, { fontFamily: fonts.bodySemiBold }]}>
+          Dev Login
+        </Text>
+      </AnimatedPressable>
     </ScrollView>
   );
 }
@@ -120,5 +140,24 @@ const styles = StyleSheet.create({
   ctaText: {
     color: '#FFFFFF',
     fontSize: 18,
+  },
+  floatingBtn: {
+    position: 'absolute',
+    right: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: '#EF4444',
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 24,
+    ...Platform.select({
+      ios: { shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.3, shadowRadius: 4 },
+      android: { elevation: 6 },
+    }),
+  },
+  floatingBtnText: {
+    color: '#fff',
+    fontSize: 13,
   },
 });

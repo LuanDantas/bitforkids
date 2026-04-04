@@ -136,22 +136,22 @@ export default function HomeScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* HERO — full-bleed background image */}
-        <View style={styles.heroWrapper}>
+        {/* HERO — full-width image with gradient fade */}
+        <View style={[styles.heroWrapper, { backgroundColor: colors.background }]}>
           <Image
             source={heroCourse.image}
             style={styles.heroBgImage}
-            resizeMode="cover"
+            resizeMode="contain"
           />
-          {/* Gradient overlay: dark top → darker bottom fading into background */}
+          {/* Single gradient: tint top + fade to background at bottom */}
           <LinearGradient
             colors={[
-              'rgba(15,23,42,0.3)',
-              'rgba(15,23,42,0.55)',
+              'rgba(15,23,42,0.35)',
+              'rgba(15,23,42,0.5)',
               colors.background,
             ] as const}
-            locations={[0, 0.6, 1]}
-            style={StyleSheet.absoluteFill}
+            locations={[0, 0.45, 0.85]}
+            style={styles.heroGradient}
           />
 
           {/* Content over the image */}
@@ -430,23 +430,29 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
 
-  // Hero wrapper — full-bleed image background
+  // Hero wrapper
   heroWrapper: {
     position: 'relative',
     width: '100%',
-    minHeight: 560,
-    justifyContent: 'flex-end',
-    overflow: 'hidden',
+    height: 420,
   },
   heroBgImage: {
     ...StyleSheet.absoluteFillObject,
     width: '100%',
     height: '100%',
   },
-  heroContent: {
-    paddingHorizontal: 24,
-    paddingBottom: 48,
+  heroGradient: {
+    ...StyleSheet.absoluteFillObject,
     zIndex: 1,
+  },
+  heroContent: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    paddingHorizontal: 24,
+    paddingBottom: 24,
+    zIndex: 2,
   },
 
   // Greeting pill
