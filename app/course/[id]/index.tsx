@@ -21,8 +21,11 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-na
 import {
   ArrowLeft,
   ChevronDown,
-  ChevronUp,
   Shield,
+  BookOpen,
+  MessageCircle,
+  Lock,
+  CheckCircle,
 } from 'lucide-react-native';
 
 interface FAQ {
@@ -450,44 +453,73 @@ export default function CourseDetailScreen() {
 
         {/* Course info */}
         <View style={styles.contentPadding}>
-          {/* Header card — badge + title + subtitle */}
-          <View style={[styles.sectionCard, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+          {/* Header — badge + title + subtitle */}
+          <View style={[styles.headerCard, { borderColor: course.trailColor[0] + '40' }]}>
+            <LinearGradient
+              colors={[course.trailColor[0] + '15', 'transparent'] as const}
+              style={StyleSheet.absoluteFill}
+            />
             <LinearGradient colors={course.trailColor} style={styles.trailBadge}>
               <Text style={[styles.trailBadgeText, { fontFamily: fonts.secondaryMedium }]}>{course.trailLabel}</Text>
             </LinearGradient>
             <Text style={[styles.courseTitle, { color: colors.text, fontFamily: fonts.display }]}>{course.title}</Text>
+            <View style={[styles.accentLine, { backgroundColor: course.trailColor[0] }]} />
             <Text style={[styles.courseSubtitle, { color: colors.textSecondary, fontFamily: fonts.body }]}>{course.subtitle}</Text>
           </View>
 
-          {/* Description card */}
+          {/* Description — quote style with left accent bar */}
           {course.extraContent.length > 0 && (
-            <View style={[styles.sectionCard, { backgroundColor: colors.surface, borderColor: colors.border }]}>
-              {course.extraContent.map((text, i) => (
-                <Text key={i} style={[styles.paragraph, { color: colors.text, fontFamily: fonts.body, marginBottom: i < course.extraContent.length - 1 ? 12 : 0 }]}>{text}</Text>
-              ))}
+            <View style={[styles.descriptionCard, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+              <View style={[styles.descriptionAccent, { backgroundColor: course.trailColor[0] }]} />
+              <View style={styles.descriptionContent}>
+                <BookOpen size={20} color={course.trailColor[0]} style={{ marginBottom: 10 }} />
+                {course.extraContent.map((text, i) => (
+                  <Text key={i} style={[styles.paragraph, { color: colors.text, fontFamily: fonts.body, marginBottom: i < course.extraContent.length - 1 ? 12 : 0 }]}>{text}</Text>
+                ))}
+              </View>
             </View>
           )}
 
           {hasAccess ? (
             <>
-              {/* Content sections — each in its own card */}
-              {course.sections.map((section, sIdx) => (
-                <AnimatedSection key={sIdx}>
-                  <View style={[styles.sectionCard, { backgroundColor: colors.surface, borderColor: colors.border }]}>
-                    <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>{section.title}</Text>
-                    {section.items.map((item, iIdx) => (
-                      <View key={iIdx} style={styles.sectionItem}>
-                        <Text style={[styles.sectionItemText, { color: colors.text, fontFamily: fonts.body }]}>{item}</Text>
+              {/* Content sections — each with unique visual */}
+              {course.sections.map((section, sIdx) => {
+                const sectionColors = [
+                  '#6366f1', '#F59E0B', '#3b82f6', '#10B981', '#8B5CF6', '#EC4899',
+                ];
+                const accent = sectionColors[sIdx % sectionColors.length];
+                return (
+                  <AnimatedSection key={sIdx}>
+                    <View style={[styles.sectionCard, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+                      {/* Section header with number badge */}
+                      <View style={styles.sectionHeader}>
+                        <View style={[styles.sectionNumberBadge, { backgroundColor: accent + '20' }]}>
+                          <Text style={[styles.sectionNumber, { color: accent, fontFamily: fonts.bodyBold }]}>{sIdx + 1}</Text>
+                        </View>
+                        <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>{section.title}</Text>
                       </View>
-                    ))}
-                  </View>
-                </AnimatedSection>
-              ))}
+                      <View style={[styles.sectionDivider, { backgroundColor: accent + '30' }]} />
+                      {/* Items with accent bullet */}
+                      {section.items.map((item, iIdx) => (
+                        <View key={iIdx} style={styles.sectionItem}>
+                          <View style={[styles.itemBullet, { backgroundColor: accent }]} />
+                          <Text style={[styles.sectionItemText, { color: colors.textSecondary, fontFamily: fonts.body }]}>{item}</Text>
+                        </View>
+                      ))}
+                    </View>
+                  </AnimatedSection>
+                );
+              })}
 
               {/* FAQ */}
               {course.faq.length > 0 && (
                 <View style={styles.faqSection}>
-                  <Text style={[styles.sectionTitleOutside, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>{'❓ ' + t('courseDetail.faqTitle')}</Text>
+                  <View style={styles.faqHeader}>
+                    <View style={[styles.faqIconCircle, { backgroundColor: '#6366f120' }]}>
+                      <MessageCircle size={20} color="#6366f1" />
+                    </View>
+                    <Text style={[styles.sectionTitleOutside, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>{t('courseDetail.faqTitle')}</Text>
+                  </View>
                   {course.faq.map((item, idx) => (
                     <FAQItem key={idx} item={item} colors={colors} fonts={fonts} />
                   ))}
@@ -497,8 +529,14 @@ export default function CourseDetailScreen() {
           ) : (
             <>
               {/* Paywall */}
-              <View style={[styles.sectionCard, styles.paywallCard, { backgroundColor: colors.surface, borderColor: colors.border }]}>
-                <Text style={styles.paywallEmoji}>🔒</Text>
+              <View style={[styles.paywallCard, { borderColor: '#6366f140' }]}>
+                <LinearGradient
+                  colors={['rgba(99,102,241,0.08)', 'transparent'] as const}
+                  style={StyleSheet.absoluteFill}
+                />
+                <View style={[styles.paywallIconCircle, { backgroundColor: '#6366f115' }]}>
+                  <Lock size={28} color="#6366f1" />
+                </View>
                 <Text style={[styles.paywallTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
                   {t('courseDetail.paywallTitle') || 'Conteúdo exclusivo para alunos'}
                 </Text>
@@ -510,12 +548,23 @@ export default function CourseDetailScreen() {
           )}
 
           {/* Guarantee */}
-          <View style={[styles.sectionCard, styles.guaranteeCard, { backgroundColor: colors.surface, borderColor: colors.border }]}>
-            <Shield size={28} color="#10B981" />
+          <View style={styles.guaranteeCard}>
+            <LinearGradient
+              colors={['rgba(16,185,129,0.1)', 'transparent'] as const}
+              style={StyleSheet.absoluteFill}
+            />
+            <View style={[styles.guaranteeIconCircle, { backgroundColor: '#10B98120' }]}>
+              <Shield size={24} color="#10B981" />
+            </View>
             <Text style={[styles.guaranteeTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>{t('courseDetail.guaranteeTitle')}</Text>
+            <View style={[styles.accentLine, { backgroundColor: '#10B981', marginBottom: 10 }]} />
             <Text style={[styles.guaranteeDesc, { color: colors.textSecondary, fontFamily: fonts.body }]}>
               {t('courseDetail.guaranteeDesc')}
             </Text>
+            <View style={styles.guaranteeBadge}>
+              <CheckCircle size={14} color="#10B981" />
+              <Text style={[styles.guaranteeBadgeText, { fontFamily: fonts.bodySemiBold }]}>100% seguro</Text>
+            </View>
           </View>
 
           <View style={{ height: 100 }} />
@@ -613,62 +662,150 @@ const styles = StyleSheet.create({
   contentPadding: {
     padding: 16,
   },
+
+  // Header card
+  headerCard: {
+    borderRadius: 20,
+    borderWidth: 1,
+    padding: 24,
+    marginBottom: 14,
+    overflow: 'hidden',
+  },
+  trailBadge: {
+    alignSelf: 'flex-start',
+    borderRadius: 20,
+    paddingVertical: 6,
+    paddingHorizontal: 14,
+    marginBottom: 16,
+  },
+  trailBadgeText: {
+    color: '#FFF',
+    fontSize: 11,
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+  },
+  courseTitle: {
+    fontSize: 26,
+    marginBottom: 12,
+    lineHeight: 34,
+  },
+  accentLine: {
+    width: 40,
+    height: 3,
+    borderRadius: 2,
+    marginBottom: 12,
+  },
+  courseSubtitle: {
+    fontSize: 15,
+    lineHeight: 24,
+  },
+
+  // Description card — quote style
+  descriptionCard: {
+    borderRadius: 16,
+    borderWidth: 1,
+    marginBottom: 14,
+    flexDirection: 'row',
+    overflow: 'hidden',
+  },
+  descriptionAccent: {
+    width: 4,
+  },
+  descriptionContent: {
+    flex: 1,
+    padding: 20,
+  },
+  paragraph: {
+    fontSize: 15,
+    lineHeight: 24,
+  },
+
+  // Content section cards
   sectionCard: {
     borderRadius: 16,
     borderWidth: 1,
     padding: 20,
     marginBottom: 14,
   },
-  trailBadge: {
-    alignSelf: 'flex-start',
-    borderRadius: 8,
-    paddingVertical: 6,
-    paddingHorizontal: 12,
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
     marginBottom: 12,
   },
-  trailBadgeText: {
-    color: '#FFF',
-    fontSize: 12,
+  sectionNumberBadge: {
+    width: 36,
+    height: 36,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  courseTitle: {
-    fontSize: 24,
-    marginBottom: 8,
-    lineHeight: 32,
-  },
-  courseSubtitle: {
+  sectionNumber: {
     fontSize: 16,
-    lineHeight: 24,
-    marginBottom: 16,
-  },
-  paragraph: {
-    fontSize: 15,
-    lineHeight: 24,
   },
   sectionTitle: {
-    fontSize: 18,
-    marginBottom: 12,
+    fontSize: 17,
+    flex: 1,
+  },
+  sectionDivider: {
+    height: 1,
+    marginBottom: 14,
   },
   sectionTitleOutside: {
     fontSize: 20,
-    marginBottom: 14,
   },
+  sectionItem: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 10,
+    marginBottom: 10,
+  },
+  itemBullet: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    marginTop: 8,
+  },
+  sectionItemText: {
+    fontSize: 14,
+    lineHeight: 22,
+    flex: 1,
+  },
+
+  // FAQ section
   faqSection: {
     marginBottom: 14,
   },
-  sectionItem: {
-    paddingLeft: 4,
-    marginBottom: 8,
-  },
-  sectionItemText: {
-    fontSize: 15,
-    lineHeight: 22,
-  },
-  paywallCard: {
+  faqHeader: {
+    flexDirection: 'row',
     alignItems: 'center',
+    gap: 10,
+    marginBottom: 14,
   },
-  paywallEmoji: {
-    fontSize: 40,
-    marginBottom: 12,
+  faqIconCircle: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  // Paywall card
+  paywallCard: {
+    borderRadius: 20,
+    borderWidth: 1,
+    padding: 28,
+    marginBottom: 14,
+    alignItems: 'center',
+    overflow: 'hidden',
+  },
+  paywallIconCircle: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 16,
   },
   paywallTitle: {
     fontSize: 18,
@@ -677,21 +814,50 @@ const styles = StyleSheet.create({
   },
   paywallDesc: {
     fontSize: 14,
-    lineHeight: 20,
+    lineHeight: 22,
     textAlign: 'center',
   },
+
+  // Guarantee card
   guaranteeCard: {
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(16,185,129,0.3)',
+    padding: 24,
+    marginBottom: 14,
     alignItems: 'center',
+    overflow: 'hidden',
+  },
+  guaranteeIconCircle: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 12,
   },
   guaranteeTitle: {
-    fontSize: 17,
-    marginTop: 8,
-    marginBottom: 6,
+    fontSize: 18,
+    marginBottom: 8,
   },
   guaranteeDesc: {
     fontSize: 14,
     textAlign: 'center',
-    lineHeight: 20,
+    lineHeight: 22,
+  },
+  guaranteeBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginTop: 14,
+    backgroundColor: 'rgba(16,185,129,0.1)',
+    paddingVertical: 6,
+    paddingHorizontal: 14,
+    borderRadius: 20,
+  },
+  guaranteeBadgeText: {
+    color: '#10B981',
+    fontSize: 13,
   },
   footer: {
     position: 'absolute',
