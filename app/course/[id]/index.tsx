@@ -381,7 +381,7 @@ function FAQItem({ item, colors, fonts }: { item: FAQ; colors: any; fonts: any }
       style={faqStyles.itemWrapper}
       onPress={toggle}
     >
-      <GlassCard style={faqStyles.item} borderRadius={12}>
+      <View style={[faqStyles.item, { backgroundColor: colors.surface, borderColor: colors.border }]}>
         <View style={faqStyles.questionRow}>
           <Text style={[faqStyles.question, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>{item.q}</Text>
           <Animated.View style={chevronStyle}>
@@ -393,7 +393,7 @@ function FAQItem({ item, colors, fonts }: { item: FAQ; colors: any; fonts: any }
             <Text style={[faqStyles.answer, { color: colors.textSecondary, fontFamily: fonts.body }]}>{item.a}</Text>
           </Animated.View>
         )}
-      </GlassCard>
+      </View>
     </AnimatedPressable>
   );
 }
@@ -507,13 +507,13 @@ export default function CourseDetailScreen() {
           )}
 
           {/* Guarantee */}
-          <GlassCard style={styles.guaranteeCard} borderRadius={12}>
+          <View style={[styles.guaranteeCard, { backgroundColor: colors.surface, borderColor: colors.border }]}>
             <Shield size={28} color="#10B981" />
             <Text style={[styles.guaranteeTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>{t('courseDetail.guaranteeTitle')}</Text>
             <Text style={[styles.guaranteeDesc, { color: colors.textSecondary, fontFamily: fonts.body }]}>
               {t('courseDetail.guaranteeDesc')}
             </Text>
-          </GlassCard>
+          </View>
 
           <View style={{ height: 100 }} />
         </View>
@@ -554,6 +554,8 @@ const faqStyles = StyleSheet.create({
   },
   item: {
     padding: 14,
+    borderRadius: 12,
+    borderWidth: 1,
   },
   questionRow: {
     flexDirection: 'row',
@@ -673,6 +675,8 @@ const styles = StyleSheet.create({
   guaranteeCard: {
     padding: 20,
     alignItems: 'center',
+    borderRadius: 12,
+    borderWidth: 1,
   },
   guaranteeTitle: {
     fontSize: 17,
