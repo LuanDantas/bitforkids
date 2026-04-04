@@ -32,8 +32,6 @@ import {
   Lightbulb,
   BookOpen,
   Heart,
-  Settings,
-  LogOut,
 } from 'lucide-react-native';
 
 // Section config: icon, accent color per section
@@ -382,24 +380,6 @@ export default function AboutScreen() {
             </View>
           </AnimatedSection>
 
-          {/* AÇÕES RÁPIDAS */}
-          <View style={s.quickActions}>
-            <AnimatedPressable
-              style={[s.quickActionBtn, { backgroundColor: colors.surface, borderColor: colors.border }]}
-              onPress={() => router.push('/settings')}
-            >
-              <Settings size={18} color="#6366f1" />
-              <Text style={[s.quickActionText, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>{t('home.quickSettings')}</Text>
-            </AnimatedPressable>
-            <AnimatedPressable
-              style={[s.quickActionBtn, { backgroundColor: colors.surface, borderColor: colors.border }]}
-              onPress={() => router.replace('/auth/login')}
-            >
-              <LogOut size={18} color="#EF4444" />
-              <Text style={[s.quickActionText, { color: '#EF4444', fontFamily: fonts.bodySemiBold }]}>{t('home.quickLogout')}</Text>
-            </AnimatedPressable>
-          </View>
-
           <View style={{ height: 40 }} />
         </View>
       </ScrollView>
@@ -519,19 +499,12 @@ const s = StyleSheet.create({
 
   // Profile
   profileImageContainer: { borderRadius: 16, overflow: 'hidden', marginBottom: 14 },
-  profileImage: { width: '100%', height: 320 },
+  profileImage: { width: '100%', height: 420 },
   profileName: { fontSize: 22, marginBottom: 4 },
   profileRole: { fontSize: 13, color: '#6366f1', marginBottom: 14 },
 
   // Family
   familyImageContainer: { borderRadius: 16, overflow: 'hidden', marginBottom: 14 },
-  familyImage: { width: '100%', height: 280 },
+  familyImage: { width: '100%', height: 380 },
 
-  // Quick actions
-  quickActions: { flexDirection: 'row', gap: 12, marginTop: 8 },
-  quickActionBtn: {
-    flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    gap: 8, paddingVertical: 14, borderRadius: 14, borderWidth: 1,
-  },
-  quickActionText: { fontSize: 14 },
 });
