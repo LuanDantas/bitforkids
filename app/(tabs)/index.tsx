@@ -30,7 +30,7 @@ import {
 } from 'lucide-react-native';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
-const CARD_WIDTH = SCREEN_WIDTH * 0.65;
+const CARD_WIDTH = SCREEN_WIDTH * 0.5;
 const CARD_SPACING = 12;
 
 const COURSES = [
@@ -105,24 +105,27 @@ export default function HomeScreen() {
       key: 'welcome',
       icon: Sparkles,
       title: t('dashboard.welcomeCard'),
-      subtitle: t('dashboard.welcomeCardSub'),
-      color: '#6366f1',
+      titleBold: t('dashboard.welcomeCardBold'),
+      cta: t('dashboard.welcomeCardCta'),
+      accent: '#F59E0B',
       onPress: () => router.push('/(tabs)/about' as any),
     },
     {
       key: 'indices',
       icon: TrendingUp,
       title: t('dashboard.indicesCard'),
-      subtitle: t('dashboard.indicesCardSub'),
-      color: '#3b82f6',
+      titleBold: t('dashboard.indicesCardBold'),
+      cta: t('dashboard.indicesCardCta'),
+      accent: '#3b82f6',
       onPress: () => router.push('/(tabs)/indices'),
     },
     {
       key: 'support',
       icon: HelpCircle,
       title: t('dashboard.supportCard'),
-      subtitle: t('dashboard.supportCardSub'),
-      color: '#10B981',
+      titleBold: t('dashboard.supportCardBold'),
+      cta: t('dashboard.supportCardCta'),
+      accent: '#10B981',
       onPress: () => router.push('/support' as any),
     },
   ];
@@ -236,6 +239,8 @@ export default function HomeScreen() {
         {/* Rest of page — sits right after the fade */}
         <AuroraBackground />
 
+        <View style={{ height: 32 }} />
+
         {/* CAROUSEL 1 - QUICK ACCESS */}
         <AnimatedSection delay={200}>
           <Text
@@ -260,40 +265,45 @@ export default function HomeScreen() {
                 onPress={link.onPress}
                 style={{ width: CARD_WIDTH, marginRight: CARD_SPACING }}
               >
-                <GlassCard style={styles.quickCard}>
-                  <View
-                    style={[
-                      styles.quickIconContainer,
-                      { backgroundColor: `${link.color}20` },
-                    ]}
-                  >
-                    <link.icon size={22} color={link.color} />
+                <View style={styles.quickCard}>
+                  {/* Icon circle with glow */}
+                  <View style={styles.quickIconRing}>
+                    <View style={[styles.quickIconCircle, { shadowColor: link.accent }]}>
+                      <link.icon size={28} color={link.accent} />
+                    </View>
                   </View>
+                  {/* Title */}
                   <Text
                     style={[
                       styles.quickTitle,
-                      { color: colors.text, fontFamily: fonts.bodySemiBold },
+                      { color: '#fff', fontFamily: fonts.body },
                     ]}
                   >
                     {link.title}
                   </Text>
                   <Text
                     style={[
-                      styles.quickSubtitle,
-                      {
-                        color: colors.textSecondary,
-                        fontFamily: fonts.body,
-                      },
+                      styles.quickTitleBold,
+                      { color: '#fff', fontFamily: fonts.display },
                     ]}
                   >
-                    {link.subtitle}
+                    {link.titleBold}
                   </Text>
-                  <ChevronRight
-                    size={16}
-                    color={colors.textTertiary}
-                    style={styles.quickChevron}
-                  />
-                </GlassCard>
+                  {/* Accent line */}
+                  <View style={[styles.quickAccentLine, { backgroundColor: link.accent }]} />
+                  {/* CTA button */}
+                  <View style={[styles.quickCta, { borderColor: link.accent }]}>
+                    <ChevronRight size={16} color="#fff" />
+                    <Text
+                      style={[
+                        styles.quickCtaText,
+                        { color: '#fff', fontFamily: fonts.bodySemiBold },
+                      ]}
+                    >
+                      {link.cta}
+                    </Text>
+                  </View>
+                </View>
               </AnimatedPressable>
             ))}
           </ScrollView>
@@ -523,28 +533,68 @@ const styles = StyleSheet.create({
 
   // Quick access cards
   quickCard: {
-    minHeight: 120,
+    backgroundColor: 'rgba(30, 27, 75, 0.9)',
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(99, 102, 241, 0.25)',
+    paddingVertical: 24,
+    paddingHorizontal: 20,
+    alignItems: 'center',
   },
-  quickIconContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
+  quickIconRing: {
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+    backgroundColor: 'rgba(0,0,0,0.35)',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 10,
+    marginBottom: 16,
+  },
+  quickIconCircle: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    ...Platform.select({
+      ios: {
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.6,
+        shadowRadius: 10,
+      },
+      android: { elevation: 4 },
+    }),
   },
   quickTitle: {
-    fontSize: 15,
-    marginBottom: 4,
+    fontSize: 22,
+    textAlign: 'center',
   },
-  quickSubtitle: {
-    fontSize: 13,
-    lineHeight: 18,
+  quickTitleBold: {
+    fontSize: 26,
+    textAlign: 'center',
+    marginBottom: 12,
   },
-  quickChevron: {
-    position: 'absolute',
-    top: 16,
-    right: 16,
+  quickAccentLine: {
+    width: 48,
+    height: 3,
+    borderRadius: 2,
+    marginBottom: 14,
+    alignSelf: 'center',
+  },
+  quickCta: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    borderWidth: 1.5,
+    borderRadius: 24,
+    paddingVertical: 10,
+    paddingHorizontal: 24,
+    alignSelf: 'center',
+  },
+  quickCtaText: {
+    fontSize: 14,
   },
 
   // Trail header
