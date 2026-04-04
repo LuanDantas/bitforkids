@@ -180,7 +180,7 @@ export default function LessonScreen() {
             style={[styles.headerModuleTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}
             numberOfLines={1}
           >
-            {module_.emoji} {module_.title}
+            {module_.title}
           </Text>
           <Text
             style={[styles.headerLessonCount, { color: colors.textSecondary, fontFamily: fonts.body }]}

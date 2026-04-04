@@ -231,7 +231,9 @@ export default function StudyDashboardScreen() {
                 >
                   {/* Card Header */}
                   <View style={styles.cardHeader}>
-                    <Text style={styles.moduleEmoji}>{mod.emoji}</Text>
+                    <View style={[styles.moduleNumberBadge, { backgroundColor: isLocked ? colors.border : '#6366f120' }]}>
+                      <Text style={[styles.moduleNumber, { color: isLocked ? colors.textTertiary : '#6366f1', fontFamily: fonts.bodyBold }]}>{index + 1}</Text>
+                    </View>
                     <View style={styles.cardHeaderText}>
                       <Text
                         style={[styles.moduleTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}
@@ -452,9 +454,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  moduleEmoji: {
-    fontSize: 28,
+  moduleNumberBadge: {
+    width: 36,
+    height: 36,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
     marginRight: 12,
+  },
+  moduleNumber: {
+    fontSize: 16,
   },
   cardHeaderText: {
     flex: 1,
