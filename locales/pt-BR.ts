@@ -32,6 +32,8 @@ const ptBR = {
     supportCardCta: 'Acessar',
     trail1Title: 'Trilha 1',
     trail1Subtitle: 'Redes da Nova Economia',
+    trail2Title: 'Trilha 2',
+    trail2Subtitle: 'A Jornada da Soberania',
     continueWatching: 'Continue assistindo',
   },
 

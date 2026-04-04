@@ -131,6 +131,7 @@ export default function HomeScreen() {
   ];
 
   const trail1Courses = COURSES.filter((c) => c.id <= 2);
+  const trail2Courses = COURSES.filter((c) => c.id === 3);
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
@@ -342,7 +343,7 @@ export default function HomeScreen() {
               return (
                 <AnimatedPressable
                   key={course.id}
-                  onPress={() => router.push(`/course/${course.id}`)}
+                  onPress={() => router.push(progress > 0 ? `/course/${course.id}/study` : `/course/${course.id}`)}
                   style={{ width: CARD_WIDTH, marginRight: CARD_SPACING }}
                 >
                   <View style={styles.courseCard}>
@@ -385,14 +386,105 @@ export default function HomeScreen() {
                         </Text>
                       </View>
                       <View style={[styles.courseCta, { borderColor: course.trailColors[0] }]}>
-                        <ChevronRight size={16} color="#fff" />
+                        <Play size={14} color="#fff" fill="#fff" />
                         <Text
                           style={[
                             styles.courseCtaText,
                             { fontFamily: fonts.bodySemiBold },
                           ]}
                         >
-                          {t('dashboard.startCourse')}
+                          {progress > 0 ? t('dashboard.continueCourse') : t('dashboard.startCourse')}
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                </AnimatedPressable>
+              );
+            })}
+          </ScrollView>
+        </AnimatedSection>
+
+        {/* CAROUSEL 3 - TRAIL 2 */}
+        <AnimatedSection delay={400}>
+          <View style={styles.trailHeader}>
+            <Text
+              style={[
+                styles.sectionTitle,
+                { color: colors.text, fontFamily: fonts.displaySemiBold },
+              ]}
+            >
+              {t('dashboard.trail2Title')}
+            </Text>
+            <Text
+              style={[
+                styles.trailSubtitle,
+                { color: colors.textSecondary, fontFamily: fonts.body },
+              ]}
+            >
+              {t('dashboard.trail2Subtitle')}
+            </Text>
+          </View>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            decelerationRate="fast"
+            snapToInterval={CARD_WIDTH + CARD_SPACING}
+            snapToAlignment="start"
+            contentContainerStyle={styles.carouselContent}
+          >
+            {trail2Courses.map((course) => {
+              const progress = getCourseProgress(course.id);
+              return (
+                <AnimatedPressable
+                  key={course.id}
+                  onPress={() => router.push(progress > 0 ? `/course/${course.id}/study` : `/course/${course.id}`)}
+                  style={{ width: CARD_WIDTH, marginRight: CARD_SPACING }}
+                >
+                  <View style={styles.courseCard}>
+                    <Image
+                      source={course.image}
+                      style={styles.courseImage}
+                    />
+                    <View style={styles.courseContent}>
+                      <Text
+                        style={[
+                          styles.courseTitle,
+                          { fontFamily: fonts.display },
+                        ]}
+                        numberOfLines={2}
+                      >
+                        {t(course.titleKey)}
+                      </Text>
+                      <View style={styles.courseProgressRow}>
+                        <View style={styles.courseProgressBar}>
+                          <View
+                            style={[
+                              styles.courseProgressFill,
+                              {
+                                width: `${progress}%`,
+                                backgroundColor: course.trailColors[0],
+                              },
+                            ]}
+                          />
+                        </View>
+                        <Text
+                          style={[
+                            styles.courseProgressText,
+                            { fontFamily: fonts.bodySemiBold },
+                          ]}
+                        >
+                          {progress}%
+                        </Text>
+                      </View>
+                      <View style={[styles.courseCta, { borderColor: course.trailColors[0] }]}>
+                        <Play size={14} color="#fff" fill="#fff" />
+                        <Text
+                          style={[
+                            styles.courseCtaText,
+                            { fontFamily: fonts.bodySemiBold },
+                          ]}
+                        >
+                          {progress > 0 ? t('dashboard.continueCourse') : t('dashboard.startCourse')}
                         </Text>
                       </View>
                     </View>

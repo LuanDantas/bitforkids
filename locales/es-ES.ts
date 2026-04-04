@@ -32,6 +32,8 @@ const esES = {
     supportCardCta: 'Acceder',
     trail1Title: 'Ruta 1',
     trail1Subtitle: 'Redes de la Nueva Economía',
+    trail2Title: 'Ruta 2',
+    trail2Subtitle: 'El Camino de la Soberanía',
     continueWatching: 'Sigue viendo',
   },
 

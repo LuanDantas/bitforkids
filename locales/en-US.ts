@@ -33,6 +33,8 @@ const enUS = {
 
     trail1Title: 'Trail 1',
     trail1Subtitle: 'Networks of the New Economy',
+    trail2Title: 'Trail 2',
+    trail2Subtitle: 'The Sovereignty Journey',
     continueWatching: 'Continue watching',
   },
 
