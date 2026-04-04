@@ -18,7 +18,8 @@ interface AnimatedSectionProps {
 export default function AnimatedSection({ children, delay = 0, style }: AnimatedSectionProps) {
   const [hasAnimated, setHasAnimated] = useState(false);
   const opacity = useSharedValue(0);
-  const translateY = useSharedValue(24);
+  const translateY = useSharedValue(32);
+  const scale = useSharedValue(0.97);
 
   const triggerAnimation = useCallback(() => {
     if (hasAnimated) return;
@@ -31,11 +32,15 @@ export default function AnimatedSection({ children, delay = 0, style }: Animated
       delay,
       withTiming(0, { duration: 500, easing: Easing.out(Easing.quad) })
     );
+    scale.value = withDelay(
+      delay,
+      withTiming(1, { duration: 500, easing: Easing.out(Easing.quad) })
+    );
   }, [hasAnimated, delay]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,
-    transform: [{ translateY: translateY.value }],
+    transform: [{ translateY: translateY.value }, { scale: scale.value }],
   }));
 
   const onLayout = useCallback(

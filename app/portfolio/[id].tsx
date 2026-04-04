@@ -133,7 +133,7 @@ const getTransactionDetails = (id: string) => {
 };
 
 export default function TransactionDetailsScreen() {
-  const { colors, isDark } = useTheme();
+  const { colors, fonts, isDark } = useTheme();
   const { t } = useLanguage();
   const router = useRouter();
   const { id } = useLocalSearchParams();
@@ -166,7 +166,7 @@ export default function TransactionDetailsScreen() {
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       {/* Header */}
       <LinearGradient
-        colors={isDark ? ['#1a1a1a', '#2a1a4a'] : ['#8B5CF6', '#3B82F6']}
+        colors={isDark ? ['#0f172a', '#1e293b'] : ['#4f46e5', '#3b82f6']}
         style={styles.header}
       >
         <TouchableOpacity
@@ -175,7 +175,7 @@ export default function TransactionDetailsScreen() {
         >
           <ChevronLeft size={24} color="white" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>{t('portfolioDetail.title')}</Text>
+        <Text style={[styles.headerTitle, { fontFamily: fonts.display }]}>{t('portfolioDetail.title')}</Text>
         <View style={{ width: 24 }} />
       </LinearGradient>
 
@@ -194,23 +194,23 @@ export default function TransactionDetailsScreen() {
                 { backgroundColor: crypto?.color + '20' },
               ]}
             >
-              <Text style={[styles.cryptoIconText, { color: crypto?.color }]}>
+              <Text style={[styles.cryptoIconText, { color: crypto?.color, fontFamily: fonts.bodyBold }]}>
                 {crypto?.icon}
               </Text>
             </View>
             <View style={styles.cryptoInfo}>
-              <Text style={[styles.cryptoName, { color: colors.text }]}>
+              <Text style={[styles.cryptoName, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
                 {crypto?.name}
               </Text>
               <Text
-                style={[styles.cryptoSymbol, { color: colors.textSecondary }]}
+                style={[styles.cryptoSymbol, { color: colors.textSecondary, fontFamily: fonts.body }]}
               >
                 {transaction.crypto}
               </Text>
             </View>
             <View style={styles.dateBadge}>
               <Calendar size={14} color={colors.primary} />
-              <Text style={[styles.dateText, { color: colors.text }]}>
+              <Text style={[styles.dateText, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>
                 {transaction.date}
               </Text>
             </View>
@@ -218,10 +218,10 @@ export default function TransactionDetailsScreen() {
 
           <View style={styles.statsGrid}>
             <View style={styles.statItem}>
-              <Text style={[styles.statLabel, { color: colors.textSecondary }]}>
+              <Text style={[styles.statLabel, { color: colors.textSecondary, fontFamily: fonts.body }]}>
                 {t('portfolioDetail.currentPrice')}
               </Text>
-              <Text style={[styles.statValue, { color: colors.text }]}>
+              <Text style={[styles.statValue, { color: colors.text, fontFamily: fonts.bodyBold }]}>
                 $
                 {transaction.currentPrice.toLocaleString('en-US', {
                   minimumFractionDigits: 2,
@@ -229,18 +229,18 @@ export default function TransactionDetailsScreen() {
               </Text>
             </View>
             <View style={styles.statItem}>
-              <Text style={[styles.statLabel, { color: colors.textSecondary }]}>
+              <Text style={[styles.statLabel, { color: colors.textSecondary, fontFamily: fonts.body }]}>
                 {t('portfolioDetail.quantity')}
               </Text>
-              <Text style={[styles.statValue, { color: colors.text }]}>
+              <Text style={[styles.statValue, { color: colors.text, fontFamily: fonts.bodyBold }]}>
                 {transaction.quantity}
               </Text>
             </View>
             <View style={styles.statItem}>
-              <Text style={[styles.statLabel, { color: colors.textSecondary }]}>
+              <Text style={[styles.statLabel, { color: colors.textSecondary, fontFamily: fonts.body }]}>
                 {t('portfolioDetail.avgPrice')}
               </Text>
-              <Text style={[styles.statValue, { color: colors.text }]}>
+              <Text style={[styles.statValue, { color: colors.text, fontFamily: fonts.bodyBold }]}>
                 $
                 {transaction.avgPrice.toLocaleString('en-US', {
                   minimumFractionDigits: 2,
@@ -257,20 +257,20 @@ export default function TransactionDetailsScreen() {
             { backgroundColor: colors.card, borderColor: colors.border },
           ]}
         >
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>
+          <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
             {t('portfolioDetail.financialSummary')}
           </Text>
 
           <View style={styles.financialGrid}>
             <View style={styles.financialItem}>
               <Text
-                style={[styles.financialLabel, { color: colors.textSecondary }]}
+                style={[styles.financialLabel, { color: colors.textSecondary, fontFamily: fonts.body }]}
               >
                 {t('portfolioDetail.investment')}
               </Text>
               <View style={styles.financialValueContainer}>
                 <DollarSign size={16} color={colors.textSecondary} />
-                <Text style={[styles.financialValue, { color: colors.text }]}>
+                <Text style={[styles.financialValue, { color: colors.text, fontFamily: fonts.bodyBold }]}>
                   $
                   {transaction.investment.toLocaleString('en-US', {
                     minimumFractionDigits: 2,
@@ -281,13 +281,13 @@ export default function TransactionDetailsScreen() {
 
             <View style={styles.financialItem}>
               <Text
-                style={[styles.financialLabel, { color: colors.textSecondary }]}
+                style={[styles.financialLabel, { color: colors.textSecondary, fontFamily: fonts.body }]}
               >
                 {t('portfolioDetail.currentBalance')}
               </Text>
               <View style={styles.financialValueContainer}>
                 <DollarSign size={16} color={colors.primary} />
-                <Text style={[styles.financialValue, { color: colors.text }]}>
+                <Text style={[styles.financialValue, { color: colors.text, fontFamily: fonts.bodyBold }]}>
                   $
                   {transaction.balance.toLocaleString('en-US', {
                     minimumFractionDigits: 2,
@@ -298,7 +298,7 @@ export default function TransactionDetailsScreen() {
 
             <View style={styles.financialItem}>
               <Text
-                style={[styles.financialLabel, { color: colors.textSecondary }]}
+                style={[styles.financialLabel, { color: colors.textSecondary, fontFamily: fonts.body }]}
               >
                 {t('portfolioDetail.profitLoss')}
               </Text>
@@ -306,7 +306,7 @@ export default function TransactionDetailsScreen() {
                 <Text
                   style={[
                     styles.financialValue,
-                    { color: profitColor, fontWeight: 'bold' },
+                    { color: profitColor, fontFamily: fonts.bodyBold },
                   ]}
                 >
                   {transaction.profit >= 0 ? '+' : ''}$
@@ -319,7 +319,7 @@ export default function TransactionDetailsScreen() {
 
             <View style={styles.financialItem}>
               <Text
-                style={[styles.financialLabel, { color: colors.textSecondary }]}
+                style={[styles.financialLabel, { color: colors.textSecondary, fontFamily: fonts.body }]}
               >
                 {t('portfolioDetail.percentage')}
               </Text>
@@ -329,7 +329,7 @@ export default function TransactionDetailsScreen() {
                   { backgroundColor: profitColor + '20' },
                 ]}
               >
-                <Text style={[styles.percentageText, { color: profitColor }]}>
+                <Text style={[styles.percentageText, { color: profitColor, fontFamily: fonts.bodyBold }]}>
                   {transaction.profitPercent >= 0 ? '+' : ''}
                   {transaction.profitPercent.toFixed(2)}%
                 </Text>
@@ -345,7 +345,7 @@ export default function TransactionDetailsScreen() {
             { backgroundColor: colors.card, borderColor: colors.border },
           ]}
         >
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>
+          <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
             {t('portfolioDetail.performanceHistory')}
           </Text>
           <EnhancedCardChart
@@ -361,7 +361,7 @@ export default function TransactionDetailsScreen() {
             { backgroundColor: colors.card, borderColor: colors.border },
           ]}
         >
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>
+          <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
             {t('portfolioDetail.walletDistribution')}
           </Text>
 
@@ -382,19 +382,19 @@ export default function TransactionDetailsScreen() {
                     <Wallet size={16} color={colors.primary} />
                   </View>
                   <View style={styles.walletInfo}>
-                    <Text style={[styles.walletName, { color: colors.text }]}>
+                    <Text style={[styles.walletName, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>
                       {wallet.name}
                     </Text>
                     <Text
                       style={[
                         styles.walletPercentage,
-                        { color: colors.textSecondary },
+                        { color: colors.textSecondary, fontFamily: fonts.body },
                       ]}
                     >
                       {wallet.percentage}%
                     </Text>
                   </View>
-                  <Text style={[styles.walletValue, { color: colors.text }]}>
+                  <Text style={[styles.walletValue, { color: colors.text, fontFamily: fonts.bodyBold }]}>
                     $
                     {wallet.value.toLocaleString('en-US', {
                       minimumFractionDigits: 2,
@@ -448,7 +448,6 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
     color: 'white',
   },
   content: {
@@ -476,14 +475,12 @@ const styles = StyleSheet.create({
   },
   cryptoIconText: {
     fontSize: 24,
-    fontWeight: 'bold',
   },
   cryptoInfo: {
     flex: 1,
   },
   cryptoName: {
     fontSize: 18,
-    fontWeight: 'bold',
     marginBottom: 4,
   },
   cryptoSymbol: {
@@ -496,11 +493,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 8,
-    backgroundColor: '#8B5CF610',
+    backgroundColor: '#6366f110',
   },
   dateText: {
     fontSize: 12,
-    fontWeight: '600',
   },
   statsGrid: {
     flexDirection: 'row',
@@ -517,11 +513,9 @@ const styles = StyleSheet.create({
   },
   statValue: {
     fontSize: 16,
-    fontWeight: 'bold',
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
     marginBottom: 16,
   },
   financialGrid: {
@@ -541,7 +535,6 @@ const styles = StyleSheet.create({
   },
   financialValue: {
     fontSize: 18,
-    fontWeight: 'bold',
   },
   percentageBadge: {
     paddingHorizontal: 12,
@@ -551,7 +544,6 @@ const styles = StyleSheet.create({
   },
   percentageText: {
     fontSize: 14,
-    fontWeight: 'bold',
   },
   walletsList: {
     gap: 12,
@@ -570,7 +562,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#8B5CF620',
+    backgroundColor: '#6366f120',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -580,7 +572,6 @@ const styles = StyleSheet.create({
   },
   walletName: {
     fontSize: 14,
-    fontWeight: '600',
   },
   walletPercentage: {
     fontSize: 12,
@@ -588,7 +579,6 @@ const styles = StyleSheet.create({
   },
   walletValue: {
     fontSize: 16,
-    fontWeight: 'bold',
   },
   progressBar: {
     height: 6,

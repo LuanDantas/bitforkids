@@ -16,6 +16,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useUser } from '@/contexts/UserContext';
 import AnimatedSection from '@/components/AnimatedSection';
 import AnimatedPressable from '@/components/AnimatedPressable';
+import GlassCard from '@/components/GlassCard';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import {
   ArrowLeft,
@@ -355,7 +356,7 @@ function getCourseData(t: (key: string) => string): Record<string, CourseData> {
   };
 }
 
-function FAQItem({ item, colors }: { item: FAQ; colors: any }) {
+function FAQItem({ item, colors, fonts }: { item: FAQ; colors: any; fonts: any }) {
   const [open, setOpen] = useState(false);
   const rotation = useSharedValue(0);
   const answerOpacity = useSharedValue(0);
@@ -377,20 +378,22 @@ function FAQItem({ item, colors }: { item: FAQ; colors: any }) {
 
   return (
     <AnimatedPressable
-      style={[faqStyles.item, { backgroundColor: colors.card }]}
+      style={faqStyles.itemWrapper}
       onPress={toggle}
     >
-      <View style={faqStyles.questionRow}>
-        <Text style={[faqStyles.question, { color: colors.text }]}>{item.q}</Text>
-        <Animated.View style={chevronStyle}>
-          <ChevronDown size={18} color="#8B5CF6" />
-        </Animated.View>
-      </View>
-      {open && (
-        <Animated.View style={answerStyle}>
-          <Text style={[faqStyles.answer, { color: colors.textSecondary }]}>{item.a}</Text>
-        </Animated.View>
-      )}
+      <GlassCard style={faqStyles.item} borderRadius={12}>
+        <View style={faqStyles.questionRow}>
+          <Text style={[faqStyles.question, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>{item.q}</Text>
+          <Animated.View style={chevronStyle}>
+            <ChevronDown size={18} color="#6366f1" />
+          </Animated.View>
+        </View>
+        {open && (
+          <Animated.View style={answerStyle}>
+            <Text style={[faqStyles.answer, { color: colors.textSecondary, fontFamily: fonts.body }]}>{item.a}</Text>
+          </Animated.View>
+        )}
+      </GlassCard>
     </AnimatedPressable>
   );
 }
@@ -398,7 +401,7 @@ function FAQItem({ item, colors }: { item: FAQ; colors: any }) {
 export default function CourseDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
   const { t } = useLanguage();
   const { hasCourseAccess, purchaseCourse } = useUser();
 
@@ -448,15 +451,15 @@ export default function CourseDetailScreen() {
         {/* Trail badge */}
         <View style={styles.contentPadding}>
           <LinearGradient colors={course.trailColor} style={styles.trailBadge}>
-            <Text style={styles.trailBadgeText}>{course.trailLabel}</Text>
+            <Text style={[styles.trailBadgeText, { fontFamily: fonts.secondaryMedium }]}>{course.trailLabel}</Text>
           </LinearGradient>
 
-          <Text style={[styles.courseTitle, { color: colors.text }]}>{course.title}</Text>
-          <Text style={[styles.courseSubtitle, { color: colors.textSecondary }]}>{course.subtitle}</Text>
+          <Text style={[styles.courseTitle, { color: colors.text, fontFamily: fonts.display }]}>{course.title}</Text>
+          <Text style={[styles.courseSubtitle, { color: colors.textSecondary, fontFamily: fonts.body }]}>{course.subtitle}</Text>
 
           {/* Extra content */}
           {course.extraContent.map((text, i) => (
-            <Text key={i} style={[styles.paragraph, { color: colors.text }]}>{text}</Text>
+            <Text key={i} style={[styles.paragraph, { color: colors.text, fontFamily: fonts.body }]}>{text}</Text>
           ))}
 
           <View style={styles.divider} />
@@ -466,10 +469,10 @@ export default function CourseDetailScreen() {
               {/* Full content — user has access */}
               {course.sections.map((section, sIdx) => (
                 <AnimatedSection key={sIdx}>
-                  <Text style={[styles.sectionTitle, { color: colors.text }]}>{section.title}</Text>
+                  <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>{section.title}</Text>
                   {section.items.map((item, iIdx) => (
                     <View key={iIdx} style={styles.sectionItem}>
-                      <Text style={[styles.sectionItemText, { color: colors.text }]}>{item}</Text>
+                      <Text style={[styles.sectionItemText, { color: colors.text, fontFamily: fonts.body }]}>{item}</Text>
                     </View>
                   ))}
                   <View style={styles.divider} />
@@ -479,9 +482,9 @@ export default function CourseDetailScreen() {
               {/* FAQ */}
               {course.faq.length > 0 && (
                 <>
-                  <Text style={[styles.sectionTitle, { color: colors.text }]}>{'❓ ' + t('courseDetail.faqTitle')}</Text>
+                  <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>{'❓ ' + t('courseDetail.faqTitle')}</Text>
                   {course.faq.map((item, idx) => (
-                    <FAQItem key={idx} item={item} colors={colors} />
+                    <FAQItem key={idx} item={item} colors={colors} fonts={fonts} />
                   ))}
                   <View style={styles.divider} />
                 </>
@@ -490,27 +493,27 @@ export default function CourseDetailScreen() {
           ) : (
             <>
               {/* Paywall — user doesn't have access */}
-              <View style={[styles.paywallCard, { backgroundColor: colors.card, borderColor: '#8B5CF6' }]}>
+              <GlassCard style={styles.paywallCard}>
                 <Text style={styles.paywallEmoji}>🔒</Text>
-                <Text style={[styles.paywallTitle, { color: colors.text }]}>
+                <Text style={[styles.paywallTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
                   {t('courseDetail.paywallTitle') || 'Conteúdo exclusivo para alunos'}
                 </Text>
-                <Text style={[styles.paywallDesc, { color: colors.textSecondary }]}>
+                <Text style={[styles.paywallDesc, { color: colors.textSecondary, fontFamily: fonts.body }]}>
                   {t('courseDetail.paywallDesc') || 'Adquira este curso para ter acesso completo a todas as aulas, materiais e conteúdo exclusivo.'}
                 </Text>
-              </View>
+              </GlassCard>
               <View style={styles.divider} />
             </>
           )}
 
           {/* Guarantee */}
-          <View style={[styles.guaranteeCard, { backgroundColor: colors.card }]}>
+          <GlassCard style={styles.guaranteeCard} borderRadius={12}>
             <Shield size={28} color="#10B981" />
-            <Text style={[styles.guaranteeTitle, { color: colors.text }]}>{t('courseDetail.guaranteeTitle')}</Text>
-            <Text style={[styles.guaranteeDesc, { color: colors.textSecondary }]}>
+            <Text style={[styles.guaranteeTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>{t('courseDetail.guaranteeTitle')}</Text>
+            <Text style={[styles.guaranteeDesc, { color: colors.textSecondary, fontFamily: fonts.body }]}>
               {t('courseDetail.guaranteeDesc')}
             </Text>
-          </View>
+          </GlassCard>
 
           <View style={{ height: 100 }} />
         </View>
@@ -520,22 +523,22 @@ export default function CourseDetailScreen() {
       <View style={[styles.footer, { backgroundColor: colors.background, borderTopColor: colors.card }]}>
         {hasAccess ? (
           <>
-            <Text style={[styles.footerLabel, { color: '#10B981', fontSize: 14, fontWeight: '600' }]}>✅ {t('courseDetail.courseOwned')}</Text>
+            <Text style={[styles.footerLabel, { color: '#10B981', fontSize: 14, fontFamily: fonts.bodySemiBold }]}>✅ {t('courseDetail.courseOwned')}</Text>
             <AnimatedPressable onPress={() => router.push(`/course/${id}/study`)}>
               <View style={[styles.buyBtn, { backgroundColor: '#10B981' }]}>
-                <Text style={styles.buyBtnText}>{t('courseDetail.accessCourse')}</Text>
+                <Text style={[styles.buyBtnText, { fontFamily: fonts.bodyBold }]}>{t('courseDetail.accessCourse')}</Text>
               </View>
             </AnimatedPressable>
           </>
         ) : (
           <>
             <View>
-              <Text style={styles.footerLabel}>{t('courseDetail.investmentLabel')}</Text>
-              <Text style={styles.footerPrice}>R$ {course.price},00</Text>
+              <Text style={[styles.footerLabel, { fontFamily: fonts.secondaryMedium }]}>{t('courseDetail.investmentLabel')}</Text>
+              <Text style={[styles.footerPrice, { fontFamily: fonts.bodyBold }]}>R$ {course.price},00</Text>
             </View>
             <AnimatedPressable onPress={handleBuy}>
-              <LinearGradient colors={['#8B5CF6', '#6D28D9'] as const} style={styles.buyBtn}>
-                <Text style={styles.buyBtnText}>{t('courseDetail.buyButton')}</Text>
+              <LinearGradient colors={['#4f46e5', '#3b82f6'] as const} style={styles.buyBtn}>
+                <Text style={[styles.buyBtnText, { fontFamily: fonts.bodyBold }]}>{t('courseDetail.buyButton')}</Text>
               </LinearGradient>
             </AnimatedPressable>
           </>
@@ -546,12 +549,11 @@ export default function CourseDetailScreen() {
 }
 
 const faqStyles = StyleSheet.create({
-  item: {
-    borderRadius: 12,
-    padding: 14,
+  itemWrapper: {
     marginBottom: 8,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.05)',
+  },
+  item: {
+    padding: 14,
   },
   questionRow: {
     flexDirection: 'row',
@@ -560,7 +562,6 @@ const faqStyles = StyleSheet.create({
   },
   question: {
     fontSize: 15,
-    fontWeight: '600',
     flex: 1,
     marginRight: 8,
   },
@@ -617,11 +618,9 @@ const styles = StyleSheet.create({
   trailBadgeText: {
     color: '#FFF',
     fontSize: 12,
-    fontWeight: '600',
   },
   courseTitle: {
     fontSize: 24,
-    fontWeight: 'bold',
     marginBottom: 8,
     lineHeight: 32,
   },
@@ -642,7 +641,6 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
     marginBottom: 12,
   },
   sectionItem: {
@@ -654,10 +652,8 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   paywallCard: {
-    borderRadius: 16,
     padding: 24,
     alignItems: 'center',
-    borderWidth: 2,
     marginBottom: 16,
   },
   paywallEmoji: {
@@ -666,7 +662,6 @@ const styles = StyleSheet.create({
   },
   paywallTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
     marginBottom: 8,
     textAlign: 'center',
   },
@@ -676,13 +671,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   guaranteeCard: {
-    borderRadius: 12,
     padding: 20,
     alignItems: 'center',
   },
   guaranteeTitle: {
     fontSize: 17,
-    fontWeight: 'bold',
     marginTop: 8,
     marginBottom: 6,
   },
@@ -714,7 +707,6 @@ const styles = StyleSheet.create({
   },
   footerPrice: {
     fontSize: 22,
-    fontWeight: 'bold',
     color: '#10B981',
   },
   buyBtn: {
@@ -725,6 +717,5 @@ const styles = StyleSheet.create({
   buyBtnText: {
     color: '#FFF',
     fontSize: 16,
-    fontWeight: 'bold',
   },
 });

@@ -10,6 +10,7 @@ import {
 import { WebView } from 'react-native-webview';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Play, Pause, Volume2, VolumeX, Maximize } from 'lucide-react-native';
+import { useTheme } from '@/contexts/ThemeContext';
 import { useVSL } from '@/contexts/VSLContext';
 
 const { width, height } = Dimensions.get('window');
@@ -31,6 +32,7 @@ export default function VSLVideo({
   const [isLoading, setIsLoading] = useState(true);
   const [progress, setProgress] = useState(0);
   const webViewRef = useRef<WebView>(null);
+  const { fonts } = useTheme();
   const { trackVideoProgress } = useVSL();
 
   const handleVideoProgress = (newProgress: number) => {
@@ -231,8 +233,8 @@ export default function VSLVideo({
     <View style={[styles.container, { height: videoHeight }]}>
       {isLoading && (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#8B5CF6" />
-          <Text style={styles.loadingText}>Carregando vídeo...</Text>
+          <ActivityIndicator size="large" color="#6366f1" />
+          <Text style={[styles.loadingText, { fontFamily: fonts.body }]}>Carregando vídeo...</Text>
         </View>
       )}
 
@@ -285,10 +287,10 @@ export default function VSLVideo({
 
       {/* Video Title Overlay */}
       <View style={styles.titleOverlay}>
-        <Text style={styles.videoTitle}>
+        <Text style={[styles.videoTitle, { fontFamily: fonts.displaySemiBold }]}>
           Como Transformar Seu Filho em um Jovem Investidor Consciente
         </Text>
-        <Text style={styles.videoDuration}>5:23</Text>
+        <Text style={[styles.videoDuration, { fontFamily: fonts.body }]}>5:23</Text>
       </View>
     </View>
   );
@@ -337,7 +339,7 @@ const styles = StyleSheet.create({
   },
   progressFill: {
     height: '100%',
-    backgroundColor: '#8B5CF6',
+    backgroundColor: '#6366f1',
     borderRadius: 2,
   },
   controlsRow: {
@@ -363,7 +365,6 @@ const styles = StyleSheet.create({
   videoTitle: {
     color: 'white',
     fontSize: 16,
-    fontWeight: 'bold',
     marginBottom: 4,
   },
   videoDuration: {

@@ -34,7 +34,7 @@ const { width } = Dimensions.get('window');
 
 export default function PaymentsScreen() {
   const router = useRouter();
-  const { colors, isDark } = useTheme();
+  const { colors, fonts, isDark } = useTheme();
   const { t } = useLanguage();
   const [selectedTab, setSelectedTab] = useState('history');
   const [showAddModal, setShowAddModal] = useState(false);
@@ -239,7 +239,7 @@ export default function PaymentsScreen() {
     >
       {/* Header */}
       <LinearGradient
-        colors={isDark ? ['#1a1a1a', '#2a1a4a'] : ['#8B5CF6', '#3B82F6']}
+        colors={isDark ? ['#0f172a', '#1e293b'] : ['#4f46e5', '#3b82f6']}
         style={styles.header}
       >
         <TouchableOpacity
@@ -248,7 +248,7 @@ export default function PaymentsScreen() {
         >
           <ArrowLeft size={24} color="white" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>{t('payments.headerTitle')}</Text>
+        <Text style={[styles.headerTitle, { fontFamily: fonts.display }]}>{t('payments.headerTitle')}</Text>
         <View style={styles.headerRight} />
       </LinearGradient>
 
@@ -256,20 +256,20 @@ export default function PaymentsScreen() {
       <View style={styles.statsContainer}>
         <View style={[styles.statCard, { backgroundColor: colors.surface }]}>
           <TrendingDown size={24} color="#EF4444" />
-          <Text style={[styles.statValue, { color: colors.text }]}>
+          <Text style={[styles.statValue, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
             R$ {stats.totalSpent.toFixed(2).replace('.', ',')}
           </Text>
-          <Text style={[styles.statLabel, { color: colors.textSecondary }]}>
+          <Text style={[styles.statLabel, { color: colors.textSecondary, fontFamily: fonts.body }]}>
             {t('payments.totalSpent')}
           </Text>
         </View>
 
         <View style={[styles.statCard, { backgroundColor: colors.surface }]}>
           <TrendingUp size={24} color="#10B981" />
-          <Text style={[styles.statValue, { color: colors.text }]}>
+          <Text style={[styles.statValue, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
             R$ {stats.cashbackReceived.toFixed(2).replace('.', ',')}
           </Text>
-          <Text style={[styles.statLabel, { color: colors.textSecondary }]}>
+          <Text style={[styles.statLabel, { color: colors.textSecondary, fontFamily: fonts.body }]}>
             {t('payments.cashbackReceived')}
           </Text>
         </View>
@@ -280,14 +280,14 @@ export default function PaymentsScreen() {
         <TouchableOpacity
           style={[
             styles.tab,
-            { backgroundColor: selectedTab === 'history' ? '#8B5CF6' : colors.card },
+            { backgroundColor: selectedTab === 'history' ? '#6366f1' : colors.card },
           ]}
           onPress={() => setSelectedTab('history')}
         >
           <Text
             style={[
               styles.tabText,
-              { color: selectedTab === 'history' ? '#FFFFFF' : colors.text },
+              { color: selectedTab === 'history' ? '#FFFFFF' : colors.text, fontFamily: fonts.bodySemiBold },
             ]}
           >
             {t('payments.tabHistory')}
@@ -297,14 +297,14 @@ export default function PaymentsScreen() {
         <TouchableOpacity
           style={[
             styles.tab,
-            { backgroundColor: selectedTab === 'methods' ? '#8B5CF6' : colors.card },
+            { backgroundColor: selectedTab === 'methods' ? '#6366f1' : colors.card },
           ]}
           onPress={() => setSelectedTab('methods')}
         >
           <Text
             style={[
               styles.tabText,
-              { color: selectedTab === 'methods' ? '#FFFFFF' : colors.text },
+              { color: selectedTab === 'methods' ? '#FFFFFF' : colors.text, fontFamily: fonts.bodySemiBold },
             ]}
           >
             {t('payments.tabMethods')}
@@ -316,7 +316,7 @@ export default function PaymentsScreen() {
       {selectedTab === 'history' && (
         <View style={styles.content}>
           <View style={styles.section}>
-            <Text style={[styles.sectionTitle, { color: colors.text }]}>
+            <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
               {t('payments.lastTransactions')}
             </Text>
 
@@ -346,7 +346,7 @@ export default function PaymentsScreen() {
                     <Text
                       style={[
                         styles.transactionDescription,
-                        { color: colors.text },
+                        { color: colors.text, fontFamily: fonts.bodySemiBold },
                       ]}
                     >
                       {transaction.description}
@@ -354,7 +354,7 @@ export default function PaymentsScreen() {
                     <Text
                       style={[
                         styles.transactionMethod,
-                        { color: colors.textSecondary },
+                        { color: colors.textSecondary, fontFamily: fonts.body },
                       ]}
                     >
                       {transaction.method}
@@ -362,7 +362,7 @@ export default function PaymentsScreen() {
                     <Text
                       style={[
                         styles.transactionDate,
-                        { color: colors.textSecondary },
+                        { color: colors.textSecondary, fontFamily: fonts.body },
                       ]}
                     >
                       {transaction.date}
@@ -375,6 +375,7 @@ export default function PaymentsScreen() {
                     style={[
                       styles.transactionAmount,
                       {
+                        fontFamily: fonts.bodyBold,
                         color:
                           transaction.type === 'purchase'
                             ? '#EF4444'
@@ -388,7 +389,7 @@ export default function PaymentsScreen() {
                   {transaction.status === 'completed' && (
                     <View style={styles.statusBadge}>
                       <Check size={12} color="#10B981" />
-                      <Text style={styles.statusText}>{t('payments.statusCompleted')}</Text>
+                      <Text style={[styles.statusText, { fontFamily: fonts.secondaryMedium }]}>{t('payments.statusCompleted')}</Text>
                     </View>
                   )}
                   {transaction.status === 'refunded' && (
@@ -398,7 +399,7 @@ export default function PaymentsScreen() {
                         { backgroundColor: '#FEF3C7' },
                       ]}
                     >
-                      <Text style={[styles.statusText, { color: '#92400E' }]}>
+                      <Text style={[styles.statusText, { color: '#92400E', fontFamily: fonts.secondaryMedium }]}>
                         {t('payments.statusRefunded')}
                       </Text>
                     </View>
@@ -409,7 +410,7 @@ export default function PaymentsScreen() {
 
             <TouchableOpacity style={styles.downloadButton}>
               <Download size={20} color={colors.primary} />
-              <Text style={[styles.downloadText, { color: colors.primary }]}>
+              <Text style={[styles.downloadText, { color: colors.primary, fontFamily: fonts.bodySemiBold }]}>
                 {t('payments.downloadStatement')}
               </Text>
             </TouchableOpacity>
@@ -421,7 +422,7 @@ export default function PaymentsScreen() {
         <View style={styles.content}>
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
-              <Text style={[styles.sectionTitle, { color: colors.text }]}>
+              <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
                 {t('payments.savedCards')}
               </Text>
               <TouchableOpacity
@@ -429,7 +430,7 @@ export default function PaymentsScreen() {
                 onPress={() => setShowAddModal(true)}
               >
                 <Plus size={20} color="white" />
-                <Text style={styles.addButtonText}>{t('payments.addButton')}</Text>
+                <Text style={[styles.addButtonText, { fontFamily: fonts.bodySemiBold }]}>{t('payments.addButton')}</Text>
               </TouchableOpacity>
             </View>
 
@@ -455,20 +456,20 @@ export default function PaymentsScreen() {
                   <View style={styles.methodInfo}>
                     <View style={styles.methodHeader}>
                       <Text
-                        style={[styles.methodBrand, { color: colors.text }]}
+                        style={[styles.methodBrand, { color: colors.text, fontFamily: fonts.bodyBold }]}
                       >
                         {method.brand}
                       </Text>
                       {method.isDefault && (
                         <View style={styles.defaultBadge}>
-                          <Text style={styles.defaultText}>{t('payments.defaultBadge')}</Text>
+                          <Text style={[styles.defaultText, { fontFamily: fonts.secondaryMedium }]}>{t('payments.defaultBadge')}</Text>
                         </View>
                       )}
                     </View>
                     <Text
                       style={[
                         styles.methodNumber,
-                        { color: colors.textSecondary },
+                        { color: colors.textSecondary, fontFamily: fonts.body },
                       ]}
                     >
                       •••• •••• •••• {method.last4}
@@ -476,14 +477,14 @@ export default function PaymentsScreen() {
                     <Text
                       style={[
                         styles.methodDetails,
-                        { color: colors.textSecondary },
+                        { color: colors.textSecondary, fontFamily: fonts.body },
                       ]}
                     >
                       {method.holder} • {t('payments.expiresIn')} {method.expiryDate}
                     </Text>
                     {!method.isDefault && (
                       <Text
-                        style={[styles.tapToDefault, { color: colors.primary }]}
+                        style={[styles.tapToDefault, { color: colors.primary, fontFamily: fonts.bodySemiBold }]}
                       >
                         {t('payments.tapToDefault')}
                       </Text>
@@ -506,11 +507,11 @@ export default function PaymentsScreen() {
 
             <View style={styles.emptyMethods}>
               <Wallet size={48} color={colors.textTertiary} />
-              <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
+              <Text style={[styles.emptyText, { color: colors.textSecondary, fontFamily: fonts.bodySemiBold }]}>
                 {t('payments.multipleCards')}
               </Text>
               <Text
-                style={[styles.emptySubtext, { color: colors.textTertiary }]}
+                style={[styles.emptySubtext, { color: colors.textTertiary, fontFamily: fonts.body }]}
               >
                 {t('payments.dataEncrypted')}
               </Text>
@@ -531,7 +532,7 @@ export default function PaymentsScreen() {
             style={[styles.modalContent, { backgroundColor: colors.surface }]}
           >
             <View style={styles.modalHeader}>
-              <Text style={[styles.modalTitle, { color: colors.text }]}>
+              <Text style={[styles.modalTitle, { color: colors.text, fontFamily: fonts.display }]}>
                 {t('payments.addCardTitle')}
               </Text>
               <TouchableOpacity
@@ -544,7 +545,7 @@ export default function PaymentsScreen() {
 
             <ScrollView showsVerticalScrollIndicator={false}>
               <View style={styles.formGroup}>
-                <Text style={[styles.label, { color: colors.text }]}>
+                <Text style={[styles.label, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>
                   {t('payments.cardNumberLabel')}
                 </Text>
                 <TextInput
@@ -567,7 +568,7 @@ export default function PaymentsScreen() {
               </View>
 
               <View style={styles.formGroup}>
-                <Text style={[styles.label, { color: colors.text }]}>
+                <Text style={[styles.label, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>
                   {t('payments.cardNameLabel')}
                 </Text>
                 <TextInput
@@ -587,7 +588,7 @@ export default function PaymentsScreen() {
 
               <View style={styles.row}>
                 <View style={[styles.formGroup, { flex: 1, marginRight: 8 }]}>
-                  <Text style={[styles.label, { color: colors.text }]}>
+                  <Text style={[styles.label, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>
                     {t('payments.expiryLabel')}
                   </Text>
                   <View style={styles.expiryRow}>
@@ -643,7 +644,7 @@ export default function PaymentsScreen() {
                 </View>
 
                 <View style={[styles.formGroup, { flex: 1, marginLeft: 8 }]}>
-                  <Text style={[styles.label, { color: colors.text }]}>
+                  <Text style={[styles.label, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>
                     {t('payments.cvvLabel')}
                   </Text>
                   <TextInput
@@ -672,7 +673,7 @@ export default function PaymentsScreen() {
                 style={styles.submitButton}
                 onPress={handleAddCard}
               >
-                <Text style={styles.submitButtonText}>{t('payments.addCardButton')}</Text>
+                <Text style={[styles.submitButtonText, { fontFamily: fonts.bodyBold }]}>{t('payments.addCardButton')}</Text>
               </TouchableOpacity>
             </ScrollView>
           </View>
@@ -701,7 +702,6 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 28,
-    fontWeight: 'bold',
     color: 'white',
     marginBottom: 4,
   },
@@ -722,7 +722,6 @@ const styles = StyleSheet.create({
   },
   statValue: {
     fontSize: 20,
-    fontWeight: 'bold',
     marginTop: 8,
   },
   statLabel: {
@@ -743,7 +742,6 @@ const styles = StyleSheet.create({
   },
   tabText: {
     fontSize: 14,
-    fontWeight: '600',
   },
   tabTextActive: {
     color: 'white',
@@ -762,13 +760,12 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
     marginBottom: 16,
   },
   addButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#8B5CF6',
+    backgroundColor: '#6366f1',
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 8,
@@ -777,7 +774,6 @@ const styles = StyleSheet.create({
   addButtonText: {
     color: 'white',
     fontSize: 14,
-    fontWeight: '600',
   },
   transactionCard: {
     flexDirection: 'row',
@@ -805,7 +801,6 @@ const styles = StyleSheet.create({
   },
   transactionDescription: {
     fontSize: 16,
-    fontWeight: '600',
     marginBottom: 4,
   },
   transactionMethod: {
@@ -820,7 +815,6 @@ const styles = StyleSheet.create({
   },
   transactionAmount: {
     fontSize: 16,
-    fontWeight: 'bold',
     marginBottom: 4,
   },
   statusBadge: {
@@ -834,7 +828,6 @@ const styles = StyleSheet.create({
   },
   statusText: {
     fontSize: 10,
-    fontWeight: '600',
     color: '#059669',
   },
   downloadButton: {
@@ -847,7 +840,6 @@ const styles = StyleSheet.create({
   },
   downloadText: {
     fontSize: 14,
-    fontWeight: '600',
   },
   methodCard: {
     flexDirection: 'row',
@@ -881,7 +873,6 @@ const styles = StyleSheet.create({
   },
   methodBrand: {
     fontSize: 16,
-    fontWeight: 'bold',
   },
   defaultBadge: {
     backgroundColor: '#D1FAE5',
@@ -891,7 +882,6 @@ const styles = StyleSheet.create({
   },
   defaultText: {
     fontSize: 10,
-    fontWeight: '600',
     color: '#059669',
   },
   methodNumber: {
@@ -903,7 +893,6 @@ const styles = StyleSheet.create({
   },
   tapToDefault: {
     fontSize: 12,
-    fontWeight: '600',
     marginTop: 4,
   },
   methodActions: {
@@ -915,7 +904,6 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 16,
-    fontWeight: '600',
     marginTop: 16,
   },
   emptySubtext: {
@@ -941,7 +929,6 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: 24,
-    fontWeight: 'bold',
   },
   closeButton: {
     padding: 4,
@@ -951,7 +938,6 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    fontWeight: '600',
     marginBottom: 8,
   },
   input: {
@@ -972,10 +958,9 @@ const styles = StyleSheet.create({
   },
   expirySeparator: {
     fontSize: 18,
-    fontWeight: 'bold',
   },
   submitButton: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: '#6366f1',
     padding: 16,
     borderRadius: 12,
     alignItems: 'center',
@@ -985,6 +970,5 @@ const styles = StyleSheet.create({
   submitButtonText: {
     color: 'white',
     fontSize: 16,
-    fontWeight: 'bold',
   },
 });

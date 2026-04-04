@@ -27,7 +27,7 @@ import {
 export default function StudyDashboardScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
-  const { colors, isDark } = useTheme();
+  const { colors, fonts, isDark } = useTheme();
   const { t } = useLanguage();
   const { hasCourseAccess } = useUser();
   const {
@@ -81,7 +81,7 @@ export default function StudyDashboardScreen() {
         colors={
           isDark
             ? (['#1a1025', '#0a0a0a'] as const)
-            : (['#8B5CF6', '#6D28D9'] as const)
+            : (['#4f46e5', '#3b82f6'] as const)
         }
         style={styles.header}
       >
@@ -93,10 +93,10 @@ export default function StudyDashboardScreen() {
             <ArrowLeft size={22} color="#FFF" />
           </AnimatedPressable>
           <View style={styles.headerTitleContainer}>
-            <Text style={styles.headerTitle} numberOfLines={1}>
+            <Text style={[styles.headerTitle, { fontFamily: fonts.display }]} numberOfLines={1}>
               {course.title}
             </Text>
-            <Text style={styles.headerSubtitle}>
+            <Text style={[styles.headerSubtitle, { fontFamily: fonts.body }]}>
               {t('study.yourJourney') || 'Sua jornada de aprendizado'}
             </Text>
           </View>
@@ -106,10 +106,10 @@ export default function StudyDashboardScreen() {
         <View style={styles.progressSection}>
           <View style={styles.progressInfo}>
             <BookOpen size={16} color="rgba(255,255,255,0.8)" />
-            <Text style={styles.progressLabel}>
+            <Text style={[styles.progressLabel, { fontFamily: fonts.body }]}>
               {t('study.overallProgress') || 'Progresso geral'}
             </Text>
-            <Text style={styles.progressPercent}>{progressPercent}%</Text>
+            <Text style={[styles.progressPercent, { fontFamily: fonts.bodyBold }]}>{progressPercent}%</Text>
           </View>
           <View style={styles.progressBarBg}>
             <View
@@ -153,7 +153,7 @@ export default function StudyDashboardScreen() {
                         {
                           backgroundColor: isLocked
                             ? colors.border
-                            : '#8B5CF6',
+                            : '#6366f1',
                         },
                       ]}
                     />
@@ -174,7 +174,7 @@ export default function StudyDashboardScreen() {
                     ) : isLocked ? (
                       <Lock size={16} color="#9CA3AF" />
                     ) : (
-                      <Text style={styles.statusNumber}>{index + 1}</Text>
+                      <Text style={[styles.statusNumber, { fontFamily: fonts.bodyBold }]}>{index + 1}</Text>
                     )}
                   </View>
 
@@ -186,7 +186,7 @@ export default function StudyDashboardScreen() {
                         styles.timelineLineBottom,
                         {
                           backgroundColor:
-                            isCompleted ? '#8B5CF6' : colors.border,
+                            isCompleted ? '#6366f1' : colors.border,
                         },
                       ]}
                     />
@@ -207,7 +207,7 @@ export default function StudyDashboardScreen() {
                       borderColor: isCompleted
                         ? '#10B981'
                         : status === 'inProgress'
-                        ? '#8B5CF6'
+                        ? '#6366f1'
                         : colors.border,
                       opacity: isLocked ? 0.5 : 1,
                     },
@@ -217,7 +217,7 @@ export default function StudyDashboardScreen() {
                           shadowColor: isCompleted
                             ? '#10B981'
                             : status === 'inProgress'
-                            ? '#8B5CF6'
+                            ? '#6366f1'
                             : '#000',
                           shadowOffset: { width: 0, height: 4 },
                           shadowOpacity: isLocked ? 0.05 : 0.12,
@@ -234,7 +234,7 @@ export default function StudyDashboardScreen() {
                     <Text style={styles.moduleEmoji}>{mod.emoji}</Text>
                     <View style={styles.cardHeaderText}>
                       <Text
-                        style={[styles.moduleTitle, { color: colors.text }]}
+                        style={[styles.moduleTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}
                         numberOfLines={2}
                       >
                         {mod.title}
@@ -253,7 +253,7 @@ export default function StudyDashboardScreen() {
                     <Text
                       style={[
                         styles.moduleDescription,
-                        { color: colors.textSecondary },
+                        { color: colors.textSecondary, fontFamily: fonts.body },
                       ]}
                       numberOfLines={2}
                     >
@@ -268,7 +268,7 @@ export default function StudyDashboardScreen() {
                       <Text
                         style={[
                           styles.lessonCountText,
-                          { color: colors.textSecondary },
+                          { color: colors.textSecondary, fontFamily: fonts.body },
                         ]}
                       >
                         {completedLessons}/{totalLessons}{' '}
@@ -280,7 +280,7 @@ export default function StudyDashboardScreen() {
                       <Text
                         style={[
                           styles.durationText,
-                          { color: colors.textSecondary },
+                          { color: colors.textSecondary, fontFamily: fonts.body },
                         ]}
                       >
                         {mod.lessons.reduce((sum, l) => sum + l.duration, 0)} min
@@ -304,7 +304,7 @@ export default function StudyDashboardScreen() {
                               width: `${modulePercent}%`,
                               backgroundColor: isCompleted
                                 ? '#10B981'
-                                : '#8B5CF6',
+                                : '#6366f1',
                             },
                           ]}
                         />
@@ -351,7 +351,6 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 22,
-    fontWeight: 'bold',
     color: '#FFF',
     marginBottom: 2,
   },
@@ -375,7 +374,6 @@ const styles = StyleSheet.create({
   },
   progressPercent: {
     fontSize: 15,
-    fontWeight: 'bold',
     color: '#FFF',
   },
   progressBarBg: {
@@ -429,10 +427,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#10B981',
   },
   statusCircleInProgress: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: '#6366f1',
   },
   statusCircleAvailable: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: '#6366f1',
     opacity: 0.7,
   },
   statusCircleLocked: {
@@ -441,7 +439,6 @@ const styles = StyleSheet.create({
   statusNumber: {
     color: '#FFF',
     fontSize: 16,
-    fontWeight: 'bold',
   },
   moduleCard: {
     flex: 1,
@@ -464,7 +461,6 @@ const styles = StyleSheet.create({
   },
   moduleTitle: {
     fontSize: 16,
-    fontWeight: '700',
     lineHeight: 22,
   },
   moduleDescription: {

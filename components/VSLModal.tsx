@@ -35,7 +35,7 @@ export default function VSLModal({
   onClose,
   onCTAPress,
 }: VSLModalProps) {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
   const { dismissVSLForDays, trackVSLConversion } = useVSL();
 
   const handleDismissFor30Days = async () => {
@@ -61,7 +61,7 @@ export default function VSLModal({
           <TouchableOpacity style={styles.closeButton} onPress={onClose}>
             <X size={24} color={colors.text} />
           </TouchableOpacity>
-          <Text style={[styles.headerTitle, { color: colors.text }]}>
+          <Text style={[styles.headerTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
             Oferta Especial para Você
           </Text>
         </View>
@@ -69,18 +69,18 @@ export default function VSLModal({
         <ScrollView showsVerticalScrollIndicator={false}>
           {/* Hero Section */}
           <LinearGradient
-            colors={['#8B5CF6', '#3B82F6']}
+            colors={['#4f46e5', '#3b82f6']}
             style={styles.heroSection}
           >
             <View style={styles.badgeContainer}>
-              <Text style={styles.badge}>🎯 OFERTA LIMITADA</Text>
+              <Text style={[styles.badge, { fontFamily: fonts.secondaryMedium }]}>🎯 OFERTA LIMITADA</Text>
             </View>
 
-            <Text style={styles.mainHeadline}>
+            <Text style={[styles.mainHeadline, { fontFamily: fonts.display }]}>
               Como Transformar Seu Filho em um Jovem Investidor Consciente
             </Text>
 
-            <Text style={styles.subHeadline}>
+            <Text style={[styles.subHeadline, { fontFamily: fonts.displaySemiBold }]}>
               Mesmo que Ele Nunca Tenha Ouvido Falar em Bitcoin
             </Text>
 
@@ -88,15 +88,15 @@ export default function VSLModal({
             <View style={styles.quickStats}>
               <View style={styles.quickStat}>
                 <Users size={16} color="white" />
-                <Text style={styles.quickStatText}>12.5k</Text>
+                <Text style={[styles.quickStatText, { fontFamily: fonts.bodyBold }]}>12.5k</Text>
               </View>
               <View style={styles.quickStat}>
                 <Star size={16} color="white" />
-                <Text style={styles.quickStatText}>4.9/5</Text>
+                <Text style={[styles.quickStatText, { fontFamily: fonts.bodyBold }]}>4.9/5</Text>
               </View>
               <View style={styles.quickStat}>
                 <Clock size={16} color="white" />
-                <Text style={styles.quickStatText}>5min</Text>
+                <Text style={[styles.quickStatText, { fontFamily: fonts.bodyBold }]}>5min</Text>
               </View>
             </View>
           </LinearGradient>
@@ -107,7 +107,7 @@ export default function VSLModal({
               <View style={styles.playIconContainer}>
                 <Play size={20} color="white" />
               </View>
-              <Text style={[styles.videoTitle, { color: colors.text }]}>
+              <Text style={[styles.videoTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
                 Assista ao Vídeo Exclusivo
               </Text>
             </View>
@@ -115,7 +115,7 @@ export default function VSLModal({
             <VSLVideo />
 
             <Text
-              style={[styles.videoSubtitle, { color: colors.textSecondary }]}
+              style={[styles.videoSubtitle, { color: colors.textSecondary, fontFamily: fonts.body }]}
             >
               Descubra como outras famílias estão preparando seus filhos para o
               futuro financeiro
@@ -130,49 +130,49 @@ export default function VSLModal({
             >
               <View style={styles.offerHeader}>
                 <Crown size={28} color="white" />
-                <Text style={styles.offerTitle}>PLANO ANUAL PREMIUM</Text>
-                <Text style={styles.offerSubtitle}>
+                <Text style={[styles.offerTitle, { fontFamily: fonts.display }]}>PLANO ANUAL PREMIUM</Text>
+                <Text style={[styles.offerSubtitle, { fontFamily: fonts.body }]}>
                   Acesso completo por 12 meses
                 </Text>
               </View>
 
               <View style={styles.priceContainer}>
                 <View style={styles.priceRow}>
-                  <Text style={styles.originalPrice}>De R$ 1.799,90</Text>
+                  <Text style={[styles.originalPrice, { fontFamily: fonts.body }]}>De R$ 1.799,90</Text>
                   <View style={styles.discountBadge}>
-                    <Text style={styles.discountText}>-60%</Text>
+                    <Text style={[styles.discountText, { fontFamily: fonts.secondaryMedium }]}>-60%</Text>
                   </View>
                 </View>
-                <Text style={styles.currentPrice}>R$ 699,90</Text>
-                <Text style={styles.priceSubtext}>
+                <Text style={[styles.currentPrice, { fontFamily: fonts.display }]}>R$ 699,90</Text>
+                <Text style={[styles.priceSubtext, { fontFamily: fonts.body }]}>
                   ou 12x de R$ 58,33 sem juros
                 </Text>
               </View>
 
               <View style={styles.benefitsList}>
-                <Text style={styles.benefitItem}>
+                <Text style={[styles.benefitItem, { fontFamily: fonts.body }]}>
                   ✅ Acesso a +50 cursos completos
                 </Text>
-                <Text style={styles.benefitItem}>
+                <Text style={[styles.benefitItem, { fontFamily: fonts.body }]}>
                   ✅ Mais de 200 horas de conteúdo
                 </Text>
-                <Text style={styles.benefitItem}>
+                <Text style={[styles.benefitItem, { fontFamily: fonts.body }]}>
                   ✅ Comunidade VIP exclusiva
                 </Text>
-                <Text style={styles.benefitItem}>
+                <Text style={[styles.benefitItem, { fontFamily: fonts.body }]}>
                   ✅ Cashback dobrado (10%)
                 </Text>
-                <Text style={styles.benefitItem}>✅ Suporte prioritário</Text>
+                <Text style={[styles.benefitItem, { fontFamily: fonts.body }]}>✅ Suporte prioritário</Text>
               </View>
 
               <TouchableOpacity style={styles.mainCTA} onPress={handleCTAPress}>
-                <Text style={styles.mainCTAText}>
+                <Text style={[styles.mainCTAText, { fontFamily: fonts.bodyBold }]}>
                   QUERO O PLANO PREMIUM AGORA
                 </Text>
                 <ArrowRight size={18} color="white" />
               </TouchableOpacity>
 
-              <Text style={styles.guaranteeText}>
+              <Text style={[styles.guaranteeText, { fontFamily: fonts.body }]}>
                 🔒 Garantia de 30 dias ou seu dinheiro de volta
               </Text>
             </LinearGradient>
@@ -184,11 +184,11 @@ export default function VSLModal({
               colors={['rgba(239, 68, 68, 0.1)', 'rgba(220, 38, 38, 0.1)']}
               style={[styles.urgencyCard, { borderColor: colors.border }]}
             >
-              <Text style={[styles.urgencyTitle, { color: colors.text }]}>
+              <Text style={[styles.urgencyTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
                 ⚠️ ATENÇÃO:
               </Text>
               <Text
-                style={[styles.urgencyText, { color: colors.textSecondary }]}
+                style={[styles.urgencyText, { color: colors.textSecondary, fontFamily: fonts.body }]}
               >
                 Esta oferta especial está disponível apenas por tempo limitado.
                 Não perca a chance de dar ao seu filho uma vantagem financeira
@@ -199,7 +199,7 @@ export default function VSLModal({
 
           {/* Social Proof */}
           <View style={styles.socialProofSection}>
-            <Text style={[styles.socialProofTitle, { color: colors.text }]}>
+            <Text style={[styles.socialProofTitle, { color: colors.text, fontFamily: fonts.display }]}>
               Mais de 12.500 famílias já transformaram a educação financeira dos
               seus filhos
             </Text>
@@ -214,7 +214,7 @@ export default function VSLModal({
                 <Text
                   style={[
                     styles.testimonialText,
-                    { color: colors.textSecondary },
+                    { color: colors.textSecondary, fontFamily: fonts.body },
                   ]}
                 >
                   "Meu filho sempre teve dificuldade com matemática, mas depois
@@ -222,7 +222,7 @@ export default function VSLModal({
                   ensina sobre investimentos!"
                 </Text>
                 <Text
-                  style={[styles.testimonialAuthor, { color: colors.text }]}
+                  style={[styles.testimonialAuthor, { color: colors.text, fontFamily: fonts.bodySemiBold }]}
                 >
                   - Maria Silva, mãe de João, 12 anos
                 </Text>
@@ -240,7 +240,7 @@ export default function VSLModal({
             <Text
               style={[
                 styles.dismissButtonText,
-                { color: colors.textSecondary },
+                { color: colors.textSecondary, fontFamily: fonts.body },
               ]}
             >
               Não mostrar novamente por 30 dias
@@ -252,10 +252,10 @@ export default function VSLModal({
             onPress={handleCTAPress}
           >
             <LinearGradient
-              colors={['#8B5CF6', '#3B82F6']}
+              colors={['#4f46e5', '#3b82f6']}
               style={styles.secondaryCTAGradient}
             >
-              <Text style={styles.secondaryCTAText}>VER TODOS OS CURSOS</Text>
+              <Text style={[styles.secondaryCTAText, { fontFamily: fonts.bodyBold }]}>VER TODOS OS CURSOS</Text>
             </LinearGradient>
           </TouchableOpacity>
         </View>
@@ -286,7 +286,6 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
     flex: 1,
   },
   heroSection: {
@@ -304,12 +303,10 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 20,
     fontSize: 14,
-    fontWeight: 'bold',
     color: 'white',
   },
   mainHeadline: {
     fontSize: 22,
-    fontWeight: 'bold',
     color: 'white',
     textAlign: 'center',
     lineHeight: 30,
@@ -317,7 +314,6 @@ const styles = StyleSheet.create({
   },
   subHeadline: {
     fontSize: 16,
-    fontWeight: '600',
     color: 'rgba(255, 255, 255, 0.9)',
     textAlign: 'center',
     marginBottom: 20,
@@ -334,7 +330,6 @@ const styles = StyleSheet.create({
   },
   quickStatText: {
     fontSize: 16,
-    fontWeight: 'bold',
     color: 'white',
     marginTop: 4,
   },
@@ -350,14 +345,13 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: '#6366f1',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
   },
   videoTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
     flex: 1,
   },
   videoSubtitle: {
@@ -380,7 +374,6 @@ const styles = StyleSheet.create({
   },
   offerTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
     color: 'white',
     marginTop: 8,
     marginBottom: 4,
@@ -412,12 +405,10 @@ const styles = StyleSheet.create({
   },
   discountText: {
     fontSize: 12,
-    fontWeight: 'bold',
     color: 'white',
   },
   currentPrice: {
     fontSize: 32,
-    fontWeight: 'bold',
     color: 'white',
     marginBottom: 4,
   },
@@ -445,7 +436,6 @@ const styles = StyleSheet.create({
   },
   mainCTAText: {
     fontSize: 16,
-    fontWeight: 'bold',
     color: 'white',
   },
   guaranteeText: {
@@ -463,7 +453,6 @@ const styles = StyleSheet.create({
   },
   urgencyTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
     marginBottom: 8,
   },
   urgencyText: {
@@ -475,7 +464,6 @@ const styles = StyleSheet.create({
   },
   socialProofTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 16,
   },
@@ -495,7 +483,6 @@ const styles = StyleSheet.create({
   },
   testimonialAuthor: {
     fontSize: 12,
-    fontWeight: '600',
   },
   footerActions: {
     padding: 20,
@@ -519,7 +506,6 @@ const styles = StyleSheet.create({
   },
   secondaryCTAText: {
     fontSize: 16,
-    fontWeight: 'bold',
     color: 'white',
   },
 });

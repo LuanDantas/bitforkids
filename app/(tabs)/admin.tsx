@@ -8,11 +8,13 @@ import {
   Dimensions,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useTheme } from '@/contexts/ThemeContext';
 import { Users, BookOpen, DollarSign, TrendingUp, Plus, ChartBar as BarChart3, Settings, FileText, UserCheck, Calendar } from 'lucide-react-native';
 
 const { width } = Dimensions.get('window');
 
 export default function AdminScreen() {
+  const { fonts } = useTheme();
   const [stats] = useState({
     totalUsers: 1250,
     activeCourses: 12,
@@ -66,8 +68,8 @@ export default function AdminScreen() {
       title: 'Relatórios',
       subtitle: 'Ver analytics',
       icon: BarChart3,
-      color: '#8B5CF6',
-      gradient: ['#8B5CF6', '#7C3AED'],
+      color: '#6366f1',
+      gradient: ['#4f46e5', '#3b82f6'],
     },
     {
       title: 'Configurações',
@@ -98,7 +100,7 @@ export default function AdminScreen() {
       case 'payment':
         return '#3B82F6';
       case 'course':
-        return '#8B5CF6';
+        return '#6366f1';
       default:
         return '#6B7280';
     }
@@ -108,11 +110,11 @@ export default function AdminScreen() {
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* Header */}
       <LinearGradient
-        colors={['#1a1a1a', '#2a1a4a']}
+        colors={['#0f172a', '#1e293b']}
         style={styles.header}
       >
-        <Text style={styles.headerTitle}>Painel Administrativo</Text>
-        <Text style={styles.headerSubtitle}>
+        <Text style={[styles.headerTitle, { fontFamily: fonts.display }]}>Painel Administrativo</Text>
+        <Text style={[styles.headerSubtitle, { fontFamily: fonts.body }]}>
           Gerencie sua plataforma de ensino
         </Text>
       </LinearGradient>
@@ -124,47 +126,47 @@ export default function AdminScreen() {
             <View style={styles.statIcon}>
               <Users size={24} color="#3B82F6" />
             </View>
-            <Text style={styles.statValue}>{stats.totalUsers.toLocaleString()}</Text>
-            <Text style={styles.statLabel}>Usuários Totais</Text>
-            <Text style={styles.statChange}>+{stats.newSignups} este mês</Text>
+            <Text style={[styles.statValue, { fontFamily: fonts.display }]}>{stats.totalUsers.toLocaleString()}</Text>
+            <Text style={[styles.statLabel, { fontFamily: fonts.body }]}>Usuários Totais</Text>
+            <Text style={[styles.statChange, { fontFamily: fonts.bodySemiBold }]}>+{stats.newSignups} este mês</Text>
           </View>
           
           <View style={styles.statCard}>
             <View style={styles.statIcon}>
               <BookOpen size={24} color="#10B981" />
             </View>
-            <Text style={styles.statValue}>{stats.activeCourses}</Text>
-            <Text style={styles.statLabel}>Cursos Ativos</Text>
-            <Text style={styles.statChange}>+2 esta semana</Text>
+            <Text style={[styles.statValue, { fontFamily: fonts.display }]}>{stats.activeCourses}</Text>
+            <Text style={[styles.statLabel, { fontFamily: fonts.body }]}>Cursos Ativos</Text>
+            <Text style={[styles.statChange, { fontFamily: fonts.bodySemiBold }]}>+2 esta semana</Text>
           </View>
         </View>
         
         <View style={styles.statsRow}>
           <View style={styles.statCard}>
             <View style={styles.statIcon}>
-              <DollarSign size={24} color="#8B5CF6" />
+              <DollarSign size={24} color="#6366f1" />
             </View>
-            <Text style={styles.statValue}>
+            <Text style={[styles.statValue, { fontFamily: fonts.display }]}>
               R$ {(stats.monthlyRevenue / 1000).toFixed(1)}k
             </Text>
-            <Text style={styles.statLabel}>Receita Mensal</Text>
-            <Text style={styles.statChange}>+15.3% vs mês anterior</Text>
+            <Text style={[styles.statLabel, { fontFamily: fonts.body }]}>Receita Mensal</Text>
+            <Text style={[styles.statChange, { fontFamily: fonts.bodySemiBold }]}>+15.3% vs mês anterior</Text>
           </View>
           
           <View style={styles.statCard}>
             <View style={styles.statIcon}>
               <TrendingUp size={24} color="#F59E0B" />
             </View>
-            <Text style={styles.statValue}>87%</Text>
-            <Text style={styles.statLabel}>Taxa Conclusão</Text>
-            <Text style={styles.statChange}>+5% esta semana</Text>
+            <Text style={[styles.statValue, { fontFamily: fonts.display }]}>87%</Text>
+            <Text style={[styles.statLabel, { fontFamily: fonts.body }]}>Taxa Conclusão</Text>
+            <Text style={[styles.statChange, { fontFamily: fonts.bodySemiBold }]}>+5% esta semana</Text>
           </View>
         </View>
       </View>
 
       {/* Quick Actions */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Ações Rápidas</Text>
+        <Text style={[styles.sectionTitle, { fontFamily: fonts.display }]}>Ações Rápidas</Text>
         <View style={styles.actionsGrid}>
           {quickActions.map((action, index) => {
             const Icon = action.icon;
@@ -176,8 +178,8 @@ export default function AdminScreen() {
                 >
                   <Icon size={24} color="white" />
                 </LinearGradient>
-                <Text style={styles.actionTitle}>{action.title}</Text>
-                <Text style={styles.actionSubtitle}>{action.subtitle}</Text>
+                <Text style={[styles.actionTitle, { fontFamily: fonts.displaySemiBold }]}>{action.title}</Text>
+                <Text style={[styles.actionSubtitle, { fontFamily: fonts.body }]}>{action.subtitle}</Text>
               </TouchableOpacity>
             );
           })}
@@ -187,9 +189,9 @@ export default function AdminScreen() {
       {/* Recent Activity */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Atividade Recente</Text>
+          <Text style={[styles.sectionTitle, { fontFamily: fonts.display }]}>Atividade Recente</Text>
           <TouchableOpacity>
-            <Text style={styles.seeAllText}>Ver todas</Text>
+            <Text style={[styles.seeAllText, { fontFamily: fonts.bodySemiBold }]}>Ver todas</Text>
           </TouchableOpacity>
         </View>
         
@@ -204,8 +206,8 @@ export default function AdminScreen() {
                   <Icon size={16} color={color} />
                 </View>
                 <View style={styles.activityContent}>
-                  <Text style={styles.activityMessage}>{activity.message}</Text>
-                  <Text style={styles.activityTime}>{activity.time}</Text>
+                  <Text style={[styles.activityMessage, { fontFamily: fonts.body }]}>{activity.message}</Text>
+                  <Text style={[styles.activityTime, { fontFamily: fonts.secondaryMedium }]}>{activity.time}</Text>
                 </View>
               </View>
             );
@@ -215,11 +217,11 @@ export default function AdminScreen() {
 
       {/* Revenue Chart Placeholder */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Receita dos Últimos 7 Dias</Text>
+        <Text style={[styles.sectionTitle, { fontFamily: fonts.display }]}>Receita dos Últimos 7 Dias</Text>
         <View style={styles.chartContainer}>
           <View style={styles.chartPlaceholder}>
             <BarChart3 size={48} color="#6B7280" />
-            <Text style={styles.chartPlaceholderText}>
+            <Text style={[styles.chartPlaceholderText, { fontFamily: fonts.body }]}>
               Gráfico de receita seria exibido aqui
             </Text>
           </View>
@@ -228,7 +230,7 @@ export default function AdminScreen() {
 
       {/* Top Courses */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Cursos Mais Populares</Text>
+        <Text style={[styles.sectionTitle, { fontFamily: fonts.display }]}>Cursos Mais Populares</Text>
         <View style={styles.coursesList}>
           {[
             { name: 'Fundamentos do Bitcoin', sales: 234, revenue: 'R$ 34.866,00' },
@@ -237,13 +239,13 @@ export default function AdminScreen() {
           ].map((course, index) => (
             <View key={index} style={styles.courseItem}>
               <View style={styles.courseInfo}>
-                <Text style={styles.courseName}>{course.name}</Text>
-                <Text style={styles.courseStats}>
+                <Text style={[styles.courseName, { fontFamily: fonts.bodySemiBold }]}>{course.name}</Text>
+                <Text style={[styles.courseStats, { fontFamily: fonts.body }]}>
                   {course.sales} vendas • {course.revenue}
                 </Text>
               </View>
               <View style={styles.coursePosition}>
-                <Text style={styles.positionText}>#{index + 1}</Text>
+                <Text style={[styles.positionText, { fontFamily: fonts.bodyBold }]}>#{index + 1}</Text>
               </View>
             </View>
           ))}
@@ -265,7 +267,6 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 28,
-    fontWeight: 'bold',
     color: 'white',
     marginBottom: 4,
   },
@@ -301,7 +302,6 @@ const styles = StyleSheet.create({
   },
   statValue: {
     fontSize: 24,
-    fontWeight: 'bold',
     color: 'white',
     marginBottom: 4,
   },
@@ -313,7 +313,6 @@ const styles = StyleSheet.create({
   statChange: {
     fontSize: 12,
     color: '#10B981',
-    fontWeight: '600',
   },
   section: {
     padding: 20,
@@ -326,14 +325,12 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
     color: 'white',
     marginBottom: 16,
   },
   seeAllText: {
     fontSize: 14,
-    color: '#8B5CF6',
-    fontWeight: '600',
+    color: '#6366f1',
   },
   actionsGrid: {
     flexDirection: 'row',
@@ -359,7 +356,6 @@ const styles = StyleSheet.create({
   },
   actionTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
     color: 'white',
     marginBottom: 4,
   },
@@ -437,7 +433,6 @@ const styles = StyleSheet.create({
   },
   courseName: {
     fontSize: 16,
-    fontWeight: '600',
     color: 'white',
     marginBottom: 4,
   },
@@ -449,13 +444,12 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: '#6366f1',
     justifyContent: 'center',
     alignItems: 'center',
   },
   positionText: {
     fontSize: 14,
-    fontWeight: 'bold',
     color: 'white',
   },
 });

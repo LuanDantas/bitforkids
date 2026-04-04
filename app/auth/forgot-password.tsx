@@ -19,7 +19,7 @@ export default function ForgotPasswordScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
   const router = useRouter();
-  const { colors, isDark } = useTheme();
+  const { colors, isDark, fonts } = useTheme();
   const { t } = useLanguage();
 
   const handleResetPassword = async () => {
@@ -55,13 +55,13 @@ export default function ForgotPasswordScreen() {
               <CheckCircle size={64} color="#10B981" />
             </View>
 
-            <Text style={styles.successTitle}>{t('auth.forgotPassword.successTitle')}</Text>
-            <Text style={styles.successMessage}>
+            <Text style={[styles.successTitle, { fontFamily: fonts.display }]}>{t('auth.forgotPassword.successTitle')}</Text>
+            <Text style={[styles.successMessage, { fontFamily: fonts.body }]}>
               {t('auth.forgotPassword.successMessage')}{'\n'}
-              <Text style={styles.emailText}>{email}</Text>
+              <Text style={[styles.emailText, { fontFamily: fonts.bodySemiBold }]}>{email}</Text>
             </Text>
 
-            <Text style={styles.instructionText}>
+            <Text style={[styles.instructionText, { fontFamily: fonts.body }]}>
               {t('auth.forgotPassword.successInstruction')}
             </Text>
 
@@ -70,10 +70,10 @@ export default function ForgotPasswordScreen() {
               onPress={handleBackToLogin}
             >
               <LinearGradient
-                colors={['#8B5CF6', '#3B82F6']}
+                colors={['#4f46e5', '#3b82f6']}
                 style={styles.backGradient}
               >
-                <Text style={styles.backButtonText}>{t('auth.forgotPassword.backToLogin')}</Text>
+                <Text style={[styles.backButtonText, { fontFamily: fonts.bodyBold }]}>{t('auth.forgotPassword.backToLogin')}</Text>
               </LinearGradient>
             </TouchableOpacity>
 
@@ -81,7 +81,7 @@ export default function ForgotPasswordScreen() {
               style={styles.resendButton}
               onPress={handleResetPassword}
             >
-              <Text style={styles.resendText}>{t('auth.forgotPassword.resendEmail')}</Text>
+              <Text style={[styles.resendText, { fontFamily: fonts.bodySemiBold }]}>{t('auth.forgotPassword.resendEmail')}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -105,8 +105,8 @@ export default function ForgotPasswordScreen() {
             style={styles.logo}
             resizeMode="contain"
           />
-          <Text style={[styles.title, { color: colors.text }]}>{t('auth.forgotPassword.title')}</Text>
-          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
+          <Text style={[styles.title, { color: colors.text, fontFamily: fonts.display }]}>{t('auth.forgotPassword.title')}</Text>
+          <Text style={[styles.subtitle, { color: colors.textSecondary, fontFamily: fonts.body }]}>
             {t('auth.forgotPassword.subtitle')}
           </Text>
         </View>
@@ -117,7 +117,7 @@ export default function ForgotPasswordScreen() {
               <Mail size={20} color={colors.textSecondary} />
             </View>
             <TextInput
-              style={[styles.input, { color: colors.text }]}
+              style={[styles.input, { color: colors.text, fontFamily: fonts.body }]}
               placeholder={t('auth.forgotPassword.emailPlaceholder')}
               placeholderTextColor={colors.textSecondary}
               value={email}
@@ -133,10 +133,10 @@ export default function ForgotPasswordScreen() {
             disabled={isLoading}
           >
             <LinearGradient
-              colors={['#8B5CF6', '#3B82F6']}
+              colors={['#4f46e5', '#3b82f6']}
               style={styles.resetGradient}
             >
-              <Text style={styles.resetText}>
+              <Text style={[styles.resetText, { fontFamily: fonts.bodyBold }]}>
                 {isLoading ? t('auth.forgotPassword.sendButtonLoading') : t('auth.forgotPassword.sendButton')}
               </Text>
             </LinearGradient>
@@ -144,9 +144,9 @@ export default function ForgotPasswordScreen() {
         </View>
 
         <View style={styles.footer}>
-          <Text style={[styles.footerText, { color: colors.textSecondary }]}>{t('auth.forgotPassword.rememberedPassword')}</Text>
+          <Text style={[styles.footerText, { color: colors.textSecondary, fontFamily: fonts.body }]}>{t('auth.forgotPassword.rememberedPassword')}</Text>
           <TouchableOpacity onPress={handleBackToLogin}>
-            <Text style={styles.loginText}>{t('auth.forgotPassword.loginLink')}</Text>
+            <Text style={[styles.loginText, { fontFamily: fonts.bodySemiBold }]}>{t('auth.forgotPassword.loginLink')}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -185,7 +185,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: 'bold',
     color: 'white',
     marginBottom: 8,
   },
@@ -228,7 +227,6 @@ const styles = StyleSheet.create({
   },
   resetText: {
     fontSize: 16,
-    fontWeight: 'bold',
     color: 'white',
   },
   footer: {
@@ -242,8 +240,7 @@ const styles = StyleSheet.create({
   },
   loginText: {
     fontSize: 16,
-    color: '#8B5CF6',
-    fontWeight: '600',
+    color: '#6366f1',
   },
   successContainer: {
     alignItems: 'center',
@@ -253,7 +250,6 @@ const styles = StyleSheet.create({
   },
   successTitle: {
     fontSize: 28,
-    fontWeight: 'bold',
     color: 'white',
     marginBottom: 12,
   },
@@ -265,8 +261,7 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
   emailText: {
-    color: '#8B5CF6',
-    fontWeight: '600',
+    color: '#6366f1',
   },
   instructionText: {
     fontSize: 14,
@@ -288,7 +283,6 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     fontSize: 16,
-    fontWeight: 'bold',
     color: 'white',
   },
   resendButton: {
@@ -296,7 +290,6 @@ const styles = StyleSheet.create({
   },
   resendText: {
     fontSize: 14,
-    color: '#8B5CF6',
-    fontWeight: '600',
+    color: '#6366f1',
   },
 });

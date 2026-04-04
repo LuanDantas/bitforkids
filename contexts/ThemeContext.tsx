@@ -13,59 +13,112 @@ interface ThemeColors {
   border: string;
   borderLight: string;
   primary: string;
+  primaryLight: string;
+  secondary: string;
+  tertiary: string;
   success: string;
   warning: string;
   error: string;
   tabBar: string;
   tabBarBorder: string;
+  surfaceGlass: string;
+  borderAccent: string;
+  glow: string;
+  gradientStart: string;
+  gradientEnd: string;
 }
+
+interface ThemeFonts {
+  body: string;
+  bodyMedium: string;
+  bodySemiBold: string;
+  bodyBold: string;
+  display: string;
+  displaySemiBold: string;
+  displayMedium: string;
+  secondary: string;
+  secondaryMedium: string;
+  secondarySemiBold: string;
+  secondaryBold: string;
+}
+
+const fonts: ThemeFonts = {
+  body: 'Inter_400Regular',
+  bodyMedium: 'Inter_500Medium',
+  bodySemiBold: 'Inter_600SemiBold',
+  bodyBold: 'Inter_700Bold',
+  display: 'SpaceGrotesk_700Bold',
+  displaySemiBold: 'SpaceGrotesk_600SemiBold',
+  displayMedium: 'SpaceGrotesk_500Medium',
+  secondary: 'Manrope_400Regular',
+  secondaryMedium: 'Manrope_500Medium',
+  secondarySemiBold: 'Manrope_600SemiBold',
+  secondaryBold: 'Manrope_700Bold',
+};
 
 interface ThemeContextType {
   theme: ThemeMode;
   colors: ThemeColors;
+  fonts: ThemeFonts;
   isDark: boolean;
   toggleTheme: () => void;
   setDarkMode: (enabled: boolean) => void;
 }
 
 const lightColors: ThemeColors = {
-  background: '#ffffff',
-  surface: '#f8f9fa',
+  background: '#f8fafc',
+  surface: '#f1f5f9',
   card: '#ffffff',
-  text: '#1a1a1a',
-  textSecondary: '#6b7280',
-  textTertiary: '#9ca3af',
-  border: '#e5e7eb',
-  borderLight: '#f3f4f6',
-  primary: '#8B5CF6',
+  text: '#0f172a',
+  textSecondary: '#475569',
+  textTertiary: '#94a3b8',
+  border: '#e2e8f0',
+  borderLight: '#f1f5f9',
+  primary: '#6366f1',
+  primaryLight: '#818cf8',
+  secondary: '#3b82f6',
+  tertiary: '#06b6d4',
   success: '#10B981',
   warning: '#F59E0B',
   error: '#EF4444',
   tabBar: '#ffffff',
-  tabBarBorder: '#e5e7eb',
+  tabBarBorder: '#e2e8f0',
+  surfaceGlass: 'rgba(255, 255, 255, 0.7)',
+  borderAccent: 'rgba(99, 102, 241, 0.2)',
+  glow: '#6366f1',
+  gradientStart: '#4f46e5',
+  gradientEnd: '#3b82f6',
 };
 
 const darkColors: ThemeColors = {
-  background: '#0a0a0a',
-  surface: '#1a1a1a',
-  card: '#1a1a1a',
-  text: 'white',
-  textSecondary: '#9CA3AF',
-  textTertiary: '#6B7280',
-  border: '#2a2a2a',
-  borderLight: '#2a2a2a',
-  primary: '#8B5CF6',
+  background: '#0f172a',
+  surface: '#1e293b',
+  card: '#1e293b',
+  text: '#ffffff',
+  textSecondary: '#d1d5db',
+  textTertiary: '#9ca3af',
+  border: 'rgba(99, 102, 241, 0.15)',
+  borderLight: 'rgba(99, 102, 241, 0.08)',
+  primary: '#6366f1',
+  primaryLight: '#818cf8',
+  secondary: '#3b82f6',
+  tertiary: '#06b6d4',
   success: '#10B981',
   warning: '#F59E0B',
   error: '#EF4444',
-  tabBar: '#1a1a1a',
-  tabBarBorder: '#2a2a2a',
+  tabBar: '#0f172a',
+  tabBarBorder: 'rgba(99, 102, 241, 0.1)',
+  surfaceGlass: 'rgba(30, 41, 59, 0.6)',
+  borderAccent: 'rgba(99, 102, 241, 0.25)',
+  glow: '#6366f1',
+  gradientStart: '#4f46e5',
+  gradientEnd: '#3b82f6',
 };
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<ThemeMode>('light');
+  const [theme, setTheme] = useState<ThemeMode>('dark');
   const [systemColorScheme, setSystemColorScheme] = useState<ColorSchemeName>(
     Appearance.getColorScheme()
   );
@@ -101,7 +154,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, colors, isDark, toggleTheme, setDarkMode }}>
+    <ThemeContext.Provider value={{ theme, colors, fonts, isDark, toggleTheme, setDarkMode }}>
       {children}
     </ThemeContext.Provider>
   );

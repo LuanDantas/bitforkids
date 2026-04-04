@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Play, ArrowRight, Star, Users, Award } from 'lucide-react-native';
+import { useTheme } from '@/contexts/ThemeContext';
 import VSLVideo from './VSLVideo';
 
 const { width } = Dimensions.get('window');
@@ -18,22 +19,24 @@ interface VSLHeroProps {
 }
 
 export default function VSLHero({ onCTAPress, onVideoProgress }: VSLHeroProps) {
+  const { fonts } = useTheme();
+
   return (
     <View style={styles.container}>
       {/* Header */}
-      <LinearGradient colors={['#8B5CF6', '#3B82F6']} style={styles.header}>
+      <LinearGradient colors={['#4f46e5', '#3b82f6']} style={styles.header}>
         <View style={styles.headerContent}>
-          <Text style={styles.badge}>🎯 OFERTA LIMITADA</Text>
-          <Text style={styles.mainHeadline}>
+          <Text style={[styles.badge, { fontFamily: fonts.secondaryMedium }]}>🎯 OFERTA LIMITADA</Text>
+          <Text style={[styles.mainHeadline, { fontFamily: fonts.display }]}>
             Como Transformar Seu Filho em um Jovem Investidor Consciente
           </Text>
-          <Text style={styles.subHeadline}>
+          <Text style={[styles.subHeadline, { fontFamily: fonts.displaySemiBold }]}>
             Mesmo que Ele Nunca Tenha Ouvido Falar em Bitcoin
           </Text>
 
-          <Text style={styles.description}>
+          <Text style={[styles.description, { fontFamily: fonts.body }]}>
             Descubra o método passo a passo que já ajudou{' '}
-            <Text style={styles.highlight}>+12.500 famílias</Text> a ensinar
+            <Text style={[styles.highlight, { fontFamily: fonts.bodyBold }]}>+12.500 famílias</Text> a ensinar
             educação financeira e criptomoedas de forma segura e divertida
           </Text>
 
@@ -41,18 +44,18 @@ export default function VSLHero({ onCTAPress, onVideoProgress }: VSLHeroProps) {
           <View style={styles.statsContainer}>
             <View style={styles.statItem}>
               <Users size={20} color="white" />
-              <Text style={styles.statNumber}>12.5k</Text>
-              <Text style={styles.statLabel}>Alunos</Text>
+              <Text style={[styles.statNumber, { fontFamily: fonts.bodyBold }]}>12.5k</Text>
+              <Text style={[styles.statLabel, { fontFamily: fonts.secondaryMedium }]}>Alunos</Text>
             </View>
             <View style={styles.statItem}>
               <Star size={20} color="white" />
-              <Text style={styles.statNumber}>4.9</Text>
-              <Text style={styles.statLabel}>Avaliação</Text>
+              <Text style={[styles.statNumber, { fontFamily: fonts.bodyBold }]}>4.9</Text>
+              <Text style={[styles.statLabel, { fontFamily: fonts.secondaryMedium }]}>Avaliação</Text>
             </View>
             <View style={styles.statItem}>
               <Award size={20} color="white" />
-              <Text style={styles.statNumber}>50+</Text>
-              <Text style={styles.statLabel}>Cursos</Text>
+              <Text style={[styles.statNumber, { fontFamily: fonts.bodyBold }]}>50+</Text>
+              <Text style={[styles.statLabel, { fontFamily: fonts.secondaryMedium }]}>Cursos</Text>
             </View>
           </View>
         </View>
@@ -64,14 +67,14 @@ export default function VSLHero({ onCTAPress, onVideoProgress }: VSLHeroProps) {
           <View style={styles.playIconContainer}>
             <Play size={24} color="white" />
           </View>
-          <Text style={styles.videoTitle}>
+          <Text style={[styles.videoTitle, { fontFamily: fonts.displaySemiBold }]}>
             Assista ao Vídeo Exclusivo (5 minutos)
           </Text>
         </View>
 
         <VSLVideo onVideoProgress={onVideoProgress} />
 
-        <Text style={styles.videoSubtitle}>
+        <Text style={[styles.videoSubtitle, { fontFamily: fonts.body }]}>
           Descubra como outras famílias estão preparando seus filhos para o
           futuro financeiro
         </Text>
@@ -84,17 +87,17 @@ export default function VSLHero({ onCTAPress, onVideoProgress }: VSLHeroProps) {
             colors={['#F59E0B', '#D97706']}
             style={styles.ctaGradient}
           >
-            <Text style={styles.ctaText}>
+            <Text style={[styles.ctaText, { fontFamily: fonts.bodyBold }]}>
               QUERO TRANSFORMAR MEU FILHO AGORA
             </Text>
             <ArrowRight size={20} color="white" />
           </LinearGradient>
         </TouchableOpacity>
 
-        <Text style={styles.ctaSubtext}>
+        <Text style={[styles.ctaSubtext, { fontFamily: fonts.body }]}>
           ⚡ Acesso imediato após o pagamento
         </Text>
-        <Text style={styles.ctaSubtext}>
+        <Text style={[styles.ctaSubtext, { fontFamily: fonts.body }]}>
           🔒 Garantia de 30 dias ou seu dinheiro de volta
         </Text>
       </View>
@@ -105,8 +108,8 @@ export default function VSLHero({ onCTAPress, onVideoProgress }: VSLHeroProps) {
           colors={['rgba(239, 68, 68, 0.1)', 'rgba(220, 38, 38, 0.1)']}
           style={styles.urgencyCard}
         >
-          <Text style={styles.urgencyTitle}>⚠️ ATENÇÃO:</Text>
-          <Text style={styles.urgencyText}>
+          <Text style={[styles.urgencyTitle, { fontFamily: fonts.displaySemiBold }]}>⚠️ ATENÇÃO:</Text>
+          <Text style={[styles.urgencyText, { fontFamily: fonts.body }]}>
             Esta oferta especial está disponível apenas por tempo limitado. Não
             perca a chance de dar ao seu filho uma vantagem financeira que
             durará toda a vida.
@@ -135,13 +138,11 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 20,
     fontSize: 14,
-    fontWeight: 'bold',
     color: 'white',
     marginBottom: 20,
   },
   mainHeadline: {
     fontSize: 24,
-    fontWeight: 'bold',
     color: 'white',
     textAlign: 'center',
     lineHeight: 32,
@@ -149,7 +150,6 @@ const styles = StyleSheet.create({
   },
   subHeadline: {
     fontSize: 18,
-    fontWeight: '600',
     color: 'rgba(255, 255, 255, 0.9)',
     textAlign: 'center',
     marginBottom: 20,
@@ -162,7 +162,6 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   highlight: {
-    fontWeight: 'bold',
     color: '#F59E0B',
   },
   statsContainer: {
@@ -178,7 +177,6 @@ const styles = StyleSheet.create({
   },
   statNumber: {
     fontSize: 20,
-    fontWeight: 'bold',
     color: 'white',
     marginTop: 4,
   },
@@ -199,14 +197,13 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: '#6366f1',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
   },
   videoTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
     color: '#1a1a1a',
     flex: 1,
   },
@@ -237,7 +234,6 @@ const styles = StyleSheet.create({
   },
   ctaText: {
     fontSize: 18,
-    fontWeight: 'bold',
     color: 'white',
     textAlign: 'center',
   },
@@ -258,7 +254,6 @@ const styles = StyleSheet.create({
   },
   urgencyTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
     color: '#EF4444',
     marginBottom: 8,
   },

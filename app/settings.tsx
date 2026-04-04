@@ -48,7 +48,7 @@ interface GeneralSettings {
 
 export default function SettingsScreen() {
   const router = useRouter();
-  const { colors, isDark, setDarkMode } = useTheme();
+  const { colors, fonts, isDark, setDarkMode } = useTheme();
   const { locale, setLocale, t } = useLanguage();
 
   const [settings, setSettings] = useState<GeneralSettings>({
@@ -120,7 +120,7 @@ export default function SettingsScreen() {
     {
       title: t('settings.categoryAppearance'),
       icon: Palette,
-      color: '#8B5CF6',
+      color: '#6366f1',
       items: [
         {
           key: 'darkMode' as keyof GeneralSettings,
@@ -238,7 +238,7 @@ export default function SettingsScreen() {
       icon: Info,
       title: t('settings.aboutApp'),
       subtitle: t('settings.aboutAppDesc'),
-      color: '#8B5CF6',
+      color: '#6366f1',
       onPress: openAbout,
     },
   ];
@@ -246,7 +246,7 @@ export default function SettingsScreen() {
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       {/* Header */}
-      <LinearGradient colors={isDark ? ['#1a1a1a', '#2a1a4a'] as const : ['#8B5CF6', '#3B82F6'] as const} style={styles.header}>
+      <LinearGradient colors={isDark ? ['#0f172a', '#1e293b'] as const : ['#4f46e5', '#3b82f6'] as const} style={styles.header}>
         <View style={styles.headerContent}>
           <TouchableOpacity
             style={styles.backButton}
@@ -255,8 +255,8 @@ export default function SettingsScreen() {
             <ArrowLeft size={24} color="white" />
           </TouchableOpacity>
           <View style={styles.headerText}>
-            <Text style={styles.headerTitle}>{t('settings.headerTitle')}</Text>
-            <Text style={styles.headerSubtitle}>{t('settings.headerSubtitle')}</Text>
+            <Text style={[styles.headerTitle, { fontFamily: fonts.display }]}>{t('settings.headerTitle')}</Text>
+            <Text style={[styles.headerSubtitle, { fontFamily: fonts.body }]}>{t('settings.headerSubtitle')}</Text>
           </View>
           <View style={styles.headerRight}>
             <Settings size={24} color="white" />
@@ -279,7 +279,7 @@ export default function SettingsScreen() {
                 >
                   <Icon size={20} color={category.color} />
                 </View>
-                <Text style={[styles.categoryTitle, { color: colors.text }]}>{category.title}</Text>
+                <Text style={[styles.categoryTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>{category.title}</Text>
               </View>
 
               <View style={[styles.settingsList, { backgroundColor: colors.card, borderColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }]}>
@@ -292,8 +292,8 @@ export default function SettingsScreen() {
                   return (
                     <View key={itemIndex} style={[styles.settingItem, { borderBottomColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }]}>
                       <View style={styles.settingContent}>
-                        <Text style={[styles.settingTitle, { color: colors.text }]}>{item.title}</Text>
-                        <Text style={[styles.settingSubtitle, { color: colors.textSecondary }]}>
+                        <Text style={[styles.settingTitle, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>{item.title}</Text>
+                        <Text style={[styles.settingSubtitle, { color: colors.textSecondary, fontFamily: fonts.body }]}>
                           {item.subtitle}
                         </Text>
                       </View>
@@ -333,7 +333,7 @@ export default function SettingsScreen() {
 
         {/* Support */}
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('settings.supportTitle')}</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>{t('settings.supportTitle')}</Text>
           <View style={[styles.supportList, { backgroundColor: colors.card, borderColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }]}>
             {supportActions.map((action, index) => {
               const Icon = action.icon;
@@ -352,8 +352,8 @@ export default function SettingsScreen() {
                     <Icon size={20} color={action.color} />
                   </View>
                   <View style={styles.supportContent}>
-                    <Text style={[styles.supportTitle, { color: colors.text }]}>{action.title}</Text>
-                    <Text style={[styles.supportSubtitle, { color: colors.textSecondary }]}>
+                    <Text style={[styles.supportTitle, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>{action.title}</Text>
+                    <Text style={[styles.supportSubtitle, { color: colors.textSecondary, fontFamily: fonts.body }]}>
                       {action.subtitle}
                     </Text>
                   </View>
@@ -370,8 +370,8 @@ export default function SettingsScreen() {
 
         {/* App Info */}
         <View style={styles.appInfo}>
-          <Text style={[styles.appVersion, { color: colors.textSecondary }]}>{t('settings.appVersion')}</Text>
-          <Text style={[styles.appCopyright, { color: colors.textSecondary }]}>
+          <Text style={[styles.appVersion, { color: colors.textSecondary, fontFamily: fonts.body }]}>{t('settings.appVersion')}</Text>
+          <Text style={[styles.appCopyright, { color: colors.textSecondary, fontFamily: fonts.body }]}>
             {t('settings.appCopyright')}
           </Text>
         </View>
@@ -409,7 +409,6 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
     color: 'white',
   },
   headerSubtitle: {
@@ -433,8 +432,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
-    
+
     marginBottom: 16,
   },
   categoryHeader: {
@@ -452,7 +450,6 @@ const styles = StyleSheet.create({
   },
   categoryTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
   },
   settingsList: {
     
@@ -475,13 +472,12 @@ const styles = StyleSheet.create({
   },
   settingTitle: {
     fontSize: 16,
-    fontWeight: '600',
-    
+
     marginBottom: 2,
   },
   settingSubtitle: {
     fontSize: 14,
-    
+
   },
   actionButton: {
     padding: 8,
@@ -513,13 +509,12 @@ const styles = StyleSheet.create({
   },
   supportTitle: {
     fontSize: 16,
-    fontWeight: '600',
-    
+
     marginBottom: 2,
   },
   supportSubtitle: {
     fontSize: 14,
-    
+
   },
   appInfo: {
     padding: 20,

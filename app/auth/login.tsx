@@ -24,7 +24,7 @@ export default function LoginScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { resetSessionFlag } = useVSL();
-  const { colors, isDark } = useTheme();
+  const { colors, isDark, fonts } = useTheme();
   const { t } = useLanguage();
   const { login } = useUser();
 
@@ -64,8 +64,8 @@ export default function LoginScreen() {
             style={styles.logo}
             resizeMode="contain"
           />
-          <Text style={[styles.title, { color: colors.text }]}>{t('auth.login.title')}</Text>
-          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
+          <Text style={[styles.title, { color: colors.text, fontFamily: fonts.display }]}>{t('auth.login.title')}</Text>
+          <Text style={[styles.subtitle, { color: colors.textSecondary, fontFamily: fonts.body }]}>
             {t('auth.login.subtitle')}
           </Text>
         </View>
@@ -77,7 +77,7 @@ export default function LoginScreen() {
               <Mail size={20} color={colors.textSecondary} />
             </View>
             <TextInput
-              style={[styles.input, { color: colors.text }]}
+              style={[styles.input, { color: colors.text, fontFamily: fonts.body }]}
               placeholder={t('auth.login.emailPlaceholder')}
               placeholderTextColor={colors.textSecondary}
               value={email}
@@ -92,7 +92,7 @@ export default function LoginScreen() {
               <Lock size={20} color={colors.textSecondary} />
             </View>
             <TextInput
-              style={[styles.input, { paddingRight: 50, color: colors.text }]}
+              style={[styles.input, { paddingRight: 50, color: colors.text, fontFamily: fonts.body }]}
               placeholder={t('auth.login.passwordPlaceholder')}
               placeholderTextColor={colors.textSecondary}
               value={password}
@@ -115,7 +115,7 @@ export default function LoginScreen() {
             style={styles.forgotPassword}
             onPress={() => router.push('/auth/forgot-password')}
           >
-            <Text style={styles.forgotPasswordText}>{t('auth.login.forgotPassword')}</Text>
+            <Text style={[styles.forgotPasswordText, { fontFamily: fonts.bodySemiBold }]}>{t('auth.login.forgotPassword')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -124,10 +124,10 @@ export default function LoginScreen() {
             disabled={isLoading}
           >
             <LinearGradient
-              colors={['#8B5CF6', '#3B82F6']}
+              colors={['#4f46e5', '#3b82f6']}
               style={styles.loginGradient}
             >
-              <Text style={styles.loginText}>
+              <Text style={[styles.loginText, { fontFamily: fonts.bodyBold }]}>
                 {isLoading ? t('auth.login.loginButtonLoading') : t('auth.login.loginButton')}
               </Text>
             </LinearGradient>
@@ -136,7 +136,7 @@ export default function LoginScreen() {
           {/* Divider */}
           <View style={styles.divider}>
             <View style={[styles.dividerLine, { backgroundColor: isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)' }]} />
-            <Text style={[styles.dividerText, { color: colors.textSecondary }]}>{t('auth.login.divider')}</Text>
+            <Text style={[styles.dividerText, { color: colors.textSecondary, fontFamily: fonts.body }]}>{t('auth.login.divider')}</Text>
             <View style={[styles.dividerLine, { backgroundColor: isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)' }]} />
           </View>
 
@@ -160,9 +160,9 @@ export default function LoginScreen() {
 
         {/* Sign Up Link */}
         <View style={styles.footer}>
-          <Text style={[styles.footerText, { color: colors.textSecondary }]}>{t('auth.login.noAccount')}</Text>
+          <Text style={[styles.footerText, { color: colors.textSecondary, fontFamily: fonts.body }]}>{t('auth.login.noAccount')}</Text>
           <TouchableOpacity onPress={() => router.push('/auth/register')}>
-            <Text style={styles.signUpText}>{t('auth.login.signUp')}</Text>
+            <Text style={[styles.signUpText, { fontFamily: fonts.bodySemiBold }]}>{t('auth.login.signUp')}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -190,7 +190,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: 'bold',
     color: 'white',
     marginBottom: 8,
   },
@@ -232,8 +231,7 @@ const styles = StyleSheet.create({
   },
   forgotPasswordText: {
     fontSize: 14,
-    color: '#8B5CF6',
-    fontWeight: '600',
+    color: '#6366f1',
   },
   loginButton: {
     borderRadius: 12,
@@ -246,7 +244,6 @@ const styles = StyleSheet.create({
   },
   loginText: {
     fontSize: 16,
-    fontWeight: 'bold',
     color: 'white',
   },
   divider: {
@@ -281,7 +278,6 @@ const styles = StyleSheet.create({
   },
   socialButtonText: {
     fontSize: 18,
-    fontWeight: 'bold',
     color: 'white',
   },
   footer: {
@@ -295,7 +291,6 @@ const styles = StyleSheet.create({
   },
   signUpText: {
     fontSize: 16,
-    color: '#8B5CF6',
-    fontWeight: '600',
+    color: '#6366f1',
   },
 });

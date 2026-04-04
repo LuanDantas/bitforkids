@@ -33,6 +33,7 @@ import {
   Clock,
 } from 'lucide-react-native';
 import LineChart from '@/components/charts/LineChart';
+import GlassCard from '@/components/GlassCard';
 import Svg, { Polyline, Circle } from 'react-native-svg';
 
 const cryptos = [
@@ -246,7 +247,7 @@ const calculateQuantity = (amount: string, price: string): string => {
 };
 
 export default function PortfolioScreen() {
-  const { colors, isDark } = useTheme();
+  const { colors, fonts, isDark } = useTheme();
   const { t } = useLanguage();
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
@@ -557,36 +558,33 @@ export default function PortfolioScreen() {
           const TrendIcon = card.trend.icon;
           const chartColor = card.change >= 0 ? '#10B981' : '#EF4444';
           return (
-            <View
+            <GlassCard
               key={index}
-              style={[
-                styles.card,
-                { backgroundColor: colors.card, borderColor: colors.border },
-              ]}
+              style={styles.card}
             >
               <View style={styles.cardHeader}>
                 <Text
-                  style={[styles.cardTitle, { color: colors.textSecondary }]}
+                  style={[styles.cardTitle, { color: colors.textSecondary, fontFamily: fonts.bodySemiBold }]}
                 >
                   {card.title}
                 </Text>
                 <View style={styles.cardTrend}>
                   <TrendIcon size={14} color={card.trend.color} />
                   <Text
-                    style={[styles.cardTrendText, { color: card.trend.color }]}
+                    style={[styles.cardTrendText, { color: card.trend.color, fontFamily: fonts.secondaryMedium }]}
                   >
                     {card.change > 0 ? '+' : ''}
                     {card.change.toFixed(1)}%
                   </Text>
                 </View>
               </View>
-              <Text style={[styles.cardValue, { color: colors.text }]}>
+              <Text style={[styles.cardValue, { color: colors.text, fontFamily: fonts.display }]}>
                 {card.value}
               </Text>
               <View style={styles.cardChart}>
                 <EnhancedCardChart data={card.chartData} color={chartColor} />
               </View>
-            </View>
+            </GlassCard>
           );
         })}
       </View>
@@ -595,13 +593,10 @@ export default function PortfolioScreen() {
 
   const renderTransactionsTable = () => {
     return (
-      <View
-        style={[
-          styles.tableContainer,
-          { backgroundColor: colors.card, borderColor: colors.border },
-        ]}
+      <GlassCard
+        style={styles.tableContainer}
       >
-        <Text style={[styles.tableTitle, { color: colors.text }]}>
+        <Text style={[styles.tableTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
           {t('portfolio.profitAndLoss')}
         </Text>
 
@@ -611,7 +606,7 @@ export default function PortfolioScreen() {
               <Text
                 style={[
                   styles.tableHeaderText,
-                  { color: colors.textSecondary },
+                  { color: colors.textSecondary, fontFamily: fonts.bodySemiBold },
                 ]}
               >
                 {t('portfolio.crypto')}
@@ -619,7 +614,7 @@ export default function PortfolioScreen() {
               <Text
                 style={[
                   styles.tableHeaderText,
-                  { color: colors.textSecondary },
+                  { color: colors.textSecondary, fontFamily: fonts.bodySemiBold },
                 ]}
               >
                 {t('portfolio.currentPrice')}
@@ -627,7 +622,7 @@ export default function PortfolioScreen() {
               <Text
                 style={[
                   styles.tableHeaderText,
-                  { color: colors.textSecondary },
+                  { color: colors.textSecondary, fontFamily: fonts.bodySemiBold },
                 ]}
               >
                 {t('portfolio.quantity')}
@@ -635,7 +630,7 @@ export default function PortfolioScreen() {
               <Text
                 style={[
                   styles.tableHeaderText,
-                  { color: colors.textSecondary },
+                  { color: colors.textSecondary, fontFamily: fonts.bodySemiBold },
                 ]}
               >
                 {t('portfolio.deposit')}
@@ -643,7 +638,7 @@ export default function PortfolioScreen() {
               <Text
                 style={[
                   styles.tableHeaderText,
-                  { color: colors.textSecondary },
+                  { color: colors.textSecondary, fontFamily: fonts.bodySemiBold },
                 ]}
               >
                 {t('portfolio.balance')}
@@ -651,7 +646,7 @@ export default function PortfolioScreen() {
               <Text
                 style={[
                   styles.tableHeaderText,
-                  { color: colors.textSecondary },
+                  { color: colors.textSecondary, fontFamily: fonts.bodySemiBold },
                 ]}
               >
                 {t('portfolio.avgPrice')}
@@ -659,7 +654,7 @@ export default function PortfolioScreen() {
               <Text
                 style={[
                   styles.tableHeaderText,
-                  { color: colors.textSecondary },
+                  { color: colors.textSecondary, fontFamily: fonts.bodySemiBold },
                 ]}
               >
                 {t('portfolio.profit')}
@@ -667,7 +662,7 @@ export default function PortfolioScreen() {
               <Text
                 style={[
                   styles.tableHeaderText,
-                  { color: colors.textSecondary },
+                  { color: colors.textSecondary, fontFamily: fonts.bodySemiBold },
                 ]}
               >
                 {t('portfolio.profitPercent')}
@@ -675,7 +670,7 @@ export default function PortfolioScreen() {
               <Text
                 style={[
                   styles.tableHeaderText,
-                  { color: colors.textSecondary },
+                  { color: colors.textSecondary, fontFamily: fonts.bodySemiBold },
                 ]}
               >
                 {t('portfolio.trend')}
@@ -683,7 +678,7 @@ export default function PortfolioScreen() {
               <Text
                 style={[
                   styles.tableHeaderText,
-                  { color: colors.textSecondary },
+                  { color: colors.textSecondary, fontFamily: fonts.bodySemiBold },
                 ]}
               >
                 {t('portfolio.actions')}
@@ -700,12 +695,12 @@ export default function PortfolioScreen() {
               return (
                 <View key={transaction.id} style={styles.tableRow}>
                   <View style={styles.tableCell}>
-                    <Text style={[styles.cryptoCell, { color: colors.text }]}>
+                    <Text style={[styles.cryptoCell, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>
                       {crypto?.icon} {transaction.crypto}
                     </Text>
                   </View>
                   <View style={styles.tableCell}>
-                    <Text style={[styles.cellText, { color: colors.text }]}>
+                    <Text style={[styles.cellText, { color: colors.text, fontFamily: fonts.body }]}>
                       $
                       {transaction.currentPrice.toLocaleString('en-US', {
                         minimumFractionDigits: 2,
@@ -713,12 +708,12 @@ export default function PortfolioScreen() {
                     </Text>
                   </View>
                   <View style={styles.tableCell}>
-                    <Text style={[styles.cellText, { color: colors.text }]}>
+                    <Text style={[styles.cellText, { color: colors.text, fontFamily: fonts.body }]}>
                       {transaction.quantity}
                     </Text>
                   </View>
                   <View style={styles.tableCell}>
-                    <Text style={[styles.cellText, { color: colors.text }]}>
+                    <Text style={[styles.cellText, { color: colors.text, fontFamily: fonts.body }]}>
                       $
                       {transaction.investment.toLocaleString('en-US', {
                         minimumFractionDigits: 2,
@@ -726,7 +721,7 @@ export default function PortfolioScreen() {
                     </Text>
                   </View>
                   <View style={styles.tableCell}>
-                    <Text style={[styles.cellText, { color: colors.text }]}>
+                    <Text style={[styles.cellText, { color: colors.text, fontFamily: fonts.body }]}>
                       $
                       {transaction.balance.toLocaleString('en-US', {
                         minimumFractionDigits: 2,
@@ -734,7 +729,7 @@ export default function PortfolioScreen() {
                     </Text>
                   </View>
                   <View style={styles.tableCell}>
-                    <Text style={[styles.cellText, { color: colors.text }]}>
+                    <Text style={[styles.cellText, { color: colors.text, fontFamily: fonts.body }]}>
                       $
                       {(transaction.avgPrice || 0).toLocaleString('en-US', {
                         minimumFractionDigits: 2,
@@ -745,7 +740,7 @@ export default function PortfolioScreen() {
                     <Text
                       style={[
                         styles.cellText,
-                        { color: profitColor, fontWeight: 'bold' },
+                        { color: profitColor, fontFamily: fonts.bodyBold },
                       ]}
                     >
                       {transaction.profit >= 0 ? '+' : ''}$
@@ -759,6 +754,7 @@ export default function PortfolioScreen() {
                         {
                           backgroundColor: profitColor + '20',
                           color: profitColor,
+                          fontFamily: fonts.secondaryMedium,
                         },
                       ]}
                     >
@@ -774,7 +770,7 @@ export default function PortfolioScreen() {
                       ]}
                     >
                       <TrendIcon size={12} color={trend.color} />
-                      <Text style={[styles.trendText, { color: trend.color }]}>
+                      <Text style={[styles.trendText, { color: trend.color, fontFamily: fonts.secondaryMedium }]}>
                         {trend.label}
                       </Text>
                     </View>
@@ -800,7 +796,7 @@ export default function PortfolioScreen() {
             })}
           </View>
         </ScrollView>
-      </View>
+      </GlassCard>
     );
   };
 
@@ -808,11 +804,11 @@ export default function PortfolioScreen() {
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       {/* Header */}
       <LinearGradient
-        colors={isDark ? ['#1a1a1a', '#2a1a4a'] : ['#8B5CF6', '#3B82F6']}
+        colors={isDark ? ['#0f172a', '#1e293b'] : ['#4f46e5', '#3b82f6']}
         style={styles.header}
       >
-        <Text style={styles.headerTitle}>{t('portfolio.headerTitle')}</Text>
-        <Text style={styles.headerSubtitle}>
+        <Text style={[styles.headerTitle, { fontFamily: fonts.display }]}>{t('portfolio.headerTitle')}</Text>
+        <Text style={[styles.headerSubtitle, { fontFamily: fonts.body }]}>
           {t('portfolio.headerSubtitle')}
         </Text>
 
@@ -871,7 +867,7 @@ export default function PortfolioScreen() {
       <Modal visible={showWalletModal} transparent animationType="slide">
         <View style={styles.modalOverlay}>
           <View style={[styles.modalContent, { backgroundColor: colors.card }]}>
-            <Text style={[styles.modalTitle, { color: colors.text }]}>
+            <Text style={[styles.modalTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
               {t('portfolio.walletRegistration')}
             </Text>
 
@@ -908,7 +904,7 @@ export default function PortfolioScreen() {
                 <Text
                   style={[
                     styles.modalButtonText,
-                    { color: colors.text || '#000000' },
+                    { color: colors.text || '#000000', fontFamily: fonts.bodyBold },
                   ]}
                 >
                   {t('portfolio.cancel')}
@@ -921,7 +917,7 @@ export default function PortfolioScreen() {
                 ]}
                 onPress={handleAddWallet}
               >
-                <Text style={[styles.modalButtonText, { color: 'white' }]}>
+                <Text style={[styles.modalButtonText, { color: 'white', fontFamily: fonts.bodyBold }]}>
                   {t('portfolio.save')}
                 </Text>
               </TouchableOpacity>
@@ -936,13 +932,13 @@ export default function PortfolioScreen() {
           style={[styles.container, { backgroundColor: colors.background }]}
         >
           <LinearGradient
-            colors={['#1a1a1a', '#2a1a4a']}
+            colors={['#0f172a', '#1e293b']}
             style={styles.modalHeader}
           >
             <TouchableOpacity onPress={() => setShowWalletsList(false)}>
               <ChevronLeft size={24} color="white" />
             </TouchableOpacity>
-            <Text style={styles.modalHeaderTitle}>{t('portfolio.wallets')}</Text>
+            <Text style={[styles.modalHeaderTitle, { fontFamily: fonts.displaySemiBold }]}>{t('portfolio.wallets')}</Text>
             <View style={{ width: 24 }} />
           </LinearGradient>
 
@@ -952,18 +948,12 @@ export default function PortfolioScreen() {
               const TrendIcon = wallet.change >= 0 ? TrendingUp : TrendingDown;
 
               return (
-                <View
+                <GlassCard
                   key={wallet.id}
-                  style={[
-                    styles.walletCard,
-                    {
-                      backgroundColor: colors.card,
-                      borderColor: colors.border,
-                    },
-                  ]}
+                  style={styles.walletCard}
                 >
                   <View style={styles.walletHeader}>
-                    <Text style={[styles.walletName, { color: colors.text }]}>
+                    <Text style={[styles.walletName, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
                       {wallet.name}
                     </Text>
                     <View style={styles.walletActions}>
@@ -981,7 +971,7 @@ export default function PortfolioScreen() {
                   </View>
 
                   <View style={styles.walletStats}>
-                    <Text style={[styles.walletValue, { color: colors.text }]}>
+                    <Text style={[styles.walletValue, { color: colors.text, fontFamily: fonts.display }]}>
                       $
                       {wallet.totalValue.toLocaleString('en-US', {
                         minimumFractionDigits: 2,
@@ -996,7 +986,7 @@ export default function PortfolioScreen() {
                       <Text
                         style={[
                           styles.walletProfitText,
-                          { color: profitColor },
+                          { color: profitColor, fontFamily: fonts.bodySemiBold },
                         ]}
                       >
                         {wallet.profit >= 0 ? '+' : ''}$
@@ -1011,7 +1001,7 @@ export default function PortfolioScreen() {
                       color={profitColor}
                     />
                   </View>
-                </View>
+                </GlassCard>
               );
             })}
           </ScrollView>
@@ -1027,7 +1017,7 @@ export default function PortfolioScreen() {
             }}
           >
             <Plus size={24} color="white" />
-            <Text style={styles.addWalletText}>{t('portfolio.addWallet')}</Text>
+            <Text style={[styles.addWalletText, { fontFamily: fonts.bodyBold }]}>{t('portfolio.addWallet')}</Text>
           </TouchableOpacity>
         </View>
       </Modal>
@@ -1040,7 +1030,7 @@ export default function PortfolioScreen() {
       >
         <View style={styles.modalOverlay}>
           <View style={[styles.modalContent, { backgroundColor: colors.card }]}>
-            <Text style={[styles.modalTitle, { color: colors.text }]}>
+            <Text style={[styles.modalTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
               {t('portfolio.transactionType')}
             </Text>
             <TouchableOpacity
@@ -1052,7 +1042,7 @@ export default function PortfolioScreen() {
             >
               <Plus size={24} color={colors.primary} />
               <Text
-                style={[styles.transactionTypeText, { color: colors.text }]}
+                style={[styles.transactionTypeText, { color: colors.text, fontFamily: fonts.bodySemiBold }]}
               >
                 {t('portfolio.depositType')}
               </Text>
@@ -1066,7 +1056,7 @@ export default function PortfolioScreen() {
             >
               <Minus size={24} color="#EF4444" />
               <Text
-                style={[styles.transactionTypeText, { color: colors.text }]}
+                style={[styles.transactionTypeText, { color: colors.text, fontFamily: fonts.bodySemiBold }]}
               >
                 {t('portfolio.withdrawal')}
               </Text>
@@ -1077,13 +1067,13 @@ export default function PortfolioScreen() {
                 padding: 16,
                 borderRadius: 8,
                 alignItems: 'center',
-                backgroundColor: '#8B5CF6',
+                backgroundColor: '#6366f1',
               }}
               onPress={() => {
                 setShowTransactionModal(false);
               }}
             >
-              <Text style={[styles.modalButtonText, { color: '#FFFFFF' }]}>
+              <Text style={[styles.modalButtonText, { color: '#FFFFFF', fontFamily: fonts.bodyBold }]}>
                 {t('portfolio.cancel')}
               </Text>
             </TouchableOpacity>
@@ -1104,12 +1094,12 @@ export default function PortfolioScreen() {
               { backgroundColor: colors.card, maxHeight: '90%' },
             ]}
           >
-            <Text style={[styles.modalTitle, { color: colors.text }]}>
+            <Text style={[styles.modalTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
               {t('portfolio.registerDeposit')}
             </Text>
 
             {/* Crypto Selector */}
-            <Text style={[styles.label, { color: colors.text }]}>{t('portfolio.coin')}</Text>
+            <Text style={[styles.label, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>{t('portfolio.coin')}</Text>
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}
@@ -1157,6 +1147,7 @@ export default function PortfolioScreen() {
                           transactionForm.crypto === crypto.id
                             ? 'white'
                             : colors.text,
+                        fontFamily: fonts.secondaryMedium,
                       },
                     ]}
                   >
@@ -1167,7 +1158,7 @@ export default function PortfolioScreen() {
             </ScrollView>
 
             {/* Wallet Selector */}
-            <Text style={[styles.label, { color: colors.text }]}>{t('portfolio.wallet')}</Text>
+            <Text style={[styles.label, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>{t('portfolio.wallet')}</Text>
             <TouchableOpacity
               style={[
                 styles.select,
@@ -1182,6 +1173,7 @@ export default function PortfolioScreen() {
                     color: transactionForm.wallet
                       ? colors.text
                       : colors.textTertiary,
+                    fontFamily: fonts.body,
                   },
                 ]}
               >
@@ -1190,7 +1182,7 @@ export default function PortfolioScreen() {
             </TouchableOpacity>
 
             {/* Price */}
-            <Text style={[styles.label, { color: colors.text }]}>
+            <Text style={[styles.label, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>
               {t('portfolio.coinPrice')}
             </Text>
             <TextInput
@@ -1217,7 +1209,7 @@ export default function PortfolioScreen() {
             />
 
             {/* Date */}
-            <Text style={[styles.label, { color: colors.text }]}>
+            <Text style={[styles.label, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>
               {t('portfolio.depositDate')}
             </Text>
             <TouchableOpacity
@@ -1238,6 +1230,7 @@ export default function PortfolioScreen() {
                     ? colors.text
                     : colors.textTertiary,
                   fontSize: 16,
+                  fontFamily: fonts.body,
                 }}
               >
                 {transactionForm.date || 'DD/MM/YYYY'}
@@ -1245,7 +1238,7 @@ export default function PortfolioScreen() {
             </TouchableOpacity>
 
             {/* Amount */}
-            <Text style={[styles.label, { color: colors.text }]}>
+            <Text style={[styles.label, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>
               {t('portfolio.depositValue')}
             </Text>
             <TextInput
@@ -1272,7 +1265,7 @@ export default function PortfolioScreen() {
             />
 
             {/* Quantity */}
-            <Text style={[styles.label, { color: colors.text }]}>
+            <Text style={[styles.label, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>
               {t('portfolio.coinQuantity')}
             </Text>
             <TextInput
@@ -1310,7 +1303,7 @@ export default function PortfolioScreen() {
                 <Text
                   style={[
                     styles.modalButtonText,
-                    { color: colors.text || '#000000' },
+                    { color: colors.text || '#000000', fontFamily: fonts.bodyBold },
                   ]}
                 >
                   {t('portfolio.cancel')}
@@ -1323,7 +1316,7 @@ export default function PortfolioScreen() {
                 ]}
                 onPress={handleAddTransaction}
               >
-                <Text style={[styles.modalButtonText, { color: 'white' }]}>
+                <Text style={[styles.modalButtonText, { color: 'white', fontFamily: fonts.bodyBold }]}>
                   {t('portfolio.save')}
                 </Text>
               </TouchableOpacity>
@@ -1341,7 +1334,7 @@ export default function PortfolioScreen() {
       >
         <View style={styles.modalOverlay}>
           <View style={[styles.modalContent, { backgroundColor: colors.card }]}>
-            <Text style={[styles.modalTitle, { color: colors.text }]}>
+            <Text style={[styles.modalTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
               {t('portfolio.selectWallet')}
             </Text>
 
@@ -1376,6 +1369,7 @@ export default function PortfolioScreen() {
                           transactionForm.wallet === wallet.name
                             ? colors.primary
                             : colors.text,
+                        fontFamily: fonts.bodySemiBold,
                       },
                     ]}
                   >
@@ -1418,7 +1412,7 @@ export default function PortfolioScreen() {
       >
         <View style={styles.modalOverlay}>
           <View style={[styles.modalContent, { backgroundColor: colors.card }]}>
-            <Text style={[styles.modalTitle, { color: colors.text }]}>
+            <Text style={[styles.modalTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
               {t('portfolio.selectDate')}
             </Text>
 
@@ -1432,7 +1426,7 @@ export default function PortfolioScreen() {
             >
               {/* Days of month */}
               <View style={{ flex: 1 }}>
-                <Text style={[styles.label, { color: colors.text }]}>
+                <Text style={[styles.label, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>
                   {t('portfolio.dayOfMonth')}
                 </Text>
                 <ScrollView style={{ maxHeight: 200 }}>
@@ -1460,7 +1454,7 @@ export default function PortfolioScreen() {
                         setShowDatePicker(false);
                       }}
                     >
-                      <Text style={{ color: colors.text, fontWeight: '600' }}>
+                      <Text style={{ color: colors.text, fontFamily: fonts.bodySemiBold }}>
                         {day}
                       </Text>
                     </TouchableOpacity>
@@ -1507,7 +1501,6 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 28,
-    fontWeight: 'bold',
     color: 'white',
     marginBottom: 4,
   },
@@ -1558,8 +1551,6 @@ const styles = StyleSheet.create({
   card: {
     width: '100%',
     borderRadius: 12,
-    padding: 16,
-    borderWidth: 1,
   },
   cardHeader: {
     flexDirection: 'row',
@@ -1569,11 +1560,9 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontSize: 14,
-    fontWeight: '600',
   },
   cardValue: {
     fontSize: 24,
-    fontWeight: 'bold',
     marginBottom: 16,
   },
   cardTrend: {
@@ -1583,7 +1572,6 @@ const styles = StyleSheet.create({
   },
   cardTrendText: {
     fontSize: 12,
-    fontWeight: '600',
   },
   cardChart: {
     alignItems: 'flex-start',
@@ -1593,12 +1581,9 @@ const styles = StyleSheet.create({
   },
   tableContainer: {
     borderRadius: 12,
-    borderWidth: 1,
-    padding: 16,
   },
   tableTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
     marginBottom: 16,
   },
   table: {
@@ -1613,7 +1598,6 @@ const styles = StyleSheet.create({
   },
   tableHeaderText: {
     fontSize: 12,
-    fontWeight: '600',
     width: 100,
   },
   tableRow: {
@@ -1631,14 +1615,12 @@ const styles = StyleSheet.create({
   },
   cryptoCell: {
     fontSize: 14,
-    fontWeight: '600',
   },
   percentageBadge: {
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
     fontSize: 12,
-    fontWeight: '600',
   },
   trendBadge: {
     flexDirection: 'row',
@@ -1650,7 +1632,6 @@ const styles = StyleSheet.create({
   },
   trendText: {
     fontSize: 10,
-    fontWeight: '600',
   },
   actionsCell: {
     flexDirection: 'row',
@@ -1676,7 +1657,6 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
     marginBottom: 20,
     textAlign: 'center',
   },
@@ -1689,7 +1669,6 @@ const styles = StyleSheet.create({
   },
   modalHeaderTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
     color: 'white',
   },
   input: {
@@ -1701,7 +1680,6 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    fontWeight: '600',
     marginBottom: 8,
   },
   modalButtons: {
@@ -1717,7 +1695,6 @@ const styles = StyleSheet.create({
   },
   modalButtonText: {
     fontSize: 16,
-    fontWeight: '600',
   },
   walletsList: {
     flex: 1,
@@ -1725,9 +1702,7 @@ const styles = StyleSheet.create({
   },
   walletCard: {
     borderRadius: 12,
-    padding: 16,
     marginBottom: 16,
-    borderWidth: 1,
   },
   walletHeader: {
     flexDirection: 'row',
@@ -1737,7 +1712,6 @@ const styles = StyleSheet.create({
   },
   walletName: {
     fontSize: 18,
-    fontWeight: 'bold',
   },
   walletActions: {
     flexDirection: 'row',
@@ -1751,7 +1725,6 @@ const styles = StyleSheet.create({
   },
   walletValue: {
     fontSize: 24,
-    fontWeight: 'bold',
   },
   walletProfitBadge: {
     paddingHorizontal: 12,
@@ -1760,7 +1733,6 @@ const styles = StyleSheet.create({
   },
   walletProfitText: {
     fontSize: 14,
-    fontWeight: '600',
   },
   walletChart: {
     minHeight: 200,
@@ -1778,7 +1750,6 @@ const styles = StyleSheet.create({
   },
   addWalletText: {
     fontSize: 16,
-    fontWeight: '600',
     color: 'white',
   },
   transactionTypeButton: {
@@ -1793,7 +1764,6 @@ const styles = StyleSheet.create({
   },
   transactionTypeText: {
     fontSize: 16,
-    fontWeight: '600',
   },
   cryptoSelector: {
     marginBottom: 16,
@@ -1812,7 +1782,6 @@ const styles = StyleSheet.create({
   },
   cryptoOptionText: {
     fontSize: 12,
-    fontWeight: '600',
   },
   select: {
     borderWidth: 1,
@@ -1831,7 +1800,6 @@ const styles = StyleSheet.create({
   },
   walletPickerText: {
     fontSize: 16,
-    fontWeight: '600',
   },
   dayButton: {
     padding: 12,

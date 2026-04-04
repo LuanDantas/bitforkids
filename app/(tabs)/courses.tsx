@@ -14,13 +14,14 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useUser } from '@/contexts/UserContext';
 import AnimatedSection from '@/components/AnimatedSection';
 import AnimatedPressable from '@/components/AnimatedPressable';
+import GlassCard from '@/components/GlassCard';
 import {
   ChevronRight,
   Shield,
 } from 'lucide-react-native';
 
 const cardShadow = Platform.select({
-  ios: { shadowColor: '#8B5CF6', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.15, shadowRadius: 12 },
+  ios: { shadowColor: '#6366f1', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.15, shadowRadius: 12 },
   android: { elevation: 6 },
   default: {},
 }) as any;
@@ -62,7 +63,7 @@ const targetAudience = [
   { emoji: '💰', title: 'Cansado da desvalorização', desc: 'Guardar em moedas fortes, como Dólar e Bitcoin.' },
 ];
 
-function CourseCard({ course, onPress, colors, t, owned }: any) {
+function CourseCard({ course, onPress, colors, fonts, t, owned }: any) {
   return (
     <AnimatedPressable
       style={[styles.courseCard, { backgroundColor: colors.card }, cardShadow]}
@@ -71,30 +72,30 @@ function CourseCard({ course, onPress, colors, t, owned }: any) {
       <Image source={course.image} style={styles.courseImage} resizeMode="cover" />
       {owned && (
         <View style={styles.ownedBadge}>
-          <Text style={styles.ownedBadgeText}>✅ {t('courses.owned') || 'Adquirido'}</Text>
+          <Text style={[styles.ownedBadgeText, { fontFamily: fonts.secondaryMedium }]}>✅ {t('courses.owned') || 'Adquirido'}</Text>
         </View>
       )}
       <View style={styles.courseContent}>
-        <Text style={[styles.courseTitle, { color: colors.text }]}>{course.title}</Text>
-        <Text style={[styles.courseSubtitle, { color: colors.textSecondary }]} numberOfLines={3}>
+        <Text style={[styles.courseTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>{course.title}</Text>
+        <Text style={[styles.courseSubtitle, { color: colors.textSecondary, fontFamily: fonts.body }]} numberOfLines={3}>
           {course.subtitle}
         </Text>
         <View style={styles.courseFooter}>
           <View>
             {owned ? (
-              <Text style={[styles.coursePrice, { color: '#10B981' }]}>✅</Text>
+              <Text style={[styles.coursePrice, { color: '#10B981', fontFamily: fonts.bodyBold }]}>✅</Text>
             ) : (
               <>
-                <Text style={styles.priceLabel}>{t('courses.priceLabel')}</Text>
-                <Text style={styles.coursePrice}>R$ {course.price}</Text>
+                <Text style={[styles.priceLabel, { fontFamily: fonts.secondaryMedium }]}>{t('courses.priceLabel')}</Text>
+                <Text style={[styles.coursePrice, { fontFamily: fonts.bodyBold }]}>R$ {course.price}</Text>
               </>
             )}
           </View>
           <LinearGradient
-            colors={owned ? ['#10B981', '#059669'] as const : ['#8B5CF6', '#6D28D9'] as const}
+            colors={owned ? ['#10B981', '#059669'] as const : ['#4f46e5', '#3b82f6'] as const}
             style={styles.courseBtn}
           >
-            <Text style={styles.courseBtnText}>{owned ? (t('courses.access') || 'Acessar') : t('courses.viewCourse')}</Text>
+            <Text style={[styles.courseBtnText, { fontFamily: fonts.bodyBold }]}>{owned ? (t('courses.access') || 'Acessar') : t('courses.viewCourse')}</Text>
             <ChevronRight size={16} color="#FFF" />
           </LinearGradient>
         </View>
@@ -105,7 +106,7 @@ function CourseCard({ course, onPress, colors, t, owned }: any) {
 
 export default function CoursesScreen() {
   const router = useRouter();
-  const { colors, isDark } = useTheme();
+  const { colors, fonts, isDark } = useTheme();
   const { t } = useLanguage();
   const { hasCourseAccess } = useUser();
 
@@ -137,9 +138,9 @@ export default function CoursesScreen() {
       showsVerticalScrollIndicator={false}
     >
       {/* Header */}
-      <LinearGradient colors={isDark ? ['#1a1a1a', '#2a1a4a'] as const : ['#8B5CF6', '#3B82F6'] as const} style={styles.header}>
-        <Text style={styles.headerTitle}>{t('courses.headerTitle')}</Text>
-        <Text style={styles.headerSubtitle}>
+      <LinearGradient colors={isDark ? ['#0f172a', '#1e293b'] as const : ['#4f46e5', '#3b82f6'] as const} style={styles.header}>
+        <Text style={[styles.headerTitle, { fontFamily: fonts.display }]}>{t('courses.headerTitle')}</Text>
+        <Text style={[styles.headerSubtitle, { fontFamily: fonts.body }]}>
           {t('courses.headerSubtitle')}
         </Text>
       </LinearGradient>
@@ -148,21 +149,21 @@ export default function CoursesScreen() {
 
         {/* Para quem são */}
         <AnimatedSection>
-        <Text style={[styles.sectionTitle, { color: colors.text }]}>
+        <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.display }]}>
           {t('courses.targetTitle')}
         </Text>
-        <Text style={[styles.sectionDesc, { color: colors.textSecondary }]}>
+        <Text style={[styles.sectionDesc, { color: colors.textSecondary, fontFamily: fonts.body }]}>
           {t('courses.targetDesc')}
         </Text>
 
         {translatedAudience.map((item, index) => (
-          <View key={index} style={[styles.audienceItem, { backgroundColor: colors.card }]}>
+          <GlassCard key={index} style={styles.audienceItem}>
             <Text style={styles.audienceEmoji}>{item.emoji}</Text>
             <View style={styles.audienceContent}>
-              <Text style={[styles.audienceTitle, { color: colors.text }]}>{item.title}</Text>
-              <Text style={[styles.audienceDesc, { color: colors.textSecondary }]}>{item.desc}</Text>
+              <Text style={[styles.audienceTitle, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>{item.title}</Text>
+              <Text style={[styles.audienceDesc, { color: colors.textSecondary, fontFamily: fonts.body }]}>{item.desc}</Text>
             </View>
-          </View>
+          </GlassCard>
         ))}
         </AnimatedSection>
 
@@ -171,9 +172,9 @@ export default function CoursesScreen() {
         {/* Trilha 1 */}
         <AnimatedSection>
         <LinearGradient colors={['#F7931A', '#E2761B'] as const} style={styles.trailBadge}>
-          <Text style={styles.trailBadgeText}>🟠 {t('courses.trail1Badge')}</Text>
+          <Text style={[styles.trailBadgeText, { fontFamily: fonts.bodyBold }]}>🟠 {t('courses.trail1Badge')}</Text>
         </LinearGradient>
-        <Text style={[styles.trailSubtitle, { color: colors.textSecondary }]}>
+        <Text style={[styles.trailSubtitle, { color: colors.textSecondary, fontFamily: fonts.body }]}>
           {t('courses.trail1Subtitle')}
         </Text>
 
@@ -183,6 +184,7 @@ export default function CoursesScreen() {
             course={course}
             onPress={() => router.push(`/course/${course.id}`)}
             colors={colors}
+            fonts={fonts}
             t={t}
             owned={hasCourseAccess(course.id)}
           />
@@ -194,9 +196,9 @@ export default function CoursesScreen() {
         {/* Trilha 2 */}
         <AnimatedSection>
         <LinearGradient colors={['#3B82F6', '#1D4ED8'] as const} style={styles.trailBadge}>
-          <Text style={styles.trailBadgeText}>🔵 {t('courses.trail2Badge')}</Text>
+          <Text style={[styles.trailBadgeText, { fontFamily: fonts.bodyBold }]}>🔵 {t('courses.trail2Badge')}</Text>
         </LinearGradient>
-        <Text style={[styles.trailSubtitle, { color: colors.textSecondary }]}>
+        <Text style={[styles.trailSubtitle, { color: colors.textSecondary, fontFamily: fonts.body }]}>
           {t('courses.trail2Subtitle')}
         </Text>
 
@@ -206,6 +208,7 @@ export default function CoursesScreen() {
             course={course}
             onPress={() => router.push(`/course/${course.id}`)}
             colors={colors}
+            fonts={fonts}
             t={t}
             owned={hasCourseAccess(course.id)}
           />
@@ -216,15 +219,15 @@ export default function CoursesScreen() {
 
         {/* Garantia */}
         <AnimatedSection>
-        <View style={[styles.guaranteeCard, { backgroundColor: colors.card }]}>
+        <GlassCard style={styles.guaranteeCard}>
           <Shield size={32} color="#10B981" />
-          <Text style={[styles.guaranteeTitle, { color: colors.text }]}>
+          <Text style={[styles.guaranteeTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
             {t('courses.guaranteeTitle')}
           </Text>
-          <Text style={[styles.guaranteeDesc, { color: colors.textSecondary }]}>
+          <Text style={[styles.guaranteeDesc, { color: colors.textSecondary, fontFamily: fonts.body }]}>
             {t('courses.guaranteeDesc')}
           </Text>
-        </View>
+        </GlassCard>
         </AnimatedSection>
 
         <View style={{ height: 40 }} />
@@ -247,7 +250,6 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 28,
-    fontWeight: 'bold',
     color: '#FFFFFF',
     marginBottom: 4,
   },
@@ -261,7 +263,6 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 22,
-    fontWeight: 'bold',
     marginBottom: 8,
   },
   sectionDesc: {
@@ -272,10 +273,7 @@ const styles = StyleSheet.create({
   audienceItem: {
     flexDirection: 'row',
     padding: 14,
-    borderRadius: 16,
     marginBottom: 8,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.05)',
   },
   audienceEmoji: {
     fontSize: 20,
@@ -294,7 +292,6 @@ const styles = StyleSheet.create({
   },
   audienceTitle: {
     fontSize: 15,
-    fontWeight: '700',
     marginBottom: 2,
   },
   audienceDesc: {
@@ -315,7 +312,6 @@ const styles = StyleSheet.create({
   trailBadgeText: {
     color: '#FFFFFF',
     fontSize: 15,
-    fontWeight: 'bold',
   },
   trailSubtitle: {
     fontSize: 14,
@@ -346,14 +342,12 @@ const styles = StyleSheet.create({
   ownedBadgeText: {
     color: '#FFF',
     fontSize: 12,
-    fontWeight: '700',
   },
   courseContent: {
     padding: 16,
   },
   courseTitle: {
     fontSize: 17,
-    fontWeight: 'bold',
     marginBottom: 6,
   },
   courseSubtitle: {
@@ -373,7 +367,6 @@ const styles = StyleSheet.create({
   },
   coursePrice: {
     fontSize: 20,
-    fontWeight: 'bold',
     color: '#10B981',
   },
   courseBtn: {
@@ -387,14 +380,10 @@ const styles = StyleSheet.create({
   courseBtnText: {
     color: '#FFFFFF',
     fontSize: 14,
-    fontWeight: '600',
   },
   guaranteeCard: {
-    borderRadius: 16,
     padding: 24,
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'rgba(16, 185, 129, 0.2)',
     ...Platform.select({
       ios: { shadowColor: '#10B981', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.15, shadowRadius: 10 },
       android: { elevation: 4 },
@@ -402,7 +391,6 @@ const styles = StyleSheet.create({
   },
   guaranteeTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
     marginTop: 12,
     marginBottom: 8,
     textAlign: 'center',

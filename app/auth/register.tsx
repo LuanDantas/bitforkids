@@ -26,7 +26,7 @@ export default function RegisterScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const router = useRouter();
-  const { colors, isDark } = useTheme();
+  const { colors, isDark, fonts } = useTheme();
   const { t } = useLanguage();
   const { source, plan } = useLocalSearchParams();
   const { trackVSLConversion, resetSessionFlag } = useVSL();
@@ -99,15 +99,15 @@ export default function RegisterScreen() {
               style={styles.logo}
               resizeMode="contain"
             />
-            <Text style={[styles.title, { color: colors.text }]}>{t('auth.register.title')}</Text>
-            <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
+            <Text style={[styles.title, { color: colors.text, fontFamily: fonts.display }]}>{t('auth.register.title')}</Text>
+            <Text style={[styles.subtitle, { color: colors.textSecondary, fontFamily: fonts.body }]}>
               {source === 'vsl'
                 ? t('auth.register.subtitleVSL')
                 : t('auth.register.subtitleDefault')}
             </Text>
             {source === 'vsl' && plan === 'premium' && (
               <View style={styles.vslBadge}>
-                <Text style={styles.vslBadgeText}>
+                <Text style={[styles.vslBadgeText, { fontFamily: fonts.secondaryMedium }]}>
                   🎯 {t('auth.register.vslBadge')}
                 </Text>
               </View>
@@ -121,7 +121,7 @@ export default function RegisterScreen() {
                 <User size={20} color={colors.textSecondary} />
               </View>
               <TextInput
-                style={[styles.input, { color: colors.text }]}
+                style={[styles.input, { color: colors.text, fontFamily: fonts.body }]}
                 placeholder={t('auth.register.namePlaceholder')}
                 placeholderTextColor={colors.textSecondary}
                 value={name}
@@ -134,7 +134,7 @@ export default function RegisterScreen() {
                 <Mail size={20} color={colors.textSecondary} />
               </View>
               <TextInput
-                style={[styles.input, { color: colors.text }]}
+                style={[styles.input, { color: colors.text, fontFamily: fonts.body }]}
                 placeholder={t('auth.register.emailPlaceholder')}
                 placeholderTextColor={colors.textSecondary}
                 value={email}
@@ -149,7 +149,7 @@ export default function RegisterScreen() {
                 <Lock size={20} color={colors.textSecondary} />
               </View>
               <TextInput
-                style={[styles.input, { paddingRight: 50 }]}
+                style={[styles.input, { paddingRight: 50, fontFamily: fonts.body }]}
                 placeholder={t('auth.register.passwordPlaceholder')}
                 placeholderTextColor={colors.textSecondary}
                 value={password}
@@ -173,7 +173,7 @@ export default function RegisterScreen() {
                 <Lock size={20} color={colors.textSecondary} />
               </View>
               <TextInput
-                style={[styles.input, { paddingRight: 50 }]}
+                style={[styles.input, { paddingRight: 50, fontFamily: fonts.body }]}
                 placeholder={t('auth.register.confirmPasswordPlaceholder')}
                 placeholderTextColor={colors.textSecondary}
                 value={confirmPassword}
@@ -205,10 +205,10 @@ export default function RegisterScreen() {
               >
                 {acceptedTerms && <Text style={styles.checkmark}>✓</Text>}
               </View>
-              <Text style={styles.termsText}>
+              <Text style={[styles.termsText, { fontFamily: fonts.body }]}>
                 {t('auth.register.termsPrefix')}
-                <Text style={styles.termsLink}>{t('auth.register.termsLink')}</Text>{t('auth.register.termsAnd')}
-                <Text style={styles.termsLink}>{t('auth.register.privacyLink')}</Text>
+                <Text style={[styles.termsLink, { fontFamily: fonts.bodySemiBold }]}>{t('auth.register.termsLink')}</Text>{t('auth.register.termsAnd')}
+                <Text style={[styles.termsLink, { fontFamily: fonts.bodySemiBold }]}>{t('auth.register.privacyLink')}</Text>
               </Text>
             </TouchableOpacity>
 
@@ -218,10 +218,10 @@ export default function RegisterScreen() {
               disabled={isLoading}
             >
               <LinearGradient
-                colors={['#8B5CF6', '#3B82F6']}
+                colors={['#4f46e5', '#3b82f6']}
                 style={styles.registerGradient}
               >
-                <Text style={styles.registerText}>
+                <Text style={[styles.registerText, { fontFamily: fonts.bodyBold }]}>
                   {isLoading ? t('auth.register.registerButtonLoading') : t('auth.register.registerButton')}
                 </Text>
               </LinearGradient>
@@ -230,9 +230,9 @@ export default function RegisterScreen() {
 
           {/* Login Link */}
           <View style={styles.footer}>
-            <Text style={[styles.footerText, { color: colors.textSecondary }]}>{t('auth.register.hasAccount')}</Text>
+            <Text style={[styles.footerText, { color: colors.textSecondary, fontFamily: fonts.body }]}>{t('auth.register.hasAccount')}</Text>
             <TouchableOpacity onPress={() => router.push('/auth/login')}>
-              <Text style={styles.loginText}>{t('auth.register.loginLink')}</Text>
+              <Text style={[styles.loginText, { fontFamily: fonts.bodySemiBold }]}>{t('auth.register.loginLink')}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -263,7 +263,6 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: 'bold',
     color: 'white',
     marginBottom: 8,
   },
@@ -285,7 +284,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#F59E0B',
     textAlign: 'center',
-    fontWeight: '600',
   },
   form: {
     marginBottom: 40,
@@ -332,13 +330,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   checkboxChecked: {
-    backgroundColor: '#8B5CF6',
-    borderColor: '#8B5CF6',
+    backgroundColor: '#6366f1',
+    borderColor: '#6366f1',
   },
   checkmark: {
     color: 'white',
     fontSize: 12,
-    fontWeight: 'bold',
   },
   termsText: {
     flex: 1,
@@ -347,8 +344,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   termsLink: {
-    color: '#8B5CF6',
-    fontWeight: '600',
+    color: '#6366f1',
   },
   registerButton: {
     borderRadius: 12,
@@ -360,7 +356,6 @@ const styles = StyleSheet.create({
   },
   registerText: {
     fontSize: 16,
-    fontWeight: 'bold',
     color: 'white',
   },
   footer: {
@@ -375,7 +370,6 @@ const styles = StyleSheet.create({
   },
   loginText: {
     fontSize: 16,
-    color: '#8B5CF6',
-    fontWeight: '600',
+    color: '#6366f1',
   },
 });

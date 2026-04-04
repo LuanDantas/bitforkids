@@ -47,7 +47,7 @@ interface PrivacySettings {
 
 export default function PrivacyScreen() {
   const router = useRouter();
-  const { colors, isDark } = useTheme();
+  const { colors, fonts, isDark } = useTheme();
   const { t } = useLanguage();
 
   const [settings, setSettings] = useState<PrivacySettings>({
@@ -178,7 +178,7 @@ export default function PrivacyScreen() {
     {
       title: t('privacy.categoryDataAnalytics'),
       icon: Database,
-      color: '#8B5CF6',
+      color: '#6366f1',
       items: [
         {
           key: 'dataAnalytics' as keyof PrivacySettings,
@@ -232,7 +232,7 @@ export default function PrivacyScreen() {
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       {/* Header */}
-      <LinearGradient colors={isDark ? ['#1a1a1a', '#2a1a4a'] as const : ['#8B5CF6', '#3B82F6'] as const} style={styles.header}>
+      <LinearGradient colors={isDark ? ['#0f172a', '#1e293b'] as const : ['#4f46e5', '#3b82f6'] as const} style={styles.header}>
         <View style={styles.headerContent}>
           <TouchableOpacity
             style={styles.backButton}
@@ -241,8 +241,8 @@ export default function PrivacyScreen() {
             <ArrowLeft size={24} color="white" />
           </TouchableOpacity>
           <View style={styles.headerText}>
-            <Text style={styles.headerTitle}>{t('privacy.headerTitle')}</Text>
-            <Text style={styles.headerSubtitle}>{t('privacy.headerSubtitle')}</Text>
+            <Text style={[styles.headerTitle, { fontFamily: fonts.display }]}>{t('privacy.headerTitle')}</Text>
+            <Text style={[styles.headerSubtitle, { fontFamily: fonts.body }]}>{t('privacy.headerSubtitle')}</Text>
           </View>
           <View style={styles.headerRight}>
             <Shield size={24} color="white" />
@@ -253,7 +253,7 @@ export default function PrivacyScreen() {
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {/* Security Info */}
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('privacy.securityTitle')}</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>{t('privacy.securityTitle')}</Text>
           {securityInfo.map((info, index) => {
             const Icon = info.icon;
             return (
@@ -262,8 +262,8 @@ export default function PrivacyScreen() {
                   <Icon size={20} color="#10B981" />
                 </View>
                 <View style={styles.infoContent}>
-                  <Text style={[styles.infoTitle, { color: colors.text }]}>{info.title}</Text>
-                  <Text style={[styles.infoDescription, { color: colors.textSecondary }]}>{info.description}</Text>
+                  <Text style={[styles.infoTitle, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>{info.title}</Text>
+                  <Text style={[styles.infoDescription, { color: colors.textSecondary, fontFamily: fonts.body }]}>{info.description}</Text>
                 </View>
               </View>
             );
@@ -284,7 +284,7 @@ export default function PrivacyScreen() {
                 >
                   <Icon size={20} color={category.color} />
                 </View>
-                <Text style={[styles.categoryTitle, { color: colors.text }]}>{category.title}</Text>
+                <Text style={[styles.categoryTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>{category.title}</Text>
               </View>
 
               <View style={[styles.settingsList, { backgroundColor: colors.card, borderColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }]}>
@@ -293,8 +293,8 @@ export default function PrivacyScreen() {
                   return (
                     <View key={itemIndex} style={[styles.settingItem, { borderBottomColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }]}>
                       <View style={styles.settingContent}>
-                        <Text style={[styles.settingTitle, { color: colors.text }]}>{item.title}</Text>
-                        <Text style={[styles.settingSubtitle, { color: colors.textSecondary }]}>
+                        <Text style={[styles.settingTitle, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>{item.title}</Text>
+                        <Text style={[styles.settingSubtitle, { color: colors.textSecondary, fontFamily: fonts.body }]}>
                           {item.subtitle}
                         </Text>
                       </View>
@@ -317,7 +317,7 @@ export default function PrivacyScreen() {
 
         {/* Data Actions */}
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('privacy.manageDataTitle')}</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>{t('privacy.manageDataTitle')}</Text>
           <View style={[styles.actionsList, { backgroundColor: colors.card, borderColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }]}>
             {dataActions.map((action, index) => {
               const Icon = action.icon;
@@ -336,8 +336,8 @@ export default function PrivacyScreen() {
                     <Icon size={20} color={action.color} />
                   </View>
                   <View style={styles.actionContent}>
-                    <Text style={[styles.actionTitle, { color: colors.text }]}>{action.title}</Text>
-                    <Text style={[styles.actionSubtitle, { color: colors.textSecondary }]}>{action.subtitle}</Text>
+                    <Text style={[styles.actionTitle, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>{action.title}</Text>
+                    <Text style={[styles.actionSubtitle, { color: colors.textSecondary, fontFamily: fonts.body }]}>{action.subtitle}</Text>
                   </View>
                   <ArrowLeft
                     size={20}
@@ -352,7 +352,7 @@ export default function PrivacyScreen() {
 
         {/* Legal Documents */}
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('privacy.legalTitle')}</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>{t('privacy.legalTitle')}</Text>
           <View style={[styles.legalList, { backgroundColor: colors.card, borderColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }]}>
             <TouchableOpacity
               style={[styles.legalItem, { borderBottomColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }]}
@@ -362,8 +362,8 @@ export default function PrivacyScreen() {
                 <FileText size={20} color="#3B82F6" />
               </View>
               <View style={styles.legalContent}>
-                <Text style={[styles.legalTitle, { color: colors.text }]}>{t('privacy.privacyPolicy')}</Text>
-                <Text style={[styles.legalSubtitle, { color: colors.textSecondary }]}>
+                <Text style={[styles.legalTitle, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>{t('privacy.privacyPolicy')}</Text>
+                <Text style={[styles.legalSubtitle, { color: colors.textSecondary, fontFamily: fonts.body }]}>
                   {t('privacy.privacyPolicyDesc')}
                 </Text>
               </View>
@@ -379,11 +379,11 @@ export default function PrivacyScreen() {
               onPress={openTermsOfService}
             >
               <View style={styles.legalIcon}>
-                <FileText size={20} color="#8B5CF6" />
+                <FileText size={20} color="#6366f1" />
               </View>
               <View style={styles.legalContent}>
-                <Text style={[styles.legalTitle, { color: colors.text }]}>{t('privacy.termsOfService')}</Text>
-                <Text style={[styles.legalSubtitle, { color: colors.textSecondary }]}>
+                <Text style={[styles.legalTitle, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>{t('privacy.termsOfService')}</Text>
+                <Text style={[styles.legalSubtitle, { color: colors.textSecondary, fontFamily: fonts.body }]}>
                   {t('privacy.termsOfServiceDesc')}
                 </Text>
               </View>
@@ -403,22 +403,22 @@ export default function PrivacyScreen() {
               <AlertTriangle size={24} color="#F59E0B" />
             </View>
             <View style={styles.supportContent}>
-              <Text style={[styles.supportTitle, { color: colors.text }]}>{t('privacy.helpTitle')}</Text>
-              <Text style={[styles.supportDescription, { color: colors.textSecondary }]}>
+              <Text style={[styles.supportTitle, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>{t('privacy.helpTitle')}</Text>
+              <Text style={[styles.supportDescription, { color: colors.textSecondary, fontFamily: fonts.body }]}>
                 {t('privacy.helpDesc')}
               </Text>
             </View>
             <TouchableOpacity style={styles.supportButton}>
               <Mail size={16} color="white" />
-              <Text style={styles.supportButtonText}>{t('privacy.helpContact')}</Text>
+              <Text style={[styles.supportButtonText, { fontFamily: fonts.bodySemiBold }]}>{t('privacy.helpContact')}</Text>
             </TouchableOpacity>
           </View>
         </View>
 
         {/* App Info */}
         <View style={styles.appInfo}>
-          <Text style={[styles.appVersion, { color: colors.textSecondary }]}>{t('privacy.appVersion')}</Text>
-          <Text style={[styles.appCopyright, { color: colors.textSecondary }]}>
+          <Text style={[styles.appVersion, { color: colors.textSecondary, fontFamily: fonts.body }]}>{t('privacy.appVersion')}</Text>
+          <Text style={[styles.appCopyright, { color: colors.textSecondary, fontFamily: fonts.body }]}>
             {t('privacy.appCopyright')}
           </Text>
         </View>
@@ -455,7 +455,6 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
     color: 'white',
   },
   headerSubtitle: {
@@ -479,8 +478,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
-    
+
     marginBottom: 16,
   },
   infoCard: {
@@ -507,13 +505,12 @@ const styles = StyleSheet.create({
   },
   infoTitle: {
     fontSize: 16,
-    fontWeight: '600',
-    
+
     marginBottom: 4,
   },
   infoDescription: {
     fontSize: 14,
-    
+
   },
   categoryHeader: {
     flexDirection: 'row',
@@ -530,8 +527,7 @@ const styles = StyleSheet.create({
   },
   categoryTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
-    
+
   },
   settingsList: {
     
@@ -554,13 +550,12 @@ const styles = StyleSheet.create({
   },
   settingTitle: {
     fontSize: 16,
-    fontWeight: '600',
-    
+
     marginBottom: 2,
   },
   settingSubtitle: {
     fontSize: 14,
-    
+
   },
   actionsList: {
     
@@ -589,13 +584,12 @@ const styles = StyleSheet.create({
   },
   actionTitle: {
     fontSize: 16,
-    fontWeight: '600',
-    
+
     marginBottom: 2,
   },
   actionSubtitle: {
     fontSize: 14,
-    
+
   },
   legalList: {
     
@@ -625,13 +619,12 @@ const styles = StyleSheet.create({
   },
   legalTitle: {
     fontSize: 16,
-    fontWeight: '600',
-    
+
     marginBottom: 2,
   },
   legalSubtitle: {
     fontSize: 14,
-    
+
   },
   supportCard: {
     flexDirection: 'row',
@@ -656,13 +649,12 @@ const styles = StyleSheet.create({
   },
   supportTitle: {
     fontSize: 16,
-    fontWeight: '600',
-    
+
     marginBottom: 4,
   },
   supportDescription: {
     fontSize: 14,
-    
+
   },
   supportButton: {
     flexDirection: 'row',
@@ -675,7 +667,6 @@ const styles = StyleSheet.create({
   },
   supportButtonText: {
     fontSize: 14,
-    fontWeight: '600',
     color: 'white',
   },
   appInfo: {

@@ -8,6 +8,46 @@ const enUS = {
     profile: 'Profile',
     indices: 'Indices',
     portfolio: 'Portfolio',
+    about: 'About',
+  },
+
+  // =====================
+  // DASHBOARD (HOME)
+  // =====================
+  dashboard: {
+    greeting: 'Hello,',
+    greetingSubtitle: 'Good to see you back!',
+    continueCourse: 'Continue course',
+    startCourse: 'Start now',
+    progressLabel: 'completed',
+    quickAccessTitle: 'Quick access',
+    welcomeCard: 'Start here',
+    welcomeCardSub: 'Welcome & guidance',
+    indicesCard: 'Market Indices',
+    indicesCardSub: 'Track the market',
+    supportCard: 'Support',
+    supportCardSub: 'Need help?',
+    trail1Title: 'Trail 1',
+    trail1Subtitle: 'Networks of the New Economy',
+    continueWatching: 'Continue watching',
+  },
+
+  // =====================
+  // SUPPORT
+  // =====================
+  support: {
+    title: 'Support',
+    subtitle: 'How can we help?',
+    emailTitle: 'Email',
+    email: 'suporte@bitforkids.com',
+    responseTime: 'We respond within 24h',
+    faqTitle: 'Frequently Asked Questions',
+    faq1Question: 'How do I access my courses?',
+    faq1Answer: 'After logging in, go to the Courses tab and select the desired course.',
+    faq2Question: 'I forgot my password, what do I do?',
+    faq2Answer: 'On the login screen, tap "Forgot my password" to recover it.',
+    faq3Question: 'How does the guarantee work?',
+    faq3Answer: 'We offer a 7-day guarantee. If you are not satisfied, we will refund your money.',
   },
 
   // =====================

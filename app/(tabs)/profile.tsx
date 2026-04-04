@@ -29,7 +29,7 @@ import { useUser } from '@/contexts/UserContext';
 
 export default function ProfileScreen() {
   const router = useRouter();
-  const { colors, isDark } = useTheme();
+  const { colors, fonts, isDark } = useTheme();
   const { t } = useLanguage();
   const { user: authUser, logout } = useUser();
   const [user] = useState({
@@ -66,7 +66,7 @@ export default function ProfileScreen() {
       icon: Shield,
       title: t('profile.menuPrivacyTitle'),
       subtitle: t('profile.menuPrivacySubtitle'),
-      color: '#8B5CF6',
+      color: '#6366f1',
     },
     {
       icon: Settings,
@@ -79,7 +79,7 @@ export default function ProfileScreen() {
   return (
     <ScrollView style={[styles.container, { backgroundColor: colors.background }]} showsVerticalScrollIndicator={false}>
       {/* Profile Header */}
-      <LinearGradient colors={isDark ? ['#1a1a1a', '#2a1a4a'] as const : ['#8B5CF6', '#3B82F6'] as const} style={styles.header}>
+      <LinearGradient colors={isDark ? ['#0f172a', '#1e293b'] as const : ['#4f46e5', '#3b82f6'] as const} style={styles.header}>
         <View style={styles.profileSection}>
           <View style={styles.avatarContainer}>
             <View style={styles.avatar}>
@@ -91,10 +91,10 @@ export default function ProfileScreen() {
           </View>
 
           <View style={styles.userInfo}>
-            <Text style={styles.userName}>{user.name}</Text>
-            <Text style={[styles.userEmail, { color: 'rgba(255,255,255,0.8)' }]}>{user.email}</Text>
+            <Text style={[styles.userName, { fontFamily: fonts.display }]}>{user.name}</Text>
+            <Text style={[styles.userEmail, { color: 'rgba(255,255,255,0.8)', fontFamily: fonts.body }]}>{user.email}</Text>
             <View style={[styles.levelBadge, { backgroundColor: 'rgba(255,255,255,0.2)' }]}>
-              <Text style={[styles.levelText, { color: '#FFFFFF' }]}>{user.level}</Text>
+              <Text style={[styles.levelText, { color: '#FFFFFF', fontFamily: fonts.secondaryMedium }]}>{user.level}</Text>
             </View>
           </View>
         </View>
@@ -102,7 +102,7 @@ export default function ProfileScreen() {
 
       {/* Cashback Section */}
       <View style={styles.section}>
-        <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('profile.cashbackTitle')}</Text>
+        <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.display }]}>{t('profile.cashbackTitle')}</Text>
         <View style={styles.cashbackContainer}>
           <LinearGradient
             colors={['#10B981', '#059669']}
@@ -112,16 +112,16 @@ export default function ProfileScreen() {
               <View style={styles.cashbackIcon}>
                 <Coins size={24} color="white" />
               </View>
-              <Text style={styles.cashbackTitle}>{t('profile.cashbackAvailable')}</Text>
+              <Text style={[styles.cashbackTitle, { fontFamily: fonts.bodySemiBold }]}>{t('profile.cashbackAvailable')}</Text>
             </View>
-            <Text style={styles.cashbackAmount}>
+            <Text style={[styles.cashbackAmount, { fontFamily: fonts.display }]}>
               {user.stats.availableCashback}
             </Text>
-            <Text style={styles.cashbackTotal}>
+            <Text style={[styles.cashbackTotal, { fontFamily: fonts.body }]}>
               {t('profile.cashbackTotal')} {user.stats.totalCashback}
             </Text>
             <AnimatedPressable style={styles.withdrawButton}>
-              <Text style={styles.withdrawText}>{t('profile.cashbackWithdraw')}</Text>
+              <Text style={[styles.withdrawText, { fontFamily: fonts.bodyBold }]}>{t('profile.cashbackWithdraw')}</Text>
             </AnimatedPressable>
           </LinearGradient>
         </View>
@@ -129,7 +129,7 @@ export default function ProfileScreen() {
 
       {/* Menu Items */}
       <View style={styles.section}>
-        <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('profile.settingsSection')}</Text>
+        <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.display }]}>{t('profile.settingsSection')}</Text>
         <View style={styles.menuList}>
           {menuItems.map((item, index) => {
             const Icon = item.icon;
@@ -154,8 +154,8 @@ export default function ProfileScreen() {
                     <Icon size={20} color={item.color} />
                   </View>
                   <View style={styles.menuText}>
-                    <Text style={[styles.menuTitle, { color: colors.text }]}>{item.title}</Text>
-                    <Text style={[styles.menuSubtitle, { color: colors.textSecondary }]}>{item.subtitle}</Text>
+                    <Text style={[styles.menuTitle, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>{item.title}</Text>
+                    <Text style={[styles.menuSubtitle, { color: colors.textSecondary, fontFamily: fonts.body }]}>{item.subtitle}</Text>
                   </View>
                 </View>
                 <ChevronRight size={20} color={colors.textSecondary} />
@@ -172,14 +172,14 @@ export default function ProfileScreen() {
           onPress={() => { logout(); router.replace('/auth/login'); }}
         >
           <LogOut size={20} color="#EF4444" />
-          <Text style={styles.logoutText}>{t('profile.logout')}</Text>
+          <Text style={[styles.logoutText, { fontFamily: fonts.bodySemiBold }]}>{t('profile.logout')}</Text>
         </AnimatedPressable>
       </View>
 
       {/* App Info */}
       <View style={styles.appInfo}>
-        <Text style={[styles.appVersion, { color: colors.textSecondary }]}>{t('profile.appVersion')}</Text>
-        <Text style={[styles.appCopyright, { color: colors.textSecondary }]}>
+        <Text style={[styles.appVersion, { color: colors.textSecondary, fontFamily: fonts.body }]}>{t('profile.appVersion')}</Text>
+        <Text style={[styles.appCopyright, { color: colors.textSecondary, fontFamily: fonts.body }]}>
           {t('profile.appCopyright')}
         </Text>
       </View>
@@ -189,7 +189,7 @@ export default function ProfileScreen() {
 
 const menuShadow = Platform.select({
   ios: {
-    shadowColor: '#8B5CF6',
+    shadowColor: '#6366f1',
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: '#6366f1',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 3,
@@ -243,7 +243,6 @@ const styles = StyleSheet.create({
   },
   userName: {
     fontSize: 24,
-    fontWeight: 'bold',
     color: 'white',
     marginBottom: 4,
   },
@@ -261,15 +260,13 @@ const styles = StyleSheet.create({
   },
   levelText: {
     fontSize: 14,
-    fontWeight: '600',
-    color: '#8B5CF6',
+    color: '#6366f1',
   },
   section: {
     padding: 20,
   },
   sectionTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
     color: 'white',
     marginBottom: 16,
   },
@@ -304,7 +301,6 @@ const styles = StyleSheet.create({
   },
   menuTitle: {
     fontSize: 16,
-    fontWeight: '600',
     color: 'white',
     marginBottom: 2,
   },
@@ -324,7 +320,6 @@ const styles = StyleSheet.create({
   },
   logoutText: {
     fontSize: 16,
-    fontWeight: '600',
     color: '#EF4444',
   },
   appInfo: {
@@ -366,12 +361,10 @@ const styles = StyleSheet.create({
   },
   cashbackTitle: {
     fontSize: 16,
-    fontWeight: '600',
     color: 'white',
   },
   cashbackAmount: {
     fontSize: 32,
-    fontWeight: 'bold',
     color: 'white',
     marginBottom: 4,
   },
@@ -388,7 +381,6 @@ const styles = StyleSheet.create({
   },
   withdrawText: {
     fontSize: 14,
-    fontWeight: '600',
     color: 'white',
   },
 });

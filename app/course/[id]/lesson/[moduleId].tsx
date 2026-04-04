@@ -30,7 +30,7 @@ export default function LessonScreen() {
     moduleId: string;
   }>();
   const router = useRouter();
-  const { colors, isDark } = useTheme();
+  const { colors, fonts, isDark } = useTheme();
   const { t } = useLanguage();
   const { markLessonComplete, isLessonComplete } = useStudy();
 
@@ -177,13 +177,13 @@ export default function LessonScreen() {
         </AnimatedPressable>
         <View style={styles.headerCenter}>
           <Text
-            style={[styles.headerModuleTitle, { color: colors.text }]}
+            style={[styles.headerModuleTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}
             numberOfLines={1}
           >
             {module_.emoji} {module_.title}
           </Text>
           <Text
-            style={[styles.headerLessonCount, { color: colors.textSecondary }]}
+            style={[styles.headerLessonCount, { color: colors.textSecondary, fontFamily: fonts.body }]}
           >
             {t('study.lessonOf') || 'Licao'} {currentLessonIndex + 1}{' '}
             {t('study.of') || 'de'} {lessons.length}
@@ -216,7 +216,7 @@ export default function LessonScreen() {
       >
         <AnimatedSection delay={0}>
           {/* Lesson Title */}
-          <Text style={[styles.lessonTitle, { color: colors.text }]}>
+          <Text style={[styles.lessonTitle, { color: colors.text, fontFamily: fonts.display }]}>
             {currentLesson.title}
           </Text>
 
@@ -229,7 +229,7 @@ export default function LessonScreen() {
                 .map((paragraph: string, idx: number) => (
                   <Text
                     key={idx}
-                    style={[styles.paragraph, { color: colors.text }]}
+                    style={[styles.paragraph, { color: colors.text, fontFamily: fonts.body }]}
                   >
                     {paragraph.trim()}
                   </Text>
@@ -256,7 +256,7 @@ export default function LessonScreen() {
                     .map((paragraph: string, idx: number) => (
                       <Text
                         key={idx}
-                        style={[styles.paragraph, { color: colors.text }]}
+                        style={[styles.paragraph, { color: colors.text, fontFamily: fonts.body }]}
                       >
                         {paragraph.trim()}
                       </Text>
@@ -280,7 +280,7 @@ export default function LessonScreen() {
                   },
                 ]}
               >
-                <Text style={[styles.questionText, { color: colors.text }]}>
+                <Text style={[styles.questionText, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>
                   {currentQuiz?.question}
                 </Text>
               </View>
@@ -305,6 +305,7 @@ export default function LessonScreen() {
                           style={[
                             styles.optionLetter,
                             {
+                              fontFamily: fonts.bodyBold,
                               color:
                                 hasAnswered &&
                                 idx === currentQuiz?.correctIndex
@@ -323,7 +324,7 @@ export default function LessonScreen() {
                       <Text
                         style={[
                           styles.optionText,
-                          { color: colors.text, flex: 1 },
+                          { color: colors.text, flex: 1, fontFamily: fonts.body },
                         ]}
                       >
                         {option}
@@ -360,6 +361,7 @@ export default function LessonScreen() {
                       style={[
                         styles.feedbackTitle,
                         {
+                          fontFamily: fonts.bodyBold,
                           color:
                             selectedAnswer === currentQuiz?.correctIndex
                               ? '#10B981'
@@ -375,7 +377,7 @@ export default function LessonScreen() {
                       <Text
                         style={[
                           styles.feedbackExplanation,
-                          { color: colors.textSecondary },
+                          { color: colors.textSecondary, fontFamily: fonts.body },
                         ]}
                       >
                         {t('study.correctFeedback') || 'Excelente! Você acertou.'}
@@ -384,7 +386,7 @@ export default function LessonScreen() {
                       <Text
                         style={[
                           styles.feedbackExplanation,
-                          { color: colors.textSecondary },
+                          { color: colors.textSecondary, fontFamily: fonts.body },
                         ]}
                       >
                         {t('study.incorrectFeedback') || 'A resposta correta está destacada em verde.'}
@@ -433,7 +435,7 @@ export default function LessonScreen() {
         >
           <ChevronLeft size={18} color={colors.textSecondary} />
           <Text
-            style={[styles.navButtonText, { color: colors.textSecondary }]}
+            style={[styles.navButtonText, { color: colors.textSecondary, fontFamily: fonts.bodySemiBold }]}
           >
             {t('study.previous') || 'Anterior'}
           </Text>
@@ -457,7 +459,7 @@ export default function LessonScreen() {
             ]}
           >
             <Trophy size={18} color="#FFF" />
-            <Text style={[styles.navButtonText, { color: '#FFF' }]}>
+            <Text style={[styles.navButtonText, { color: '#FFF', fontFamily: fonts.bodySemiBold }]}>
               {t('study.concludeModule') || 'Concluir Modulo'}
             </Text>
           </AnimatedPressable>
@@ -477,7 +479,7 @@ export default function LessonScreen() {
               },
             ]}
           >
-            <Text style={[styles.navButtonText, { color: '#FFF' }]}>
+            <Text style={[styles.navButtonText, { color: '#FFF', fontFamily: fonts.bodySemiBold }]}>
               {t('study.nextLesson') || 'Proxima Licao'}
             </Text>
             <ChevronRight size={18} color="#FFF" />
@@ -513,7 +515,6 @@ const styles = StyleSheet.create({
   },
   headerModuleTitle: {
     fontSize: 16,
-    fontWeight: '700',
   },
   headerLessonCount: {
     fontSize: 13,
@@ -527,7 +528,7 @@ const styles = StyleSheet.create({
   },
   lessonProgressFill: {
     height: '100%',
-    backgroundColor: '#8B5CF6',
+    backgroundColor: '#6366f1',
     borderRadius: 2,
   },
   contentContainer: {
@@ -535,7 +536,6 @@ const styles = StyleSheet.create({
   },
   lessonTitle: {
     fontSize: 24,
-    fontWeight: 'bold',
     lineHeight: 32,
     marginBottom: 20,
   },
@@ -570,7 +570,6 @@ const styles = StyleSheet.create({
   },
   questionText: {
     fontSize: 17,
-    fontWeight: '600',
     lineHeight: 26,
   },
   optionButton: {
@@ -592,7 +591,6 @@ const styles = StyleSheet.create({
   },
   optionLetter: {
     fontSize: 15,
-    fontWeight: '700',
   },
   optionText: {
     fontSize: 15,
@@ -609,7 +607,6 @@ const styles = StyleSheet.create({
   },
   feedbackTitle: {
     fontSize: 16,
-    fontWeight: '700',
     marginBottom: 6,
   },
   feedbackExplanation: {
@@ -640,7 +637,7 @@ const styles = StyleSheet.create({
   },
   prevButton: {},
   nextButton: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: '#6366f1',
     flex: 1,
     justifyContent: 'center',
   },
@@ -651,6 +648,5 @@ const styles = StyleSheet.create({
   },
   navButtonText: {
     fontSize: 15,
-    fontWeight: '600',
   },
 });

@@ -42,9 +42,9 @@ interface NotificationSettings {
 
 export default function NotificationsScreen() {
   const router = useRouter();
-  const { colors, isDark } = useTheme();
+  const { colors, fonts, isDark } = useTheme();
   const { t } = useLanguage();
-  const { 
+  const {
     expoPushToken, 
     scheduleBitcoinPriceNotification,
     scheduleDailyBitcoinPrice,
@@ -215,7 +215,7 @@ export default function NotificationsScreen() {
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       {/* Header */}
-      <LinearGradient colors={isDark ? ['#1a1a1a', '#2a1a4a'] as const : ['#8B5CF6', '#3B82F6'] as const} style={styles.header}>
+      <LinearGradient colors={isDark ? ['#0f172a', '#1e293b'] as const : ['#4f46e5', '#3b82f6'] as const} style={styles.header}>
         <View style={styles.headerContent}>
           <TouchableOpacity
             style={styles.backButton}
@@ -224,8 +224,8 @@ export default function NotificationsScreen() {
             <ArrowLeft size={24} color="white" />
           </TouchableOpacity>
           <View style={styles.headerText}>
-            <Text style={styles.headerTitle}>{t('notifications.headerTitle')}</Text>
-            <Text style={styles.headerSubtitle}>{t('notifications.headerSubtitle')}</Text>
+            <Text style={[styles.headerTitle, { fontFamily: fonts.display }]}>{t('notifications.headerTitle')}</Text>
+            <Text style={[styles.headerSubtitle, { fontFamily: fonts.body }]}>{t('notifications.headerSubtitle')}</Text>
           </View>
           <View style={styles.headerRight}>
             <Bell size={24} color="white" />
@@ -241,12 +241,12 @@ export default function NotificationsScreen() {
               <View style={styles.statusIcon}>
                 <Bell size={20} color="#10B981" />
               </View>
-              <Text style={[styles.statusTitle, { color: colors.text }]}>{t('notifications.statusTitle')}</Text>
+              <Text style={[styles.statusTitle, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>{t('notifications.statusTitle')}</Text>
             </View>
-            <Text style={styles.statusText}>
+            <Text style={[styles.statusText, { fontFamily: fonts.body }]}>
               {expoPushToken ? t('notifications.statusActive') : t('notifications.statusInactive')}
             </Text>
-            <Text style={[styles.statusSubtext, { color: colors.textSecondary }]}>
+            <Text style={[styles.statusSubtext, { color: colors.textSecondary, fontFamily: fonts.body }]}>
               {t('notifications.statusScheduled').replace('{{count}}', String(scheduledCount))}
             </Text>
           </View>
@@ -261,15 +261,15 @@ export default function NotificationsScreen() {
                 <View style={[styles.categoryIcon, { backgroundColor: `${category.color}20` }]}>
                   <Icon size={20} color={category.color} />
                 </View>
-                <Text style={[styles.categoryTitle, { color: colors.text }]}>{category.title}</Text>
+                <Text style={[styles.categoryTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>{category.title}</Text>
               </View>
 
               <View style={[styles.settingsList, { backgroundColor: colors.card, borderColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }]}>
                 {category.items.map((item, itemIndex) => (
                   <View key={itemIndex} style={[styles.settingItem, { borderBottomColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }]}>
                     <View style={styles.settingContent}>
-                      <Text style={[styles.settingTitle, { color: colors.text }]}>{item.title}</Text>
-                      <Text style={[styles.settingSubtitle, { color: colors.textSecondary }]}>{item.subtitle}</Text>
+                      <Text style={[styles.settingTitle, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>{item.title}</Text>
+                      <Text style={[styles.settingSubtitle, { color: colors.textSecondary, fontFamily: fonts.body }]}>{item.subtitle}</Text>
                     </View>
                     <Switch
                       value={item.enabled}
@@ -287,22 +287,22 @@ export default function NotificationsScreen() {
 
         {/* Test Notifications */}
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('notifications.testTitle')}</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>{t('notifications.testTitle')}</Text>
           <View style={styles.testButtons}>
             <TouchableOpacity
               style={[styles.testButton, { backgroundColor: '#F59E0B' }]}
               onPress={() => testNotification('price')}
             >
               <TrendingUp size={16} color="white" />
-              <Text style={styles.testButtonText}>{t('notifications.testBitcoinPrice')}</Text>
+              <Text style={[styles.testButtonText, { fontFamily: fonts.bodySemiBold }]}>{t('notifications.testBitcoinPrice')}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.testButton, { backgroundColor: '#8B5CF6' }]}
+              style={[styles.testButton, { backgroundColor: '#6366f1' }]}
               onPress={() => testNotification('motivation')}
             >
               <Gift size={16} color="white" />
-              <Text style={styles.testButtonText}>{t('notifications.testMotivation')}</Text>
+              <Text style={[styles.testButtonText, { fontFamily: fonts.bodySemiBold }]}>{t('notifications.testMotivation')}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -310,7 +310,7 @@ export default function NotificationsScreen() {
               onPress={() => testNotification('course')}
             >
               <BookOpen size={16} color="white" />
-              <Text style={styles.testButtonText}>{t('notifications.testCourse')}</Text>
+              <Text style={[styles.testButtonText, { fontFamily: fonts.bodySemiBold }]}>{t('notifications.testCourse')}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -322,14 +322,14 @@ export default function NotificationsScreen() {
             onPress={clearAllNotifications}
           >
             <BellOff size={20} color="#EF4444" />
-            <Text style={styles.clearButtonText}>{t('notifications.clearAll')}</Text>
+            <Text style={[styles.clearButtonText, { fontFamily: fonts.bodySemiBold }]}>{t('notifications.clearAll')}</Text>
           </TouchableOpacity>
         </View>
 
         {/* App Info */}
         <View style={styles.appInfo}>
-          <Text style={[styles.appVersion, { color: colors.textSecondary }]}>{t('notifications.appVersion')}</Text>
-          <Text style={[styles.appCopyright, { color: colors.textSecondary }]}>
+          <Text style={[styles.appVersion, { color: colors.textSecondary, fontFamily: fonts.body }]}>{t('notifications.appVersion')}</Text>
+          <Text style={[styles.appCopyright, { color: colors.textSecondary, fontFamily: fonts.body }]}>
             {t('notifications.appCopyright')}
           </Text>
         </View>
@@ -367,7 +367,6 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
     color: 'white',
   },
   headerSubtitle: {
@@ -391,8 +390,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
-    
+
     marginBottom: 16,
   },
   statusCard: {
@@ -418,8 +416,7 @@ const styles = StyleSheet.create({
   },
   statusTitle: {
     fontSize: 16,
-    fontWeight: '600',
-    
+
   },
   statusText: {
     fontSize: 14,
@@ -445,8 +442,7 @@ const styles = StyleSheet.create({
   },
   categoryTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
-    
+
   },
   settingsList: {
     
@@ -469,13 +465,12 @@ const styles = StyleSheet.create({
   },
   settingTitle: {
     fontSize: 16,
-    fontWeight: '600',
-    
+
     marginBottom: 2,
   },
   settingSubtitle: {
     fontSize: 14,
-    
+
   },
   testButtons: {
     flexDirection: 'row',
@@ -493,7 +488,6 @@ const styles = StyleSheet.create({
   },
   testButtonText: {
     fontSize: 14,
-    fontWeight: '600',
     color: 'white',
   },
   clearButton: {
@@ -509,7 +503,6 @@ const styles = StyleSheet.create({
   },
   clearButtonText: {
     fontSize: 16,
-    fontWeight: '600',
     color: '#EF4444',
   },
   appInfo: {

@@ -45,7 +45,7 @@ const { width } = Dimensions.get('window');
 
 export default function MentoriaCompletaScreen() {
   const router = useRouter();
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
   const [liked, setLiked] = useState(false);
   const [selectedTab, setSelectedTab] = useState('overview');
 
@@ -209,11 +209,11 @@ export default function MentoriaCompletaScreen() {
           <View style={styles.tabContent}>
             {/* Description */}
             <View style={styles.section}>
-              <Text style={[styles.sectionTitle, { color: colors.text }]}>
+              <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.display }]}>
                 Sobre a Mentoria
               </Text>
               <Text
-                style={[styles.description, { color: colors.textSecondary }]}
+                style={[styles.description, { color: colors.textSecondary, fontFamily: fonts.body }]}
               >
                 {mentorship.description}
               </Text>
@@ -221,7 +221,7 @@ export default function MentoriaCompletaScreen() {
 
             {/* Features */}
             <View style={styles.section}>
-              <Text style={[styles.sectionTitle, { color: colors.text }]}>
+              <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.display }]}>
                 O que você recebe
               </Text>
               <View style={styles.featuresGrid}>
@@ -238,13 +238,13 @@ export default function MentoriaCompletaScreen() {
                     ]}
                   >
                     <Text style={styles.featureIcon}>{feature.icon}</Text>
-                    <Text style={[styles.featureTitle, { color: colors.text }]}>
+                    <Text style={[styles.featureTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
                       {feature.title}
                     </Text>
                     <Text
                       style={[
                         styles.featureDescription,
-                        { color: colors.textSecondary },
+                        { color: colors.textSecondary, fontFamily: fonts.body },
                       ]}
                     >
                       {feature.description}
@@ -256,7 +256,7 @@ export default function MentoriaCompletaScreen() {
 
             {/* Instructor */}
             <View style={styles.section}>
-              <Text style={[styles.sectionTitle, { color: colors.text }]}>
+              <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.display }]}>
                 Seu Mentor
               </Text>
               <View
@@ -270,13 +270,13 @@ export default function MentoriaCompletaScreen() {
                   style={styles.instructorImage}
                 />
                 <View style={styles.instructorInfo}>
-                  <Text style={[styles.instructorName, { color: colors.text }]}>
+                  <Text style={[styles.instructorName, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
                     {mentorship.instructor}
                   </Text>
                   <Text
                     style={[
                       styles.instructorTitle,
-                      { color: colors.textSecondary },
+                      { color: colors.textSecondary, fontFamily: fonts.body },
                     ]}
                   >
                     {mentorship.instructorTitle}
@@ -287,7 +287,7 @@ export default function MentoriaCompletaScreen() {
                       <Text
                         style={[
                           styles.statText,
-                          { color: colors.textSecondary },
+                          { color: colors.textSecondary, fontFamily: fonts.body },
                         ]}
                       >
                         {mentorship.rating}/5
@@ -298,7 +298,7 @@ export default function MentoriaCompletaScreen() {
                       <Text
                         style={[
                           styles.statText,
-                          { color: colors.textSecondary },
+                          { color: colors.textSecondary, fontFamily: fonts.body },
                         ]}
                       >
                         {mentorship.students} alunos
@@ -314,7 +314,7 @@ export default function MentoriaCompletaScreen() {
       case 'curriculum':
         return (
           <View style={styles.tabContent}>
-            <Text style={[styles.sectionTitle, { color: colors.text }]}>
+            <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.display }]}>
               Programa Completo
             </Text>
             {modules.map((module) => (
@@ -327,16 +327,16 @@ export default function MentoriaCompletaScreen() {
               >
                 <View style={styles.moduleHeader}>
                   <View style={styles.moduleNumber}>
-                    <Text style={styles.moduleNumberText}>{module.id}</Text>
+                    <Text style={[styles.moduleNumberText, { fontFamily: fonts.bodyBold }]}>{module.id}</Text>
                   </View>
                   <View style={styles.moduleInfo}>
-                    <Text style={[styles.moduleTitle, { color: colors.text }]}>
+                    <Text style={[styles.moduleTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
                       {module.title}
                     </Text>
                     <Text
                       style={[
                         styles.moduleDescription,
-                        { color: colors.textSecondary },
+                        { color: colors.textSecondary, fontFamily: fonts.body },
                       ]}
                     >
                       {module.description}
@@ -347,7 +347,7 @@ export default function MentoriaCompletaScreen() {
                         <Text
                           style={[
                             styles.metaText,
-                            { color: colors.textSecondary },
+                            { color: colors.textSecondary, fontFamily: fonts.body },
                           ]}
                         >
                           {module.duration}
@@ -358,7 +358,7 @@ export default function MentoriaCompletaScreen() {
                         <Text
                           style={[
                             styles.metaText,
-                            { color: colors.textSecondary },
+                            { color: colors.textSecondary, fontFamily: fonts.body },
                           ]}
                         >
                           {module.lessons} aulas
@@ -374,7 +374,7 @@ export default function MentoriaCompletaScreen() {
                       <Text
                         style={[
                           styles.topicText,
-                          { color: colors.textSecondary },
+                          { color: colors.textSecondary, fontFamily: fonts.body },
                         ]}
                       >
                         {topic}
@@ -390,7 +390,7 @@ export default function MentoriaCompletaScreen() {
       case 'testimonials':
         return (
           <View style={styles.tabContent}>
-            <Text style={[styles.sectionTitle, { color: colors.text }]}>
+            <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.display }]}>
               O que nossos alunos dizem
             </Text>
             {testimonials.map((testimonial) => (
@@ -408,14 +408,14 @@ export default function MentoriaCompletaScreen() {
                   />
                   <View style={styles.testimonialInfo}>
                     <Text
-                      style={[styles.testimonialName, { color: colors.text }]}
+                      style={[styles.testimonialName, { color: colors.text, fontFamily: fonts.displaySemiBold }]}
                     >
                       {testimonial.name}
                     </Text>
                     <Text
                       style={[
                         styles.testimonialRole,
-                        { color: colors.textSecondary },
+                        { color: colors.textSecondary, fontFamily: fonts.body },
                       ]}
                     >
                       {testimonial.role}
@@ -435,7 +435,7 @@ export default function MentoriaCompletaScreen() {
                 <Text
                   style={[
                     styles.testimonialText,
-                    { color: colors.textSecondary },
+                    { color: colors.textSecondary, fontFamily: fonts.body },
                   ]}
                 >
                   "{testimonial.text}"
@@ -492,22 +492,22 @@ export default function MentoriaCompletaScreen() {
           >
             <View style={styles.heroContent}>
               <View style={styles.badgeContainer}>
-                <Text style={styles.badge}>🎯 MENTORIA EXCLUSIVA</Text>
+                <Text style={[styles.badge, { fontFamily: fonts.secondaryMedium }]}>🎯 MENTORIA EXCLUSIVA</Text>
               </View>
-              <Text style={styles.heroTitle}>{mentorship.title}</Text>
-              <Text style={styles.heroSubtitle}>{mentorship.subtitle}</Text>
+              <Text style={[styles.heroTitle, { fontFamily: fonts.display }]}>{mentorship.title}</Text>
+              <Text style={[styles.heroSubtitle, { fontFamily: fonts.body }]}>{mentorship.subtitle}</Text>
               <View style={styles.heroStats}>
                 <View style={styles.heroStat}>
                   <Star size={16} color="#F59E0B" fill="#F59E0B" />
-                  <Text style={styles.heroStatText}>{mentorship.rating}</Text>
+                  <Text style={[styles.heroStatText, { fontFamily: fonts.bodyMedium }]}>{mentorship.rating}</Text>
                 </View>
                 <View style={styles.heroStat}>
                   <Users size={16} color="white" />
-                  <Text style={styles.heroStatText}>{mentorship.students}</Text>
+                  <Text style={[styles.heroStatText, { fontFamily: fonts.bodyMedium }]}>{mentorship.students}</Text>
                 </View>
                 <View style={styles.heroStat}>
                   <Clock size={16} color="white" />
-                  <Text style={styles.heroStatText}>{mentorship.duration}</Text>
+                  <Text style={[styles.heroStatText, { fontFamily: fonts.bodyMedium }]}>{mentorship.duration}</Text>
                 </View>
               </View>
             </View>
@@ -525,10 +525,10 @@ export default function MentoriaCompletaScreen() {
                 <View style={styles.cashbackContent}>
                   <Gift size={24} color="white" />
                   <View style={styles.cashbackText}>
-                    <Text style={styles.cashbackTitle}>
+                    <Text style={[styles.cashbackTitle, { fontFamily: fonts.bodySemiBold }]}>
                       Cashback Disponível!
                     </Text>
-                    <Text style={styles.cashbackSubtitle}>
+                    <Text style={[styles.cashbackSubtitle, { fontFamily: fonts.body }]}>
                       Ganhe {mentorship.cashbackPercentage}% de volta (
                       {mentorship.cashbackAmount})
                     </Text>
@@ -562,6 +562,7 @@ export default function MentoriaCompletaScreen() {
                   style={[
                     styles.tabText,
                     {
+                      fontFamily: fonts.bodySemiBold,
                       color:
                         selectedTab === tab.key
                           ? 'white'
@@ -584,24 +585,24 @@ export default function MentoriaCompletaScreen() {
       <View style={styles.footer}>
         <View style={styles.priceSection}>
           <View style={styles.priceContainer}>
-            <Text style={styles.price}>{mentorship.price}</Text>
+            <Text style={[styles.price, { fontFamily: fonts.display }]}>{mentorship.price}</Text>
             {mentorship.originalPrice && (
-              <Text style={styles.originalPrice}>
+              <Text style={[styles.originalPrice, { fontFamily: fonts.body }]}>
                 {mentorship.originalPrice}
               </Text>
             )}
           </View>
-          <Text style={styles.priceSubtext}>
+          <Text style={[styles.priceSubtext, { fontFamily: fonts.body }]}>
             Pagamento único • Acesso vitalício
           </Text>
         </View>
 
         <TouchableOpacity style={styles.enrollButton} onPress={handleEnroll}>
           <LinearGradient
-            colors={['#8B5CF6', '#3B82F6']}
+            colors={['#4f46e5', '#3b82f6']}
             style={styles.enrollGradient}
           >
-            <Text style={styles.enrollText}>INICIAR MENTORIA</Text>
+            <Text style={[styles.enrollText, { fontFamily: fonts.bodyBold }]}>INICIAR MENTORIA</Text>
             <ArrowRight size={18} color="white" />
           </LinearGradient>
         </TouchableOpacity>
@@ -678,13 +679,11 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: 16,
     fontSize: 12,
-    fontWeight: 'bold',
     color: 'white',
     alignSelf: 'flex-start',
   },
   heroTitle: {
     fontSize: 24,
-    fontWeight: 'bold',
     color: 'white',
     marginBottom: 8,
     lineHeight: 32,
@@ -705,7 +704,6 @@ const styles = StyleSheet.create({
   },
   heroStatText: {
     fontSize: 14,
-    fontWeight: '600',
     color: 'white',
   },
   section: {
@@ -729,7 +727,6 @@ const styles = StyleSheet.create({
   },
   cashbackTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
     color: 'white',
     marginBottom: 4,
   },
@@ -748,11 +745,10 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   activeTab: {
-    backgroundColor: '#8B5CF6',
+    backgroundColor: '#6366f1',
   },
   tabText: {
     fontSize: 14,
-    fontWeight: '600',
   },
   tabContent: {
     paddingHorizontal: 20,
@@ -760,7 +756,6 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
     marginBottom: 16,
   },
   description: {
@@ -787,7 +782,6 @@ const styles = StyleSheet.create({
   },
   featureTitle: {
     fontSize: 16,
-    fontWeight: '600',
     textAlign: 'center',
     marginBottom: 4,
   },
@@ -814,7 +808,6 @@ const styles = StyleSheet.create({
   },
   instructorName: {
     fontSize: 18,
-    fontWeight: 'bold',
     marginBottom: 4,
   },
   instructorTitle: {
@@ -849,13 +842,12 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: '#6366f1',
     justifyContent: 'center',
     alignItems: 'center',
   },
   moduleNumberText: {
     fontSize: 14,
-    fontWeight: 'bold',
     color: 'white',
   },
   moduleInfo: {
@@ -863,7 +855,6 @@ const styles = StyleSheet.create({
   },
   moduleTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
     marginBottom: 4,
   },
   moduleDescription: {
@@ -916,7 +907,6 @@ const styles = StyleSheet.create({
   },
   testimonialName: {
     fontSize: 16,
-    fontWeight: 'bold',
     marginBottom: 2,
   },
   testimonialRole: {
@@ -955,7 +945,6 @@ const styles = StyleSheet.create({
   },
   price: {
     fontSize: 24,
-    fontWeight: 'bold',
     color: '#1F2937',
   },
   originalPrice: {
@@ -980,7 +969,6 @@ const styles = StyleSheet.create({
   },
   enrollText: {
     fontSize: 16,
-    fontWeight: 'bold',
     color: 'white',
   },
 });

@@ -16,7 +16,7 @@ import {
 } from 'lucide-react-native';
 
 export default function VSLBenefits() {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
 
   const mainBenefits = [
     {
@@ -24,7 +24,7 @@ export default function VSLBenefits() {
       title: 'Educação Financeira Completa',
       description:
         'Aprenda sobre Bitcoin, blockchain e investimentos de forma didática e segura',
-      color: '#8B5CF6',
+      color: '#6366f1',
     },
     {
       icon: Shield,
@@ -51,7 +51,7 @@ export default function VSLBenefits() {
       title: 'Acesso Vitalício',
       description:
         'Uma vez adquirido, você tem acesso para sempre aos conteúdos',
-      color: '#8B5CF6',
+      color: '#6366f1',
     },
   ];
 
@@ -69,10 +69,10 @@ export default function VSLBenefits() {
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={styles.section}>
-        <Text style={[styles.sectionTitle, { color: colors.text }]}>
+        <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.display }]}>
           Por que escolher o BitforKids?
         </Text>
-        <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>
+        <Text style={[styles.sectionSubtitle, { color: colors.textSecondary, fontFamily: fonts.body }]}>
           Mais de 12.500 famílias já transformaram a educação financeira dos
           seus filhos
         </Text>
@@ -96,13 +96,13 @@ export default function VSLBenefits() {
               >
                 <Icon size={24} color={benefit.color} />
               </LinearGradient>
-              <Text style={[styles.benefitTitle, { color: colors.text }]}>
+              <Text style={[styles.benefitTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
                 {benefit.title}
               </Text>
               <Text
                 style={[
                   styles.benefitDescription,
-                  { color: colors.textSecondary },
+                  { color: colors.textSecondary, fontFamily: fonts.body },
                 ]}
               >
                 {benefit.description}
@@ -114,7 +114,7 @@ export default function VSLBenefits() {
 
       {/* Additional Benefits */}
       <View style={styles.section}>
-        <Text style={[styles.sectionTitle, { color: colors.text }]}>
+        <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.display }]}>
           O que mais você recebe:
         </Text>
 
@@ -128,7 +128,7 @@ export default function VSLBenefits() {
             <View key={index} style={styles.additionalBenefitItem}>
               <CheckCircle size={16} color="#10B981" />
               <Text
-                style={[styles.additionalBenefitText, { color: colors.text }]}
+                style={[styles.additionalBenefitText, { color: colors.text, fontFamily: fonts.body }]}
               >
                 {benefit}
               </Text>
@@ -139,7 +139,7 @@ export default function VSLBenefits() {
 
       {/* Social Proof Section */}
       <View style={styles.section}>
-        <Text style={[styles.sectionTitle, { color: colors.text }]}>
+        <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.display }]}>
           Resultados Reais de Nossos Alunos
         </Text>
 
@@ -152,11 +152,11 @@ export default function VSLBenefits() {
               ]}
             >
               <TrendingUp size={32} color="#10B981" />
-              <Text style={[styles.resultNumber, { color: colors.text }]}>
+              <Text style={[styles.resultNumber, { color: colors.text, fontFamily: fonts.display }]}>
                 94%
               </Text>
               <Text
-                style={[styles.resultLabel, { color: colors.textSecondary }]}
+                style={[styles.resultLabel, { color: colors.textSecondary, fontFamily: fonts.body }]}
               >
                 dos alunos melhoraram suas notas em matemática
               </Text>
@@ -169,11 +169,11 @@ export default function VSLBenefits() {
               ]}
             >
               <Heart size={32} color="#EF4444" />
-              <Text style={[styles.resultNumber, { color: colors.text }]}>
+              <Text style={[styles.resultNumber, { color: colors.text, fontFamily: fonts.display }]}>
                 87%
               </Text>
               <Text
-                style={[styles.resultLabel, { color: colors.textSecondary }]}
+                style={[styles.resultLabel, { color: colors.textSecondary, fontFamily: fonts.body }]}
               >
                 dos pais relataram maior interesse em estudos
               </Text>
@@ -186,11 +186,11 @@ export default function VSLBenefits() {
               ]}
             >
               <Star size={32} color="#F59E0B" />
-              <Text style={[styles.resultNumber, { color: colors.text }]}>
+              <Text style={[styles.resultNumber, { color: colors.text, fontFamily: fonts.display }]}>
                 4.9/5
               </Text>
               <Text
-                style={[styles.resultLabel, { color: colors.textSecondary }]}
+                style={[styles.resultLabel, { color: colors.textSecondary, fontFamily: fonts.body }]}
               >
                 avaliação média dos nossos cursos
               </Text>
@@ -207,17 +207,17 @@ export default function VSLBenefits() {
         >
           <View style={styles.guaranteeHeader}>
             <Shield size={32} color="#10B981" />
-            <Text style={[styles.guaranteeTitle, { color: colors.text }]}>
+            <Text style={[styles.guaranteeTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
               Garantia de 30 Dias
             </Text>
           </View>
-          <Text style={[styles.guaranteeText, { color: colors.textSecondary }]}>
+          <Text style={[styles.guaranteeText, { color: colors.textSecondary, fontFamily: fonts.body }]}>
             Se você não ficar completamente satisfeito com o conteúdo ou se seu
             filho não demonstrar interesse após 30 dias, devolvemos 100% do seu
             investimento. Sem perguntas, sem burocracias.
           </Text>
           <View style={styles.guaranteeBadge}>
-            <Text style={styles.guaranteeBadgeText}>GARANTIA TOTAL</Text>
+            <Text style={[styles.guaranteeBadgeText, { fontFamily: fonts.secondaryMedium }]}>GARANTIA TOTAL</Text>
           </View>
         </LinearGradient>
       </View>
@@ -234,7 +234,6 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 22,
-    fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 8,
   },
@@ -267,7 +266,6 @@ const styles = StyleSheet.create({
   },
   benefitTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 8,
   },
@@ -305,7 +303,6 @@ const styles = StyleSheet.create({
   },
   resultNumber: {
     fontSize: 28,
-    fontWeight: 'bold',
     marginVertical: 8,
   },
   resultLabel: {
@@ -326,7 +323,6 @@ const styles = StyleSheet.create({
   },
   guaranteeTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
     marginLeft: 12,
   },
   guaranteeText: {
@@ -345,7 +341,6 @@ const styles = StyleSheet.create({
   },
   guaranteeBadgeText: {
     fontSize: 12,
-    fontWeight: 'bold',
     color: 'white',
   },
 });

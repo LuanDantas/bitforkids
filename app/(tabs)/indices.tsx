@@ -37,6 +37,7 @@ import {
   Maximize2,
   TrendingUp as TrendIcon,
 } from 'lucide-react-native';
+import GlassCard from '@/components/GlassCard';
 import PieChart from '@/components/charts/PieChart';
 import HorizontalBarChart from '@/components/charts/HorizontalBarChart';
 import VerticalBarChart from '@/components/charts/VerticalBarChart';
@@ -46,7 +47,7 @@ import CandlestickChart from '@/components/charts/CandlestickChart';
 const { width } = Dimensions.get('window');
 
 export default function IndicesScreen() {
-  const { colors, isDark } = useTheme();
+  const { colors, fonts, isDark } = useTheme();
   const { t } = useLanguage();
   const router = useRouter();
   const [refreshing, setRefreshing] = useState(false);
@@ -170,7 +171,7 @@ export default function IndicesScreen() {
       value: '$89.5B',
       label: '+15.7% (24h)',
       icon: Activity,
-      color: '#8B5CF6',
+      color: '#6366f1',
       change: '+$12.1B',
     },
     {
@@ -317,10 +318,10 @@ export default function IndicesScreen() {
       >
         <View style={styles.chartHeader}>
           <View style={styles.chartInfo}>
-            <Text style={[styles.chartTitle, { color: colors.text }]}>
+            <Text style={[styles.chartTitle, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>
               {data.name}
             </Text>
-            <Text style={[styles.chartPrice, { color: colors.text }]}>
+            <Text style={[styles.chartPrice, { color: colors.text, fontFamily: fonts.bodyBold }]}>
               $
               {data.price.toLocaleString('en-US', { minimumFractionDigits: 2 })}
             </Text>
@@ -332,7 +333,7 @@ export default function IndicesScreen() {
                   <>
                     <ChangeIcon size={14} color={changeColor} />
                     <Text
-                      style={[styles.chartChangeText, { color: changeColor }]}
+                      style={[styles.chartChangeText, { color: changeColor, fontFamily: fonts.bodySemiBold }]}
                     >
                       {Math.abs(data.change).toFixed(1)}%
                     </Text>
@@ -373,7 +374,7 @@ export default function IndicesScreen() {
                 {`${t('indices.chartAnalysis')} ${data.name}`}
               </Text>
               <Text
-                style={[styles.chartSubtext, { color: colors.textTertiary }]}
+                style={[styles.chartSubtext, { color: colors.textTertiary, fontFamily: fonts.body }]}
               >
                 {t('indices.realtimeData')}
               </Text>
@@ -384,7 +385,7 @@ export default function IndicesScreen() {
         {/* Chart Footer */}
         <View style={styles.chartFooter}>
           <Text
-            style={[styles.chartFooterText, { color: colors.textSecondary }]}
+            style={[styles.chartFooterText, { color: colors.textSecondary, fontFamily: fonts.body }]}
           >
             {t('indices.lastUpdate')}
           </Text>
@@ -415,11 +416,11 @@ export default function IndicesScreen() {
             style={styles.closeButton}
             onPress={() => setShowAdvancedCharts(false)}
           >
-            <Text style={[styles.closeButtonText, { color: colors.primary }]}>
+            <Text style={[styles.closeButtonText, { color: colors.primary, fontFamily: fonts.bodySemiBold }]}>
               {`← ${t('indices.back')}`}
             </Text>
           </TouchableOpacity>
-          <Text style={[styles.modalTitle, { color: colors.text }]}>
+          <Text style={[styles.modalTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
             {t('indices.advancedCharts')}
           </Text>
           <TouchableOpacity
@@ -461,7 +462,7 @@ export default function IndicesScreen() {
                   <Text
                     style={[
                       styles.chartTypeText,
-                      { color: colors.textSecondary },
+                      { color: colors.textSecondary, fontFamily: fonts.bodySemiBold },
                       chartType === type.key && { color: 'white' },
                     ]}
                   >
@@ -490,7 +491,7 @@ export default function IndicesScreen() {
                 <Text
                   style={[
                     styles.cryptoButtonSymbol,
-                    { color: colors.text },
+                    { color: colors.text, fontFamily: fonts.bodyBold },
                     selectedChart === key && { color: colors.primary },
                   ]}
                 >
@@ -499,7 +500,7 @@ export default function IndicesScreen() {
                 <Text
                   style={[
                     styles.cryptoButtonName,
-                    { color: colors.textSecondary },
+                    { color: colors.textSecondary, fontFamily: fonts.body },
                   ]}
                 >
                   {crypto.name}
@@ -518,12 +519,12 @@ export default function IndicesScreen() {
             <View style={styles.advancedChartHeader}>
               <View>
                 <Text
-                  style={[styles.advancedChartTitle, { color: colors.text }]}
+                  style={[styles.advancedChartTitle, { color: colors.text, fontFamily: fonts.bodySemiBold }]}
                 >
                   {data.name} ({data.symbol})
                 </Text>
                 <Text
-                  style={[styles.advancedChartPrice, { color: colors.text }]}
+                  style={[styles.advancedChartPrice, { color: colors.text, fontFamily: fonts.bodyBold }]}
                 >
                   $
                   {data.price.toLocaleString('en-US', {
@@ -541,7 +542,7 @@ export default function IndicesScreen() {
                       <Text
                         style={[
                           styles.advancedChartChangeText,
-                          { color: changeColor },
+                          { color: changeColor, fontFamily: fonts.bodyBold },
                         ]}
                       >
                         {data.change > 0 ? '+' : ''}
@@ -568,7 +569,7 @@ export default function IndicesScreen() {
                   <Text
                     style={[
                       styles.chartPlaceholderText,
-                      { color: colors.textTertiary },
+                      { color: colors.textTertiary, fontFamily: fonts.bodySemiBold },
                     ]}
                   >
                     {chartType === 'line'
@@ -593,13 +594,10 @@ export default function IndicesScreen() {
           </View>
 
           {/* Technical Indicators */}
-          <View
-            style={[
-              styles.indicatorsSection,
-              { backgroundColor: colors.card, borderColor: colors.border },
-            ]}
+          <GlassCard
+            style={styles.indicatorsSection}
           >
-            <Text style={[styles.indicatorsTitle, { color: colors.text }]}>
+            <Text style={[styles.indicatorsTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
               {t('indices.technicalIndicators')}
             </Text>
             <View style={styles.indicatorsGrid}>
@@ -607,7 +605,7 @@ export default function IndicesScreen() {
                 <Text
                   style={[
                     styles.indicatorLabel,
-                    { color: colors.textSecondary },
+                    { color: colors.textSecondary, fontFamily: fonts.body },
                   ]}
                 >
                   RSI (14)
@@ -622,6 +620,7 @@ export default function IndicesScreen() {
                           : data.indicators.rsi < 30
                           ? '#10B981'
                           : colors.text,
+                      fontFamily: fonts.bodyBold,
                     },
                   ]}
                 >
@@ -632,7 +631,7 @@ export default function IndicesScreen() {
                 <Text
                   style={[
                     styles.indicatorLabel,
-                    { color: colors.textSecondary },
+                    { color: colors.textSecondary, fontFamily: fonts.body },
                   ]}
                 >
                   MACD
@@ -645,6 +644,7 @@ export default function IndicesScreen() {
                         data.indicators.macd === 'Bullish'
                           ? '#10B981'
                           : '#EF4444',
+                      fontFamily: fonts.bodyBold,
                     },
                   ]}
                 >
@@ -655,12 +655,12 @@ export default function IndicesScreen() {
                 <Text
                   style={[
                     styles.indicatorLabel,
-                    { color: colors.textSecondary },
+                    { color: colors.textSecondary, fontFamily: fonts.body },
                   ]}
                 >
                   SMA 20
                 </Text>
-                <Text style={[styles.indicatorValue, { color: colors.text }]}>
+                <Text style={[styles.indicatorValue, { color: colors.text, fontFamily: fonts.bodyBold }]}>
                   ${data.indicators.sma20.toLocaleString()}
                 </Text>
               </View>
@@ -668,12 +668,12 @@ export default function IndicesScreen() {
                 <Text
                   style={[
                     styles.indicatorLabel,
-                    { color: colors.textSecondary },
+                    { color: colors.textSecondary, fontFamily: fonts.body },
                   ]}
                 >
                   SMA 50
                 </Text>
-                <Text style={[styles.indicatorValue, { color: colors.text }]}>
+                <Text style={[styles.indicatorValue, { color: colors.text, fontFamily: fonts.bodyBold }]}>
                   ${data.indicators.sma50.toLocaleString()}
                 </Text>
               </View>
@@ -681,12 +681,12 @@ export default function IndicesScreen() {
                 <Text
                   style={[
                     styles.indicatorLabel,
-                    { color: colors.textSecondary },
+                    { color: colors.textSecondary, fontFamily: fonts.body },
                   ]}
                 >
                   Volume 24h
                 </Text>
-                <Text style={[styles.indicatorValue, { color: colors.text }]}>
+                <Text style={[styles.indicatorValue, { color: colors.text, fontFamily: fonts.bodyBold }]}>
                   ${data.indicators.volume24h}
                 </Text>
               </View>
@@ -694,26 +694,23 @@ export default function IndicesScreen() {
                 <Text
                   style={[
                     styles.indicatorLabel,
-                    { color: colors.textSecondary },
+                    { color: colors.textSecondary, fontFamily: fonts.body },
                   ]}
                 >
                   Market Cap
                 </Text>
-                <Text style={[styles.indicatorValue, { color: colors.text }]}>
+                <Text style={[styles.indicatorValue, { color: colors.text, fontFamily: fonts.bodyBold }]}>
                   ${data.indicators.marketCap}
                 </Text>
               </View>
             </View>
-          </View>
+          </GlassCard>
 
           {/* Trading View */}
-          <View
-            style={[
-              styles.tradingSection,
-              { backgroundColor: colors.card, borderColor: colors.border },
-            ]}
+          <GlassCard
+            style={styles.tradingSection}
           >
-            <Text style={[styles.tradingTitle, { color: colors.text }]}>
+            <Text style={[styles.tradingTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
               {t('indices.marketAnalysis')}
             </Text>
             <View style={styles.tradingGrid}>
@@ -723,10 +720,10 @@ export default function IndicesScreen() {
                   { backgroundColor: colors.surface },
                 ]}
               >
-                <Text style={[styles.tradingCardTitle, { color: colors.text }]}>
+                <Text style={[styles.tradingCardTitle, { color: colors.text, fontFamily: fonts.body }]}>
                   {t('indices.support')}
                 </Text>
-                <Text style={[styles.tradingCardValue, { color: '#10B981' }]}>
+                <Text style={[styles.tradingCardValue, { color: '#10B981', fontFamily: fonts.bodyBold }]}>
                   ${(data.price * 0.95).toFixed(2)}
                 </Text>
               </View>
@@ -736,10 +733,10 @@ export default function IndicesScreen() {
                   { backgroundColor: colors.surface },
                 ]}
               >
-                <Text style={[styles.tradingCardTitle, { color: colors.text }]}>
+                <Text style={[styles.tradingCardTitle, { color: colors.text, fontFamily: fonts.body }]}>
                   {t('indices.resistance')}
                 </Text>
-                <Text style={[styles.tradingCardValue, { color: '#EF4444' }]}>
+                <Text style={[styles.tradingCardValue, { color: '#EF4444', fontFamily: fonts.bodyBold }]}>
                   ${(data.price * 1.05).toFixed(2)}
                 </Text>
               </View>
@@ -749,7 +746,7 @@ export default function IndicesScreen() {
                   { backgroundColor: colors.surface },
                 ]}
               >
-                <Text style={[styles.tradingCardTitle, { color: colors.text }]}>
+                <Text style={[styles.tradingCardTitle, { color: colors.text, fontFamily: fonts.body }]}>
                   {t('indices.trend')}
                 </Text>
                 <Text
@@ -757,6 +754,7 @@ export default function IndicesScreen() {
                     styles.tradingCardValue,
                     {
                       color: data.change > 0 ? '#10B981' : '#EF4444',
+                      fontFamily: fonts.bodyBold,
                     },
                   ]}
                 >
@@ -764,7 +762,7 @@ export default function IndicesScreen() {
                 </Text>
               </View>
             </View>
-          </View>
+          </GlassCard>
         </ScrollView>
       </View>
     );
@@ -773,30 +771,30 @@ export default function IndicesScreen() {
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       {/* Header */}
       <LinearGradient
-        colors={isDark ? ['#1a1a1a', '#2a1a4a'] : ['#8B5CF6', '#3B82F6']}
+        colors={isDark ? ['#0f172a', '#1e293b'] : ['#4f46e5', '#3b82f6']}
         style={styles.header}
       >
-        <Text style={styles.headerTitle}>{t('indices.headerTitle')}</Text>
-        <Text style={styles.headerSubtitle}>
+        <Text style={[styles.headerTitle, { fontFamily: fonts.display }]}>{t('indices.headerTitle')}</Text>
+        <Text style={[styles.headerSubtitle, { fontFamily: fonts.body }]}>
           {t('indices.headerSubtitle')}
         </Text>
 
         <View style={styles.marketOverview}>
           <View style={styles.overviewItem}>
-            <Text style={styles.overviewLabel}>Market Cap</Text>
-            <Text style={styles.overviewValue}>
+            <Text style={[styles.overviewLabel, { fontFamily: fonts.body }]}>Market Cap</Text>
+            <Text style={[styles.overviewValue, { fontFamily: fonts.bodyBold }]}>
               ${marketOverview.totalMarketCap}T
             </Text>
           </View>
           <View style={styles.overviewItem}>
-            <Text style={styles.overviewLabel}>Volume 24h</Text>
-            <Text style={styles.overviewValue}>
+            <Text style={[styles.overviewLabel, { fontFamily: fonts.body }]}>Volume 24h</Text>
+            <Text style={[styles.overviewValue, { fontFamily: fonts.bodyBold }]}>
               ${marketOverview.totalVolume}B
             </Text>
           </View>
           <View style={styles.overviewItem}>
-            <Text style={styles.overviewLabel}>BTC Dom.</Text>
-            <Text style={styles.overviewValue}>
+            <Text style={[styles.overviewLabel, { fontFamily: fonts.body }]}>BTC Dom.</Text>
+            <Text style={[styles.overviewValue, { fontFamily: fonts.bodyBold }]}>
               {marketOverview.btcDominance}%
             </Text>
           </View>
@@ -812,22 +810,16 @@ export default function IndicesScreen() {
       >
         {/* Market Stats */}
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>
+          <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.display }]}>
             {t('indices.marketStats')}
           </Text>
           <View style={styles.statsGrid}>
             {marketStats.map((stat, index) => {
               const Icon = stat.icon;
               return (
-                <View
+                <GlassCard
                   key={index}
-                  style={[
-                    styles.statCard,
-                    {
-                      backgroundColor: colors.card,
-                      borderColor: colors.border,
-                    },
-                  ]}
+                  style={styles.statCard}
                 >
                   <View style={styles.statHeader}>
                     <View
@@ -838,24 +830,24 @@ export default function IndicesScreen() {
                     >
                       <Icon size={20} color={stat.color} />
                     </View>
-                    <Text style={[styles.statChange, { color: stat.color }]}>
+                    <Text style={[styles.statChange, { color: stat.color, fontFamily: fonts.bodySemiBold }]}>
                       {stat.change}
                     </Text>
                   </View>
-                  <Text style={[styles.statValue, { color: colors.text }]}>
+                  <Text style={[styles.statValue, { color: colors.text, fontFamily: fonts.bodyBold }]}>
                     {stat.value}
                   </Text>
                   <Text
-                    style={[styles.statTitle, { color: colors.textSecondary }]}
+                    style={[styles.statTitle, { color: colors.textSecondary, fontFamily: fonts.bodySemiBold }]}
                   >
                     {stat.title}
                   </Text>
                   <Text
-                    style={[styles.statLabel, { color: colors.textTertiary }]}
+                    style={[styles.statLabel, { color: colors.textTertiary, fontFamily: fonts.body }]}
                   >
                     {stat.label}
                   </Text>
-                </View>
+                </GlassCard>
               );
             })}
           </View>
@@ -864,7 +856,7 @@ export default function IndicesScreen() {
         {/* Timeframe Selector */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
-            <Text style={[styles.sectionTitle, { color: colors.text }]}>
+            <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.display }]}>
               {t('indices.topCryptos')}
             </Text>
             <View style={styles.timeframeSelector}>
@@ -886,7 +878,7 @@ export default function IndicesScreen() {
                   <Text
                     style={[
                       styles.timeframeText,
-                      { color: colors.textSecondary },
+                      { color: colors.textSecondary, fontFamily: fonts.bodySemiBold },
                       selectedTimeframe === timeframe && { color: 'white' },
                     ]}
                   >
@@ -922,7 +914,7 @@ export default function IndicesScreen() {
                 >
                   <View style={styles.cryptoRank}>
                     <Text
-                      style={[styles.rankText, { color: colors.textTertiary }]}
+                      style={[styles.rankText, { color: colors.textTertiary, fontFamily: fonts.bodySemiBold }]}
                     >
                       {crypto.rank}
                     </Text>
@@ -935,18 +927,18 @@ export default function IndicesScreen() {
                         { backgroundColor: crypto.color + '20' },
                       ]}
                     >
-                      <Text style={[styles.logoText, { color: crypto.color }]}>
+                      <Text style={[styles.logoText, { color: crypto.color, fontFamily: fonts.bodyBold }]}>
                         {crypto.logo}
                       </Text>
                     </View>
                     <View style={styles.cryptoDetails}>
-                      <Text style={[styles.cryptoName, { color: colors.text }]}>
+                      <Text style={[styles.cryptoName, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>
                         {crypto.name}
                       </Text>
                       <Text
                         style={[
                           styles.cryptoSymbol,
-                          { color: colors.textSecondary },
+                          { color: colors.textSecondary, fontFamily: fonts.body },
                         ]}
                       >
                         {crypto.symbol}
@@ -955,12 +947,12 @@ export default function IndicesScreen() {
                   </View>
 
                   <View style={styles.cryptoPrice}>
-                    <Text style={[styles.priceText, { color: colors.text }]}>
+                    <Text style={[styles.priceText, { color: colors.text, fontFamily: fonts.bodyBold }]}>
                       {formatPrice(crypto.price)}
                     </Text>
                     <View style={styles.changeContainer}>
                       <ChangeIcon size={12} color={changeColor} />
-                      <Text style={[styles.changeText, { color: changeColor }]}>
+                      <Text style={[styles.changeText, { color: changeColor, fontFamily: fonts.bodySemiBold }]}>
                         {Math.abs(crypto.change24h).toFixed(1)}%
                       </Text>
                     </View>
@@ -970,7 +962,7 @@ export default function IndicesScreen() {
                     <Text
                       style={[
                         styles.marketCapText,
-                        { color: colors.textSecondary },
+                        { color: colors.textSecondary, fontFamily: fonts.bodySemiBold },
                       ]}
                     >
                       {formatMarketCap(crypto.marketCap)}
@@ -978,7 +970,7 @@ export default function IndicesScreen() {
                     <Text
                       style={[
                         styles.volumeText,
-                        { color: colors.textTertiary },
+                        { color: colors.textTertiary, fontFamily: fonts.body },
                       ]}
                     >
                       Vol: ${crypto.volume}B
@@ -992,38 +984,35 @@ export default function IndicesScreen() {
 
         {/* Trending Section */}
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>
+          <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.display }]}>
             {t('indices.trending')}
           </Text>
-          <View
-            style={[
-              styles.trendingContainer,
-              { backgroundColor: colors.card, borderColor: colors.border },
-            ]}
+          <GlassCard
+            style={styles.trendingContainer}
           >
             {trendingCoins.map((coin, index) => (
               <View key={index} style={styles.trendingItem}>
                 <View style={styles.trendingRank}>
                   <Text
-                    style={[styles.trendingRankText, { color: colors.primary }]}
+                    style={[styles.trendingRankText, { color: colors.primary, fontFamily: fonts.bodyBold }]}
                   >
                     {coin.rank}
                   </Text>
                 </View>
-                <Text style={[styles.trendingName, { color: colors.text }]}>
+                <Text style={[styles.trendingName, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>
                   {coin.name}
                 </Text>
-                <Text style={[styles.trendingChange, { color: '#10B981' }]}>
+                <Text style={[styles.trendingChange, { color: '#10B981', fontFamily: fonts.bodyBold }]}>
                   {coin.change}
                 </Text>
               </View>
             ))}
-          </View>
+          </GlassCard>
         </View>
 
         {/* Market Analysis */}
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>
+          <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.display }]}>
             {t('indices.marketAnalysis')}
           </Text>
           <View
@@ -1037,17 +1026,17 @@ export default function IndicesScreen() {
               style={styles.analysisHeader}
             >
               <Target size={24} color="white" />
-              <Text style={styles.analysisTitle}>Fear & Greed Index</Text>
+              <Text style={[styles.analysisTitle, { fontFamily: fonts.displaySemiBold }]}>Fear & Greed Index</Text>
             </LinearGradient>
             <View style={styles.analysisContent}>
               <View style={styles.indexContainer}>
-                <Text style={styles.indexValue}>76</Text>
-                <Text style={styles.indexLabel}>Extreme Greed</Text>
+                <Text style={[styles.indexValue, { fontFamily: fonts.display }]}>76</Text>
+                <Text style={[styles.indexLabel, { fontFamily: fonts.bodySemiBold }]}>Extreme Greed</Text>
               </View>
               <Text
                 style={[
                   styles.analysisDescription,
-                  { color: colors.textSecondary },
+                  { color: colors.textSecondary, fontFamily: fonts.body },
                 ]}
               >
                 {t('indices.marketAnalysisText')}
@@ -1058,7 +1047,7 @@ export default function IndicesScreen() {
 
         {/* Quick Actions */}
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>
+          <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.display }]}>
             {t('indices.quickActions')}
           </Text>
           <View style={styles.quickActions}>
@@ -1070,12 +1059,12 @@ export default function IndicesScreen() {
               onPress={() => setShowAdvancedCharts(true)}
             >
               <LinearGradient
-                colors={['#8B5CF6', '#3B82F6']}
+                colors={['#4f46e5', '#3b82f6']}
                 style={styles.quickActionIcon}
               >
                 <BarChart3 size={24} color="white" />
               </LinearGradient>
-              <Text style={[styles.quickActionText, { color: colors.text }]}>
+              <Text style={[styles.quickActionText, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>
                 {t('indices.advancedCharts')}
               </Text>
             </TouchableOpacity>
@@ -1092,7 +1081,7 @@ export default function IndicesScreen() {
               >
                 <PieChartIcon size={24} color="white" />
               </LinearGradient>
-              <Text style={[styles.quickActionText, { color: colors.text }]}>
+              <Text style={[styles.quickActionText, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>
                 {t('indices.portfolioTracker')}
               </Text>
             </TouchableOpacity>
@@ -1101,7 +1090,7 @@ export default function IndicesScreen() {
 
         {/* Charts Section */}
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>
+          <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.display }]}>
             {t('indices.chartAnalysis')}
           </Text>
 
@@ -1112,7 +1101,7 @@ export default function IndicesScreen() {
               { label: 'Ethereum', value: 17.2, color: '#627EEA' },
               { label: 'Solana', value: 3.4, color: '#9945FF' },
               { label: 'BNB', value: 3.2, color: '#F3BA2F' },
-              { label: 'Outros', value: 23.9, color: '#8B5CF6' },
+              { label: 'Outros', value: 23.9, color: '#6366f1' },
             ]}
           />
 
@@ -1218,7 +1207,6 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 28,
-    fontWeight: 'bold',
     color: 'white',
     marginBottom: 4,
   },
@@ -1244,7 +1232,6 @@ const styles = StyleSheet.create({
   },
   overviewValue: {
     fontSize: 16,
-    fontWeight: 'bold',
     color: 'white',
   },
   content: {
@@ -1261,7 +1248,6 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
     marginBottom: 16,
   },
   statsGrid: {
@@ -1272,8 +1258,6 @@ const styles = StyleSheet.create({
   statCard: {
     width: (width - 52) / 2,
     borderRadius: 12,
-    padding: 16,
-    borderWidth: 1,
   },
   statHeader: {
     flexDirection: 'row',
@@ -1290,16 +1274,13 @@ const styles = StyleSheet.create({
   },
   statChange: {
     fontSize: 12,
-    fontWeight: '600',
   },
   statValue: {
     fontSize: 18,
-    fontWeight: 'bold',
     marginBottom: 4,
   },
   statTitle: {
     fontSize: 14,
-    fontWeight: '600',
     marginBottom: 2,
   },
   statLabel: {
@@ -1317,7 +1298,6 @@ const styles = StyleSheet.create({
   },
   timeframeText: {
     fontSize: 12,
-    fontWeight: '600',
   },
   cryptoList: {
     gap: 12,
@@ -1336,7 +1316,6 @@ const styles = StyleSheet.create({
   },
   rankText: {
     fontSize: 14,
-    fontWeight: '600',
   },
   cryptoInfo: {
     flexDirection: 'row',
@@ -1353,14 +1332,12 @@ const styles = StyleSheet.create({
   },
   logoText: {
     fontSize: 18,
-    fontWeight: 'bold',
   },
   cryptoDetails: {
     flex: 1,
   },
   cryptoName: {
     fontSize: 16,
-    fontWeight: '600',
     marginBottom: 2,
   },
   cryptoSymbol: {
@@ -1372,7 +1349,6 @@ const styles = StyleSheet.create({
   },
   priceText: {
     fontSize: 16,
-    fontWeight: 'bold',
     marginBottom: 4,
   },
   changeContainer: {
@@ -1382,7 +1358,6 @@ const styles = StyleSheet.create({
   },
   changeText: {
     fontSize: 14,
-    fontWeight: '600',
   },
   cryptoStats: {
     alignItems: 'flex-end',
@@ -1390,7 +1365,6 @@ const styles = StyleSheet.create({
   },
   marketCapText: {
     fontSize: 14,
-    fontWeight: '600',
     marginBottom: 2,
   },
   volumeText: {
@@ -1398,8 +1372,6 @@ const styles = StyleSheet.create({
   },
   trendingContainer: {
     borderRadius: 12,
-    padding: 16,
-    borderWidth: 1,
   },
   trendingItem: {
     flexDirection: 'row',
@@ -1417,16 +1389,13 @@ const styles = StyleSheet.create({
   },
   trendingRankText: {
     fontSize: 12,
-    fontWeight: 'bold',
   },
   trendingName: {
     flex: 1,
     fontSize: 14,
-    fontWeight: '600',
   },
   trendingChange: {
     fontSize: 14,
-    fontWeight: 'bold',
   },
   analysisCard: {
     borderRadius: 12,
@@ -1442,7 +1411,6 @@ const styles = StyleSheet.create({
   },
   analysisTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
     color: 'white',
   },
   analysisContent: {
@@ -1454,13 +1422,11 @@ const styles = StyleSheet.create({
   },
   indexValue: {
     fontSize: 48,
-    fontWeight: 'bold',
     color: '#10B981',
     marginBottom: 4,
   },
   indexLabel: {
     fontSize: 16,
-    fontWeight: '600',
     color: '#10B981',
   },
   analysisDescription: {
@@ -1490,7 +1456,6 @@ const styles = StyleSheet.create({
   },
   quickActionText: {
     fontSize: 14,
-    fontWeight: '600',
     textAlign: 'center',
   },
   chartSelector: {
@@ -1506,7 +1471,6 @@ const styles = StyleSheet.create({
   },
   chartSelectorText: {
     fontSize: 14,
-    fontWeight: '600',
   },
   chartContainer: {
     borderRadius: 12,
@@ -1524,12 +1488,10 @@ const styles = StyleSheet.create({
   },
   chartTitle: {
     fontSize: 16,
-    fontWeight: '600',
     marginBottom: 4,
   },
   chartPrice: {
     fontSize: 20,
-    fontWeight: 'bold',
     marginBottom: 4,
   },
   chartChange: {
@@ -1539,7 +1501,6 @@ const styles = StyleSheet.create({
   },
   chartChangeText: {
     fontSize: 14,
-    fontWeight: '600',
   },
   fullscreenButton: {
     width: 32,
@@ -1564,7 +1525,6 @@ const styles = StyleSheet.create({
   },
   chartPlaceholderText: {
     fontSize: 16,
-    fontWeight: '600',
     textAlign: 'center',
   },
   chartSubtext: {
@@ -1600,11 +1560,9 @@ const styles = StyleSheet.create({
   },
   closeButtonText: {
     fontSize: 16,
-    fontWeight: '600',
   },
   modalTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
   },
   settingsButton: {
     width: 36,
@@ -1633,7 +1591,6 @@ const styles = StyleSheet.create({
   },
   chartTypeText: {
     fontSize: 12,
-    fontWeight: '600',
   },
   cryptoSelector: {
     flexDirection: 'row',
@@ -1649,7 +1606,6 @@ const styles = StyleSheet.create({
   },
   cryptoButtonSymbol: {
     fontSize: 14,
-    fontWeight: 'bold',
     marginBottom: 2,
   },
   cryptoButtonName: {
@@ -1669,12 +1625,10 @@ const styles = StyleSheet.create({
   },
   advancedChartTitle: {
     fontSize: 16,
-    fontWeight: '600',
     marginBottom: 4,
   },
   advancedChartPrice: {
     fontSize: 20,
-    fontWeight: 'bold',
   },
   advancedChartChange: {
     flexDirection: 'row',
@@ -1683,7 +1637,6 @@ const styles = StyleSheet.create({
   },
   advancedChartChangeText: {
     fontSize: 16,
-    fontWeight: 'bold',
   },
   enhancedChartArea: {
     height: 250,
@@ -1692,13 +1645,10 @@ const styles = StyleSheet.create({
   },
   indicatorsSection: {
     borderRadius: 12,
-    borderWidth: 1,
-    padding: 16,
     marginBottom: 16,
   },
   indicatorsTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
     marginBottom: 12,
   },
   indicatorsGrid: {
@@ -1716,17 +1666,13 @@ const styles = StyleSheet.create({
   },
   indicatorValue: {
     fontSize: 14,
-    fontWeight: 'bold',
   },
   tradingSection: {
     borderRadius: 12,
-    borderWidth: 1,
-    padding: 16,
     marginBottom: 16,
   },
   tradingTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
     marginBottom: 12,
   },
   tradingGrid: {
@@ -1745,6 +1691,5 @@ const styles = StyleSheet.create({
   },
   tradingCardValue: {
     fontSize: 14,
-    fontWeight: 'bold',
   },
 });

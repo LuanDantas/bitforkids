@@ -1,7 +1,9 @@
-import { Platform } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import { Tabs } from 'expo-router';
+import { BlurView } from 'expo-blur';
 import {
-  Chrome as Home,
+  Home,
+  Info,
   BookOpen,
   User,
   TrendingUp,
@@ -11,20 +13,33 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function TabLayout() {
-  const { colors } = useTheme();
+  const { colors, isDark } = useTheme();
   const { t } = useLanguage();
 
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
+        tabBarBackground: () => (
+          <BlurView
+            intensity={40}
+            tint={isDark ? 'dark' : 'light'}
+            style={StyleSheet.absoluteFill}
+          />
+        ),
         tabBarStyle: {
-          backgroundColor: colors.tabBar,
+          backgroundColor: 'transparent',
           borderTopColor: 'transparent',
           borderTopWidth: 0,
-          paddingBottom: 8,
+          position: 'absolute',
+          paddingBottom: 20,
           paddingTop: 10,
-          height: 72,
+          height: 84,
+          bottom: 12,
+          left: 12,
+          right: 12,
+          borderRadius: 20,
+          overflow: 'hidden',
           ...Platform.select({
             ios: {
               shadowColor: '#000',
@@ -35,7 +50,7 @@ export default function TabLayout() {
             android: { elevation: 8 },
           }),
         },
-        tabBarActiveTintColor: '#8B5CF6',
+        tabBarActiveTintColor: '#6366f1',
         tabBarInactiveTintColor: colors.textTertiary,
         tabBarLabelStyle: {
           fontSize: 11,
@@ -52,19 +67,19 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="about"
+        options={{
+          title: t('tabs.about'),
+          tabBarIcon: ({ size, color }) => <Info size={size} color={color} />,
+        }}
+      />
+      <Tabs.Screen
         name="courses"
         options={{
           title: t('tabs.courses'),
           tabBarIcon: ({ size, color }) => (
             <BookOpen size={size} color={color} />
           ),
-        }}
-      />
-      <Tabs.Screen
-        name="profile"
-        options={{
-          title: t('tabs.profile'),
-          tabBarIcon: ({ size, color }) => <User size={size} color={color} />,
         }}
       />
       <Tabs.Screen
@@ -77,8 +92,16 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="profile"
+        options={{
+          title: t('tabs.profile'),
+          tabBarIcon: ({ size, color }) => <User size={size} color={color} />,
+        }}
+      />
+      <Tabs.Screen
         name="portfolio"
         options={{
+          href: null,
           title: t('tabs.portfolio'),
           tabBarIcon: ({ size, color }) => <Wallet size={size} color={color} />,
         }}

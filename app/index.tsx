@@ -11,7 +11,7 @@ import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 
 export default function LandingPage() {
   const router = useRouter();
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
   const { t } = useLanguage();
   const insets = useSafeAreaInsets();
 
@@ -34,21 +34,21 @@ export default function LandingPage() {
       <View style={styles.body}>
         <Animated.Text
           entering={FadeInDown.delay(200).duration(500)}
-          style={[styles.highlight, { color: '#F7931A' }]}
+          style={[styles.highlight, { color: '#F7931A', fontFamily: fonts.display }]}
         >
           {t('landing.highlight')}
         </Animated.Text>
 
         <Animated.Text
           entering={FadeInDown.delay(400).duration(500)}
-          style={[styles.description, { color: colors.text }]}
+          style={[styles.description, { color: colors.text, fontFamily: fonts.body }]}
         >
           {t('landing.description')}
         </Animated.Text>
 
         <Animated.Text
           entering={FadeInDown.delay(600).duration(500)}
-          style={[styles.emphasis, { color: colors.text }]}
+          style={[styles.emphasis, { color: colors.text, fontFamily: fonts.bodySemiBold }]}
         >
           {t('landing.emphasis')}
         </Animated.Text>
@@ -56,12 +56,12 @@ export default function LandingPage() {
         <Animated.View entering={FadeInDown.delay(800).duration(500)}>
           <AnimatedPressable onPress={() => router.push('/auth/login')}>
             <LinearGradient
-              colors={['#8B5CF6', '#6D28D9']}
+              colors={['#4f46e5', '#3b82f6']}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.ctaButton}
             >
-              <Text style={styles.ctaText}>{t('landing.cta')}</Text>
+              <Text style={[styles.ctaText, { fontFamily: fonts.bodyBold }]}>{t('landing.cta')}</Text>
               <ArrowRight size={20} color="#FFFFFF" />
             </LinearGradient>
           </AnimatedPressable>
@@ -95,13 +95,11 @@ const styles = StyleSheet.create({
   },
   highlight: {
     fontSize: 26,
-    fontWeight: 'bold',
     lineHeight: 34,
     marginBottom: 12,
   },
   emphasis: {
     fontSize: 16,
-    fontWeight: '600',
     fontStyle: 'italic',
     lineHeight: 24,
     marginBottom: 8,
@@ -115,13 +113,12 @@ const styles = StyleSheet.create({
     marginTop: 24,
     gap: 8,
     ...Platform.select({
-      ios: { shadowColor: '#8B5CF6', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 10 },
+      ios: { shadowColor: '#6366f1', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 10 },
       android: { elevation: 6 },
     }),
   },
   ctaText: {
     color: '#FFFFFF',
     fontSize: 18,
-    fontWeight: 'bold',
   },
 });

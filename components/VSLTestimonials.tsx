@@ -5,7 +5,7 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { Star, Quote } from 'lucide-react-native';
 
 export default function VSLTestimonials() {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
 
   const testimonials = [
     {
@@ -62,10 +62,10 @@ export default function VSLTestimonials() {
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={styles.section}>
-        <Text style={[styles.sectionTitle, { color: colors.text }]}>
+        <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.display }]}>
           O que dizem os pais sobre o BitforKids
         </Text>
-        <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>
+        <Text style={[styles.sectionSubtitle, { color: colors.textSecondary, fontFamily: fonts.body }]}>
           Mais de 12.500 famílias já transformaram a educação financeira dos
           seus filhos
         </Text>
@@ -82,10 +82,10 @@ export default function VSLTestimonials() {
                 { backgroundColor: colors.card, borderColor: colors.border },
               ]}
             >
-              <Text style={[styles.statNumber, { color: colors.primary }]}>
+              <Text style={[styles.statNumber, { color: colors.primary, fontFamily: fonts.display }]}>
                 {stat.number}
               </Text>
-              <Text style={[styles.statLabel, { color: colors.textSecondary }]}>
+              <Text style={[styles.statLabel, { color: colors.textSecondary, fontFamily: fonts.body }]}>
                 {stat.label}
               </Text>
             </View>
@@ -107,20 +107,20 @@ export default function VSLTestimonials() {
               >
                 <View style={styles.testimonialHeader}>
                   <View style={styles.avatarContainer}>
-                    <Text style={styles.avatarText}>
+                    <Text style={[styles.avatarText, { fontFamily: fonts.bodyBold }]}>
                       {testimonial.name.charAt(0)}
                     </Text>
                   </View>
                   <View style={styles.testimonialInfo}>
                     <Text
-                      style={[styles.testimonialName, { color: colors.text }]}
+                      style={[styles.testimonialName, { color: colors.text, fontFamily: fonts.bodySemiBold }]}
                     >
                       {testimonial.name}
                     </Text>
                     <Text
                       style={[
                         styles.testimonialRole,
-                        { color: colors.textSecondary },
+                        { color: colors.textSecondary, fontFamily: fonts.body },
                       ]}
                     >
                       {testimonial.role}
@@ -128,7 +128,7 @@ export default function VSLTestimonials() {
                     <Text
                       style={[
                         styles.testimonialLocation,
-                        { color: colors.textSecondary },
+                        { color: colors.textSecondary, fontFamily: fonts.secondaryMedium },
                       ]}
                     >
                       {testimonial.location}
@@ -147,7 +147,7 @@ export default function VSLTestimonials() {
                   <Text
                     style={[
                       styles.testimonialText,
-                      { color: colors.textSecondary },
+                      { color: colors.textSecondary, fontFamily: fonts.body },
                     ]}
                   >
                     {testimonial.text}
@@ -161,7 +161,7 @@ export default function VSLTestimonials() {
 
       {/* Success Stories */}
       <View style={styles.section}>
-        <Text style={[styles.storiesTitle, { color: colors.text }]}>
+        <Text style={[styles.storiesTitle, { color: colors.text, fontFamily: fonts.display }]}>
           Histórias de Sucesso Reais
         </Text>
 
@@ -176,23 +176,23 @@ export default function VSLTestimonials() {
               colors={['rgba(16, 185, 129, 0.1)', 'rgba(5, 150, 105, 0.1)']}
               style={styles.storyGradient}
             >
-              <Text style={[styles.storyTitle, { color: colors.text }]}>
+              <Text style={[styles.storyTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
                 João, 12 anos
               </Text>
               <Text
-                style={[styles.storySubtitle, { color: colors.textSecondary }]}
+                style={[styles.storySubtitle, { color: colors.textSecondary, fontFamily: fonts.body }]}
               >
                 De notas baixas em matemática para explicar Bitcoin para a
                 família
               </Text>
-              <Text style={[styles.storyText, { color: colors.textSecondary }]}>
+              <Text style={[styles.storyText, { color: colors.textSecondary, fontFamily: fonts.body }]}>
                 "João sempre teve dificuldade com matemática, mas depois de 3
                 meses no BitforKids, ele não só melhorou suas notas como agora
                 me ensina sobre investimentos. Ele até criou uma 'carteira
                 digital' para guardar suas economias!"
               </Text>
               <Text
-                style={[styles.storyAuthor, { color: colors.textSecondary }]}
+                style={[styles.storyAuthor, { color: colors.textSecondary, fontFamily: fonts.bodySemiBold }]}
               >
                 - Maria Silva, mãe de João
               </Text>
@@ -209,22 +209,22 @@ export default function VSLTestimonials() {
               colors={['rgba(139, 92, 246, 0.1)', 'rgba(59, 130, 246, 0.1)']}
               style={styles.storyGradient}
             >
-              <Text style={[styles.storyTitle, { color: colors.text }]}>
+              <Text style={[styles.storyTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
                 Sofia, 14 anos
               </Text>
               <Text
-                style={[styles.storySubtitle, { color: colors.textSecondary }]}
+                style={[styles.storySubtitle, { color: colors.textSecondary, fontFamily: fonts.body }]}
               >
                 Desenvolveu mentalidade de poupança e planejamento financeiro
               </Text>
-              <Text style={[styles.storyText, { color: colors.textSecondary }]}>
+              <Text style={[styles.storyText, { color: colors.textSecondary, fontFamily: fonts.body }]}>
                 "Sofia sempre gastava toda a mesada no primeiro dia. Agora ela
                 faz orçamentos, planeja suas compras e até me ajuda a organizar
                 as finanças da família. O BitforKids mudou completamente nossa
                 relação com o dinheiro."
               </Text>
               <Text
-                style={[styles.storyAuthor, { color: colors.textSecondary }]}
+                style={[styles.storyAuthor, { color: colors.textSecondary, fontFamily: fonts.bodySemiBold }]}
               >
                 - Roberto Lima, pai de Sofia
               </Text>
@@ -235,7 +235,7 @@ export default function VSLTestimonials() {
 
       {/* Trust Indicators */}
       <View style={styles.section}>
-        <Text style={[styles.trustTitle, { color: colors.text }]}>
+        <Text style={[styles.trustTitle, { color: colors.text, fontFamily: fonts.display }]}>
           Por que os pais confiam no BitforKids?
         </Text>
 
@@ -247,11 +247,11 @@ export default function VSLTestimonials() {
             ]}
           >
             <Text style={styles.trustEmoji}>🛡️</Text>
-            <Text style={[styles.trustItemTitle, { color: colors.text }]}>
+            <Text style={[styles.trustItemTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
               Conteúdo Seguro
             </Text>
             <Text
-              style={[styles.trustItemText, { color: colors.textSecondary }]}
+              style={[styles.trustItemText, { color: colors.textSecondary, fontFamily: fonts.body }]}
             >
               Todo conteúdo é aprovado por educadores e psicólogos infantis
             </Text>
@@ -264,11 +264,11 @@ export default function VSLTestimonials() {
             ]}
           >
             <Text style={styles.trustEmoji}>🎓</Text>
-            <Text style={[styles.trustItemTitle, { color: colors.text }]}>
+            <Text style={[styles.trustItemTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
               Metodologia Comprovada
             </Text>
             <Text
-              style={[styles.trustItemText, { color: colors.textSecondary }]}
+              style={[styles.trustItemText, { color: colors.textSecondary, fontFamily: fonts.body }]}
             >
               Baseada em estudos científicos sobre educação financeira infantil
             </Text>
@@ -281,11 +281,11 @@ export default function VSLTestimonials() {
             ]}
           >
             <Text style={styles.trustEmoji}>👨‍👩‍👧‍👦</Text>
-            <Text style={[styles.trustItemTitle, { color: colors.text }]}>
+            <Text style={[styles.trustItemTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
               Comunidade Apoiadora
             </Text>
             <Text
-              style={[styles.trustItemText, { color: colors.textSecondary }]}
+              style={[styles.trustItemText, { color: colors.textSecondary, fontFamily: fonts.body }]}
             >
               Mais de 12.500 famílias compartilhando experiências e dicas
             </Text>
@@ -298,11 +298,11 @@ export default function VSLTestimonials() {
             ]}
           >
             <Text style={styles.trustEmoji}>✅</Text>
-            <Text style={[styles.trustItemTitle, { color: colors.text }]}>
+            <Text style={[styles.trustItemTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
               Garantia Total
             </Text>
             <Text
-              style={[styles.trustItemText, { color: colors.textSecondary }]}
+              style={[styles.trustItemText, { color: colors.textSecondary, fontFamily: fonts.body }]}
             >
               30 dias para testar sem compromisso. Se não gostar, devolvemos seu
               dinheiro
@@ -323,7 +323,6 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 24,
-    fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 8,
   },
@@ -348,7 +347,6 @@ const styles = StyleSheet.create({
   },
   statNumber: {
     fontSize: 24,
-    fontWeight: 'bold',
     marginBottom: 4,
   },
   statLabel: {
@@ -375,14 +373,13 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: '#6366f1',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
   },
   avatarText: {
     fontSize: 20,
-    fontWeight: 'bold',
     color: 'white',
   },
   testimonialInfo: {
@@ -390,7 +387,6 @@ const styles = StyleSheet.create({
   },
   testimonialName: {
     fontSize: 16,
-    fontWeight: 'bold',
     marginBottom: 2,
   },
   testimonialRole: {
@@ -417,7 +413,6 @@ const styles = StyleSheet.create({
   },
   storiesTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
     marginBottom: 16,
     textAlign: 'center',
   },
@@ -434,7 +429,6 @@ const styles = StyleSheet.create({
   },
   storyTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
     marginBottom: 4,
   },
   storySubtitle: {
@@ -452,7 +446,6 @@ const styles = StyleSheet.create({
   },
   trustTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
     marginBottom: 16,
     textAlign: 'center',
   },
@@ -471,7 +464,6 @@ const styles = StyleSheet.create({
   },
   trustItemTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
     marginBottom: 8,
     textAlign: 'center',
   },

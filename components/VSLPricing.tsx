@@ -28,7 +28,7 @@ export default function VSLPricing({
   onPremiumPress,
   onCoursesPress,
 }: VSLPricingProps) {
-  const { colors } = useTheme();
+  const { colors, fonts } = useTheme();
 
   const premiumBenefits = [
     { icon: Crown, text: 'Acesso a +50 cursos completos' },
@@ -65,10 +65,10 @@ export default function VSLPricing({
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={styles.section}>
-        <Text style={[styles.sectionTitle, { color: colors.text }]}>
+        <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.display }]}>
           Escolha sua opção ideal
         </Text>
-        <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>
+        <Text style={[styles.sectionSubtitle, { color: colors.textSecondary, fontFamily: fonts.body }]}>
           Recomendamos o Plano Premium para máxima economia e acesso completo
         </Text>
       </View>
@@ -80,26 +80,26 @@ export default function VSLPricing({
           style={styles.premiumCard}
         >
           <View style={styles.premiumBadge}>
-            <Text style={styles.premiumBadgeText}>MAIS POPULAR</Text>
+            <Text style={[styles.premiumBadgeText, { fontFamily: fonts.secondaryMedium }]}>MAIS POPULAR</Text>
           </View>
 
           <View style={styles.premiumHeader}>
             <Crown size={32} color="white" />
-            <Text style={styles.premiumTitle}>PLANO ANUAL PREMIUM</Text>
-            <Text style={styles.premiumSubtitle}>
+            <Text style={[styles.premiumTitle, { fontFamily: fonts.display }]}>PLANO ANUAL PREMIUM</Text>
+            <Text style={[styles.premiumSubtitle, { fontFamily: fonts.body }]}>
               Acesso completo por 12 meses
             </Text>
           </View>
 
           <View style={styles.priceContainer}>
             <View style={styles.priceRow}>
-              <Text style={styles.originalPrice}>De R$ 1.799,90</Text>
+              <Text style={[styles.originalPrice, { fontFamily: fonts.body }]}>De R$ 1.799,90</Text>
               <View style={styles.discountBadge}>
-                <Text style={styles.discountText}>-60%</Text>
+                <Text style={[styles.discountText, { fontFamily: fonts.secondaryMedium }]}>-60%</Text>
               </View>
             </View>
-            <Text style={styles.currentPrice}>R$ 699,90</Text>
-            <Text style={styles.priceSubtext}>
+            <Text style={[styles.currentPrice, { fontFamily: fonts.display }]}>R$ 699,90</Text>
+            <Text style={[styles.priceSubtext, { fontFamily: fonts.body }]}>
               ou 12x de R$ 58,33 sem juros
             </Text>
           </View>
@@ -110,20 +110,20 @@ export default function VSLPricing({
               return (
                 <View key={index} style={styles.benefitItem}>
                   <Icon size={16} color="white" />
-                  <Text style={styles.benefitText}>{benefit.text}</Text>
+                  <Text style={[styles.benefitText, { fontFamily: fonts.body }]}>{benefit.text}</Text>
                 </View>
               );
             })}
           </View>
 
           <TouchableOpacity style={styles.premiumCTA} onPress={onPremiumPress}>
-            <Text style={styles.premiumCTAText}>
+            <Text style={[styles.premiumCTAText, { fontFamily: fonts.bodyBold }]}>
               QUERO O PLANO PREMIUM AGORA
             </Text>
             <ArrowRight size={20} color="white" />
           </TouchableOpacity>
 
-          <Text style={styles.guaranteeText}>
+          <Text style={[styles.guaranteeText, { fontFamily: fonts.body }]}>
             🔒 Garantia de 30 dias ou seu dinheiro de volta
           </Text>
         </LinearGradient>
@@ -131,7 +131,7 @@ export default function VSLPricing({
 
       {/* Individual Courses */}
       <View style={styles.section}>
-        <Text style={[styles.coursesTitle, { color: colors.text }]}>
+        <Text style={[styles.coursesTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
           Ou escolha cursos individuais:
         </Text>
 
@@ -145,7 +145,7 @@ export default function VSLPricing({
                   { backgroundColor: colors.card, borderColor: colors.border },
                 ]}
               >
-                <Text style={[styles.courseTitle, { color: colors.text }]}>
+                <Text style={[styles.courseTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
                   {course.title}
                 </Text>
 
@@ -155,7 +155,7 @@ export default function VSLPricing({
                     <Text
                       style={[
                         styles.courseStatText,
-                        { color: colors.textSecondary },
+                        { color: colors.textSecondary, fontFamily: fonts.secondaryMedium },
                       ]}
                     >
                       {course.duration}
@@ -166,7 +166,7 @@ export default function VSLPricing({
                     <Text
                       style={[
                         styles.courseStatText,
-                        { color: colors.textSecondary },
+                        { color: colors.textSecondary, fontFamily: fonts.secondaryMedium },
                       ]}
                     >
                       {course.students}
@@ -177,7 +177,7 @@ export default function VSLPricing({
                     <Text
                       style={[
                         styles.courseStatText,
-                        { color: colors.textSecondary },
+                        { color: colors.textSecondary, fontFamily: fonts.secondaryMedium },
                       ]}
                     >
                       {course.rating}
@@ -185,7 +185,7 @@ export default function VSLPricing({
                   </View>
                 </View>
 
-                <Text style={[styles.coursePrice, { color: colors.primary }]}>
+                <Text style={[styles.coursePrice, { color: colors.primary, fontFamily: fonts.bodyBold }]}>
                   {course.price}
                 </Text>
               </View>
@@ -195,10 +195,10 @@ export default function VSLPricing({
 
         <TouchableOpacity style={styles.coursesCTA} onPress={onCoursesPress}>
           <LinearGradient
-            colors={['#8B5CF6', '#3B82F6']}
+            colors={['#4f46e5', '#3b82f6']}
             style={styles.coursesCTAGradient}
           >
-            <Text style={styles.coursesCTAText}>VER TODOS OS CURSOS</Text>
+            <Text style={[styles.coursesCTAText, { fontFamily: fonts.bodyBold }]}>VER TODOS OS CURSOS</Text>
             <ArrowRight size={16} color="white" />
           </LinearGradient>
         </TouchableOpacity>
@@ -206,7 +206,7 @@ export default function VSLPricing({
 
       {/* Comparison Table */}
       <View style={styles.section}>
-        <Text style={[styles.comparisonTitle, { color: colors.text }]}>
+        <Text style={[styles.comparisonTitle, { color: colors.text, fontFamily: fonts.display }]}>
           Comparação de Planos
         </Text>
 
@@ -217,13 +217,13 @@ export default function VSLPricing({
           ]}
         >
           <View style={styles.comparisonHeader}>
-            <Text style={[styles.comparisonHeaderText, { color: colors.text }]}>
+            <Text style={[styles.comparisonHeaderText, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>
               Recurso
             </Text>
-            <Text style={[styles.comparisonHeaderText, { color: colors.text }]}>
+            <Text style={[styles.comparisonHeaderText, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>
               Individual
             </Text>
-            <Text style={[styles.comparisonHeaderText, { color: colors.text }]}>
+            <Text style={[styles.comparisonHeaderText, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>
               Premium
             </Text>
           </View>
@@ -246,18 +246,18 @@ export default function VSLPricing({
                 { borderBottomColor: colors.border },
               ]}
             >
-              <Text style={[styles.comparisonFeature, { color: colors.text }]}>
+              <Text style={[styles.comparisonFeature, { color: colors.text, fontFamily: fonts.bodyMedium }]}>
                 {row.feature}
               </Text>
               <Text
                 style={[
                   styles.comparisonIndividual,
-                  { color: colors.textSecondary },
+                  { color: colors.textSecondary, fontFamily: fonts.body },
                 ]}
               >
                 {row.individual}
               </Text>
-              <Text style={[styles.comparisonPremium, { color: '#F59E0B' }]}>
+              <Text style={[styles.comparisonPremium, { color: '#F59E0B', fontFamily: fonts.bodySemiBold }]}>
                 {row.premium}
               </Text>
             </View>
@@ -271,10 +271,10 @@ export default function VSLPricing({
           colors={['rgba(139, 92, 246, 0.1)', 'rgba(59, 130, 246, 0.1)']}
           style={[styles.finalCTACard, { borderColor: colors.border }]}
         >
-          <Text style={[styles.finalCTATitle, { color: colors.text }]}>
+          <Text style={[styles.finalCTATitle, { color: colors.text, fontFamily: fonts.display }]}>
             Não perca esta oportunidade única!
           </Text>
-          <Text style={[styles.finalCTAText, { color: colors.textSecondary }]}>
+          <Text style={[styles.finalCTAText, { color: colors.textSecondary, fontFamily: fonts.body }]}>
             Junte-se a mais de 12.500 famílias que já estão preparando seus
             filhos para um futuro financeiro próspero. A educação financeira é o
             melhor investimento que você pode fazer no futuro do seu filho.
@@ -286,7 +286,7 @@ export default function VSLPricing({
               style={styles.finalCTAGradient}
             >
               <Crown size={20} color="white" />
-              <Text style={styles.finalCTATextButton}>
+              <Text style={[styles.finalCTATextButton, { fontFamily: fonts.bodyBold }]}>
                 SIM, QUERO O PLANO PREMIUM
               </Text>
             </LinearGradient>
@@ -306,7 +306,6 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 24,
-    fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 8,
   },
@@ -333,7 +332,6 @@ const styles = StyleSheet.create({
   },
   premiumBadgeText: {
     fontSize: 12,
-    fontWeight: 'bold',
     color: 'white',
   },
   premiumHeader: {
@@ -342,7 +340,6 @@ const styles = StyleSheet.create({
   },
   premiumTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
     color: 'white',
     marginTop: 8,
     marginBottom: 4,
@@ -374,12 +371,10 @@ const styles = StyleSheet.create({
   },
   discountText: {
     fontSize: 12,
-    fontWeight: 'bold',
     color: 'white',
   },
   currentPrice: {
     fontSize: 36,
-    fontWeight: 'bold',
     color: 'white',
     marginBottom: 4,
   },
@@ -413,7 +408,6 @@ const styles = StyleSheet.create({
   },
   premiumCTAText: {
     fontSize: 18,
-    fontWeight: 'bold',
     color: 'white',
   },
   guaranteeText: {
@@ -423,7 +417,6 @@ const styles = StyleSheet.create({
   },
   coursesTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
     marginBottom: 16,
   },
   coursesContainer: {
@@ -439,7 +432,6 @@ const styles = StyleSheet.create({
   },
   courseTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
     marginBottom: 12,
   },
   courseStats: {
@@ -456,7 +448,6 @@ const styles = StyleSheet.create({
   },
   coursePrice: {
     fontSize: 18,
-    fontWeight: 'bold',
   },
   coursesCTA: {
     marginTop: 16,
@@ -472,12 +463,10 @@ const styles = StyleSheet.create({
   },
   coursesCTAText: {
     fontSize: 16,
-    fontWeight: 'bold',
     color: 'white',
   },
   comparisonTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
     marginBottom: 16,
     textAlign: 'center',
   },
@@ -494,7 +483,6 @@ const styles = StyleSheet.create({
   comparisonHeaderText: {
     flex: 1,
     fontSize: 14,
-    fontWeight: 'bold',
     textAlign: 'center',
   },
   comparisonRow: {
@@ -516,7 +504,6 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 14,
     textAlign: 'center',
-    fontWeight: '600',
   },
   finalCTACard: {
     borderRadius: 12,
@@ -526,7 +513,6 @@ const styles = StyleSheet.create({
   },
   finalCTATitle: {
     fontSize: 20,
-    fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 12,
   },
@@ -550,7 +536,6 @@ const styles = StyleSheet.create({
   },
   finalCTATextButton: {
     fontSize: 18,
-    fontWeight: 'bold',
     color: 'white',
   },
 });
