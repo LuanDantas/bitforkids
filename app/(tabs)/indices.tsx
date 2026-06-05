@@ -912,15 +912,15 @@ export default function IndicesScreen() {
                     // router.push(`/crypto/${crypto.id}` as any);
                   }}
                 >
-                  <View style={styles.cryptoRank}>
-                    <Text
-                      style={[styles.rankText, { color: colors.textTertiary, fontFamily: fonts.bodySemiBold }]}
-                    >
-                      {crypto.rank}
-                    </Text>
-                  </View>
+                  <View style={styles.cryptoHeader}>
+                    <View style={styles.cryptoRank}>
+                      <Text
+                        style={[styles.rankText, { color: colors.textTertiary, fontFamily: fonts.bodySemiBold }]}
+                      >
+                        {crypto.rank}
+                      </Text>
+                    </View>
 
-                  <View style={styles.cryptoInfo}>
                     <View
                       style={[
                         styles.cryptoLogo,
@@ -946,35 +946,37 @@ export default function IndicesScreen() {
                     </View>
                   </View>
 
-                  <View style={styles.cryptoPrice}>
-                    <Text style={[styles.priceText, { color: colors.text, fontFamily: fonts.bodyBold }]}>
-                      {formatPrice(crypto.price)}
-                    </Text>
-                    <View style={styles.changeContainer}>
-                      <ChangeIcon size={12} color={changeColor} />
-                      <Text style={[styles.changeText, { color: changeColor, fontFamily: fonts.bodySemiBold }]}>
-                        {Math.abs(crypto.change24h).toFixed(1)}%
+                  <View style={styles.cryptoMetrics}>
+                    <View style={styles.metricBlock}>
+                      <Text style={[styles.priceText, { color: colors.text, fontFamily: fonts.bodyBold }]}>
+                        {formatPrice(crypto.price)}
+                      </Text>
+                      <View style={styles.changeContainer}>
+                        <ChangeIcon size={12} color={changeColor} />
+                        <Text style={[styles.changeText, { color: changeColor, fontFamily: fonts.bodySemiBold }]}>
+                          {Math.abs(crypto.change24h).toFixed(1)}%
+                        </Text>
+                      </View>
+                    </View>
+
+                    <View style={[styles.metricBlock, styles.metricBlockRight]}>
+                      <Text
+                        style={[
+                          styles.marketCapText,
+                          { color: colors.textSecondary, fontFamily: fonts.bodySemiBold },
+                        ]}
+                      >
+                        {formatMarketCap(crypto.marketCap)}
+                      </Text>
+                      <Text
+                        style={[
+                          styles.volumeText,
+                          { color: colors.textTertiary, fontFamily: fonts.body },
+                        ]}
+                      >
+                        Vol: ${crypto.volume}B
                       </Text>
                     </View>
-                  </View>
-
-                  <View style={styles.cryptoStats}>
-                    <Text
-                      style={[
-                        styles.marketCapText,
-                        { color: colors.textSecondary, fontFamily: fonts.bodySemiBold },
-                      ]}
-                    >
-                      {formatMarketCap(crypto.marketCap)}
-                    </Text>
-                    <Text
-                      style={[
-                        styles.volumeText,
-                        { color: colors.textTertiary, fontFamily: fonts.body },
-                      ]}
-                    >
-                      Vol: ${crypto.volume}B
-                    </Text>
                   </View>
                 </TouchableOpacity>
               );
@@ -1241,9 +1243,6 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   sectionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
     marginBottom: 16,
   },
   sectionTitle: {
@@ -1288,6 +1287,7 @@ const styles = StyleSheet.create({
   },
   timeframeSelector: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: 8,
   },
   timeframeButton: {
@@ -1303,11 +1303,13 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   cryptoItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
+  },
+  cryptoHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   cryptoRank: {
     width: 30,
@@ -1316,11 +1318,6 @@ const styles = StyleSheet.create({
   },
   rankText: {
     fontSize: 14,
-  },
-  cryptoInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
   },
   cryptoLogo: {
     width: 40,
@@ -1343,9 +1340,21 @@ const styles = StyleSheet.create({
   cryptoSymbol: {
     fontSize: 14,
   },
-  cryptoPrice: {
+  cryptoMetrics: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'flex-end',
-    marginRight: 16,
+    marginTop: 12,
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(148, 163, 184, 0.15)',
+    paddingLeft: 52,
+  },
+  metricBlock: {
+    alignItems: 'flex-start',
+  },
+  metricBlockRight: {
+    alignItems: 'flex-end',
   },
   priceText: {
     fontSize: 16,
@@ -1358,10 +1367,6 @@ const styles = StyleSheet.create({
   },
   changeText: {
     fontSize: 14,
-  },
-  cryptoStats: {
-    alignItems: 'flex-end',
-    minWidth: 80,
   },
   marketCapText: {
     fontSize: 14,

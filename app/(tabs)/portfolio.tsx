@@ -1123,7 +1123,7 @@ export default function PortfolioScreen() {
               <Text
                 style={[styles.transactionTypeText, { color: colors.text, fontFamily: fonts.bodySemiBold }]}
               >
-                {t('portfolio.withdrawal')}
+                {t('portfolio.withdrawalType')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
