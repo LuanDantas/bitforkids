@@ -67,19 +67,19 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="about"
-        options={{
-          title: t('tabs.about'),
-          tabBarIcon: ({ size, color }) => <Info size={size} color={color} />,
-        }}
-      />
-      <Tabs.Screen
         name="courses"
         options={{
           title: t('tabs.courses'),
           tabBarIcon: ({ size, color }) => (
             <BookOpen size={size} color={color} />
           ),
+        }}
+      />
+      <Tabs.Screen
+        name="portfolio"
+        options={{
+          title: t('tabs.portfolio'),
+          tabBarIcon: ({ size, color }) => <Wallet size={size} color={color} />,
         }}
       />
       <Tabs.Screen
@@ -99,11 +99,11 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="portfolio"
+        name="about"
         options={{
           href: null,
-          title: t('tabs.portfolio'),
-          tabBarIcon: ({ size, color }) => <Wallet size={size} color={color} />,
+          title: t('tabs.about'),
+          tabBarIcon: ({ size, color }) => <Info size={size} color={color} />,
         }}
       />
       <Tabs.Screen

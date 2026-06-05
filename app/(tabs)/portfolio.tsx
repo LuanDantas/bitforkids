@@ -37,12 +37,14 @@ import GlassCard from '@/components/GlassCard';
 import Svg, { Polyline, Circle } from 'react-native-svg';
 
 const cryptos = [
-  { id: 'BTC', name: 'Bitcoin', icon: '₿', color: '#F7931A' },
-  { id: 'ETH', name: 'Ethereum', icon: 'Ξ', color: '#627EEA' },
-  { id: 'SOL', name: 'Solana', icon: '◎', color: '#9945FF' },
-  { id: 'BNB', name: 'BNB', icon: 'B', color: '#F3BA2F' },
-  { id: 'XRP', name: 'XRP', icon: 'X', color: '#23292F' },
-  { id: 'ADA', name: 'Cardano', icon: 'A', color: '#0033AD' },
+  { id: 'BTC', name: 'Bitcoin', icon: '₿', color: '#F7931A', price: 73250.45, change: 2.3 },
+  { id: 'USDT', name: 'USDT', icon: '₮', color: '#26A17B', price: 1.0, change: 0.0 },
+  { id: 'USDC', name: 'USDC', icon: '$', color: '#2775CA', price: 1.0, change: 0.01 },
+  { id: 'DAI', name: 'DAI', icon: '◈', color: '#F5AC37', price: 1.0, change: -0.02 },
+  { id: 'ETH', name: 'Ether', icon: 'Ξ', color: '#627EEA', price: 3845.67, change: 8.2 },
+  { id: 'POL', name: 'Polygon', icon: '⬡', color: '#8247E5', price: 0.52, change: -1.2 },
+  { id: 'SOL', name: 'Solana', icon: '◎', color: '#9945FF', price: 198.34, change: -3.4 },
+  { id: 'TRX', name: 'Tron', icon: 'T', color: '#EF0027', price: 0.24, change: 1.5 },
 ];
 
 // Enhanced Line Chart Component for Cards with Axes and Scroll
@@ -482,6 +484,66 @@ export default function PortfolioScreen() {
     Alert.alert(t('portfolio.successTitle'), t('portfolio.transactionCreated'));
   };
 
+  const formatCoinPrice = (price: number) => {
+    if (price >= 1) {
+      return `$${price.toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })}`;
+    }
+    return `$${price.toFixed(4)}`;
+  };
+
+  const renderMarketSummary = () => {
+    return (
+      <GlassCard style={styles.marketCard}>
+        <Text style={[styles.marketTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
+          {t('portfolio.marketSummary')}
+        </Text>
+        {cryptos.map((coin) => {
+          const changeColor =
+            coin.change > 0 ? '#10B981' : coin.change < 0 ? '#EF4444' : colors.textSecondary;
+          const ChangeIcon =
+            coin.change > 0 ? TrendingUp : coin.change < 0 ? TrendingDown : Minus;
+          return (
+            <View
+              key={coin.id}
+              style={[styles.marketRow, { borderBottomColor: colors.border }]}
+            >
+              <View style={styles.marketCoinInfo}>
+                <View style={[styles.marketCoinIcon, { backgroundColor: coin.color + '20' }]}>
+                  <Text style={[styles.marketCoinIconText, { color: coin.color, fontFamily: fonts.bodyBold }]}>
+                    {coin.icon}
+                  </Text>
+                </View>
+                <View>
+                  <Text style={[styles.marketCoinName, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>
+                    {coin.name}
+                  </Text>
+                  <Text style={[styles.marketCoinSymbol, { color: colors.textTertiary, fontFamily: fonts.body }]}>
+                    {coin.id}
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.marketCoinPriceBox}>
+                <Text style={[styles.marketCoinPrice, { color: colors.text, fontFamily: fonts.bodyBold }]}>
+                  {formatCoinPrice(coin.price)}
+                </Text>
+                <View style={styles.marketCoinChange}>
+                  <ChangeIcon size={12} color={changeColor} />
+                  <Text style={[styles.marketCoinChangeText, { color: changeColor, fontFamily: fonts.secondaryMedium }]}>
+                    {coin.change > 0 ? '+' : ''}
+                    {coin.change.toFixed(2)}%
+                  </Text>
+                </View>
+              </View>
+            </View>
+          );
+        })}
+      </GlassCard>
+    );
+  };
+
   const renderPortfolioCards = () => {
     const cards = [
       {
@@ -856,6 +918,9 @@ export default function PortfolioScreen() {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
+        {/* Market Summary — main coins */}
+        <View style={styles.section}>{renderMarketSummary()}</View>
+
         {/* Portfolio Stats Cards */}
         <View style={styles.section}>{renderPortfolioCards()}</View>
 
@@ -1544,6 +1609,57 @@ const styles = StyleSheet.create({
   },
   section: {
     padding: 20,
+  },
+  marketCard: {
+    borderRadius: 12,
+  },
+  marketTitle: {
+    fontSize: 18,
+    marginBottom: 12,
+  },
+  marketRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+  },
+  marketCoinInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  marketCoinIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  marketCoinIconText: {
+    fontSize: 16,
+  },
+  marketCoinName: {
+    fontSize: 15,
+    marginBottom: 2,
+  },
+  marketCoinSymbol: {
+    fontSize: 12,
+  },
+  marketCoinPriceBox: {
+    alignItems: 'flex-end',
+  },
+  marketCoinPrice: {
+    fontSize: 15,
+    marginBottom: 2,
+  },
+  marketCoinChange: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  marketCoinChangeText: {
+    fontSize: 12,
   },
   cardsContainer: {
     gap: 16,

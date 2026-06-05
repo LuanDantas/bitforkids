@@ -1098,6 +1098,7 @@ const esES = {
   portfolio: {
     headerTitle: 'Portafolio',
     headerSubtitle: 'Gestiona tus inversiones en criptomonedas',
+    marketSummary: 'Mercado',
     search: 'Buscar...',
     wallets: 'Billeteras',
     addWallet: 'Agregar Billetera',

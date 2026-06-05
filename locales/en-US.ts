@@ -1099,6 +1099,7 @@ const enUS = {
   portfolio: {
     headerTitle: 'Portfolio',
     headerSubtitle: 'Manage your cryptocurrency investments',
+    marketSummary: 'Market',
     search: 'Search...',
     wallets: 'Wallets',
     addWallet: 'Add Wallet',

@@ -1098,6 +1098,7 @@ const ptBR = {
   portfolio: {
     headerTitle: 'Portfólio',
     headerSubtitle: 'Gerencie seus investimentos em criptomoedas',
+    marketSummary: 'Mercado',
     search: 'Buscar...',
     wallets: 'Carteiras',
     addWallet: 'Adicionar Carteira',
