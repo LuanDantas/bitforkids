@@ -14,6 +14,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useUser } from '@/contexts/UserContext';
+import { useCourseDetail } from '@/hooks/useCourseDetail';
 import AnimatedSection from '@/components/AnimatedSection';
 import AnimatedPressable from '@/components/AnimatedPressable';
 import GradientText from '@/components/GradientText';
@@ -385,14 +386,21 @@ export default function CourseDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const { colors, fonts } = useTheme();
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   const { hasCourseAccess, purchaseCourse } = useUser();
 
   const courseId = parseInt(id || '1', 10);
   const hasAccess = hasCourseAccess(courseId);
 
   const courseDataMap = getCourseData(t);
-  const course = courseDataMap[id || '1'];
+  const localCourse = courseDataMap[id || '1'];
+  const { data: apiCourse } = useCourseDetail(courseId, locale);
+
+  // Dados da API quando disponíveis; mantém image/trailColor locais e cai para o
+  // conteúdo i18n enquanto carrega ou se a API estiver indisponível.
+  const course = localCourse
+    ? { ...localCourse, ...(apiCourse ?? {}) }
+    : localCourse;
   if (!course) {
     return (
       <View style={[styles.container, { backgroundColor: colors.background, justifyContent: 'center', alignItems: 'center' }]}>

@@ -11,6 +11,7 @@ import { useRouter } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useUser } from '@/contexts/UserContext';
+import { useCourses } from '@/hooks/useCourses';
 import AnimatedSection from '@/components/AnimatedSection';
 import AnimatedPressable from '@/components/AnimatedPressable';
 import {
@@ -30,23 +31,40 @@ const AUDIENCE_ICONS = [Users, ShieldCheck, FileText, Key, Heart, Briefcase, Tre
 // Identidade Landing 6: rotação monocromática indigo → azul → ciano
 const AUDIENCE_ACCENTS = ['#6366f1', '#3b82f6', '#06b6d4', '#818cf8', '#60a5fa', '#6366f1', '#3b82f6'];
 
-const courses = [
-  { id: 1, trail: 1, image: require('../../assets/images/curso-bitcoin.png') },
-  { id: 2, trail: 1, image: require('../../assets/images/curso-ethereum.png') },
-  { id: 3, trail: 2, image: require('../../assets/images/curso-autocustodia.png') },
+// Banners locais por curso (legacyId) — o catálogo da API ainda não tem capas.
+const COURSE_IMAGES: Record<number, any> = {
+  1: require('../../assets/images/curso-bitcoin.png'),
+  2: require('../../assets/images/curso-ethereum.png'),
+  3: require('../../assets/images/curso-autocustodia.png'),
+};
+
+const FALLBACK_COURSES = [
+  { id: 1, trail: 1 },
+  { id: 2, trail: 1 },
+  { id: 3, trail: 2 },
 ];
 
 export default function CoursesScreen() {
   const router = useRouter();
   const { colors, fonts, isDark } = useTheme();
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   const { hasCourseAccess } = useUser();
+  const { courses: apiCourses } = useCourses(locale);
 
-  const translatedCourses = courses.map(c => ({
+  // Dados da API quando disponíveis; fallback para i18n local enquanto carrega/offline.
+  const baseCourses =
+    apiCourses ??
+    FALLBACK_COURSES.map(c => ({
+      id: c.id,
+      trail: c.trail,
+      title: t(`courses.course${c.id}Title`),
+      subtitle: t(`courses.course${c.id}Subtitle`),
+      price: '397,00',
+    }));
+
+  const translatedCourses = baseCourses.map(c => ({
     ...c,
-    title: t(`courses.course${c.id}Title`),
-    subtitle: t(`courses.course${c.id}Subtitle`),
-    price: '397,00',
+    image: COURSE_IMAGES[c.id],
   }));
 
   const trail1 = translatedCourses.filter(c => c.trail === 1);
