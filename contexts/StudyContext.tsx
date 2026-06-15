@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback, use
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useUser } from '@/contexts/UserContext';
 import { studyData } from '@/data/studyModules';
+import { progressApi } from '@/services/api/progress';
 
 const STORAGE_KEY = '@bitforkids_study_progress';
 
@@ -18,6 +19,8 @@ interface StudyContextType {
   getCourseProgress: (courseId: number) => number; // 0-100 percentage
   isModuleUnlocked: (courseId: number, moduleId: string) => boolean;
   isLessonComplete: (courseId: number, moduleId: string, lessonId: string) => boolean;
+  /** Sincroniza o progresso do curso com o servidor (mescla as conclusões). */
+  syncCourse: (courseId: number) => Promise<void>;
 }
 
 type AllProgress = Record<string, Record<number, CourseProgress>>;
@@ -31,7 +34,7 @@ const defaultCourseProgress: CourseProgress = {
 const StudyContext = createContext<StudyContextType | undefined>(undefined);
 
 export function StudyProvider({ children }: { children: React.ReactNode }) {
-  const { user } = useUser();
+  const { user, isAuthenticated } = useUser();
   const [allProgress, setAllProgress] = useState<AllProgress>({});
   const [isLoaded, setIsLoaded] = useState(false);
   const allProgressRef = useRef(allProgress);
@@ -76,6 +79,10 @@ export function StudyProvider({ children }: { children: React.ReactNode }) {
 
   const markLessonComplete = useCallback(
     (courseId: number, moduleId: string, lessonId: string) => {
+      // Persiste no servidor (best-effort; ignora erros/offline/sem matrícula).
+      if (isAuthenticated) {
+        progressApi.completeLesson(courseId, lessonId).catch(() => {});
+      }
       setAllProgress((prev) => {
         const userProgress = prev[userKey] ?? {};
         const course = userProgress[courseId] ?? { ...defaultCourseProgress, completedLessons: [] };
@@ -109,7 +116,33 @@ export function StudyProvider({ children }: { children: React.ReactNode }) {
         };
       });
     },
-    [userKey],
+    [userKey, isAuthenticated],
+  );
+
+  // Mescla o progresso do servidor no estado local (sem sobrescrever conclusões locais).
+  const syncCourse = useCallback(
+    async (courseId: number) => {
+      if (!isAuthenticated) return;
+      const serverKeys = await progressApi.fetchCompletedKeys(courseId);
+      if (serverKeys.length === 0) return;
+      setAllProgress((prev) => {
+        const userProgress = prev[userKey] ?? {};
+        const course =
+          userProgress[courseId] ?? { ...defaultCourseProgress, completedLessons: [] };
+        const merged = Array.from(
+          new Set([...course.completedLessons, ...serverKeys]),
+        );
+        if (merged.length === course.completedLessons.length) return prev;
+        return {
+          ...prev,
+          [userKey]: {
+            ...userProgress,
+            [courseId]: { ...course, completedLessons: merged },
+          },
+        };
+      });
+    },
+    [userKey, isAuthenticated],
   );
 
   const getModuleProgress = useCallback(
@@ -183,6 +216,7 @@ export function StudyProvider({ children }: { children: React.ReactNode }) {
         getCourseProgress,
         isModuleUnlocked,
         isLessonComplete,
+        syncCourse,
       }}
     >
       {children}

@@ -35,10 +35,16 @@ export default function StudyDashboardScreen() {
     getModuleProgress,
     isModuleUnlocked,
     isLessonComplete,
+    syncCourse,
   } = useStudy();
 
   const courseId = Number(id);
   const course = studyData.find((c) => c.courseId === courseId);
+
+  // Puxa o progresso do servidor ao abrir o curso.
+  React.useEffect(() => {
+    syncCourse(courseId);
+  }, [courseId, syncCourse]);
 
   if (!course) {
     return (
