@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { cmsApi } from '@/services/api/cms';
 
 type Locale = 'pt-BR' | 'en-US' | 'es-ES';
 
@@ -40,6 +41,8 @@ function getNestedValue(obj: any, path: string): string {
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>('pt-BR');
   const [isLoaded, setIsLoaded] = useState(false);
+  // Textos gerenciáveis vindos do CMS (sobrepõem os locales bundlados).
+  const [cmsBundle, setCmsBundle] = useState<Record<string, string>>({});
 
   useEffect(() => {
     AsyncStorage.getItem(STORAGE_KEY).then((saved) => {
@@ -50,6 +53,22 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
+  // Busca o bundle do CMS sempre que o locale muda (best-effort; cai nos locales locais).
+  useEffect(() => {
+    let active = true;
+    cmsApi
+      .bundle(locale)
+      .then((b) => {
+        if (active) setCmsBundle(b.items ?? {});
+      })
+      .catch(() => {
+        if (active) setCmsBundle({});
+      });
+    return () => {
+      active = false;
+    };
+  }, [locale]);
+
   const setLocale = useCallback((newLocale: Locale) => {
     setLocaleState(newLocale);
     AsyncStorage.setItem(STORAGE_KEY, newLocale);
@@ -57,15 +76,20 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   const t = useCallback(
     (key: string): string => {
+      // 1) CMS (gerenciável) tem prioridade.
+      const fromCms = cmsBundle[key];
+      if (typeof fromCms === 'string' && fromCms.length > 0) return fromCms;
+
+      // 2) Locales bundlados (offline / chaves não gerenciadas).
       const translations = getTranslations();
       const result = getNestedValue(translations[locale], key);
       if (result === key && locale !== 'pt-BR') {
-        // Fallback to Portuguese if key not found in current locale
+        // Fallback para português se a chave não existir no locale atual.
         return getNestedValue(translations['pt-BR'], key);
       }
       return result;
     },
-    [locale]
+    [locale, cmsBundle]
   );
 
   if (!isLoaded) return null;
