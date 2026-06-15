@@ -45,7 +45,7 @@ Expo Router file-based routing:
 
 ### State Management (contexts/)
 
-- **ThemeContext** — Light/dark/system theme with 30+ color tokens, persisted via AsyncStorage
+- **ThemeContext** — Dark-only theme (Landing Page 6 / CryptoVerse identity) with brand color + gradient tokens (`gradientPrimary`, `gradientHeading`, `gradientCta`, `accentLight`, `accentCyan`, `badge*`). Light/system modes removed
 - **VSLContext** — VSL modal visibility, video progress tracking, conversion tracking with session/cooldown rules
 
 ### Services (services/)
@@ -55,6 +55,7 @@ Expo Router file-based routing:
 ### Components (components/)
 
 - `charts/` — Five chart types (CandlestickChart, LineChart, PieChart, VerticalBarChart, HorizontalBarChart) using react-native-svg
+- Signature design-system components (Landing Page 6): `GradientButton` (primary/ghost variants with glow), `GradientText` (gradient-clipped text via `@react-native-masked-view/masked-view`), `Badge` (indigo glass pill)
 - VSL-related components (VSLHero, VSLVideo, VSLBenefits, VSLPricing, VSLTestimonials, VSLModal)
 
 ### Assets (assets/images/)

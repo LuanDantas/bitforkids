@@ -16,7 +16,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useUser } from '@/contexts/UserContext';
 import AnimatedSection from '@/components/AnimatedSection';
 import AnimatedPressable from '@/components/AnimatedPressable';
-import GlassCard from '@/components/GlassCard';
+import GradientText from '@/components/GradientText';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import {
   ArrowLeft,
@@ -52,7 +52,7 @@ function getCourseData(t: (key: string) => string): Record<string, CourseData> {
       subtitle: t('courseDetail.course1.subtitle'),
       price: '397',
       image: require('../../../assets/images/curso-bitcoin.png'),
-      trailColor: ['#F7931A', '#E2761B'] as const,
+      trailColor: ['#6366f1', '#3b82f6'] as const,
       trailLabel: t('courseDetail.course1.trailLabel'),
       sections: [
         {
@@ -154,7 +154,7 @@ function getCourseData(t: (key: string) => string): Record<string, CourseData> {
       subtitle: t('courseDetail.course2.subtitle'),
       price: '397',
       image: require('../../../assets/images/curso-ethereum.png'),
-      trailColor: ['#627EEA', '#3B5998'] as const,
+      trailColor: ['#3b82f6', '#06b6d4'] as const,
       trailLabel: t('courseDetail.course2.trailLabel'),
       sections: [
         {
@@ -258,7 +258,7 @@ function getCourseData(t: (key: string) => string): Record<string, CourseData> {
       subtitle: t('courseDetail.course3.subtitle'),
       price: '397',
       image: require('../../../assets/images/curso-autocustodia.png'),
-      trailColor: ['#3B82F6', '#1D4ED8'] as const,
+      trailColor: ['#6366f1', '#3b82f6'] as const,
       trailLabel: t('courseDetail.course3.trailLabel'),
       sections: [
         {
@@ -442,7 +442,7 @@ export default function CourseDetailScreen() {
             <LinearGradient colors={course.trailColor} style={styles.trailBadge}>
               <Text style={[styles.trailBadgeText, { fontFamily: fonts.secondaryMedium }]}>{course.trailLabel}</Text>
             </LinearGradient>
-            <Text style={[styles.courseTitle, { color: colors.text, fontFamily: fonts.display }]}>{course.title}</Text>
+            <GradientText style={[styles.courseTitle, { fontFamily: fonts.display }]}>{course.title}</GradientText>
             <View style={[styles.accentLine, { backgroundColor: course.trailColor[0] }]} />
             <Text style={[styles.courseSubtitle, { color: colors.textSecondary, fontFamily: fonts.body }]}>{course.subtitle}</Text>
           </View>
@@ -465,7 +465,7 @@ export default function CourseDetailScreen() {
               {/* Content sections — each with unique visual */}
               {course.sections.map((section, sIdx) => {
                 const sectionColors = [
-                  '#6366f1', '#F59E0B', '#3b82f6', '#10B981', '#8B5CF6', '#EC4899',
+                  '#6366f1', '#3b82f6', '#06b6d4', '#818cf8', '#60a5fa', '#6366f1',
                 ];
                 const accent = sectionColors[sIdx % sectionColors.length];
                 return (
@@ -530,19 +530,19 @@ export default function CourseDetailScreen() {
           {/* Guarantee */}
           <View style={styles.guaranteeCard}>
             <LinearGradient
-              colors={['rgba(16,185,129,0.1)', 'transparent'] as const}
+              colors={['rgba(99,102,241,0.1)', 'transparent'] as const}
               style={StyleSheet.absoluteFill}
             />
-            <View style={[styles.guaranteeIconCircle, { backgroundColor: '#10B98120' }]}>
-              <Shield size={24} color="#10B981" />
+            <View style={[styles.guaranteeIconCircle, { backgroundColor: '#6366f120' }]}>
+              <Shield size={24} color="#6366f1" />
             </View>
             <Text style={[styles.guaranteeTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>{t('courseDetail.guaranteeTitle')}</Text>
-            <View style={[styles.accentLine, { backgroundColor: '#10B981', marginBottom: 10 }]} />
+            <View style={[styles.accentLine, { backgroundColor: '#6366f1', marginBottom: 10 }]} />
             <Text style={[styles.guaranteeDesc, { color: colors.textSecondary, fontFamily: fonts.body }]}>
               {t('courseDetail.guaranteeDesc')}
             </Text>
             <View style={styles.guaranteeBadge}>
-              <CheckCircle size={14} color="#10B981" />
+              <CheckCircle size={14} color="#6366f1" />
               <Text style={[styles.guaranteeBadgeText, { fontFamily: fonts.bodySemiBold }]}>100% seguro</Text>
             </View>
           </View>
@@ -555,11 +555,11 @@ export default function CourseDetailScreen() {
       <View style={[styles.footer, { backgroundColor: colors.background, borderTopColor: colors.card }]}>
         {hasAccess ? (
           <>
-            <Text style={[styles.footerLabel, { color: '#10B981', fontSize: 14, fontFamily: fonts.bodySemiBold }]}>✅ {t('courseDetail.courseOwned')}</Text>
+            <Text style={[styles.footerLabel, { color: colors.accentLight, fontSize: 14, fontFamily: fonts.bodySemiBold }]}>✅ {t('courseDetail.courseOwned')}</Text>
             <AnimatedPressable onPress={() => router.push(`/course/${id}/study`)}>
-              <View style={[styles.buyBtn, { backgroundColor: '#10B981' }]}>
+              <LinearGradient colors={colors.gradientPrimary} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.buyBtn}>
                 <Text style={[styles.buyBtnText, { fontFamily: fonts.bodyBold }]}>{t('courseDetail.accessCourse')}</Text>
-              </View>
+              </LinearGradient>
             </AnimatedPressable>
           </>
         ) : (
@@ -802,7 +802,7 @@ const styles = StyleSheet.create({
   guaranteeCard: {
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: 'rgba(16,185,129,0.3)',
+    borderColor: 'rgba(99,102,241,0.3)',
     padding: 24,
     marginBottom: 14,
     alignItems: 'center',
@@ -830,13 +830,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 6,
     marginTop: 14,
-    backgroundColor: 'rgba(16,185,129,0.1)',
+    backgroundColor: 'rgba(99,102,241,0.1)',
     paddingVertical: 6,
     paddingHorizontal: 14,
     borderRadius: 20,
   },
   guaranteeBadgeText: {
-    color: '#10B981',
+    color: '#6366f1',
     fontSize: 13,
   },
   footer: {
@@ -862,7 +862,7 @@ const styles = StyleSheet.create({
   },
   footerPrice: {
     fontSize: 22,
-    color: '#10B981',
+    color: '#818cf8',
   },
   buyBtn: {
     paddingVertical: 14,

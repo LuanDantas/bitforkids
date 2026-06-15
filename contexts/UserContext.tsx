@@ -38,6 +38,14 @@ const MOCK_USERS: Record<string, { password: string; user: Omit<User, 'purchased
       role: 'user',
     },
   },
+  'luandr92@gmail.com': {
+    password: 'admin123',
+    user: {
+      email: 'luandr92@gmail.com',
+      name: 'Luan Dantas',
+      role: 'root',
+    },
+  },
 };
 
 const UserContext = createContext<UserContextType | undefined>(undefined);

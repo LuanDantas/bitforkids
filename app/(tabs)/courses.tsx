@@ -5,7 +5,6 @@ import {
   StyleSheet,
   ScrollView,
   Image,
-  Platform,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
@@ -28,7 +27,8 @@ import {
 } from 'lucide-react-native';
 
 const AUDIENCE_ICONS = [Users, ShieldCheck, FileText, Key, Heart, Briefcase, TrendingDown];
-const AUDIENCE_ACCENTS = ['#3b82f6', '#10B981', '#F59E0B', '#8B5CF6', '#EC4899', '#6366f1', '#EF4444'];
+// Identidade Landing 6: rotação monocromática indigo → azul → ciano
+const AUDIENCE_ACCENTS = ['#6366f1', '#3b82f6', '#06b6d4', '#818cf8', '#60a5fa', '#6366f1', '#3b82f6'];
 
 const courses = [
   { id: 1, trail: 1, image: require('../../assets/images/curso-bitcoin.png') },
@@ -101,8 +101,8 @@ export default function CoursesScreen() {
 
         {/* Trilha 1 */}
         <AnimatedSection>
-          <View style={[s.trailCard, { borderColor: '#F7931A40' }]}>
-            <LinearGradient colors={['#F7931A', '#E2761B'] as const} style={s.trailHeader}>
+          <View style={[s.trailCard, { borderColor: 'rgba(99,102,241,0.25)' }]}>
+            <LinearGradient colors={['#6366f1', '#3b82f6'] as const} style={s.trailHeader}>
               <Text style={[s.trailLabel, { fontFamily: fonts.secondaryMedium }]}>{t('courses.trail1Badge')}</Text>
             </LinearGradient>
             <View style={s.trailBody}>
@@ -124,8 +124,8 @@ export default function CoursesScreen() {
 
         {/* Trilha 2 */}
         <AnimatedSection>
-          <View style={[s.trailCard, { borderColor: '#3B82F640' }]}>
-            <LinearGradient colors={['#3B82F6', '#1D4ED8'] as const} style={s.trailHeader}>
+          <View style={[s.trailCard, { borderColor: 'rgba(59,130,246,0.25)' }]}>
+            <LinearGradient colors={['#3b82f6', '#06b6d4'] as const} style={s.trailHeader}>
               <Text style={[s.trailLabel, { fontFamily: fonts.secondaryMedium }]}>{t('courses.trail2Badge')}</Text>
             </LinearGradient>
             <View style={s.trailBody}>
@@ -148,15 +148,15 @@ export default function CoursesScreen() {
         {/* Garantia */}
         <AnimatedSection>
           <View style={s.guaranteeCard}>
-            <LinearGradient colors={['rgba(16,185,129,0.1)', 'transparent'] as const} style={StyleSheet.absoluteFill} />
-            <View style={[s.guaranteeIconCircle, { backgroundColor: '#10B98120' }]}>
-              <Shield size={24} color="#10B981" />
+            <LinearGradient colors={['rgba(99,102,241,0.1)', 'transparent'] as const} style={StyleSheet.absoluteFill} />
+            <View style={[s.guaranteeIconCircle, { backgroundColor: '#6366f120' }]}>
+              <Shield size={24} color="#6366f1" />
             </View>
             <Text style={[s.guaranteeTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>{t('courses.guaranteeTitle')}</Text>
             <View style={s.accentLine} />
             <Text style={[s.guaranteeDesc, { color: colors.textSecondary, fontFamily: fonts.body }]}>{t('courses.guaranteeDesc')}</Text>
             <View style={s.guaranteeBadge}>
-              <CheckCircle size={14} color="#10B981" />
+              <CheckCircle size={14} color="#6366f1" />
               <Text style={[s.guaranteeBadgeText, { fontFamily: fonts.bodySemiBold }]}>100% seguro</Text>
             </View>
           </View>
@@ -178,13 +178,14 @@ function CourseCard({ course, owned, onPress, colors, fonts, t }: any) {
           <Text style={[s.ownedBadgeText, { fontFamily: fonts.secondaryMedium }]}>{t('courses.owned') || 'Adquirido'}</Text>
         </View>
       )}
+
       <View style={s.courseContent}>
         <Text style={[s.courseTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>{course.title}</Text>
         <Text style={[s.courseSubtitle, { color: colors.textSecondary, fontFamily: fonts.body }]} numberOfLines={3}>{course.subtitle}</Text>
         <View style={s.courseFooter}>
           {owned ? (
-            <View style={[s.coursePriceChip, { backgroundColor: '#10B98115' }]}>
-              <CheckCircle size={14} color="#10B981" />
+            <View style={[s.coursePriceChip, { backgroundColor: '#6366f120' }]}>
+              <CheckCircle size={14} color="#818cf8" />
               <Text style={[s.coursePriceOwned, { fontFamily: fonts.bodySemiBold }]}>{t('courses.owned')}</Text>
             </View>
           ) : (
@@ -194,7 +195,7 @@ function CourseCard({ course, owned, onPress, colors, fonts, t }: any) {
             </View>
           )}
           <LinearGradient
-            colors={owned ? ['#10B981', '#059669'] as const : ['#4f46e5', '#3b82f6'] as const}
+            colors={owned ? ['#6366f1', '#3b82f6'] as const : ['#4f46e5', '#3b82f6'] as const}
             style={s.courseBtn}
           >
             <Text style={[s.courseBtnText, { fontFamily: fonts.bodySemiBold }]}>{owned ? (t('courses.access') || 'Acessar') : t('courses.viewCourse')}</Text>
@@ -243,7 +244,7 @@ const s = StyleSheet.create({
   courseCard: { borderRadius: 16, overflow: 'hidden', marginBottom: 14, borderWidth: 1 },
   courseImage: { width: '100%', height: 160 },
   ownedBadge: {
-    position: 'absolute', top: 12, right: 12, backgroundColor: '#10B981',
+    position: 'absolute', top: 12, right: 12, backgroundColor: '#6366f1',
     paddingHorizontal: 10, paddingVertical: 5, borderRadius: 20, zIndex: 1,
     flexDirection: 'row', alignItems: 'center', gap: 4,
   },
@@ -253,24 +254,24 @@ const s = StyleSheet.create({
   courseSubtitle: { fontSize: 13, lineHeight: 20, marginBottom: 14 },
   courseFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   priceLabel: { fontSize: 11, color: '#8B8B8B', marginBottom: 2 },
-  coursePrice: { fontSize: 18, color: '#10B981' },
+  coursePrice: { fontSize: 18, color: '#818cf8' },
   coursePriceChip: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20 },
-  coursePriceOwned: { fontSize: 13, color: '#10B981' },
+  coursePriceOwned: { fontSize: 13, color: '#818cf8' },
   courseBtn: { flexDirection: 'row', alignItems: 'center', paddingVertical: 10, paddingHorizontal: 16, borderRadius: 12, gap: 4 },
   courseBtnText: { color: '#FFF', fontSize: 13 },
 
   // Guarantee
   guaranteeCard: {
-    borderRadius: 20, borderWidth: 1, borderColor: 'rgba(16,185,129,0.3)',
+    borderRadius: 20, borderWidth: 1, borderColor: 'rgba(99,102,241,0.3)',
     padding: 24, marginBottom: 14, alignItems: 'center', overflow: 'hidden',
   },
   guaranteeIconCircle: { width: 48, height: 48, borderRadius: 24, alignItems: 'center', justifyContent: 'center', marginBottom: 12 },
   guaranteeTitle: { fontSize: 18, marginBottom: 8 },
-  accentLine: { width: 40, height: 3, borderRadius: 2, backgroundColor: '#10B981', marginBottom: 12 },
+  accentLine: { width: 40, height: 3, borderRadius: 2, backgroundColor: '#6366f1', marginBottom: 12 },
   guaranteeDesc: { fontSize: 14, textAlign: 'center', lineHeight: 22 },
   guaranteeBadge: {
     flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 14,
-    backgroundColor: 'rgba(16,185,129,0.1)', paddingVertical: 6, paddingHorizontal: 14, borderRadius: 20,
+    backgroundColor: 'rgba(99,102,241,0.1)', paddingVertical: 6, paddingHorizontal: 14, borderRadius: 20,
   },
-  guaranteeBadgeText: { color: '#10B981', fontSize: 13 },
+  guaranteeBadgeText: { color: '#6366f1', fontSize: 13 },
 });

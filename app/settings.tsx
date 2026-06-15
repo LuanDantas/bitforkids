@@ -15,18 +15,10 @@ import {
   ArrowLeft,
   Settings,
   Palette,
-  Moon,
-  Sun,
   Globe,
   Volume2,
-  VolumeX,
   Smartphone,
-  Wifi,
-  Battery,
   Shield,
-  User,
-  Bell,
-  CreditCard,
   HelpCircle,
   Info,
 } from 'lucide-react-native';
@@ -122,12 +114,6 @@ export default function SettingsScreen() {
       icon: Palette,
       color: '#6366f1',
       items: [
-        {
-          key: 'darkMode' as keyof GeneralSettings,
-          title: t('settings.darkMode'),
-          subtitle: t('settings.darkModeDesc'),
-          type: 'switch',
-        },
         {
           key: 'language' as keyof GeneralSettings,
           title: t('settings.language'),

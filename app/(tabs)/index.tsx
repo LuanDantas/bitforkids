@@ -12,7 +12,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import AnimatedSection from '@/components/AnimatedSection';
 import AnimatedPressable from '@/components/AnimatedPressable';
-import GlassCard from '@/components/GlassCard';
 import AuroraBackground from '@/components/AuroraBackground';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -39,21 +38,18 @@ const COURSES = [
     titleKey: 'home.course1Title',
     subtitleKey: 'home.course1Subtitle',
     image: require('../../assets/images/curso-bitcoin.png'),
-    trailColors: ['#F7931A', '#E2761B'] as const,
   },
   {
     id: 2,
     titleKey: 'home.course2Title',
     subtitleKey: 'home.course2Subtitle',
     image: require('../../assets/images/curso-ethereum.png'),
-    trailColors: ['#3B82F6', '#1D4ED8'] as const,
   },
   {
     id: 3,
     titleKey: 'home.course3Title',
     subtitleKey: 'home.course3Subtitle',
     image: require('../../assets/images/curso-autocustodia.png'),
-    trailColors: ['#3B82F6', '#1D4ED8'] as const,
   },
 ];
 
@@ -107,7 +103,7 @@ export default function HomeScreen() {
       title: t('dashboard.welcomeCard'),
       titleBold: t('dashboard.welcomeCardBold'),
       cta: t('dashboard.welcomeCardCta'),
-      accent: '#F59E0B',
+      accent: colors.primary,
       onPress: () => router.push('/(tabs)/about' as any),
     },
     {
@@ -116,7 +112,7 @@ export default function HomeScreen() {
       title: t('dashboard.indicesCard'),
       titleBold: t('dashboard.indicesCardBold'),
       cta: t('dashboard.indicesCardCta'),
-      accent: '#3b82f6',
+      accent: colors.secondary,
       onPress: () => router.push('/(tabs)/indices'),
     },
     {
@@ -125,7 +121,7 @@ export default function HomeScreen() {
       title: t('dashboard.supportCard'),
       titleBold: t('dashboard.supportCardBold'),
       cta: t('dashboard.supportCardCta'),
-      accent: '#10B981',
+      accent: colors.tertiary,
       onPress: () => router.push('/support' as any),
     },
   ];
@@ -200,7 +196,7 @@ export default function HomeScreen() {
                     <Text
                       style={[
                         styles.heroSubtitleBold,
-                        { fontFamily: fonts.bodyBold },
+                        { color: colors.accentLight, fontFamily: fonts.bodyBold },
                       ]}
                     >
                       {heroCourse.lastModuleTitle}
@@ -214,7 +210,7 @@ export default function HomeScreen() {
                   style={styles.heroCTA}
                 >
                   <LinearGradient
-                    colors={['#F59E0B', '#F97316'] as const}
+                    colors={colors.gradientPrimary}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 0 }}
                     style={styles.heroCTAGradient}
@@ -371,7 +367,7 @@ export default function HomeScreen() {
                               styles.courseProgressFill,
                               {
                                 width: `${progress}%`,
-                                backgroundColor: course.trailColors[0],
+                                backgroundColor: colors.primary,
                               },
                             ]}
                           />
@@ -385,7 +381,7 @@ export default function HomeScreen() {
                           {progress}%
                         </Text>
                       </View>
-                      <View style={[styles.courseCta, { borderColor: course.trailColors[0] }]}>
+                      <View style={[styles.courseCta, { borderColor: colors.primary }]}>
                         <Play size={14} color="#fff" fill="#fff" />
                         <Text
                           style={[
@@ -462,7 +458,7 @@ export default function HomeScreen() {
                               styles.courseProgressFill,
                               {
                                 width: `${progress}%`,
-                                backgroundColor: course.trailColors[0],
+                                backgroundColor: colors.primary,
                               },
                             ]}
                           />
@@ -476,7 +472,7 @@ export default function HomeScreen() {
                           {progress}%
                         </Text>
                       </View>
-                      <View style={[styles.courseCta, { borderColor: course.trailColors[0] }]}>
+                      <View style={[styles.courseCta, { borderColor: colors.primary }]}>
                         <Play size={14} color="#fff" fill="#fff" />
                         <Text
                           style={[
@@ -500,19 +496,6 @@ export default function HomeScreen() {
     </View>
   );
 }
-
-const shadowStyle = Platform.select({
-  ios: {
-    shadowColor: '#6366f1',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 12,
-  },
-  android: {
-    elevation: 6,
-  },
-  default: {},
-}) as any;
 
 const styles = StyleSheet.create({
   container: {
@@ -550,7 +533,9 @@ const styles = StyleSheet.create({
   // Greeting pill
   greetingPill: {
     alignSelf: 'flex-start',
-    backgroundColor: 'rgba(30, 27, 75, 0.85)',
+    backgroundColor: 'rgba(99, 102, 241, 0.18)',
+    borderWidth: 1,
+    borderColor: 'rgba(99, 102, 241, 0.35)',
     borderRadius: 24,
     paddingHorizontal: 18,
     paddingVertical: 10,
@@ -581,7 +566,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   heroSubtitleBold: {
-    color: '#F59E0B',
+    color: '#818cf8',
     fontSize: 14,
   },
   heroCTA: {

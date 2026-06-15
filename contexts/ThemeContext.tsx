@@ -1,5 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Appearance, ColorSchemeName } from 'react-native';
+import React, { createContext, useContext } from 'react';
 
 type ThemeMode = 'light' | 'dark' | 'system';
 
@@ -26,6 +25,15 @@ interface ThemeColors {
   glow: string;
   gradientStart: string;
   gradientEnd: string;
+  // Tokens de identidade Landing 6 (CryptoVerse)
+  accentLight: string;
+  accentCyan: string;
+  badgeBg: string;
+  badgeBorder: string;
+  badgeText: string;
+  gradientPrimary: [string, string];
+  gradientHeading: [string, string, string];
+  gradientCta: [string, string, string];
 }
 
 interface ThemeFonts {
@@ -65,31 +73,6 @@ interface ThemeContextType {
   setDarkMode: (enabled: boolean) => void;
 }
 
-const lightColors: ThemeColors = {
-  background: '#f8fafc',
-  surface: '#f1f5f9',
-  card: '#ffffff',
-  text: '#0f172a',
-  textSecondary: '#475569',
-  textTertiary: '#94a3b8',
-  border: '#e2e8f0',
-  borderLight: '#f1f5f9',
-  primary: '#6366f1',
-  primaryLight: '#818cf8',
-  secondary: '#3b82f6',
-  tertiary: '#06b6d4',
-  success: '#10B981',
-  warning: '#F59E0B',
-  error: '#EF4444',
-  tabBar: '#ffffff',
-  tabBarBorder: '#e2e8f0',
-  surfaceGlass: 'rgba(255, 255, 255, 0.7)',
-  borderAccent: 'rgba(99, 102, 241, 0.2)',
-  glow: '#6366f1',
-  gradientStart: '#4f46e5',
-  gradientEnd: '#3b82f6',
-};
-
 const darkColors: ThemeColors = {
   background: '#0f172a',
   surface: '#1e293b',
@@ -113,45 +96,28 @@ const darkColors: ThemeColors = {
   glow: '#6366f1',
   gradientStart: '#4f46e5',
   gradientEnd: '#3b82f6',
+  accentLight: '#818cf8',
+  accentCyan: '#06b6d4',
+  badgeBg: 'rgba(99, 102, 241, 0.08)',
+  badgeBorder: 'rgba(99, 102, 241, 0.2)',
+  badgeText: '#a5b4fc',
+  gradientPrimary: ['#6366f1', '#3b82f6'],
+  gradientHeading: ['#818cf8', '#60a5fa', '#22d3ee'],
+  gradientCta: ['#4f46e5', '#2563eb', '#1d4ed8'],
 };
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<ThemeMode>('dark');
-  const [systemColorScheme, setSystemColorScheme] = useState<ColorSchemeName>(
-    Appearance.getColorScheme()
-  );
+  // App travado em dark-only para espelhar a identidade da Landing 6 (CryptoVerse).
+  // A API permanece estável para não quebrar telas que consomem useTheme(); o
+  // toggle apenas não tem mais efeito.
+  const theme: ThemeMode = 'dark';
+  const isDark = true;
+  const colors = darkColors;
 
-  useEffect(() => {
-    const subscription = Appearance.addChangeListener(({ colorScheme }) => {
-      setSystemColorScheme(colorScheme);
-    });
-
-    return () => subscription?.remove();
-  }, []);
-
-  const isDark = theme === 'dark' || (theme === 'system' && systemColorScheme === 'dark');
-  const colors = isDark ? darkColors : lightColors;
-
-  const setDarkMode = (enabled: boolean) => {
-    setTheme(enabled ? 'dark' : 'light');
-  };
-
-  const toggleTheme = () => {
-    setTheme(current => {
-      switch (current) {
-        case 'dark':
-          return 'light';
-        case 'light':
-          return 'system';
-        case 'system':
-          return 'dark';
-        default:
-          return 'dark';
-      }
-    });
-  };
+  const setDarkMode = (_enabled: boolean) => {};
+  const toggleTheme = () => {};
 
   return (
     <ThemeContext.Provider value={{ theme, colors, fonts, isDark, toggleTheme, setDarkMode }}>

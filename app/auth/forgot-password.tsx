@@ -8,11 +8,13 @@ import {
   Alert,
   Image,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Mail, ArrowLeft, CheckCircle } from 'lucide-react-native';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import AuroraBackground from '@/components/AuroraBackground';
+import GradientText from '@/components/GradientText';
+import GradientButton from '@/components/GradientButton';
 
 export default function ForgotPasswordScreen() {
   const [email, setEmail] = useState('');
@@ -49,10 +51,11 @@ export default function ForgotPasswordScreen() {
   if (emailSent) {
     return (
       <View style={[styles.container, { backgroundColor: colors.background }]}>
+        <AuroraBackground />
         <View style={styles.content}>
           <View style={styles.successContainer}>
             <View style={styles.successIcon}>
-              <CheckCircle size={64} color="#10B981" />
+              <CheckCircle size={64} color={colors.primary} />
             </View>
 
             <Text style={[styles.successTitle, { fontFamily: fonts.display }]}>{t('auth.forgotPassword.successTitle')}</Text>
@@ -65,17 +68,11 @@ export default function ForgotPasswordScreen() {
               {t('auth.forgotPassword.successInstruction')}
             </Text>
 
-            <TouchableOpacity
-              style={styles.backButton}
+            <GradientButton
+              label={t('auth.forgotPassword.backToLogin')}
               onPress={handleBackToLogin}
-            >
-              <LinearGradient
-                colors={['#4f46e5', '#3b82f6']}
-                style={styles.backGradient}
-              >
-                <Text style={[styles.backButtonText, { fontFamily: fonts.bodyBold }]}>{t('auth.forgotPassword.backToLogin')}</Text>
-              </LinearGradient>
-            </TouchableOpacity>
+              style={styles.backButton}
+            />
 
             <TouchableOpacity
               style={styles.resendButton}
@@ -91,6 +88,7 @@ export default function ForgotPasswordScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <AuroraBackground />
       <View style={styles.content}>
         <TouchableOpacity
           style={styles.backIconButton}
@@ -105,7 +103,7 @@ export default function ForgotPasswordScreen() {
             style={styles.logo}
             resizeMode="contain"
           />
-          <Text style={[styles.title, { color: colors.text, fontFamily: fonts.display }]}>{t('auth.forgotPassword.title')}</Text>
+          <GradientText style={[styles.title, { fontFamily: fonts.display }]}>{t('auth.forgotPassword.title')}</GradientText>
           <Text style={[styles.subtitle, { color: colors.textSecondary, fontFamily: fonts.body }]}>
             {t('auth.forgotPassword.subtitle')}
           </Text>
@@ -127,20 +125,12 @@ export default function ForgotPasswordScreen() {
             />
           </View>
 
-          <TouchableOpacity
-            style={styles.resetButton}
+          <GradientButton
+            label={t('auth.forgotPassword.sendButton')}
             onPress={handleResetPassword}
-            disabled={isLoading}
-          >
-            <LinearGradient
-              colors={['#4f46e5', '#3b82f6']}
-              style={styles.resetGradient}
-            >
-              <Text style={[styles.resetText, { fontFamily: fonts.bodyBold }]}>
-                {isLoading ? t('auth.forgotPassword.sendButtonLoading') : t('auth.forgotPassword.sendButton')}
-              </Text>
-            </LinearGradient>
-          </TouchableOpacity>
+            loading={isLoading}
+            style={styles.resetButton}
+          />
         </View>
 
         <View style={styles.footer}>

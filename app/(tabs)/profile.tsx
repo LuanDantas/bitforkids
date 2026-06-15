@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  Image,
   Platform,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -19,7 +18,6 @@ import {
   LogOut,
   CreditCard as Edit,
   ChevronRight,
-  Gift,
   Coins,
 } from 'lucide-react-native';
 
@@ -54,25 +52,25 @@ export default function ProfileScreen() {
       icon: CreditCard,
       title: t('profile.menuPaymentsTitle'),
       subtitle: t('profile.menuPaymentsSubtitle'),
-      color: '#10B981',
+      color: '#6366f1',
     },
     {
       icon: Bell,
       title: t('profile.menuNotificationsTitle'),
       subtitle: t('profile.menuNotificationsSubtitle'),
-      color: '#3B82F6',
+      color: '#3b82f6',
     },
     {
       icon: Shield,
       title: t('profile.menuPrivacyTitle'),
       subtitle: t('profile.menuPrivacySubtitle'),
-      color: '#6366f1',
+      color: '#06b6d4',
     },
     {
       icon: Settings,
       title: t('profile.menuSettingsTitle'),
       subtitle: t('profile.menuSettingsSubtitle'),
-      color: '#6B7280',
+      color: '#818cf8',
     },
   ];
 
@@ -105,7 +103,9 @@ export default function ProfileScreen() {
         <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.display }]}>{t('profile.cashbackTitle')}</Text>
         <View style={styles.cashbackContainer}>
           <LinearGradient
-            colors={['#10B981', '#059669']}
+            colors={colors.gradientPrimary}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
             style={styles.cashbackCard}
           >
             <View style={styles.cashbackHeader}>
@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 16,
     borderWidth: 1,
-    borderColor: 'rgba(139, 92, 246, 0.1)',
+    borderColor: 'rgba(99, 102, 241, 0.12)',
     marginBottom: 10,
   },
   menuItemLeft: {

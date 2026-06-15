@@ -9,12 +9,14 @@ import {
   ScrollView,
   Image,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import { Mail, Lock, User, Eye, EyeOff, Phone } from 'lucide-react-native';
+import { Mail, Lock, User, Eye, EyeOff } from 'lucide-react-native';
 import { useVSL } from '@/contexts/VSLContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import AuroraBackground from '@/components/AuroraBackground';
+import GradientText from '@/components/GradientText';
+import GradientButton from '@/components/GradientButton';
 
 export default function RegisterScreen() {
   const [name, setName] = useState('');
@@ -87,6 +89,7 @@ export default function RegisterScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <AuroraBackground />
       <ScrollView
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
@@ -99,7 +102,7 @@ export default function RegisterScreen() {
               style={styles.logo}
               resizeMode="contain"
             />
-            <Text style={[styles.title, { color: colors.text, fontFamily: fonts.display }]}>{t('auth.register.title')}</Text>
+            <GradientText style={[styles.title, { fontFamily: fonts.display }]}>{t('auth.register.title')}</GradientText>
             <Text style={[styles.subtitle, { color: colors.textSecondary, fontFamily: fonts.body }]}>
               {source === 'vsl'
                 ? t('auth.register.subtitleVSL')
@@ -212,20 +215,12 @@ export default function RegisterScreen() {
               </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
-              style={styles.registerButton}
+            <GradientButton
+              label={t('auth.register.registerButton')}
               onPress={handleRegister}
-              disabled={isLoading}
-            >
-              <LinearGradient
-                colors={['#4f46e5', '#3b82f6']}
-                style={styles.registerGradient}
-              >
-                <Text style={[styles.registerText, { fontFamily: fonts.bodyBold }]}>
-                  {isLoading ? t('auth.register.registerButtonLoading') : t('auth.register.registerButton')}
-                </Text>
-              </LinearGradient>
-            </TouchableOpacity>
+              loading={isLoading}
+              style={styles.registerButton}
+            />
           </View>
 
           {/* Login Link */}
@@ -273,16 +268,16 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   vslBadge: {
-    backgroundColor: 'rgba(245, 158, 11, 0.2)',
+    backgroundColor: 'rgba(99, 102, 241, 0.15)',
     borderWidth: 1,
-    borderColor: '#F59E0B',
+    borderColor: 'rgba(99, 102, 241, 0.4)',
     borderRadius: 8,
     padding: 12,
     marginTop: 12,
   },
   vslBadgeText: {
     fontSize: 14,
-    color: '#F59E0B',
+    color: '#818cf8',
     textAlign: 'center',
   },
   form: {

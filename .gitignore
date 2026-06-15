@@ -31,5 +31,8 @@ yarn-error.*
 .env*.local
 .env
 
+# credenciais sensíveis
+credentials.txt
+
 # typescript
 *.tsbuildinfo

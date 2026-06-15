@@ -8,7 +8,6 @@ import {
   Alert,
   Image,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react-native';
 import { FontAwesome } from '@expo/vector-icons';
@@ -16,6 +15,9 @@ import { useVSL } from '@/contexts/VSLContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useUser } from '@/contexts/UserContext';
+import AuroraBackground from '@/components/AuroraBackground';
+import GradientText from '@/components/GradientText';
+import GradientButton from '@/components/GradientButton';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -56,6 +58,7 @@ export default function LoginScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <AuroraBackground />
       <View style={styles.content}>
         {/* Logo/Header */}
         <View style={styles.header}>
@@ -64,7 +67,7 @@ export default function LoginScreen() {
             style={styles.logo}
             resizeMode="contain"
           />
-          <Text style={[styles.title, { color: colors.text, fontFamily: fonts.display }]}>{t('auth.login.title')}</Text>
+          <GradientText style={[styles.title, { fontFamily: fonts.display }]}>{t('auth.login.title')}</GradientText>
           <Text style={[styles.subtitle, { color: colors.textSecondary, fontFamily: fonts.body }]}>
             {t('auth.login.subtitle')}
           </Text>
@@ -118,20 +121,12 @@ export default function LoginScreen() {
             <Text style={[styles.forgotPasswordText, { fontFamily: fonts.bodySemiBold }]}>{t('auth.login.forgotPassword')}</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.loginButton}
+          <GradientButton
+            label={t('auth.login.loginButton')}
             onPress={handleLogin}
-            disabled={isLoading}
-          >
-            <LinearGradient
-              colors={['#4f46e5', '#3b82f6']}
-              style={styles.loginGradient}
-            >
-              <Text style={[styles.loginText, { fontFamily: fonts.bodyBold }]}>
-                {isLoading ? t('auth.login.loginButtonLoading') : t('auth.login.loginButton')}
-              </Text>
-            </LinearGradient>
-          </TouchableOpacity>
+            loading={isLoading}
+            style={styles.loginButton}
+          />
 
           {/* Divider */}
           <View style={styles.divider}>

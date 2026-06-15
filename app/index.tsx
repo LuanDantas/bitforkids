@@ -1,5 +1,4 @@
 import { View, Text, StyleSheet, ScrollView, Image, Platform } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useUser } from '@/contexts/UserContext';
@@ -7,6 +6,9 @@ import { ArrowRight, Zap } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import AnimatedPressable from '@/components/AnimatedPressable';
+import GradientButton from '@/components/GradientButton';
+import GradientText from '@/components/GradientText';
+import AuroraBackground from '@/components/AuroraBackground';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Animated, { FadeInDown, FadeIn } from 'react-native-reanimated';
 
@@ -30,6 +32,7 @@ export default function LandingPage() {
       contentContainerStyle={styles.contentContainer}
     >
       <StatusBar style="light" />
+      <AuroraBackground />
       <View style={{ height: insets.top }} />
 
       <Animated.View entering={FadeIn.duration(600)}>
@@ -41,12 +44,11 @@ export default function LandingPage() {
       </Animated.View>
 
       <View style={styles.body}>
-        <Animated.Text
-          entering={FadeInDown.delay(200).duration(500)}
-          style={[styles.highlight, { color: '#F7931A', fontFamily: fonts.display }]}
-        >
-          {t('landing.highlight')}
-        </Animated.Text>
+        <Animated.View entering={FadeInDown.delay(200).duration(500)}>
+          <GradientText style={[styles.highlight, { fontFamily: fonts.display }]}>
+            {t('landing.highlight')}
+          </GradientText>
+        </Animated.View>
 
         <Animated.Text
           entering={FadeInDown.delay(400).duration(500)}
@@ -62,18 +64,13 @@ export default function LandingPage() {
           {t('landing.emphasis')}
         </Animated.Text>
 
-        <Animated.View entering={FadeInDown.delay(800).duration(500)}>
-          <AnimatedPressable onPress={() => router.push('/auth/login')}>
-            <LinearGradient
-              colors={['#4f46e5', '#3b82f6']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-              style={styles.ctaButton}
-            >
-              <Text style={[styles.ctaText, { fontFamily: fonts.bodyBold }]}>{t('landing.cta')}</Text>
-              <ArrowRight size={20} color="#FFFFFF" />
-            </LinearGradient>
-          </AnimatedPressable>
+        <Animated.View entering={FadeInDown.delay(800).duration(500)} style={styles.ctaWrap}>
+          <GradientButton
+            label={t('landing.cta')}
+            onPress={() => router.push('/auth/login')}
+            icon={<ArrowRight size={20} color="#FFFFFF" />}
+            iconPosition="right"
+          />
         </Animated.View>
       </View>
 
@@ -124,22 +121,8 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     marginBottom: 8,
   },
-  ctaButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 16,
-    borderRadius: 12,
+  ctaWrap: {
     marginTop: 24,
-    gap: 8,
-    ...Platform.select({
-      ios: { shadowColor: '#6366f1', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 10 },
-      android: { elevation: 6 },
-    }),
-  },
-  ctaText: {
-    color: '#FFFFFF',
-    fontSize: 18,
   },
   floatingBtn: {
     position: 'absolute',
