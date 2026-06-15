@@ -48,7 +48,8 @@
       "router": {},
       "eas": {
         "projectId": "15102c8d-6d22-4833-9213-298d3d58572c"
-      }
+      },
+      "apiUrl": "http://localhost:3000/api"
     },
     "owner": "luan-apps",
     "runtimeVersion": {

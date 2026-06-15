@@ -12,6 +12,7 @@ import { useRouter } from 'expo-router';
 import { Mail, ArrowLeft, CheckCircle } from 'lucide-react-native';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { authApi } from '@/services/api/auth';
 import AuroraBackground from '@/components/AuroraBackground';
 import GradientText from '@/components/GradientText';
 import GradientButton from '@/components/GradientButton';
@@ -38,10 +39,15 @@ export default function ForgotPasswordScreen() {
 
     setIsLoading(true);
 
-    setTimeout(() => {
+    try {
+      // resposta sempre neutra (não revela se o email existe)
+      await authApi.forgotPassword(email.trim());
+    } catch {
+      // ignora — mantém UX neutra
+    } finally {
       setIsLoading(false);
       setEmailSent(true);
-    }, 1500);
+    }
   };
 
   const handleBackToLogin = () => {

@@ -36,3 +36,4 @@ credentials.txt
 
 # typescript
 *.tsbuildinfo
+expo-dev.log

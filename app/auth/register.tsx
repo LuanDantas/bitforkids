@@ -12,6 +12,7 @@ import {
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Mail, Lock, User, Eye, EyeOff } from 'lucide-react-native';
 import { useVSL } from '@/contexts/VSLContext';
+import { useUser } from '@/contexts/UserContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import AuroraBackground from '@/components/AuroraBackground';
@@ -32,6 +33,7 @@ export default function RegisterScreen() {
   const { t } = useLanguage();
   const { source, plan } = useLocalSearchParams();
   const { trackVSLConversion, resetSessionFlag } = useVSL();
+  const { register } = useUser();
 
   // Track VSL conversion when user comes from VSL
   React.useEffect(() => {
@@ -63,28 +65,37 @@ export default function RegisterScreen() {
 
     setIsLoading(true);
 
-    // Simulate registration API call
-    setTimeout(() => {
-      setIsLoading(false);
+    const result = await register(email, password, name);
+    setIsLoading(false);
+
+    if (!result.success) {
       Alert.alert(
-        t('auth.register.successTitle'),
-        t('auth.register.successMessage'),
-        [
-          {
-            text: t('auth.register.successButton'),
-            onPress: () => {
-              // Track purchase conversion if coming from VSL with premium plan
-              if (source === 'vsl' && plan === 'premium') {
-                trackVSLConversion('purchase');
-              }
-              // Reset VSL session flag on successful registration
-              resetSessionFlag();
-              router.replace('/(tabs)');
-            },
-          },
-        ]
+        t('auth.register.errorTitle'),
+        result.error === 'network_error'
+          ? t('auth.register.errorFillAll')
+          : result.error || t('auth.register.errorTitle')
       );
-    }, 1500);
+      return;
+    }
+
+    Alert.alert(
+      t('auth.register.successTitle'),
+      t('auth.register.successMessage'),
+      [
+        {
+          text: t('auth.register.successButton'),
+          onPress: () => {
+            // Track purchase conversion if coming from VSL with premium plan
+            if (source === 'vsl' && plan === 'premium') {
+              trackVSLConversion('purchase');
+            }
+            // Reset VSL session flag on successful registration
+            resetSessionFlag();
+            router.replace('/(tabs)');
+          },
+        },
+      ]
+    );
   };
 
   return (

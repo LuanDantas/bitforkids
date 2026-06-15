@@ -1,7 +1,18 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from 'react';
+import { authApi } from '@/services/api/auth';
+import { coursesApi } from '@/services/api/courses';
+import { tokenStore } from '@/services/api/tokenStore';
+import { onSessionExpired, ApiError } from '@/services/api/client';
+import type { ApiUser } from '@/services/api/types';
 
 export interface User {
+  id: string;
   email: string;
   name: string;
   role: 'user' | 'root';
@@ -11,96 +22,121 @@ export interface User {
 interface UserContextType {
   user: User | null;
   isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  login: (
+    email: string,
+    password: string
+  ) => Promise<{ success: boolean; error?: string }>;
+  register: (
+    email: string,
+    password: string,
+    name: string,
+    phone?: string
+  ) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
   hasCourseAccess: (courseId: number) => boolean;
-  purchaseCourse: (courseId: number) => void;
+  purchaseCourse: (courseId: number) => Promise<void>;
+  refreshAccess: () => Promise<void>;
 }
 
-const STORAGE_KEY = '@bitforkids_user';
-const PURCHASES_KEY = '@bitforkids_purchases';
-
-// Mock users database
-const MOCK_USERS: Record<string, { password: string; user: Omit<User, 'purchasedCourses'> }> = {
-  'root@bitforkids.com': {
-    password: 'root123',
-    user: {
-      email: 'root@bitforkids.com',
-      name: 'Dani Spitaletti',
-      role: 'root',
-    },
-  },
-  'teste@bitforkids.com': {
-    password: 'admin123',
-    user: {
-      email: 'teste@bitforkids.com',
-      name: 'João Silva',
-      role: 'user',
-    },
-  },
-  'luandr92@gmail.com': {
-    password: 'admin123',
-    user: {
-      email: 'luandr92@gmail.com',
-      name: 'Luan Dantas',
-      role: 'root',
-    },
-  },
-};
-
 const UserContext = createContext<UserContextType | undefined>(undefined);
+
+/** Mapeia o usuário da API para o formato consumido pelas telas. */
+function mapRole(role: ApiUser['role']): 'user' | 'root' {
+  return role === 'ROOT' || role === 'ADMIN' ? 'root' : 'user';
+}
+
+async function loadPurchasedCourses(role: 'user' | 'root'): Promise<number[]> {
+  // Root/admin têm acesso total — não precisa listar matrículas.
+  if (role === 'root') return [1, 2, 3];
+  try {
+    const enrollments = await coursesApi.myEnrollments();
+    return enrollments
+      .filter((e) => e.status === 'ACTIVE')
+      .map((e) => e.course?.legacyId)
+      .filter((id): id is number => typeof id === 'number');
+  } catch {
+    return [];
+  }
+}
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Restore session on boot
+  const buildUser = useCallback(async (apiUser: ApiUser): Promise<User> => {
+    const role = mapRole(apiUser.role);
+    const purchasedCourses = await loadPurchasedCourses(role);
+    return {
+      id: apiUser.id,
+      email: apiUser.email,
+      name: apiUser.name,
+      role,
+      purchasedCourses,
+    };
+  }, []);
+
+  // Restaura sessão a partir do token salvo.
   useEffect(() => {
     (async () => {
       try {
-        const [savedUser, savedPurchases] = await Promise.all([
-          AsyncStorage.getItem(STORAGE_KEY),
-          AsyncStorage.getItem(PURCHASES_KEY),
-        ]);
-        if (savedUser) {
-          const parsed = JSON.parse(savedUser) as User;
-          const purchases = savedPurchases ? JSON.parse(savedPurchases) : [];
-          setUser({ ...parsed, purchasedCourses: parsed.role === 'root' ? [1, 2, 3] : purchases });
+        const tokens = await tokenStore.load();
+        if (tokens) {
+          const apiUser = await authApi.me();
+          setUser(await buildUser(apiUser));
         }
-      } catch {}
+      } catch {
+        await tokenStore.clear();
+      }
       setIsLoaded(true);
     })();
+  }, [buildUser]);
+
+  // Encerra a sessão localmente se o refresh falhar no servidor.
+  useEffect(() => {
+    return onSessionExpired(() => setUser(null));
   }, []);
 
-  const login = useCallback(async (email: string, password: string) => {
-    const normalizedEmail = email.toLowerCase().trim();
-    const mockUser = MOCK_USERS[normalizedEmail];
+  const login = useCallback(
+    async (email: string, password: string) => {
+      try {
+        const res = await authApi.login(email.trim(), password);
+        setUser(await buildUser(res.user));
+        return { success: true };
+      } catch (err) {
+        const status = err instanceof ApiError ? err.status : 0;
+        return {
+          success: false,
+          error: status === 401 ? 'invalid_credentials' : 'network_error',
+        };
+      }
+    },
+    [buildUser]
+  );
 
-    if (!mockUser || mockUser.password !== password) {
-      return { success: false, error: 'invalid_credentials' };
-    }
-
-    // Load purchased courses for this user
-    let purchases: number[] = [];
-    try {
-      const saved = await AsyncStorage.getItem(`${PURCHASES_KEY}_${normalizedEmail}`);
-      if (saved) purchases = JSON.parse(saved);
-    } catch {}
-
-    const fullUser: User = {
-      ...mockUser.user,
-      purchasedCourses: mockUser.user.role === 'root' ? [1, 2, 3] : purchases,
-    };
-
-    setUser(fullUser);
-    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(fullUser));
-    return { success: true };
-  }, []);
+  const register = useCallback(
+    async (email: string, password: string, name: string, phone?: string) => {
+      try {
+        const res = await authApi.register(email.trim(), password, name, phone);
+        setUser(await buildUser(res.user));
+        return { success: true };
+      } catch (err) {
+        const message = err instanceof ApiError ? err.message : 'network_error';
+        return { success: false, error: message };
+      }
+    },
+    [buildUser]
+  );
 
   const logout = useCallback(async () => {
+    await authApi.logout();
     setUser(null);
-    await AsyncStorage.removeItem(STORAGE_KEY);
   }, []);
+
+  const refreshAccess = useCallback(async () => {
+    if (!user) return;
+    const purchasedCourses = await loadPurchasedCourses(user.role);
+    setUser((prev) => (prev ? { ...prev, purchasedCourses } : prev));
+  }, [user]);
 
   const hasCourseAccess = useCallback(
     (courseId: number): boolean => {
@@ -115,16 +151,16 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     async (courseId: number) => {
       if (!user) return;
       if (user.purchasedCourses.includes(courseId)) return;
-
-      const updated: User = {
-        ...user,
-        purchasedCourses: [...user.purchasedCourses, courseId],
-      };
-      setUser(updated);
-      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-      await AsyncStorage.setItem(
-        `${PURCHASES_KEY}_${user.email}`,
-        JSON.stringify(updated.purchasedCourses)
+      const uuid = await coursesApi.resolveId(courseId);
+      if (!uuid) return;
+      await coursesApi.enroll(uuid);
+      setUser((prev) =>
+        prev
+          ? {
+              ...prev,
+              purchasedCourses: [...prev.purchasedCourses, courseId],
+            }
+          : prev
       );
     },
     [user]
@@ -134,7 +170,16 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <UserContext.Provider
-      value={{ user, isAuthenticated: !!user, login, logout, hasCourseAccess, purchaseCourse }}
+      value={{
+        user,
+        isAuthenticated: !!user,
+        login,
+        register,
+        logout,
+        hasCourseAccess,
+        purchaseCourse,
+        refreshAccess,
+      }}
     >
       {children}
     </UserContext.Provider>
