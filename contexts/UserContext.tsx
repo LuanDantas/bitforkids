@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 import { authApi } from '@/services/api/auth';
 import { coursesApi } from '@/services/api/courses';
+import { paymentsApi } from '@/services/api/payments';
 import { tokenStore } from '@/services/api/tokenStore';
 import { onSessionExpired, ApiError } from '@/services/api/client';
 import type { ApiUser } from '@/services/api/types';
@@ -153,7 +154,8 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
       if (user.purchasedCourses.includes(courseId)) return;
       const uuid = await coursesApi.resolveId(courseId);
       if (!uuid) return;
-      await coursesApi.enroll(uuid);
+      // Checkout real: cria Transaction + Enrollment + Cashback (gateway stub).
+      await paymentsApi.checkout(uuid);
       setUser((prev) =>
         prev
           ? {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -24,12 +24,37 @@ import {
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useUser } from '@/contexts/UserContext';
+import { paymentsApi } from '@/services/api/payments';
 
 export default function ProfileScreen() {
   const router = useRouter();
   const { colors, fonts, isDark } = useTheme();
   const { t } = useLanguage();
-  const { user: authUser, logout } = useUser();
+  const { user: authUser, logout, isAuthenticated } = useUser();
+
+  const [cashback, setCashback] = useState({
+    available: 'R$ 45,20',
+    total: 'R$ 127,50',
+  });
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    const fmt = (cents: number) =>
+      `R$ ${(cents / 100).toLocaleString('pt-BR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })}`;
+    paymentsApi
+      .cashback()
+      .then((c) =>
+        setCashback({
+          available: fmt(c.availableCents),
+          total: fmt(c.totalEarnedCents),
+        })
+      )
+      .catch(() => {});
+  }, [isAuthenticated]);
+
   const [user] = useState({
     name: authUser?.name || 'Usuário',
     email: authUser?.email || '',
@@ -115,10 +140,10 @@ export default function ProfileScreen() {
               <Text style={[styles.cashbackTitle, { fontFamily: fonts.bodySemiBold }]}>{t('profile.cashbackAvailable')}</Text>
             </View>
             <Text style={[styles.cashbackAmount, { fontFamily: fonts.display }]}>
-              {user.stats.availableCashback}
+              {cashback.available}
             </Text>
             <Text style={[styles.cashbackTotal, { fontFamily: fonts.body }]}>
-              {t('profile.cashbackTotal')} {user.stats.totalCashback}
+              {t('profile.cashbackTotal')} {cashback.total}
             </Text>
             <AnimatedPressable style={styles.withdrawButton}>
               <Text style={[styles.withdrawText, { fontFamily: fonts.bodyBold }]}>{t('profile.cashbackWithdraw')}</Text>
