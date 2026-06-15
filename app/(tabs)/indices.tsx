@@ -12,6 +12,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useMarket } from '@/hooks/useMarket';
 import {
   TrendingUp,
   TrendingDown,
@@ -58,8 +59,10 @@ export default function IndicesScreen() {
 
   const timeframes = ['1h', '24h', '7d', '30d', '1y'];
 
-  // Mock market data
-  const marketOverview = {
+  const { overview: apiOverview, topCryptos: apiTopCryptos, reload } = useMarket();
+
+  // Fallback local enquanto carrega / se a API estiver indisponível.
+  const marketOverview = apiOverview ?? {
     totalMarketCap: 2.1,
     totalVolume: 89.5,
     btcDominance: 52.3,
@@ -68,7 +71,7 @@ export default function IndicesScreen() {
     defiTvl: 45.2,
   };
 
-  const topCryptos = [
+  const FALLBACK_TOP_CRYPTOS = [
     {
       id: 1,
       name: 'Bitcoin',
@@ -149,6 +152,8 @@ export default function IndicesScreen() {
     },
   ];
 
+  const topCryptos = apiTopCryptos ?? FALLBACK_TOP_CRYPTOS;
+
   const marketStats = [
     {
       title: 'Fear & Greed Index',
@@ -160,19 +165,19 @@ export default function IndicesScreen() {
     },
     {
       title: 'Global Market Cap',
-      value: '$2.1T',
-      label: '+2.3% (24h)',
+      value: `$${marketOverview.totalMarketCap}T`,
+      label: `BTC ${marketOverview.btcDominance}%`,
       icon: Globe,
       color: '#3B82F6',
-      change: '+$48.2B',
+      change: `${marketOverview.activeCryptos} ativos`,
     },
     {
       title: 'Total Volume',
-      value: '$89.5B',
-      label: '+15.7% (24h)',
+      value: `$${marketOverview.totalVolume}B`,
+      label: '24h',
       icon: Activity,
       color: '#6366f1',
-      change: '+$12.1B',
+      change: `${marketOverview.exchanges} mercados`,
     },
     {
       title: 'DeFi TVL',
@@ -269,9 +274,7 @@ export default function IndicesScreen() {
   ];
   const onRefresh = () => {
     setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 2000);
+    reload().finally(() => setRefreshing(false));
   };
 
   const getChangeColor = (change: number) => {
