@@ -1,4 +1,5 @@
 import * as Notifications from 'expo-notifications';
+import { api } from '@/services/api/client';
 
 export interface BitcoinPriceData {
   price: number;
@@ -19,26 +20,42 @@ class BitcoinPriceServiceImpl implements BitcoinPriceService {
   private lastPrice: number | null = null;
 
   async getCurrentPrice(): Promise<BitcoinPriceData> {
+    // 1) Backend BitForKids (cacheia o CoinGecko via cron).
     try {
-      // Simulando dados da API (substitua pela API real)
+      const data = await api.get<{
+        priceBrlCents: number;
+        variation24h: number;
+        variationPercent: number;
+        capturedAt: string;
+      }>('/market/bitcoin/price', { auth: false });
+      if (data?.priceBrlCents) {
+        return {
+          price: data.priceBrlCents / 100,
+          variation24h: data.variation24h,
+          variationPercent: data.variationPercent,
+          lastUpdate: data.capturedAt ? new Date(data.capturedAt) : new Date(),
+        };
+      }
+    } catch {
+      // segue para o fallback direto
+    }
+
+    // 2) Fallback: CoinGecko direto.
+    try {
       const response = await fetch(
         'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=brl&include_24hr_change=true'
       );
       const data = await response.json();
-
-      const price = data.bitcoin.brl;
       const variation24h = data.bitcoin.brl_24h_change;
-      const variationPercent = variation24h;
-
       return {
-        price,
+        price: data.bitcoin.brl,
         variation24h,
-        variationPercent,
+        variationPercent: variation24h,
         lastUpdate: new Date(),
       };
     } catch (error) {
       console.error('Error fetching Bitcoin price:', error);
-      // Fallback com dados simulados
+      // 3) Fallback estático.
       return {
         price: 350000,
         variation24h: 5000,
