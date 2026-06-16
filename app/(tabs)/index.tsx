@@ -163,6 +163,7 @@ export default function HomeScreen() {
         {/* HERO — full-width image with gradient fade */}
         <View style={[styles.heroWrapper, { backgroundColor: colors.background }]}>
           <Image
+            key={typeof heroCourse.image === 'number' ? `local-${heroCourse.id}` : heroCourse.image.uri}
             source={heroCourse.image}
             style={styles.heroBgImage}
             resizeMode="contain"
@@ -370,6 +371,7 @@ export default function HomeScreen() {
                   <View style={styles.courseCard}>
                     {/* Image on top */}
                     <Image
+                      key={typeof course.image === 'number' ? `local-${course.id}` : course.image.uri}
                       source={course.image}
                       style={styles.courseImage}
                     />
@@ -465,6 +467,7 @@ export default function HomeScreen() {
                 >
                   <View style={styles.courseCard}>
                     <Image
+                      key={typeof course.image === 'number' ? `local-${course.id}` : course.image.uri}
                       source={course.image}
                       style={styles.courseImage}
                     />

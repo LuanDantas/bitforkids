@@ -447,7 +447,7 @@ export default function AboutScreen() {
 function TrailCourseItem({ title, subtitle, price, image, onPress, colors, fonts }: any) {
   return (
     <AnimatedPressable onPress={onPress} style={s.courseItem}>
-      <Image source={image} style={s.courseImage} resizeMode="cover" />
+      <Image key={typeof image === 'number' ? 'local' : image.uri} source={image} style={s.courseImage} resizeMode="cover" />
       <View style={s.courseInfo}>
         <Text style={[s.courseName, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>{title}</Text>
         <Text style={[s.courseSub, { color: colors.textSecondary, fontFamily: fonts.body }]} numberOfLines={2}>{subtitle}</Text>
