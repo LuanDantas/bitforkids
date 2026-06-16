@@ -31,7 +31,8 @@ const AUDIENCE_ICONS = [Users, ShieldCheck, FileText, Key, Heart, Briefcase, Tre
 // Identidade Landing 6: rotação monocromática indigo → azul → ciano
 const AUDIENCE_ACCENTS = ['#6366f1', '#3b82f6', '#06b6d4', '#818cf8', '#60a5fa', '#6366f1', '#3b82f6'];
 
-// Banners locais por curso (legacyId) — o catálogo da API ainda não tem capas.
+// Banners locais por curso (legacyId) — fallback quando a API não traz coverUrl
+// (offline ou capa ainda não cadastrada). A capa oficial vem de course.coverUrl.
 const COURSE_IMAGES: Record<number, any> = {
   1: require('../../assets/images/curso-bitcoin.png'),
   2: require('../../assets/images/curso-ethereum.png'),
@@ -60,11 +61,12 @@ export default function CoursesScreen() {
       title: t(`courses.course${c.id}Title`),
       subtitle: t(`courses.course${c.id}Subtitle`),
       price: '397,00',
+      coverUrl: null as string | null,
     }));
 
   const translatedCourses = baseCourses.map(c => ({
     ...c,
-    image: COURSE_IMAGES[c.id],
+    image: c.coverUrl ? { uri: c.coverUrl } : COURSE_IMAGES[c.id],
   }));
 
   const trail1 = translatedCourses.filter(c => c.trail === 1);

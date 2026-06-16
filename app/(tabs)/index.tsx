@@ -17,6 +17,7 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useUser } from '@/contexts/UserContext';
 import { useStudy } from '@/contexts/StudyContext';
+import { useCourses } from '@/hooks/useCourses';
 import { studyData } from '@/data/studyModules';
 import { StatusBar } from 'expo-status-bar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -32,37 +33,60 @@ const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_WIDTH = SCREEN_WIDTH * 0.5;
 const CARD_SPACING = 12;
 
-const COURSES = [
-  {
-    id: 1,
-    titleKey: 'home.course1Title',
-    subtitleKey: 'home.course1Subtitle',
-    image: require('../../assets/images/curso-bitcoin.png'),
-  },
-  {
-    id: 2,
-    titleKey: 'home.course2Title',
-    subtitleKey: 'home.course2Subtitle',
-    image: require('../../assets/images/curso-ethereum.png'),
-  },
-  {
-    id: 3,
-    titleKey: 'home.course3Title',
-    subtitleKey: 'home.course3Subtitle',
-    image: require('../../assets/images/curso-autocustodia.png'),
-  },
+type HomeCourse = {
+  id: number;
+  title: string;
+  subtitle: string;
+  trail: number;
+  image: any;
+};
+
+// Capas locais por legacyId — fallback quando offline ou sem coverUrl na API.
+const LOCAL_COVERS: Record<number, any> = {
+  1: require('../../assets/images/curso-bitcoin.png'),
+  2: require('../../assets/images/curso-ethereum.png'),
+  3: require('../../assets/images/curso-autocustodia.png'),
+};
+
+// Fallback estático (i18n) exibido apenas enquanto a API carrega / offline.
+const FALLBACK_COURSES = [
+  { id: 1, titleKey: 'home.course1Title', subtitleKey: 'home.course1Subtitle', trail: 1 },
+  { id: 2, titleKey: 'home.course2Title', subtitleKey: 'home.course2Subtitle', trail: 1 },
+  { id: 3, titleKey: 'home.course3Title', subtitleKey: 'home.course3Subtitle', trail: 2 },
 ];
 
 export default function HomeScreen() {
   const router = useRouter();
   const { colors, fonts } = useTheme();
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   const insets = useSafeAreaInsets();
   const { user, hasCourseAccess } = useUser();
   const { getCourseProgress, getProgress } = useStudy();
+  const { courses: apiCourses } = useCourses(locale);
+
+  // Lista de cursos da home: API (apenas publicados, com coverUrl) quando disponível;
+  // fallback estático (i18n + capa local) somente enquanto carrega / offline.
+  const courses: HomeCourse[] = useMemo(() => {
+    if (apiCourses && apiCourses.length) {
+      return apiCourses.map((c) => ({
+        id: c.id,
+        title: c.title,
+        subtitle: c.subtitle ?? '',
+        trail: c.trail,
+        image: c.coverUrl ? { uri: c.coverUrl } : LOCAL_COVERS[c.id],
+      }));
+    }
+    return FALLBACK_COURSES.map((c) => ({
+      id: c.id,
+      title: t(c.titleKey),
+      subtitle: t(c.subtitleKey),
+      trail: c.trail,
+      image: LOCAL_COVERS[c.id],
+    }));
+  }, [apiCourses, t]);
 
   const heroCourse = useMemo(() => {
-    const buildResult = (course: typeof COURSES[0], progress: number, isResuming: boolean) => {
+    const buildResult = (course: HomeCourse, progress: number, isResuming: boolean) => {
       const study = studyData.find((s) => s.courseId === course.id);
       const details = getProgress(course.id);
       let lastModuleTitle = '';
@@ -79,7 +103,7 @@ export default function HomeScreen() {
     };
 
     // Priority 1: In-progress course
-    for (const course of COURSES) {
+    for (const course of courses) {
       const progress = getCourseProgress(course.id);
       const details = getProgress(course.id);
       if (progress > 0 && progress < 100 && details.lastModule) {
@@ -87,14 +111,14 @@ export default function HomeScreen() {
       }
     }
     // Priority 2: First course with access and 0% progress
-    for (const course of COURSES) {
+    for (const course of courses) {
       if (hasCourseAccess(course.id) && getCourseProgress(course.id) === 0) {
         return buildResult(course, 0, false);
       }
     }
-    // Fallback: Course 1
-    return buildResult(COURSES[0], 0, false);
-  }, [getCourseProgress, getProgress, hasCourseAccess]);
+    // Fallback: primeiro curso da lista
+    return buildResult(courses[0], 0, false);
+  }, [courses, getCourseProgress, getProgress, hasCourseAccess]);
 
   const quickLinks = [
     {
@@ -126,8 +150,8 @@ export default function HomeScreen() {
     },
   ];
 
-  const trail1Courses = COURSES.filter((c) => c.id <= 2);
-  const trail2Courses = COURSES.filter((c) => c.id === 3);
+  const trail1Courses = courses.filter((c) => c.trail === 1);
+  const trail2Courses = courses.filter((c) => c.trail === 2);
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
@@ -179,7 +203,7 @@ export default function HomeScreen() {
                     { fontFamily: fonts.display },
                   ]}
                 >
-                  {t(heroCourse.titleKey)}
+                  {heroCourse.title}
                 </Text>
 
                 {/* Continue watching info */}
@@ -307,6 +331,7 @@ export default function HomeScreen() {
         </AnimatedSection>
 
         {/* CAROUSEL 2 - TRAIL 1 */}
+        {trail1Courses.length > 0 && (
         <AnimatedSection delay={300}>
           <View style={styles.trailHeader}>
             <Text
@@ -357,7 +382,7 @@ export default function HomeScreen() {
                         ]}
                         numberOfLines={2}
                       >
-                        {t(course.titleKey)}
+                        {course.title}
                       </Text>
                       {/* Progress bar */}
                       <View style={styles.courseProgressRow}>
@@ -399,8 +424,10 @@ export default function HomeScreen() {
             })}
           </ScrollView>
         </AnimatedSection>
+        )}
 
         {/* CAROUSEL 3 - TRAIL 2 */}
+        {trail2Courses.length > 0 && (
         <AnimatedSection delay={400}>
           <View style={styles.trailHeader}>
             <Text
@@ -449,7 +476,7 @@ export default function HomeScreen() {
                         ]}
                         numberOfLines={2}
                       >
-                        {t(course.titleKey)}
+                        {course.title}
                       </Text>
                       <View style={styles.courseProgressRow}>
                         <View style={styles.courseProgressBar}>
@@ -490,6 +517,7 @@ export default function HomeScreen() {
             })}
           </ScrollView>
         </AnimatedSection>
+        )}
 
         <View style={{ height: 100 }} />
       </ScrollView>

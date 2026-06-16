@@ -14,6 +14,7 @@ export interface CourseDetailData {
   sections: { title: string; items: string[] }[];
   extraContent: string[];
   faq: DetailFaq[];
+  coverUrl: string | null; // capa servida pela API; null -> usa asset local
 }
 
 /**
@@ -45,6 +46,7 @@ export function useCourseDetail(legacyId: number, locale = 'pt-BR') {
             items: s.items,
           })),
           faq: (c.faqs ?? []).map((f) => ({ q: f.question, a: f.answer })),
+          coverUrl: c.coverUrl ?? null,
         });
       } catch {
         if (active) setError(true);

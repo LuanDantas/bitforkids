@@ -9,6 +9,7 @@ export interface CatalogCourse {
   title: string;
   subtitle: string;
   price: string; // ex "397,00"
+  coverUrl: string | null; // capa servida pela API; null -> usa asset local
 }
 
 const TRACK_TRAIL: Record<string, number> = {
@@ -28,6 +29,7 @@ function mapCourse(c: CourseSummary): CatalogCourse | null {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     }),
+    coverUrl: c.coverUrl ?? null,
   };
 }
 

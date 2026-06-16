@@ -432,7 +432,7 @@ export default function CourseDetailScreen() {
 
         {/* Banner */}
         <View style={styles.bannerContainer}>
-          <Image source={course.image} style={styles.bannerImage} resizeMode="cover" />
+          <Image source={course.coverUrl ? { uri: course.coverUrl } : course.image} style={styles.bannerImage} resizeMode="cover" />
           <LinearGradient colors={['rgba(0,0,0,0.5)', 'transparent'] as const} style={styles.bannerTopGradient} />
           <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
             <ArrowLeft size={24} color="#FFF" />

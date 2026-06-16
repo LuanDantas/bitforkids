@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import {
   View,
   Text,
@@ -16,6 +16,7 @@ import AuroraBackground from '@/components/AuroraBackground';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useVSL } from '@/contexts/VSLContext';
+import { useCourses } from '@/hooks/useCourses';
 import { StatusBar } from 'expo-status-bar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
@@ -76,11 +77,51 @@ function SectionCard({ index, title, accent, icon: Icon, colors, fonts, children
   );
 }
 
+// Capas locais por legacyId — fallback quando offline ou sem coverUrl na API.
+const ABOUT_LOCAL_COVERS: Record<number, any> = {
+  1: require('../../assets/images/curso-bitcoin.png'),
+  2: require('../../assets/images/curso-ethereum.png'),
+  3: require('../../assets/images/curso-autocustodia.png'),
+};
+
+// Fallback estático (i18n) exibido apenas enquanto a API carrega / offline.
+const ABOUT_FALLBACK_COURSES = [
+  { id: 1, titleKey: 'home.course1Title', subtitleKey: 'home.course1Subtitle', trail: 1 },
+  { id: 2, titleKey: 'home.course2Title', subtitleKey: 'home.course2Subtitle', trail: 1 },
+  { id: 3, titleKey: 'home.course3Title', subtitleKey: 'home.course3Subtitle', trail: 2 },
+];
+
 export default function AboutScreen() {
   const router = useRouter();
   const { colors, fonts } = useTheme();
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   const insets = useSafeAreaInsets();
+  const { courses: apiCourses } = useCourses(locale);
+
+  // Cursos exibidos nas trilhas: API (somente publicados, com coverUrl) quando
+  // disponível; fallback estático (i18n + capa local) apenas enquanto carrega / offline.
+  const aboutCourses = useMemo(() => {
+    if (apiCourses && apiCourses.length) {
+      return apiCourses.map((c) => ({
+        id: c.id,
+        title: c.title,
+        subtitle: c.subtitle ?? '',
+        price: c.price,
+        trail: c.trail,
+        image: c.coverUrl ? { uri: c.coverUrl } : ABOUT_LOCAL_COVERS[c.id],
+      }));
+    }
+    return ABOUT_FALLBACK_COURSES.map((c) => ({
+      id: c.id,
+      title: t(c.titleKey),
+      subtitle: t(c.subtitleKey),
+      price: '397,00',
+      trail: c.trail,
+      image: ABOUT_LOCAL_COVERS[c.id],
+    }));
+  }, [apiCourses, t]);
+  const coursesByTrail = (trail: number) =>
+    aboutCourses.filter((c) => c.trail === trail);
   const {
     shouldShowVSL,
     showVSLModal,
@@ -281,6 +322,7 @@ export default function AboutScreen() {
             </View>
 
             {/* Trilha 1 */}
+            {coursesByTrail(1).length > 0 && (
             <View style={[s.trailCard, { borderColor: '#F7931A40' }]}>
               <LinearGradient colors={['#F7931A', '#E2761B'] as const} style={s.trailCardHeader}>
                 <Text style={[s.trailLabel, { fontFamily: fonts.secondaryMedium }]}>{t('home.trail1Label')}</Text>
@@ -288,12 +330,15 @@ export default function AboutScreen() {
                 <Text style={[s.trailSub, { fontFamily: fonts.body }]}>{t('home.trail1Subtitle')}</Text>
               </LinearGradient>
               <View style={s.trailBody}>
-                <TrailCourseItem title={t('home.course1Title')} subtitle={t('home.course1Subtitle')} price="397,00" image={require('../../assets/images/curso-bitcoin.png')} onPress={() => router.push('/course/1')} colors={colors} fonts={fonts} />
-                <TrailCourseItem title={t('home.course2Title')} subtitle={t('home.course2Subtitle')} price="397,00" image={require('../../assets/images/curso-ethereum.png')} onPress={() => router.push('/course/2')} colors={colors} fonts={fonts} />
+                {coursesByTrail(1).map((c) => (
+                  <TrailCourseItem key={c.id} title={c.title} subtitle={c.subtitle} price={c.price} image={c.image} onPress={() => router.push(`/course/${c.id}`)} colors={colors} fonts={fonts} />
+                ))}
               </View>
             </View>
+            )}
 
             {/* Trilha 2 */}
+            {coursesByTrail(2).length > 0 && (
             <View style={[s.trailCard, { borderColor: '#3B82F640' }]}>
               <LinearGradient colors={['#3B82F6', '#1D4ED8'] as const} style={s.trailCardHeader}>
                 <Text style={[s.trailLabel, { fontFamily: fonts.secondaryMedium }]}>{t('home.trail2Label')}</Text>
@@ -301,9 +346,12 @@ export default function AboutScreen() {
                 <Text style={[s.trailSub, { fontFamily: fonts.body }]}>{t('home.trail2Subtitle')}</Text>
               </LinearGradient>
               <View style={s.trailBody}>
-                <TrailCourseItem title={t('home.course3Title')} subtitle={t('home.course3Subtitle')} price="397,00" image={require('../../assets/images/curso-autocustodia.png')} onPress={() => router.push('/course/3')} colors={colors} fonts={fonts} />
+                {coursesByTrail(2).map((c) => (
+                  <TrailCourseItem key={c.id} title={c.title} subtitle={c.subtitle} price={c.price} image={c.image} onPress={() => router.push(`/course/${c.id}`)} colors={colors} fonts={fonts} />
+                ))}
               </View>
             </View>
+            )}
 
             {/* Garantia */}
             <View style={s.guaranteeCard}>
