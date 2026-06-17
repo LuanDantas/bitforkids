@@ -19,6 +19,13 @@ export default function LandingPage() {
   const { t } = useLanguage();
   const insets = useSafeAreaInsets();
 
+  // Capa gerenciável via CMS (landing.coverImage); fallback ao asset local.
+  const coverValue = t('landing.coverImage');
+  const coverSource =
+    typeof coverValue === 'string' && coverValue.startsWith('http')
+      ? { uri: coverValue }
+      : require('../assets/images/hero-banner.png');
+
   const handleQuickLogin = async () => {
     const result = await login('root@bitforkids.com', 'root123');
     if (result.success) {
@@ -37,7 +44,8 @@ export default function LandingPage() {
 
       <Animated.View entering={FadeIn.duration(600)}>
         <Image
-          source={require('../assets/images/hero-banner.png')}
+          key={typeof coverSource === 'number' ? 'local' : coverSource.uri}
+          source={coverSource}
           style={styles.heroBanner}
           resizeMode="contain"
         />
