@@ -26,6 +26,10 @@ import {
 import { useNotifications } from '../hooks/useNotifications';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import {
+  notificationsApi,
+  NotificationPreferences,
+} from '@/services/api/notifications';
 
 interface NotificationSettings {
   pushNotifications: boolean;
@@ -73,6 +77,22 @@ export default function NotificationsScreen() {
     loadScheduledNotifications();
   }, []);
 
+  // Preferências persistidas no backend (4 toggles). Demais opções são locais.
+  useEffect(() => {
+    notificationsApi
+      .getPreferences()
+      .then((p) =>
+        setSettings((prev) => ({
+          ...prev,
+          bitcoinPriceAlerts: p.bitcoinPrice,
+          cashbackNotifications: p.cashback,
+          dailyPriceUpdates: p.dailyDigest,
+          motivationMessages: p.marketing,
+        }))
+      )
+      .catch(() => {});
+  }, []);
+
   const loadScheduledNotifications = async () => {
     try {
       const scheduled = await getScheduledNotifications();
@@ -82,11 +102,22 @@ export default function NotificationsScreen() {
     }
   };
 
+  // Toggles que persistem no backend (demais são locais/dispositivo).
+  const PREF_MAP: Partial<
+    Record<keyof NotificationSettings, keyof NotificationPreferences>
+  > = {
+    bitcoinPriceAlerts: 'bitcoinPrice',
+    cashbackNotifications: 'cashback',
+    dailyPriceUpdates: 'dailyDigest',
+    motivationMessages: 'marketing',
+  };
+
   const updateSetting = (key: keyof NotificationSettings, value: boolean) => {
-    setSettings(prev => ({
-      ...prev,
-      [key]: value,
-    }));
+    setSettings((prev) => ({ ...prev, [key]: value }));
+    const apiKey = PREF_MAP[key];
+    if (apiKey) {
+      notificationsApi.updatePreferences({ [apiKey]: value }).catch(() => {});
+    }
   };
 
   const testNotification = async (type: 'price' | 'motivation' | 'course') => {
