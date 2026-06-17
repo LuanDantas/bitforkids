@@ -98,6 +98,17 @@ export default function AboutScreen() {
   const insets = useSafeAreaInsets();
   const { courses: apiCourses } = useCourses(locale);
 
+  // Imagens gerenciáveis via CMS (home.*); fallback aos assets locais.
+  const cmsImage = (key: string, local: number) => {
+    const value = t(key);
+    return typeof value === 'string' && value.startsWith('http')
+      ? { uri: value }
+      : local;
+  };
+  const heroImage = cmsImage('home.heroImage', require('../../assets/images/hero-banner.png'));
+  const profileImage = cmsImage('home.profileImage', require('../../assets/images/dani-profile.png'));
+  const familyImage = cmsImage('home.familyImage', require('../../assets/images/dani-family.png'));
+
   // Cursos exibidos nas trilhas: API (somente publicados, com coverUrl) quando
   // disponível; fallback estático (i18n + capa local) apenas enquanto carrega / offline.
   const aboutCourses = useMemo(() => {
@@ -147,7 +158,8 @@ export default function AboutScreen() {
         {/* HERO */}
         <View style={{ height: insets.top }} />
         <Image
-          source={require('../../assets/images/hero-banner.png')}
+          key={typeof heroImage === 'number' ? 'local' : heroImage.uri}
+          source={heroImage}
           style={s.heroBanner}
           resizeMode="contain"
         />
@@ -390,7 +402,7 @@ export default function AboutScreen() {
               <View style={[s.cardDivider, { backgroundColor: '#EC489930' }]} />
 
               <View style={s.profileImageContainer}>
-                <Image source={require('../../assets/images/dani-profile.png')} style={s.profileImage} resizeMode="cover" />
+                <Image key={typeof profileImage === 'number' ? 'local' : profileImage.uri} source={profileImage} style={s.profileImage} resizeMode="cover" />
               </View>
               <Text style={[s.profileName, { color: colors.text, fontFamily: fonts.display }]}>{t('home.aboutMeName')}</Text>
               <Text style={[s.profileRole, { fontFamily: fonts.bodySemiBold }]}>{t('home.aboutMeRole')}</Text>
@@ -421,7 +433,7 @@ export default function AboutScreen() {
               </View>
               <View style={[s.cardDivider, { backgroundColor: '#F59E0B30' }]} />
               <View style={s.familyImageContainer}>
-                <Image source={require('../../assets/images/dani-family.png')} style={s.familyImage} resizeMode="cover" />
+                <Image key={typeof familyImage === 'number' ? 'local' : familyImage.uri} source={familyImage} style={s.familyImage} resizeMode="cover" />
               </View>
               <Text style={[s.paragraph, { color: colors.text, fontFamily: fonts.body }]}>{t('home.familyParagraph1')}</Text>
               <Text style={[s.paragraph, { color: colors.textSecondary, fontFamily: fonts.body }]}>{t('home.familyParagraph2')}</Text>
