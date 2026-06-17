@@ -18,6 +18,12 @@ export interface PortfolioWalletVM {
   profit: number;
   chartData: { label: string; value: number }[];
 }
+export interface PositionWalletVM {
+  id: string;
+  name: string;
+  value: number;
+  percentage: number;
+}
 export interface PortfolioPositionVM {
   id: string;
   crypto: string;
@@ -29,6 +35,7 @@ export interface PortfolioPositionVM {
   profit: number;
   profitPercent: number;
   trend: 'high' | 'low' | 'neutral';
+  wallets: PositionWalletVM[];
 }
 export interface PortfolioStatsVM {
   totalAportes: number;
@@ -104,6 +111,15 @@ export function usePortfolio(): UsePortfolio {
         const profit = balance - investment;
         const profitPercent = investment > 0 ? (profit / investment) * 100 : 0;
         const ch = change24hById.get(a.assetSymbol) ?? 0;
+        // Distribuição da posição entre as carteiras que a detêm.
+        const breakdown = summary.wallets
+          .map((w) => {
+            const h = w.holdings.find((x) => x.assetSymbol === a.assetSymbol);
+            if (!h) return null;
+            return { id: w.walletId, name: w.name, value: Number(h.quantity) * price };
+          })
+          .filter((x): x is { id: string; name: string; value: number } => !!x);
+        const assetTotal = breakdown.reduce((s, b) => s + b.value, 0) || 1;
         return {
           id: a.assetSymbol,
           crypto: a.assetSymbol,
@@ -115,6 +131,10 @@ export function usePortfolio(): UsePortfolio {
           profit,
           profitPercent,
           trend: ch > 1 ? 'high' : ch < -1 ? 'low' : 'neutral',
+          wallets: breakdown.map((b) => ({
+            ...b,
+            percentage: Math.round((b.value / assetTotal) * 100),
+          })),
         };
       });
 

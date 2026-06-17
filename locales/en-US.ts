@@ -1140,6 +1140,7 @@ const enUS = {
     errorTitle: 'Error',
     errorWalletName: 'Please enter the wallet name',
     errorFillRequired: 'Please fill in all required fields',
+    errorGeneric: 'Something went wrong. Please try again.',
     successTitle: 'Success',
     walletCreated: 'Wallet created successfully!',
     walletEdit: 'Edit wallet',
@@ -1176,6 +1177,7 @@ const enUS = {
     profitLoss: 'Profit/Loss',
     percentage: 'Percentage',
     performanceHistory: 'Performance History',
+    historyUnavailable: 'Per-asset history coming soon.',
     walletDistribution: 'Distribution by Wallets',
   },
 

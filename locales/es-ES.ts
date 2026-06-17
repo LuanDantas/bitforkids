@@ -1139,6 +1139,7 @@ const esES = {
     errorTitle: 'Error',
     errorWalletName: 'Por favor, ingresa el nombre de la billetera',
     errorFillRequired: 'Por favor, completa todos los campos obligatorios',
+    errorGeneric: 'Algo salió mal. Inténtalo de nuevo.',
     successTitle: 'Éxito',
     walletCreated: '¡Billetera creada con éxito!',
     walletEdit: 'Editar billetera',
@@ -1175,6 +1176,7 @@ const esES = {
     profitLoss: 'Ganancia/Pérdida',
     percentage: 'Porcentaje',
     performanceHistory: 'Historial de Rendimiento',
+    historyUnavailable: 'Historial por activo próximamente.',
     walletDistribution: 'Distribución por Billeteras',
   },
 

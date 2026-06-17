@@ -1139,6 +1139,7 @@ const ptBR = {
     errorTitle: 'Erro',
     errorWalletName: 'Por favor, informe o nome da carteira',
     errorFillRequired: 'Por favor, preencha todos os campos obrigatórios',
+    errorGeneric: 'Algo deu errado. Tente novamente.',
     successTitle: 'Sucesso',
     walletCreated: 'Carteira criada com sucesso!',
     walletEdit: 'Editar carteira',
@@ -1175,6 +1176,7 @@ const ptBR = {
     profitLoss: 'Lucro/Prejuízo',
     percentage: 'Percentual',
     performanceHistory: 'Histórico de Performance',
+    historyUnavailable: 'Histórico por ativo disponível em breve.',
     walletDistribution: 'Distribuição por Carteiras',
   },
 

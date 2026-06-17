@@ -20,9 +20,9 @@ import {
   Calendar,
   Wallet,
 } from 'lucide-react-native';
-import EnhancedCardChart from '@/components/charts/LineChart';
+import { usePortfolio } from '@/hooks/usePortfolio';
 
-// Mock cryptos
+// Identidade visual por símbolo (ícone/cor) para exibição.
 const cryptos = [
   { id: 'BTC', name: 'Bitcoin', icon: '₿', color: '#F7931A' },
   { id: 'ETH', name: 'Ethereum', icon: 'Ξ', color: '#627EEA' },
@@ -32,121 +32,16 @@ const cryptos = [
   { id: 'ADA', name: 'Cardano', icon: 'A', color: '#0033AD' },
 ];
 
-// Mock data for transaction details
-const getTransactionDetails = (id: string) => {
-  const mockDetails = {
-    '1': {
-      id: '1',
-      crypto: 'BTC',
-      currentPrice: 73250.45,
-      quantity: 0.15,
-      investment: 10000,
-      balance: 10987.57,
-      avgPrice: 66666.67,
-      profit: 987.57,
-      profitPercent: 9.88,
-      trend: 'high',
-      date: '15/03/2024',
-      historicalData: [
-        { label: 'Jan', value: 9000 },
-        { label: 'Fev', value: 9500 },
-        { label: 'Mar', value: 10000 },
-        { label: 'Abr', value: 9800 },
-        { label: 'Mai', value: 10200 },
-        { label: 'Jun', value: 10500 },
-        { label: 'Jul', value: 10800 },
-        { label: 'Ago', value: 10750 },
-        { label: 'Set', value: 10850 },
-        { label: 'Out', value: 10900 },
-        { label: 'Nov', value: 10950 },
-        { label: 'Dez', value: 10987.57 },
-      ],
-      wallets: [
-        { id: '1', name: 'Carteira Principal', percentage: 65, value: 7142 },
-        { id: '2', name: 'Trading', percentage: 35, value: 3845.57 },
-      ],
-    },
-    '2': {
-      id: '2',
-      crypto: 'ETH',
-      currentPrice: 3845.67,
-      quantity: 1.5,
-      investment: 5000,
-      balance: 5768.51,
-      avgPrice: 3333.33,
-      profit: 768.51,
-      profitPercent: 15.37,
-      trend: 'high',
-      date: '20/04/2024',
-      historicalData: [
-        { label: 'Jan', value: 4200 },
-        { label: 'Fev', value: 4500 },
-        { label: 'Mar', value: 4800 },
-        { label: 'Abr', value: 5000 },
-        { label: 'Mai', value: 5200 },
-        { label: 'Jun', value: 5300 },
-        { label: 'Jul', value: 5450 },
-        { label: 'Ago', value: 5500 },
-        { label: 'Set', value: 5600 },
-        { label: 'Out', value: 5700 },
-        { label: 'Nov', value: 5750 },
-        { label: 'Dez', value: 5768.51 },
-      ],
-      wallets: [
-        { id: '1', name: 'Carteira Principal', percentage: 80, value: 4614.81 },
-        { id: '2', name: 'Trading', percentage: 20, value: 1153.7 },
-      ],
-    },
-    '3': {
-      id: '3',
-      crypto: 'SOL',
-      currentPrice: 198.34,
-      quantity: 25,
-      investment: 3000,
-      balance: 4958.5,
-      avgPrice: 120,
-      profit: 1958.5,
-      profitPercent: 65.28,
-      trend: 'high',
-      date: '10/05/2024',
-      historicalData: [
-        { label: 'Jan', value: 2500 },
-        { label: 'Fev', value: 2800 },
-        { label: 'Mar', value: 3100 },
-        { label: 'Abr', value: 3400 },
-        { label: 'Mai', value: 3000 },
-        { label: 'Jun', value: 3600 },
-        { label: 'Jul', value: 3800 },
-        { label: 'Ago', value: 4000 },
-        { label: 'Set', value: 4300 },
-        { label: 'Out', value: 4500 },
-        { label: 'Nov', value: 4800 },
-        { label: 'Dez', value: 4958.5 },
-      ],
-      wallets: [
-        { id: '1', name: 'Carteira Principal', percentage: 100, value: 4958.5 },
-      ],
-    },
-  };
-
-  return mockDetails[id] || mockDetails['1'];
-};
-
 export default function TransactionDetailsScreen() {
   const { colors, fonts, isDark } = useTheme();
   const { t } = useLanguage();
   const router = useRouter();
   const { id } = useLocalSearchParams();
+  const { positions, loading } = usePortfolio();
 
-  const transaction = getTransactionDetails(id as string);
-  const crypto = cryptos.find((c) => c.id === transaction.crypto);
-  const profitColor = transaction.profit >= 0 ? '#10B981' : '#EF4444';
-  const trendIcon =
-    transaction.profitPercent >= 5
-      ? TrendingUp
-      : transaction.profitPercent <= -5
-      ? TrendingDown
-      : Eye;
+  const transaction = positions.find((p) => p.id === id);
+  const crypto = cryptos.find((c) => c.id === transaction?.crypto);
+  const profitColor = (transaction?.profit ?? 0) >= 0 ? '#10B981' : '#EF4444';
 
   if (!transaction) {
     return (
@@ -157,7 +52,15 @@ export default function TransactionDetailsScreen() {
           styles.centered,
         ]}
       >
-        <ActivityIndicator size="large" color={colors.primary} />
+        {loading ? (
+          <ActivityIndicator size="large" color={colors.primary} />
+        ) : (
+          <TouchableOpacity onPress={() => router.back()}>
+            <Text style={{ color: colors.textSecondary, fontFamily: fonts.body }}>
+              {t('portfolio.errorGeneric')}
+            </Text>
+          </TouchableOpacity>
+        )}
       </View>
     );
   }
@@ -206,12 +109,6 @@ export default function TransactionDetailsScreen() {
                 style={[styles.cryptoSymbol, { color: colors.textSecondary, fontFamily: fonts.body }]}
               >
                 {transaction.crypto}
-              </Text>
-            </View>
-            <View style={styles.dateBadge}>
-              <Calendar size={14} color={colors.primary} />
-              <Text style={[styles.dateText, { color: colors.text, fontFamily: fonts.bodySemiBold }]}>
-                {transaction.date}
               </Text>
             </View>
           </View>
@@ -348,10 +245,16 @@ export default function TransactionDetailsScreen() {
           <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
             {t('portfolioDetail.performanceHistory')}
           </Text>
-          <EnhancedCardChart
-            data={transaction.historicalData}
-            color={profitColor}
-          />
+          <Text
+            style={{
+              color: colors.textTertiary,
+              fontFamily: fonts.body,
+              fontSize: 13,
+              paddingVertical: 12,
+            }}
+          >
+            {t('portfolioDetail.historyUnavailable')}
+          </Text>
         </View>
 
         {/* Wallets Distribution */}

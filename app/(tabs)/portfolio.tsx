@@ -35,6 +35,9 @@ import {
 import LineChart from '@/components/charts/LineChart';
 import GlassCard from '@/components/GlassCard';
 import Svg, { Polyline, Circle } from 'react-native-svg';
+import { usePortfolio } from '@/hooks/usePortfolio';
+import { useMarket } from '@/hooks/useMarket';
+import { portfolioApi } from '@/services/api/portfolio';
 
 const cryptos = [
   { id: 'BTC', name: 'Bitcoin', icon: '₿', color: '#F7931A', price: 73250.45, change: 2.3 },
@@ -61,6 +64,17 @@ const EnhancedCardChart = ({
   const padding = 40;
   const chartInnerWidth = chartWidth - padding * 2;
   const chartInnerHeight = chartHeight - padding * 2;
+
+  // Histórico ainda esparso (0–1 ponto): o gráfico de linha precisa de ≥2 pontos.
+  if (!data || data.length < 2) {
+    return (
+      <View style={{ height: 200, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 16 }}>
+        <Text style={{ color: themeColors.textTertiary, fontSize: 12, textAlign: 'center' }}>
+          Gráfico disponível após alguns dias de histórico.
+        </Text>
+      </View>
+    );
+  }
 
   const maxValue = Math.max(...data.map((d) => d.value));
   const minValue = Math.min(...data.map((d) => d.value));
@@ -275,97 +289,19 @@ export default function PortfolioScreen() {
     quantity: '',
   });
 
-  // Mock data
-  const [wallets, setWallets] = useState([
-    {
-      id: '1',
-      name: 'Carteira Principal',
-      totalValue: 15420.5,
-      change: 12.5,
-      profit: 1850.75,
-      chartData: [
-        { label: 'Jan', value: 12000 },
-        { label: 'Fev', value: 12800 },
-        { label: 'Mar', value: 13200 },
-        { label: 'Abr', value: 13800 },
-        { label: 'Mai', value: 14200 },
-        { label: 'Jun', value: 14500 },
-        { label: 'Jul', value: 14800 },
-        { label: 'Ago', value: 15000 },
-        { label: 'Set', value: 15150 },
-        { label: 'Out', value: 15300 },
-        { label: 'Nov', value: 15400 },
-        { label: 'Dez', value: 15420.5 },
-      ],
-    },
-    {
-      id: '2',
-      name: 'Trading',
-      totalValue: 8250.25,
-      change: -3.2,
-      profit: -264.1,
-      chartData: [
-        { label: 'Jan', value: 9000 },
-        { label: 'Fev', value: 8800 },
-        { label: 'Mar', value: 8600 },
-        { label: 'Abr', value: 8700 },
-        { label: 'Mai', value: 8500 },
-        { label: 'Jun', value: 8300 },
-        { label: 'Jul', value: 8350 },
-        { label: 'Ago', value: 8200 },
-        { label: 'Set', value: 8150 },
-        { label: 'Out', value: 8300 },
-        { label: 'Nov', value: 8250 },
-        { label: 'Dez', value: 8250.25 },
-      ],
-    },
-  ]);
+  // Dados reais do portfólio (API): carteiras, posições por ativo e stats.
+  const { wallets, positions, stats, reload } = usePortfolio();
 
-  const [transactions, setTransactions] = useState([
-    {
-      id: '1',
-      crypto: 'BTC',
-      currentPrice: 73250.45,
-      quantity: 0.15,
-      investment: 10000,
-      balance: 10987.57,
-      avgPrice: 66666.67,
-      profit: 987.57,
-      profitPercent: 9.88,
-      trend: 'high',
-    },
-    {
-      id: '2',
-      crypto: 'ETH',
-      currentPrice: 3845.67,
-      quantity: 1.5,
-      investment: 5000,
-      balance: 5768.51,
-      profit: 768.51,
-      profitPercent: 15.37,
-      trend: 'high',
-    },
-    {
-      id: '3',
-      crypto: 'SOL',
-      currentPrice: 198.34,
-      quantity: 25,
-      investment: 3000,
-      balance: 4958.5,
-      profit: 1958.5,
-      profitPercent: 65.28,
-      trend: 'high',
-    },
-  ]);
-
-  const portfolioStats = {
-    totalAportes: 15000,
-    aportesChange: 5.2,
-    totalBalance: 21714.58,
-    balanceChange: -8.5,
-    totalProfit: 3714.58,
-    profitChange: 32.8,
-  };
+  // Resumo de mercado com preços reais (CoinGecko via API).
+  const { topCryptos } = useMarket();
+  const marketCoins = (topCryptos ?? []).slice(0, 6).map((c) => ({
+    id: c.symbol,
+    name: c.name,
+    icon: c.logo,
+    color: c.color,
+    price: c.price,
+    change: c.change24h,
+  }));
 
   const calculateTrend = (value: number) => {
     if (value > 5)
@@ -375,11 +311,10 @@ export default function PortfolioScreen() {
     return { label: t('portfolio.neutral'), color: '#F59E0B', icon: Minus };
   };
 
-  const onRefresh = () => {
+  const onRefresh = async () => {
     setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 2000);
+    await reload();
+    setRefreshing(false);
   };
 
   const closeWalletModal = () => {
@@ -388,49 +323,28 @@ export default function PortfolioScreen() {
     setEditingWalletId(null);
   };
 
-  const handleAddWallet = () => {
-    if (!newWalletName.trim()) {
+  const handleAddWallet = async () => {
+    const name = newWalletName.trim();
+    if (!name) {
       Alert.alert(t('portfolio.errorTitle'), t('portfolio.errorWalletName'));
       return;
     }
-
-    if (editingWalletId) {
-      // Edição: atualiza apenas a carteira selecionada.
-      setWallets(
-        wallets.map((w) =>
-          w.id === editingWalletId ? { ...w, name: newWalletName.trim() } : w
-        )
-      );
+    try {
+      if (editingWalletId) {
+        await portfolioApi.updateWallet(editingWalletId, name);
+      } else {
+        await portfolioApi.createWallet(name);
+      }
+      const wasEditing = !!editingWalletId;
+      await reload();
       closeWalletModal();
-      Alert.alert(t('portfolio.successTitle'), t('portfolio.walletUpdated'));
-      return;
+      Alert.alert(
+        t('portfolio.successTitle'),
+        wasEditing ? t('portfolio.walletUpdated') : t('portfolio.walletCreated')
+      );
+    } catch {
+      Alert.alert(t('portfolio.errorTitle'), t('portfolio.errorGeneric'));
     }
-
-    const newWallet = {
-      id: Date.now().toString(),
-      name: newWalletName.trim(),
-      totalValue: 0,
-      change: 0,
-      profit: 0,
-      chartData: [
-        { label: 'Jan', value: 0 },
-        { label: 'Fev', value: 0 },
-        { label: 'Mar', value: 0 },
-        { label: 'Abr', value: 0 },
-        { label: 'Mai', value: 0 },
-        { label: 'Jun', value: 0 },
-        { label: 'Jul', value: 0 },
-        { label: 'Ago', value: 0 },
-        { label: 'Set', value: 0 },
-        { label: 'Out', value: 0 },
-        { label: 'Nov', value: 0 },
-        { label: 'Dez', value: 0 },
-      ],
-    };
-
-    setWallets([...wallets, newWallet]);
-    closeWalletModal();
-    Alert.alert(t('portfolio.successTitle'), t('portfolio.walletCreated'));
   };
 
   const handleEditWallet = (id: string) => {
@@ -449,57 +363,65 @@ export default function PortfolioScreen() {
         {
           text: t('portfolio.delete'),
           style: 'destructive',
-          onPress: () => {
-            setWallets(wallets.filter((w) => w.id !== id));
+          onPress: async () => {
+            try {
+              await portfolioApi.removeWallet(id);
+              await reload();
+            } catch {
+              Alert.alert(t('portfolio.errorTitle'), t('portfolio.errorGeneric'));
+            }
           },
         },
       ]
     );
   };
 
-  const handleAddTransaction = () => {
+  const handleAddTransaction = async () => {
     if (
       !transactionForm.crypto ||
       !transactionForm.wallet ||
       !transactionForm.price ||
       !transactionForm.amount
     ) {
-      Alert.alert(t('portfolio.errorTitle'), t('portfolio.errorFillFields'));
+      Alert.alert(t('portfolio.errorTitle'), t('portfolio.errorFillRequired'));
       return;
     }
 
-    // Parse currency values (remove $ and commas)
     const priceValue = parseFloat(parseCurrency(transactionForm.price));
-    const amountValue = parseFloat(parseCurrency(transactionForm.amount));
     const quantityValue = parseFloat(transactionForm.quantity);
+    if (!(priceValue > 0) || !(quantityValue > 0)) {
+      Alert.alert(t('portfolio.errorTitle'), t('portfolio.errorFillRequired'));
+      return;
+    }
 
-    const newTransaction = {
-      id: Date.now().toString(),
-      crypto: transactionForm.crypto,
-      currentPrice: priceValue,
-      quantity: quantityValue,
-      investment: amountValue,
-      balance: amountValue,
-      avgPrice: priceValue,
-      profit: 0,
-      profitPercent: 0,
-      trend: 'neutral' as const,
-    };
+    // DD/MM/YYYY -> ISO (opcional)
+    let occurredAt: string | undefined;
+    const m = transactionForm.date.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+    if (m) occurredAt = `${m[3]}-${m[2]}-${m[1]}T12:00:00.000Z`;
 
-    setTransactions([...transactions, newTransaction]);
-
-    // Reset form
-    setTransactionForm({
-      crypto: '',
-      wallet: '',
-      price: '',
-      date: '',
-      amount: '',
-      quantity: '',
-    });
-    setShowTransactionModal(false);
-    setSelectedTransactionType(null);
-    Alert.alert(t('portfolio.successTitle'), t('portfolio.transactionCreated'));
+    try {
+      await portfolioApi.createTransaction(transactionForm.wallet, {
+        assetSymbol: transactionForm.crypto,
+        side: selectedTransactionType === 'withdrawal' ? 'SELL' : 'BUY',
+        quantity: quantityValue,
+        priceCents: Math.round(priceValue * 100),
+        occurredAt,
+      });
+      await reload();
+      setTransactionForm({
+        crypto: '',
+        wallet: '',
+        price: '',
+        date: '',
+        amount: '',
+        quantity: '',
+      });
+      setShowTransactionModal(false);
+      setSelectedTransactionType(null);
+      Alert.alert(t('portfolio.successTitle'), t('portfolio.transactionCreated'));
+    } catch {
+      Alert.alert(t('portfolio.errorTitle'), t('portfolio.errorGeneric'));
+    }
   };
 
   const formatCoinPrice = (price: number) => {
@@ -518,7 +440,7 @@ export default function PortfolioScreen() {
         <Text style={[styles.marketTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
           {t('portfolio.marketSummary')}
         </Text>
-        {cryptos.map((coin) => {
+        {marketCoins.map((coin) => {
           const changeColor =
             coin.change > 0 ? '#10B981' : coin.change < 0 ? '#EF4444' : colors.textSecondary;
           const ChangeIcon =
@@ -563,72 +485,29 @@ export default function PortfolioScreen() {
   };
 
   const renderPortfolioCards = () => {
+    const fmt = (n: number) =>
+      `$${n.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
     const cards = [
       {
         title: t('portfolio.deposits'),
-        value: `$${portfolioStats.totalAportes.toLocaleString('en-US', {
-          minimumFractionDigits: 2,
-        })}`,
-        change: portfolioStats.aportesChange,
-        trend: calculateTrend(portfolioStats.aportesChange),
-        chartData: [
-          { label: 'Jan', value: 12000 },
-          { label: 'Fev', value: 12500 },
-          { label: 'Mar', value: 13000 },
-          { label: 'Abr', value: 13500 },
-          { label: 'Mai', value: 14000 },
-          { label: 'Jun', value: 14500 },
-          { label: 'Jul', value: 15000 },
-          { label: 'Ago', value: 14800 },
-          { label: 'Set', value: 14600 },
-          { label: 'Out', value: 14900 },
-          { label: 'Nov', value: 15100 },
-          { label: 'Dez', value: 15000 },
-        ],
+        value: fmt(stats.totalAportes),
+        change: 0,
+        trend: calculateTrend(0),
+        chartData: stats.depositsChart,
       },
       {
         title: t('portfolio.balance'),
-        value: `$${portfolioStats.totalBalance.toLocaleString('en-US', {
-          minimumFractionDigits: 2,
-        })}`,
-        change: portfolioStats.balanceChange,
-        trend: calculateTrend(portfolioStats.balanceChange),
-        chartData: [
-          { label: 'Jan', value: 25000 },
-          { label: 'Fev', value: 24500 },
-          { label: 'Mar', value: 24000 },
-          { label: 'Abr', value: 23500 },
-          { label: 'Mai', value: 23000 },
-          { label: 'Jun', value: 22500 },
-          { label: 'Jul', value: 22000 },
-          { label: 'Ago', value: 21500 },
-          { label: 'Set', value: 21000 },
-          { label: 'Out', value: 21800 },
-          { label: 'Nov', value: 21500 },
-          { label: 'Dez', value: 21714 },
-        ],
+        value: fmt(stats.totalBalance),
+        change: stats.profitChange,
+        trend: calculateTrend(stats.profitChange),
+        chartData: stats.balanceChart,
       },
       {
         title: t('portfolio.profit'),
-        value: `$${portfolioStats.totalProfit.toLocaleString('en-US', {
-          minimumFractionDigits: 2,
-        })}`,
-        change: portfolioStats.profitChange,
-        trend: calculateTrend(portfolioStats.profitChange),
-        chartData: [
-          { label: 'Jan', value: 2000 },
-          { label: 'Fev', value: 2200 },
-          { label: 'Mar', value: 2500 },
-          { label: 'Abr', value: 2800 },
-          { label: 'Mai', value: 3100 },
-          { label: 'Jun', value: 3400 },
-          { label: 'Jul', value: 3650 },
-          { label: 'Ago', value: 3700 },
-          { label: 'Set', value: 3680 },
-          { label: 'Out', value: 3750 },
-          { label: 'Nov', value: 3730 },
-          { label: 'Dez', value: 3714 },
-        ],
+        value: fmt(stats.totalProfit),
+        change: stats.profitChange,
+        trend: calculateTrend(stats.profitChange),
+        chartData: stats.profitChart,
       },
     ];
 
@@ -765,7 +644,7 @@ export default function PortfolioScreen() {
               </Text>
             </View>
 
-            {transactions.map((transaction) => {
+            {positions.map((transaction) => {
               const crypto = cryptos.find((c) => c.id === transaction.crypto);
               const profitColor =
                 transaction.profit >= 0 ? '#10B981' : '#EF4444';
@@ -1261,7 +1140,8 @@ export default function PortfolioScreen() {
                   },
                 ]}
               >
-                {transactionForm.wallet || t('portfolio.selectWallet')}
+                {wallets.find((w) => w.id === transactionForm.wallet)?.name ||
+                  t('portfolio.selectWallet')}
               </Text>
             </TouchableOpacity>
 
@@ -1432,7 +1312,7 @@ export default function PortfolioScreen() {
                       backgroundColor: colors.surface,
                       borderColor: colors.border,
                     },
-                    transactionForm.wallet === wallet.name && {
+                    transactionForm.wallet === wallet.id && {
                       backgroundColor: colors.primary + '20',
                       borderColor: colors.primary,
                     },
@@ -1440,7 +1320,7 @@ export default function PortfolioScreen() {
                   onPress={() => {
                     setTransactionForm({
                       ...transactionForm,
-                      wallet: wallet.name,
+                      wallet: wallet.id,
                     });
                     setShowWalletPicker(false);
                   }}
@@ -1450,7 +1330,7 @@ export default function PortfolioScreen() {
                       styles.walletPickerText,
                       {
                         color:
-                          transactionForm.wallet === wallet.name
+                          transactionForm.wallet === wallet.id
                             ? colors.primary
                             : colors.text,
                         fontFamily: fonts.bodySemiBold,
