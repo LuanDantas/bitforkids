@@ -1,5 +1,7 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, Platform } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
+import { PREVIEW_MESSAGE_TYPE, isAllowedPreviewOrigin } from '@/contexts/LanguageContext';
 import LandingPage from '../index';
 import AboutScreen from '../(tabs)/about';
 
@@ -12,7 +14,24 @@ const PREVIEW_SCREENS: Record<string, React.ComponentType> = {
 };
 
 export default function PreviewScreen() {
-  const { slug } = useLocalSearchParams<{ slug: string }>();
+  const params = useLocalSearchParams<{ slug: string }>();
+  // O slug pode vir pela rota (dev/deep-link) ou pela mensagem do admin (permite
+  // hospedar o web na mesma origem com uma URL fixa, sem rewrite de SPA).
+  const [slug, setSlug] = useState(params.slug);
+
+  useEffect(() => {
+    if (Platform.OS !== 'web' || typeof window === 'undefined') return;
+    const handler = (event: MessageEvent) => {
+      if (!isAllowedPreviewOrigin(event.origin)) return;
+      const data = event.data;
+      if (data?.type === PREVIEW_MESSAGE_TYPE && typeof data.slug === 'string') {
+        setSlug(data.slug);
+      }
+    };
+    window.addEventListener('message', handler);
+    return () => window.removeEventListener('message', handler);
+  }, []);
+
   const Screen = slug ? PREVIEW_SCREENS[slug] : undefined;
 
   if (!Screen) {

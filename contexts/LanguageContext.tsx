@@ -5,11 +5,20 @@ import { cmsApi } from '@/services/api/cms';
 
 type Locale = 'pt-BR' | 'en-US' | 'es-ES';
 
-// Prévia ao vivo (admin /pages): aceita mensagens postMessage apenas no web e
-// somente de origens locais de desenvolvimento. Sem efeito no app nativo.
-const PREVIEW_MESSAGE_TYPE = 'BFK_PREVIEW';
-const isAllowedPreviewOrigin = (origin: string) =>
-  /^https?:\/\/localhost(:\d+)?$/.test(origin);
+// Prévia ao vivo (admin /pages): aceita mensagens postMessage apenas no web.
+// Origens aceitas: a própria origem (admin servindo o web na mesma origem em
+// produção), uma allowlist via env (EXPO_PUBLIC_PREVIEW_ORIGINS, p/ subdomínio),
+// e localhost (dev). Sem efeito no app nativo.
+export const PREVIEW_MESSAGE_TYPE = 'BFK_PREVIEW';
+const PREVIEW_ALLOWED_ORIGINS = (process.env.EXPO_PUBLIC_PREVIEW_ORIGINS ?? '')
+  .split(',')
+  .map((s) => s.trim())
+  .filter(Boolean);
+export const isAllowedPreviewOrigin = (origin: string) => {
+  if (typeof window !== 'undefined' && origin === window.location.origin) return true;
+  if (PREVIEW_ALLOWED_ORIGINS.includes(origin)) return true;
+  return /^https?:\/\/localhost(:\d+)?$/.test(origin);
+};
 const isLocale = (v: unknown): v is Locale =>
   v === 'pt-BR' || v === 'en-US' || v === 'es-ES';
 
