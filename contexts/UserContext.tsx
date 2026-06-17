@@ -5,6 +5,7 @@ import React, {
   useEffect,
   useCallback,
 } from 'react';
+import { Platform } from 'react-native';
 import { authApi } from '@/services/api/auth';
 import { coursesApi } from '@/services/api/courses';
 import { paymentsApi } from '@/services/api/payments';
@@ -41,6 +42,22 @@ interface UserContextType {
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
+// Modo-prévia (admin /pages): apenas no web e somente na rota /preview. Injeta
+// uma sessão fictícia com acesso total para que telas atrás de login/paywall
+// (study, courseDetail, etc.) renderizem. Sem qualquer efeito no app nativo.
+function isPreviewMode(): boolean {
+  if (Platform.OS !== 'web' || typeof window === 'undefined') return false;
+  return /\/preview(\/|$)/.test(window.location.pathname);
+}
+
+const PREVIEW_USER: User = {
+  id: 'preview',
+  email: 'preview@bitforkids.com',
+  name: 'Prévia',
+  role: 'root',
+  purchasedCourses: [1, 2, 3],
+};
+
 /** Mapeia o usuário da API para o formato consumido pelas telas. */
 function mapRole(role: ApiUser['role']): 'user' | 'root' {
   return role === 'ROOT' || role === 'ADMIN' ? 'root' : 'user';
@@ -61,7 +78,9 @@ async function loadPurchasedCourses(role: 'user' | 'root'): Promise<number[]> {
 }
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(
+    isPreviewMode() ? PREVIEW_USER : null
+  );
   const [isLoaded, setIsLoaded] = useState(false);
 
   const buildUser = useCallback(async (apiUser: ApiUser): Promise<User> => {
@@ -78,6 +97,10 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
 
   // Restaura sessão a partir do token salvo.
   useEffect(() => {
+    if (isPreviewMode()) {
+      setIsLoaded(true);
+      return;
+    }
     (async () => {
       try {
         const tokens = await tokenStore.load();

@@ -4,13 +4,43 @@ import { useLocalSearchParams } from 'expo-router';
 import { PREVIEW_MESSAGE_TYPE, isAllowedPreviewOrigin } from '@/contexts/LanguageContext';
 import LandingPage from '../index';
 import AboutScreen from '../(tabs)/about';
+import DashboardScreen from '../(tabs)/index';
+import CoursesScreen from '../(tabs)/courses';
+import ProfileScreen from '../(tabs)/profile';
+import PortfolioScreen from '../(tabs)/portfolio';
+import IndicesScreen from '../(tabs)/indices';
+import CourseDetailScreen from '../course/[id]/index';
+import StudyScreen from '../course/[id]/study';
+import PortfolioDetailScreen from '../portfolio/[id]';
+import PaymentsScreen from '../payments';
+import NotificationsScreen from '../notifications';
+import SettingsScreen from '../settings';
+import PrivacyScreen from '../privacy';
+import SupportScreen from '../support';
+import LoginScreen from '../auth/login';
 
 // Rota usada apenas pela prévia ao vivo do admin (Expo Web embutido em iframe).
 // Renderiza a tela real correspondente ao slug, sem o chrome de tabs nem gate de
-// auth. Os textos são injetados ao vivo via postMessage (ver LanguageContext).
+// auth (UserContext entra em modo-prévia). Os textos são injetados ao vivo via
+// postMessage (ver LanguageContext). Telas [id] recebem um id de amostra (?id=1)
+// pela URL. common/tabs não têm tela única e não são previewáveis.
 const PREVIEW_SCREENS: Record<string, React.ComponentType> = {
   landing: LandingPage,
   home: AboutScreen,
+  dashboard: DashboardScreen,
+  courses: CoursesScreen,
+  courseDetail: CourseDetailScreen,
+  study: StudyScreen,
+  profile: ProfileScreen,
+  portfolio: PortfolioScreen,
+  portfolioDetail: PortfolioDetailScreen,
+  indices: IndicesScreen,
+  payments: PaymentsScreen,
+  notifications: NotificationsScreen,
+  settings: SettingsScreen,
+  privacy: PrivacyScreen,
+  auth: LoginScreen,
+  support: SupportScreen,
 };
 
 export default function PreviewScreen() {
