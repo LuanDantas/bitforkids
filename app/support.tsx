@@ -14,7 +14,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AuroraBackground from '@/components/AuroraBackground';
 import AnimatedSection from '@/components/AnimatedSection';
 import AnimatedPressable from '@/components/AnimatedPressable';
-import GlassCard from '@/components/GlassCard';
 import { StatusBar } from 'expo-status-bar';
 import {
   ArrowLeft,
@@ -37,7 +36,12 @@ function FAQItem({
   const [open, setOpen] = useState(false);
   return (
     <AnimatedPressable onPress={() => setOpen(!open)}>
-      <GlassCard style={styles.faqCard}>
+      <View
+        style={[
+          styles.card,
+          { backgroundColor: colors.surface, borderColor: colors.border },
+        ]}
+      >
         <View style={styles.faqHeader}>
           <Text
             style={[
@@ -63,7 +67,7 @@ function FAQItem({
             {answer}
           </Text>
         )}
-      </GlassCard>
+      </View>
     </AnimatedPressable>
   );
 }
@@ -124,7 +128,13 @@ export default function SupportScreen() {
               Linking.openURL(`mailto:${t('support.email')}`)
             }
           >
-            <GlassCard style={styles.contactCard}>
+            <View
+              style={[
+                styles.card,
+                styles.contactCard,
+                { backgroundColor: colors.surface, borderColor: colors.border },
+              ]}
+            >
               <View
                 style={[
                   styles.contactIcon,
@@ -159,7 +169,7 @@ export default function SupportScreen() {
                   {t('support.responseTime')}
                 </Text>
               </View>
-            </GlassCard>
+            </View>
           </AnimatedPressable>
         </AnimatedSection>
 
@@ -222,6 +232,13 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
 
+  // Card base (sólido, consistente com o restante do app)
+  card: {
+    borderRadius: 16,
+    borderWidth: 1,
+    padding: 16,
+  },
+
   // Contact
   contactCard: {
     flexDirection: 'row',
@@ -261,9 +278,6 @@ const styles = StyleSheet.create({
   faqList: {
     paddingHorizontal: 20,
     gap: 10,
-  },
-  faqCard: {
-    paddingVertical: 14,
   },
   faqHeader: {
     flexDirection: 'row',
