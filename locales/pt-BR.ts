@@ -937,6 +937,7 @@ const ptBR = {
     exportAlertConfirm: 'Exportar',
     exportSuccessTitle: 'Sucesso',
     exportSuccessMessage: 'Email de exportação enviado! Verifique sua caixa de entrada.',
+    dataError: 'Não foi possível concluir a operação. Tente novamente.',
 
     deleteAccount: 'Excluir Conta',
     deleteAccountDesc: 'Remover permanentemente sua conta e dados',

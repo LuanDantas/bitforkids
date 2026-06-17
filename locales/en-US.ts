@@ -938,6 +938,7 @@ const enUS = {
     exportAlertConfirm: 'Export',
     exportSuccessTitle: 'Success',
     exportSuccessMessage: 'Export email sent! Check your inbox.',
+    dataError: 'We could not complete the operation. Please try again.',
 
     deleteAccount: 'Delete Account',
     deleteAccountDesc: 'Permanently remove your account and data',

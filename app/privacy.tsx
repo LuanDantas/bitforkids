@@ -8,6 +8,7 @@ import {
   Switch,
   Alert,
   Linking,
+  Share,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
@@ -31,6 +32,8 @@ import {
 } from 'lucide-react-native';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useUser } from '@/contexts/UserContext';
+import { usersApi } from '@/services/api/users';
 
 interface PrivacySettings {
   profileVisibility: boolean;
@@ -47,6 +50,7 @@ interface PrivacySettings {
 
 export default function PrivacyScreen() {
   const router = useRouter();
+  const { logout } = useUser();
   const { colors, fonts, isDark } = useTheme();
   const { t } = useLanguage();
 
@@ -78,11 +82,16 @@ export default function PrivacyScreen() {
         { text: t('privacy.exportAlertCancel'), style: 'cancel' },
         {
           text: t('privacy.exportAlertConfirm'),
-          onPress: () => {
-            Alert.alert(
-              t('privacy.exportSuccessTitle'),
-              t('privacy.exportSuccessMessage')
-            );
+          onPress: async () => {
+            try {
+              const data = await usersApi.exportData();
+              await Share.share({
+                title: 'BitForKids',
+                message: JSON.stringify(data, null, 2),
+              });
+            } catch {
+              Alert.alert(t('privacy.exportSuccessTitle'), t('privacy.dataError'));
+            }
           },
         },
       ]
@@ -107,11 +116,18 @@ export default function PrivacyScreen() {
                 {
                   text: t('privacy.deleteConfirmButton'),
                   style: 'destructive',
-                  onPress: () => {
-                    Alert.alert(
-                      t('privacy.deleteSuccessTitle'),
-                      t('privacy.deleteSuccessMessage')
-                    );
+                  onPress: async () => {
+                    try {
+                      await usersApi.deleteAccount();
+                      await logout();
+                      Alert.alert(
+                        t('privacy.deleteSuccessTitle'),
+                        t('privacy.deleteSuccessMessage')
+                      );
+                      router.replace('/');
+                    } catch {
+                      Alert.alert(t('privacy.deleteAlertTitle'), t('privacy.dataError'));
+                    }
                   },
                 },
               ]

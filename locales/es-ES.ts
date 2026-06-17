@@ -937,6 +937,7 @@ const esES = {
     exportAlertConfirm: 'Exportar',
     exportSuccessTitle: 'Éxito',
     exportSuccessMessage: '¡Correo de exportación enviado! Revisa tu bandeja de entrada.',
+    dataError: 'No se pudo completar la operación. Inténtalo de nuevo.',
 
     deleteAccount: 'Eliminar Cuenta',
     deleteAccountDesc: 'Eliminar permanentemente tu cuenta y datos',
