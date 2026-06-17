@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   Platform,
+  Alert,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
@@ -33,27 +34,63 @@ export default function ProfileScreen() {
   const { user: authUser, logout, isAuthenticated } = useUser();
 
   const [cashback, setCashback] = useState({
-    available: 'R$ 45,20',
-    total: 'R$ 127,50',
+    available: 'R$ 0,00',
+    total: 'R$ 0,00',
+    availableCents: 0,
   });
 
-  useEffect(() => {
+  const fmtCents = (cents: number) =>
+    `R$ ${(cents / 100).toLocaleString('pt-BR', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })}`;
+
+  const loadCashback = useCallback(() => {
     if (!isAuthenticated) return;
-    const fmt = (cents: number) =>
-      `R$ ${(cents / 100).toLocaleString('pt-BR', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })}`;
     paymentsApi
       .cashback()
       .then((c) =>
         setCashback({
-          available: fmt(c.availableCents),
-          total: fmt(c.totalEarnedCents),
+          available: fmtCents(c.availableCents),
+          total: fmtCents(c.totalEarnedCents),
+          availableCents: c.availableCents,
         })
       )
       .catch(() => {});
   }, [isAuthenticated]);
+
+  useEffect(() => {
+    loadCashback();
+  }, [loadCashback]);
+
+  const handleWithdraw = () => {
+    if (cashback.availableCents <= 0) {
+      Alert.alert(t('profile.cashbackWithdraw'), t('profile.cashbackNone'));
+      return;
+    }
+    Alert.alert(
+      t('profile.cashbackWithdraw'),
+      t('profile.cashbackConfirm').replace('{{amount}}', cashback.available),
+      [
+        { text: t('common.cancel'), style: 'cancel' },
+        {
+          text: t('profile.cashbackWithdraw'),
+          onPress: async () => {
+            try {
+              await paymentsApi.withdrawCashback(cashback.availableCents);
+              loadCashback();
+              Alert.alert(
+                t('profile.cashbackWithdraw'),
+                t('profile.cashbackWithdrawn')
+              );
+            } catch {
+              Alert.alert(t('profile.cashbackWithdraw'), t('profile.cashbackNone'));
+            }
+          },
+        },
+      ]
+    );
+  };
 
   const [user] = useState({
     name: authUser?.name || 'Usuário',
@@ -145,7 +182,7 @@ export default function ProfileScreen() {
             <Text style={[styles.cashbackTotal, { fontFamily: fonts.body }]}>
               {t('profile.cashbackTotal')} {cashback.total}
             </Text>
-            <AnimatedPressable style={styles.withdrawButton}>
+            <AnimatedPressable style={styles.withdrawButton} onPress={handleWithdraw}>
               <Text style={[styles.withdrawText, { fontFamily: fonts.bodyBold }]}>{t('profile.cashbackWithdraw')}</Text>
             </AnimatedPressable>
           </LinearGradient>

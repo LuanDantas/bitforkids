@@ -663,6 +663,9 @@ const ptBR = {
     cashbackAvailable: 'Saldo Disponível',
     cashbackTotal: 'Total acumulado:',
     cashbackWithdraw: 'Resgatar',
+    cashbackNone: 'Você não tem cashback disponível para saque.',
+    cashbackConfirm: 'Confirmar saque de {{amount}} em cashback?',
+    cashbackWithdrawn: 'Saque solicitado com sucesso!',
     settingsSection: 'Configurações',
     menuPaymentsTitle: 'Pagamentos',
     menuPaymentsSubtitle: 'Histórico e métodos',
@@ -998,6 +1001,7 @@ const ptBR = {
     // Methods
     savedCards: 'Cartões Salvos',
     addButton: 'Adicionar',
+    cardViaStripe: 'O cadastro de cartão será feito de forma segura via Stripe (em breve).',
     defaultBadge: 'Padrão',
     expiresIn: 'Expira em',
     tapToDefault: 'Toque para definir como padrão',

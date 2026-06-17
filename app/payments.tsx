@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -14,6 +14,11 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import {
+  paymentsApi,
+  PaymentMethod,
+  TransactionItem,
+} from '@/services/api/payments';
 import {
   ArrowLeft,
   CreditCard,
@@ -46,179 +51,132 @@ export default function PaymentsScreen() {
     cvv: '',
   });
 
-  const [paymentMethods, setPaymentMethods] = useState([
-    {
-      id: 1,
-      type: 'credit',
-      brand: 'Visa',
-      last4: '4242',
-      holder: 'João Silva',
-      expiryDate: '12/25',
-      isDefault: true,
-    },
-    {
-      id: 2,
-      type: 'credit',
-      brand: 'Mastercard',
-      last4: '8888',
-      holder: 'João Silva',
-      expiryDate: '08/26',
-      isDefault: false,
-    },
-  ]);
+  type CardVM = {
+    id: string;
+    type: string;
+    brand: string;
+    last4: string;
+    holder: string;
+    expiryDate: string;
+    isDefault: boolean;
+  };
+  type TxVM = {
+    id: string;
+    type: 'purchase' | 'cashback' | 'other';
+    description: string;
+    amount: number;
+    date: string;
+    status: string;
+    method: string;
+  };
 
-  const transactions = [
-    {
-      id: 1,
-      type: 'purchase',
-      description: t('payments.transactionMiniCurso'),
-      amount: 67.0,
-      date: '15/01/2024',
-      status: 'completed',
-      method: 'Visa •••• 4242',
-    },
-    {
-      id: 2,
-      type: 'purchase',
-      description: t('payments.transactionAutocustodia'),
-      amount: 97.0,
-      date: '10/01/2024',
-      status: 'completed',
-      method: 'Mastercard •••• 8888',
-    },
-    {
-      id: 3,
-      type: 'cashback',
-      description: t('payments.transactionCashback'),
-      amount: 20.0,
-      date: '10/01/2024',
-      status: 'completed',
-      method: 'Bitcoin',
-    },
-    {
-      id: 4,
-      type: 'purchase',
-      description: t('payments.transactionDeFi'),
-      amount: 397.0,
-      date: '05/01/2024',
-      status: 'completed',
-      method: 'Visa •••• 4242',
-    },
-    {
-      id: 5,
-      type: 'purchase',
-      description: t('payments.transactionPacote'),
-      amount: 790.0,
-      date: '01/01/2024',
-      status: 'refunded',
-      method: 'Visa •••• 4242',
-    },
-  ];
+  const [paymentMethods, setPaymentMethods] = useState<CardVM[]>([]);
+  const [transactions, setTransactions] = useState<TxVM[]>([]);
+  const [cashbackCents, setCashbackCents] = useState(0);
+
+  const mapCard = (m: PaymentMethod): CardVM => ({
+    id: m.id,
+    type: 'credit',
+    brand: m.brand,
+    last4: m.last4,
+    holder: m.holderName,
+    expiryDate: `${String(m.expMonth).padStart(2, '0')}/${String(m.expYear).slice(-2)}`,
+    isDefault: m.isDefault,
+  });
+
+  const load = useCallback(async () => {
+    try {
+      const [cards, txs, cashback] = await Promise.all([
+        paymentsApi.listPaymentMethods(),
+        paymentsApi.transactions(),
+        paymentsApi.cashback(),
+      ]);
+      setCashbackCents(cashback.totalEarnedCents);
+      const cardById = new Map(cards.map((c) => [c.id, c]));
+      setPaymentMethods(cards.map(mapCard));
+      setTransactions(
+        txs.map((tx: TransactionItem): TxVM => {
+          const isPurchase = tx.type === 'PURCHASE';
+          const isCashback = tx.type === 'CASHBACK';
+          const card = tx.paymentMethodId
+            ? cardById.get(tx.paymentMethodId)
+            : undefined;
+          return {
+            id: tx.id,
+            type: isPurchase ? 'purchase' : isCashback ? 'cashback' : 'other',
+            description: tx.description,
+            amount: tx.amountCents / 100,
+            date: new Date(tx.createdAt).toLocaleDateString('pt-BR'),
+            status: tx.status.toLowerCase(),
+            method: isCashback
+              ? t('payments.transactionCashback')
+              : card
+                ? `${card.brand} •••• ${card.last4}`
+                : tx.currency,
+          };
+        })
+      );
+    } catch {
+      setPaymentMethods([]);
+      setTransactions([]);
+      setCashbackCents(0);
+    }
+  }, [t]);
+
+  useEffect(() => {
+    load();
+  }, [load]);
 
   const stats = {
     totalSpent: transactions
-      .filter((t) => t.type === 'purchase' && t.status === 'completed')
-      .reduce((sum, t) => sum + t.amount, 0),
-    cashbackReceived: transactions
-      .filter((t) => t.type === 'cashback')
-      .reduce((sum, t) => sum + t.amount, 0),
+      .filter((tx) => tx.type === 'purchase' && tx.status === 'completed')
+      .reduce((sum, tx) => sum + tx.amount, 0),
+    cashbackReceived: cashbackCents / 100,
   };
 
-  // Detect card brand from number
-  const getCardBrand = (number: string) => {
-    if (number.startsWith('4')) return 'Visa';
-    if (number.startsWith('5')) return 'Mastercard';
-    if (number.startsWith('34') || number.startsWith('37'))
-      return 'American Express';
-    return 'Credit Card';
-  };
-
-  // Handle add card
+  // Cadastro de cartão será via Stripe (tokenização/PaymentSheet) na frente do
+  // gateway — não coletamos número/CVV no app (PCI). Por ora, placeholder.
   const handleAddCard = () => {
-    if (
-      !newCard.number ||
-      !newCard.holder ||
-      !newCard.expiryMonth ||
-      !newCard.expiryYear ||
-      !newCard.cvv
-    ) {
+    Alert.alert(t('payments.addButton'), t('payments.cardViaStripe'));
+  };
+
+  // Define cartão padrão (API + reload)
+  const handleSetDefaultCard = async (id: string) => {
+    try {
+      await paymentsApi.setDefaultPaymentMethod(id);
+      await load();
+    } catch {
       Alert.alert(t('payments.errorTitle'), t('payments.errorFillAll'));
-      return;
     }
-
-    // Validate card number
-    if (
-      newCard.number.replace(/\s/g, '').length < 13 ||
-      newCard.number.replace(/\s/g, '').length > 19
-    ) {
-      Alert.alert(t('payments.errorTitle'), t('payments.errorInvalidCard'));
-      return;
-    }
-
-    const last4 = newCard.number.replace(/\s/g, '').slice(-4);
-    const brand = getCardBrand(newCard.number);
-    const expiryDate = `${newCard.expiryMonth}/${newCard.expiryYear}`;
-
-    const newPaymentMethod = {
-      id: Date.now(),
-      type: 'credit',
-      brand,
-      last4,
-      holder: newCard.holder,
-      expiryDate,
-      isDefault: paymentMethods.length === 0,
-    };
-
-    setPaymentMethods([...paymentMethods, newPaymentMethod]);
-    setShowAddModal(false);
-    setNewCard({
-      number: '',
-      holder: '',
-      expiryMonth: '',
-      expiryYear: '',
-      cvv: '',
-    });
-
-    Alert.alert(t('payments.successTitle'), t('payments.cardAdded'));
   };
 
-  // Handle set default card
-  const handleSetDefaultCard = (id: number) => {
-    const updatedMethods = paymentMethods.map((card) => ({
-      ...card,
-      isDefault: card.id === id,
-    }));
-    setPaymentMethods(updatedMethods);
-    const card = paymentMethods.find((c) => c.id === id);
-    Alert.alert(
-      t('payments.successTitle'),
-      t('payments.cardNowDefault').replace('{{brand}}', card?.brand || '').replace('{{last4}}', card?.last4 || '')
-    );
-  };
-
-  // Handle remove card
-  const handleRemoveCard = (id: number) => {
+  // Remove cartão (API + reload)
+  const handleRemoveCard = (id: string) => {
     const cardToRemove = paymentMethods.find((card) => card.id === id);
 
     if (cardToRemove?.isDefault) {
-      Alert.alert(
-        t('payments.warningTitle'),
-        t('payments.cannotRemoveDefault')
-      );
+      Alert.alert(t('payments.warningTitle'), t('payments.cannotRemoveDefault'));
       return;
     }
 
     Alert.alert(
       t('payments.removeCardTitle'),
-      t('payments.removeCardMessage').replace('{{brand}}', cardToRemove?.brand || '').replace('{{last4}}', cardToRemove?.last4 || ''),
+      t('payments.removeCardMessage')
+        .replace('{{brand}}', cardToRemove?.brand || '')
+        .replace('{{last4}}', cardToRemove?.last4 || ''),
       [
         { text: t('payments.removeCardCancel'), style: 'cancel' },
         {
           text: t('payments.removeCardConfirm'),
           style: 'destructive',
-          onPress: () => {
-            setPaymentMethods(paymentMethods.filter((card) => card.id !== id));
-            Alert.alert(t('payments.successTitle'), t('payments.cardRemoved'));
+          onPress: async () => {
+            try {
+              await paymentsApi.removePaymentMethod(id);
+              await load();
+              Alert.alert(t('payments.successTitle'), t('payments.cardRemoved'));
+            } catch {
+              Alert.alert(t('payments.errorTitle'), t('payments.errorFillAll'));
+            }
           },
         },
       ]
@@ -425,10 +383,7 @@ export default function PaymentsScreen() {
               <Text style={[styles.sectionTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
                 {t('payments.savedCards')}
               </Text>
-              <TouchableOpacity
-                style={styles.addButton}
-                onPress={() => setShowAddModal(true)}
-              >
+              <TouchableOpacity style={styles.addButton} onPress={handleAddCard}>
                 <Plus size={20} color="white" />
                 <Text style={[styles.addButtonText, { fontFamily: fonts.bodySemiBold }]}>{t('payments.addButton')}</Text>
               </TouchableOpacity>

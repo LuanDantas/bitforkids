@@ -664,6 +664,9 @@ const enUS = {
     cashbackAvailable: 'Available Balance',
     cashbackTotal: 'Total accumulated:',
     cashbackWithdraw: 'Withdraw',
+    cashbackNone: 'You have no cashback available to withdraw.',
+    cashbackConfirm: 'Confirm withdrawal of {{amount}} in cashback?',
+    cashbackWithdrawn: 'Withdrawal requested successfully!',
     settingsSection: 'Settings',
     menuPaymentsTitle: 'Payments',
     menuPaymentsSubtitle: 'History and methods',
@@ -999,6 +1002,7 @@ const enUS = {
     // Methods
     savedCards: 'Saved Cards',
     addButton: 'Add',
+    cardViaStripe: 'Card setup will be done securely via Stripe (coming soon).',
     defaultBadge: 'Default',
     expiresIn: 'Expires on',
     tapToDefault: 'Tap to set as default',

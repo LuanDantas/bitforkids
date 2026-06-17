@@ -663,6 +663,9 @@ const esES = {
     cashbackAvailable: 'Saldo Disponible',
     cashbackTotal: 'Total acumulado:',
     cashbackWithdraw: 'Canjear',
+    cashbackNone: 'No tienes cashback disponible para retirar.',
+    cashbackConfirm: '¿Confirmar retiro de {{amount}} en cashback?',
+    cashbackWithdrawn: '¡Retiro solicitado con éxito!',
     settingsSection: 'Configuración',
     menuPaymentsTitle: 'Pagos',
     menuPaymentsSubtitle: 'Historial y métodos',
@@ -998,6 +1001,7 @@ const esES = {
     // Methods
     savedCards: 'Tarjetas Guardadas',
     addButton: 'Agregar',
+    cardViaStripe: 'El registro de tarjeta se hará de forma segura vía Stripe (próximamente).',
     defaultBadge: 'Predeterminada',
     expiresIn: 'Expira en',
     tapToDefault: 'Toca para establecer como predeterminada',
