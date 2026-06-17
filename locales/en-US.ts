@@ -1142,6 +1142,8 @@ const enUS = {
     errorFillRequired: 'Please fill in all required fields',
     successTitle: 'Success',
     walletCreated: 'Wallet created successfully!',
+    walletEdit: 'Edit wallet',
+    walletUpdated: 'Wallet updated successfully!',
     transactionCreated: 'Transaction registered successfully!',
     confirmDelete: 'Confirm deletion',
     confirmDeleteMessage: 'Are you sure you want to delete this wallet?',

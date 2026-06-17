@@ -260,6 +260,7 @@ export default function PortfolioScreen() {
   const [showWalletPicker, setShowWalletPicker] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [newWalletName, setNewWalletName] = useState('');
+  const [editingWalletId, setEditingWalletId] = useState<string | null>(null);
   const [selectedTransactionType, setSelectedTransactionType] = useState<
     'deposit' | 'withdrawal' | null
   >(null);
@@ -381,15 +382,33 @@ export default function PortfolioScreen() {
     }, 2000);
   };
 
+  const closeWalletModal = () => {
+    setShowWalletModal(false);
+    setNewWalletName('');
+    setEditingWalletId(null);
+  };
+
   const handleAddWallet = () => {
     if (!newWalletName.trim()) {
       Alert.alert(t('portfolio.errorTitle'), t('portfolio.errorWalletName'));
       return;
     }
 
+    if (editingWalletId) {
+      // Edição: atualiza apenas a carteira selecionada.
+      setWallets(
+        wallets.map((w) =>
+          w.id === editingWalletId ? { ...w, name: newWalletName.trim() } : w
+        )
+      );
+      closeWalletModal();
+      Alert.alert(t('portfolio.successTitle'), t('portfolio.walletUpdated'));
+      return;
+    }
+
     const newWallet = {
       id: Date.now().toString(),
-      name: newWalletName,
+      name: newWalletName.trim(),
       totalValue: 0,
       change: 0,
       profit: 0,
@@ -410,16 +429,15 @@ export default function PortfolioScreen() {
     };
 
     setWallets([...wallets, newWallet]);
-    setNewWalletName('');
-    setShowWalletModal(false);
+    closeWalletModal();
     Alert.alert(t('portfolio.successTitle'), t('portfolio.walletCreated'));
   };
 
   const handleEditWallet = (id: string) => {
     const wallet = wallets.find((w) => w.id === id);
+    setEditingWalletId(id);
     setNewWalletName(wallet?.name || '');
     setShowWalletModal(true);
-    // In a real app, you would update the specific wallet
   };
 
   const handleDeleteWallet = (id: string) => {
@@ -928,69 +946,6 @@ export default function PortfolioScreen() {
         <View style={styles.section}>{renderTransactionsTable()}</View>
       </ScrollView>
 
-      {/* Wallet Modal */}
-      <Modal visible={showWalletModal} transparent animationType="slide">
-        <View style={styles.modalOverlay}>
-          <View style={[styles.modalContent, { backgroundColor: colors.card }]}>
-            <Text style={[styles.modalTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
-              {t('portfolio.walletRegistration')}
-            </Text>
-
-            <TextInput
-              style={[
-                styles.input,
-                {
-                  backgroundColor: colors.surface,
-                  color: colors.text,
-                  borderColor: colors.border,
-                },
-              ]}
-              placeholder={t('portfolio.walletNamePlaceholder')}
-              placeholderTextColor={colors.textTertiary}
-              value={newWalletName}
-              onChangeText={setNewWalletName}
-            />
-
-            <View style={styles.modalButtons}>
-              <TouchableOpacity
-                style={[
-                  styles.modalButton,
-                  {
-                    backgroundColor: colors.surface || '#f3f4f6',
-                    borderWidth: 1,
-                    borderColor: colors.border,
-                  },
-                ]}
-                onPress={() => {
-                  setShowWalletModal(false);
-                  setNewWalletName('');
-                }}
-              >
-                <Text
-                  style={[
-                    styles.modalButtonText,
-                    { color: colors.text || '#000000', fontFamily: fonts.bodyBold },
-                  ]}
-                >
-                  {t('portfolio.cancel')}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  styles.modalButton,
-                  { backgroundColor: colors.primary },
-                ]}
-                onPress={handleAddWallet}
-              >
-                <Text style={[styles.modalButtonText, { color: 'white', fontFamily: fonts.bodyBold }]}>
-                  {t('portfolio.save')}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
-
       {/* Wallets List Modal */}
       <Modal visible={showWalletsList} animationType="slide">
         <View
@@ -1077,13 +1032,77 @@ export default function PortfolioScreen() {
               { backgroundColor: colors.primary },
             ]}
             onPress={() => {
-              setShowWalletsList(false);
+              setEditingWalletId(null);
+              setNewWalletName('');
               setShowWalletModal(true);
             }}
           >
             <Plus size={24} color="white" />
             <Text style={[styles.addWalletText, { fontFamily: fonts.bodyBold }]}>{t('portfolio.addWallet')}</Text>
           </TouchableOpacity>
+
+          {/* Modal de adicionar/editar carteira — aninhado para sobrepor a
+              lista de Carteiras sem fechá-la (evita navegar de volta ao Portfólio) */}
+          <Modal visible={showWalletModal} transparent animationType="slide">
+            <View style={styles.modalOverlay}>
+              <View style={[styles.modalContent, { backgroundColor: colors.card }]}>
+                <Text style={[styles.modalTitle, { color: colors.text, fontFamily: fonts.displaySemiBold }]}>
+                  {editingWalletId
+                    ? t('portfolio.walletEdit')
+                    : t('portfolio.walletRegistration')}
+                </Text>
+
+                <TextInput
+                  style={[
+                    styles.input,
+                    {
+                      backgroundColor: colors.surface,
+                      color: colors.text,
+                      borderColor: colors.border,
+                    },
+                  ]}
+                  placeholder={t('portfolio.walletNamePlaceholder')}
+                  placeholderTextColor={colors.textTertiary}
+                  value={newWalletName}
+                  onChangeText={setNewWalletName}
+                />
+
+                <View style={styles.modalButtons}>
+                  <TouchableOpacity
+                    style={[
+                      styles.modalButton,
+                      {
+                        backgroundColor: colors.surface || '#f3f4f6',
+                        borderWidth: 1,
+                        borderColor: colors.border,
+                      },
+                    ]}
+                    onPress={closeWalletModal}
+                  >
+                    <Text
+                      style={[
+                        styles.modalButtonText,
+                        { color: colors.text || '#000000', fontFamily: fonts.bodyBold },
+                      ]}
+                    >
+                      {t('portfolio.cancel')}
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[
+                      styles.modalButton,
+                      { backgroundColor: colors.primary },
+                    ]}
+                    onPress={handleAddWallet}
+                  >
+                    <Text style={[styles.modalButtonText, { color: 'white', fontFamily: fonts.bodyBold }]}>
+                      {t('portfolio.save')}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Modal>
         </View>
       </Modal>
 

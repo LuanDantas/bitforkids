@@ -1141,6 +1141,8 @@ const esES = {
     errorFillRequired: 'Por favor, completa todos los campos obligatorios',
     successTitle: 'Éxito',
     walletCreated: '¡Billetera creada con éxito!',
+    walletEdit: 'Editar billetera',
+    walletUpdated: '¡Billetera actualizada con éxito!',
     transactionCreated: '¡Transacción registrada con éxito!',
     confirmDelete: 'Confirmar eliminación',
     confirmDeleteMessage: '¿Estás seguro de que deseas eliminar esta billetera?',

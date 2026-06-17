@@ -1141,6 +1141,8 @@ const ptBR = {
     errorFillRequired: 'Por favor, preencha todos os campos obrigatórios',
     successTitle: 'Sucesso',
     walletCreated: 'Carteira criada com sucesso!',
+    walletEdit: 'Editar carteira',
+    walletUpdated: 'Carteira atualizada com sucesso!',
     transactionCreated: 'Transação cadastrada com sucesso!',
     confirmDelete: 'Confirmar exclusão',
     confirmDeleteMessage: 'Tem certeza que deseja excluir esta carteira?',
